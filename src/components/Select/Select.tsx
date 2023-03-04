@@ -92,10 +92,10 @@ export default function Select(props: Props) {
             color: theme.palette.text.primary
           },
           '&:hover': {
-            color: disabled ? theme.palette.text.primary : theme.palette.common.white,
+            color: disabled ? theme.palette.text.primary : theme.palette.common.black,
             backgroundColor: disabled ? theme.palette.background.paper : theme.palette.primary.main,
             '& .MuiSelect-icon': {
-              color: disabled ? theme.palette.text.primary : theme.palette.common.white
+              color: disabled ? theme.palette.text.primary : theme.palette.common.black
             }
           },
           '& .Mui-disabled.MuiInputBase-input': {

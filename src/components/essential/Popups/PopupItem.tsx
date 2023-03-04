@@ -3,7 +3,7 @@ import { styled } from '@mui/material'
 import { animated, useSpring } from 'react-spring'
 import { useRemovePopup } from 'state/application/hooks'
 import TransactionPopup from './TransactionPopup'
-import { CloseIcon } from 'theme/components'
+import { CloseIcon } from 'themes/components'
 
 export const Popup = styled('div')(({ theme }) => ({
   display: 'inlineBlock',

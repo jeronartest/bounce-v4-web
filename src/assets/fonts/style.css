@@ -1,0 +1,13 @@
+
+@font-face {
+  font-family: 'Sharp Grotesk DB Cyr Book 20';
+  src: url('./SharpGroteskDBCyrBook20-Regular.otf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sharp Grotesk DB Cyr Medium 22';
+  src: url('./SharpGroteskDBCyrMedium22-Regular.otf') format('truetype');
+  font-style: normal;
+}
+

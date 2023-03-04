@@ -1,9 +1,9 @@
 import { Box, useTheme, Button } from '@mui/material'
-import { HideOnMobile } from 'theme/index'
+import { HideOnMobile } from 'themes/index'
 import { ReactComponent as Medium } from 'assets/socialLinksIcon/medium.svg'
 import { ReactComponent as Twitter } from 'assets/socialLinksIcon/twitter.svg'
 import { ReactComponent as Telegram } from 'assets/socialLinksIcon/telegram.svg'
-import { ExternalLink } from 'theme/components'
+import { ExternalLink } from 'themes/components'
 
 export default function Footer() {
   const theme = useTheme()

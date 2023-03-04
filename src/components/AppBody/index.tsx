@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
-import { CloseIcon } from 'theme/components'
+import { CloseIcon } from 'themes/components'
 
 const Root = styled('div')(({ theme }) => ({
   position: 'relative',

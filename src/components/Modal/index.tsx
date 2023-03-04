@@ -2,7 +2,7 @@ import React from 'react'
 import { Dialog, useTheme, Box, Slide, Fade, SlideProps, FadeProps } from '@mui/material'
 import useModal from 'hooks/useModal'
 import { useRef } from 'react'
-import { CloseIcon } from 'theme/components'
+import { CloseIcon } from 'themes/components'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 interface Props {

@@ -3,7 +3,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { NavLink } from 'react-router-dom'
 import { Box, MenuItem, styled, Theme, Drawer } from '@mui/material'
 
-import { ExternalLink } from 'theme/components'
+import { ExternalLink } from 'themes/components'
 import { Tabs } from '.'
 
 const StyledNavLink = styled(NavLink)({})

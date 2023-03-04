@@ -2,8 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import 'inter-ui'
-import { CssBaseline, ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material'
-import theme from 'theme/index'
+import { StyledEngineProvider } from '@mui/material'
+import { MuiThemeProvider } from './themes'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import Blocklist from './components/essential/Blocklist'
@@ -42,8 +42,7 @@ root.render(
           <Provider store={store}>
             <Updaters />
             <StyledEngineProvider injectFirst>
-              <MuiThemeProvider theme={theme}>
-                <CssBaseline />
+              <MuiThemeProvider>
                 <BrowserRouter>
                   <App />
                 </BrowserRouter>

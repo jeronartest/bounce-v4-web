@@ -1,20 +1,20 @@
 import { useMemo } from 'react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { useTheme, Box, styled, Typography, Button } from '@mui/material'
+import { useTheme, Box, styled, Button } from '@mui/material'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
-import { shortenAddress } from '../../utils'
+// import { shortenAddress } from '../../utils'
 import WalletModal from 'components/Modal/WalletModal/index'
-import Spinner from 'components/Spinner'
-import { ReactComponent as Web3StatusIconSvg } from 'assets/svg/web3status_icon.svg'
+// import Spinner from 'components/Spinner'
+import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
-  marginBottom: 15,
+  marginBottom: 0,
   [theme.breakpoints.down('sm')]: {
     maxWidth: 320,
     width: '100%',
@@ -37,14 +37,12 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 function Web3StatusInner() {
   const { account, error } = useWeb3React()
-  const { ENSName } = useENSName(account ?? undefined)
-  const allTransactions = useAllTransactions()
-  const sortedRecentTransactions = useMemo(() => {
-    const txs = Object.values(allTransactions)
-    return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
-  }, [allTransactions])
-  const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
-  const hasPendingTransactions = !!pending.length
+  // const allTransactions = useAllTransactions()
+  // const sortedRecentTransactions = useMemo(() => {
+  //   const txs = Object.values(allTransactions)
+  //   return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+  // }, [allTransactions])
+  // const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const toggleWalletModal = useWalletModalToggle()
   const theme = useTheme()
   const isDownSm = useBreakpoint()
@@ -57,8 +55,8 @@ function Web3StatusInner() {
       >
         <Box
           sx={{
-            height: { xs: 24, sm: 36 },
-            width: { xs: 100, sm: 180 },
+            // height: { xs: 24, sm: 36 },
+            // width: { xs: 100, sm: 180 },
             borderRadius: '46px',
             display: 'flex',
             justifyContent: 'space-between',
@@ -66,28 +64,6 @@ function Web3StatusInner() {
             backgroundColor: theme.palette.background.default
           }}
         >
-          <div />
-          {hasPendingTransactions ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 20 } }}>
-              <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
-              <Box component="span" sx={{ ml: 3 }}>
-                <Typography sx={{ fontSize: { xs: 9, sm: 14 }, ml: 8, color: theme.palette.text.primary }} noWrap>
-                  {pending?.length} Pending
-                </Typography>
-              </Box>
-            </Box>
-          ) : (
-            <Typography
-              sx={{
-                fontSize: { xs: 9, sm: 14 },
-                mr: { xs: 10, sm: 17 },
-                ml: { xs: 10, sm: 20 },
-                color: theme.palette.text.primary
-              }}
-            >
-              {ENSName || shortenAddress(account)}
-            </Typography>
-          )}
           <Web3StatusIcon />
         </Box>
       </Box>

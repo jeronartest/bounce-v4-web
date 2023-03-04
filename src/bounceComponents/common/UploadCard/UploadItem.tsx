@@ -1,0 +1,96 @@
+import React, { useMemo, useState } from 'react'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
+import { ReactComponent as AddSVG } from './assets/add.svg'
+import styles from './styles'
+import Uploader from '@/components/common/Uploader'
+import type { IFile } from '@/components/common/Uploader'
+
+export type IUploadItemProps = {
+  value?: Partial<IFile>
+  accept?: string[]
+  limitSize?: number
+  onChange?: (value: IFile) => void
+  onRemove?: (value: IFile) => void
+  sx?: any
+  tips?: string
+}
+
+const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onChange, onRemove, sx, tips }) => {
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const UploadContent = useMemo(() => {
+    if (loading)
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100', height: '100%' }}>
+          <CircularProgress color="secondary" size={20} />
+        </Box>
+      )
+    if (value?.fileUrl) {
+      return (
+        <Box sx={styles.editBox}>
+          <picture>
+            <img style={{ ...sx }} src={value.fileUrl} alt={value.fileName || 'upload image'} />
+          </picture>
+          {/* <Typography variant="body1" sx={styles.edit}>
+            edit
+          </Typography> */}
+        </Box>
+      )
+    }
+    return (
+      <Box sx={styles.addItem}>
+        <Typography variant="body1" sx={{ mr: 8 }}>
+          Add
+        </Typography>
+        <AddSVG />
+      </Box>
+    )
+  }, [loading, value, sx])
+
+  return (
+    <Box>
+      <Box
+        sx={{
+          ...styles.item,
+          ...sx,
+          '&>div:first-of-type': {
+            display: 'block',
+          },
+          '&:hover .edit': {
+            display: 'block !important',
+          },
+        }}
+      >
+        <Uploader
+          sx={styles.uploadBox}
+          accept={accept}
+          limitSize={limitSize}
+          disabled={loading}
+          tips={tips}
+          onBefore={(files) => {
+            setLoading(true)
+            return Promise.resolve(files)
+          }}
+          onSuccess={(file) => {
+            onChange?.(file)
+            setLoading(false)
+          }}
+          onError={() => {
+            setLoading(false)
+          }}
+        >
+          <Stack direction="row" justifyContent="center" alignItems="center" sx={styles.content}>
+            {UploadContent}
+          </Stack>
+        </Uploader>
+        {value?.fileUrl && (
+          <Typography variant="body1" sx={styles.edit} className="edit">
+            Edit
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  )
+}
+
+export default UploadItem

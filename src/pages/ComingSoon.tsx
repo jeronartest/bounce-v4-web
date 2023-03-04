@@ -1,5 +1,5 @@
 import { styled } from '@mui/material'
-import { Dots } from 'theme/components'
+import { Dots } from 'themes/components'
 
 const Frame = styled('div')(`
 width: calc(100% - 40px);

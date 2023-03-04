@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled, Button } from '@mui/material'
-import { ExternalLink } from 'theme/components'
+import { ExternalLink } from 'themes/components'
 import LogoText from 'components/LogoText'
 
 const GreenCircle = styled('div')(({ theme }) => ({

@@ -2,7 +2,7 @@ import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerro
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
 import { Typography, Box } from '@mui/material'
 import { useActiveWeb3React } from 'hooks/'
-import { ExternalLink } from 'theme/components'
+import { ExternalLink } from 'themes/components'
 import { getEtherscanLink } from 'utils'
 
 export default function TransactionPopup({

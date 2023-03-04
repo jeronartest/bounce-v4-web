@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { styled } from '@mui/material'
+import { Suspense, useEffect } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Container, styled } from '@mui/material'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
@@ -10,6 +10,14 @@ import ComingSoon from './ComingSoon'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
+import { Questions } from 'bounceComponents/common/Questions'
+import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
+
+import Login from 'pages/login'
+import Signup from 'pages/signup'
+import { Mobile } from 'bounceComponents/common/Mobile'
+import { ShowOnMobile } from 'themes/context'
+import { ToastContainer } from 'react-toastify'
 
 const AppWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -28,7 +36,7 @@ const ContentWrapper = styled('div')({
   // alignItems: 'center'
 })
 
-const BodyWrapper = styled('div')(({ theme }) => ({
+const BodyWrapper = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -47,30 +55,45 @@ const BodyWrapper = styled('div')(({ theme }) => ({
 }))
 
 export default function App() {
+  const { pathname, search } = useLocation()
+  console.log('🚀 ~ file: App.tsx:60 ~ App ~ params:', search)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <Suspense fallback={null}>
       <ModalProvider>
-        <AppWrapper id="app">
-          <ContentWrapper>
-            <Header />
-            <BodyWrapper id="body">
-              <Popups />
-              <Polling />
-              {/* <WarningModal /> */}
-              <Web3ReactManager>
-                <Routes>
-                  <Route path={routes.test1} element={<ComingSoon />} />
-                  <Route path={routes.test2} element={<ComingSoon />} />
-                  <Route path={routes.test3} element={<ComingSoon />}>
-                    <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
-                  </Route>
-                  <Route path="*" element={<Navigate to={routes.test1} replace />} />
-                </Routes>
-              </Web3ReactManager>
-            </BodyWrapper>
-            {/* <Footer /> */}
-          </ContentWrapper>
-        </AppWrapper>
+        <NiceModalProvider>
+          <AppWrapper id="app">
+            <ContentWrapper>
+              <Header />
+              <ToastContainer />
+              <Questions />
+              <ShowOnMobile breakpoint="md">
+                <Mobile />
+              </ShowOnMobile>
+              <BodyWrapper id="body" maxWidth="xl">
+                <Popups />
+                <Polling />
+                {/* <WarningModal /> */}
+                <Web3ReactManager>
+                  <Routes>
+                    <Route path={routes.login} element={<Login />} />
+                    <Route path={routes.signup} element={<Signup />} />
+                    <Route path={routes.test2} element={<ComingSoon />} />
+                    <Route path={routes.test3} element={<ComingSoon />}>
+                      <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
+                    </Route>
+                    <Route path="*" element={<Navigate to={routes.login} replace />} />
+                  </Routes>
+                </Web3ReactManager>
+              </BodyWrapper>
+              {/* <Footer /> */}
+            </ContentWrapper>
+          </AppWrapper>
+        </NiceModalProvider>
       </ModalProvider>{' '}
     </Suspense>
   )

@@ -1,15 +1,31 @@
 import { useState, useCallback } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { AppBar, Box, IconButton, MenuItem, styled as muiStyled, styled } from '@mui/material'
-import { ExternalLink } from 'theme/components'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  styled as muiStyled,
+  styled
+} from '@mui/material'
+import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
-import { HideOnMobile, ShowOnMobile } from 'theme/index'
+import { HideOnMobile, ShowOnMobile } from 'themes/index'
 import PlainSelect from 'components/Select/PlainSelect'
 import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkSelect from './NetworkSelect'
+import Search from 'bounceComponents/common/Header/Search'
+import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
+import { USER_TYPE } from 'api/user/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { useLogout, useUserInfo } from 'state/users/hooks'
 
 interface TabContent {
   title: string
@@ -49,14 +65,14 @@ const navLinkSX = ({ theme }: any) => ({
 const StyledNavLink = styled(Link)(navLinkSX)
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  position: 'relative',
+  position: 'fixed',
   height: theme.height.header,
   backgroundColor: theme.palette.background.paper,
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
-  padding: '0 40px 0 25px!important',
+  padding: '0 25px 0 25px!important',
   zIndex: theme.zIndex.drawer,
   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
@@ -77,7 +93,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   },
   [theme.breakpoints.down('lg')]: {
     '& .link': { marginRight: 15 },
-    padding: '0 24px 0 0!important'
+    padding: '0 24px 0 24!important'
   },
   [theme.breakpoints.down('md')]: {
     position: 'fixed'
@@ -102,8 +118,7 @@ const Filler = styled('div')(({ theme }) => ({
 
 const MainLogo = styled(Link)(({ theme }) => ({
   '& img': {
-    width: 180.8,
-    height: 34.7
+    height: 29
   },
   '&:hover': {
     cursor: 'pointer'
@@ -128,6 +143,79 @@ export default function Header() {
   const handleMobileMenueDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
+
+  const navigate = useNavigate()
+
+  const { userId, userType, userInfo, companyInfo, token } = useUserInfo()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const userOpen = Boolean(anchorEl)
+  const handleUserMenuClose = () => {
+    setAnchorEl(null)
+  }
+  const { logout } = useLogout()
+  const UserDialog = () => (
+    <Menu
+      open={userOpen}
+      anchorEl={anchorEl}
+      onClose={handleUserMenuClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center'
+      }}
+      sx={{
+        mt: 4,
+        '& .MuiPopover-paper': {
+          borderRadius: 20,
+          padding: '10px 0px'
+        },
+        '& .MuiList-padding': {
+          padding: '0px 0px 0px 0px',
+          background: '#FFFFFF',
+          boxShadow: 'none',
+          borderRadius: 20
+        },
+        '& .MuiMenuItem-gutters': {
+          padding: '10px 20px'
+        }
+      }}
+    >
+      <MenuItem
+        onClick={() => {
+          navigate(
+            Number(userType) === USER_TYPE.USER
+              ? `${routes.profile.summary}?id=${userId}`
+              : `${routes.company.summary}?id=${userId}`
+          )
+          setAnchorEl(null)
+        }}
+      >
+        My Homepage
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
+          navigate(routes.profile.account.settings)
+          setAnchorEl(null)
+        }}
+      >
+        Account settings
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
+          logout()
+          setAnchorEl(null)
+        }}
+      >
+        Logout
+      </MenuItem>
+    </Menu>
+  )
+  const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
 
   return (
     <>
@@ -225,7 +313,51 @@ export default function Header() {
           </HideOnMobile>
         </Box>
 
-        <Box display="flex" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
+        <Stack direction={'row'} alignItems="center" spacing={24}>
+          <Search />
+          <CreateBtn />
+
+          <Stack direction="row" alignItems="center" spacing={20}>
+            {token ? (
+              <div>
+                <Avatar
+                  component={'button'}
+                  id="userAvatar"
+                  src={
+                    (Number(userType) === USER_TYPE.USER ? userInfo?.avatar?.fileUrl : companyInfo?.avatar?.fileUrl) ||
+                    DefaultAvatarSVG
+                  }
+                  sx={{
+                    width: 52,
+                    height: 52,
+                    padding: 0,
+                    cursor: 'pointer',
+                    border: 0
+                  }}
+                  onClick={handleUserClick}
+                />
+                <UserDialog />
+              </div>
+            ) : (
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{ width: 120, height: 40, borderRadius: 20 }}
+                onClick={() => {
+                  if (location.pathname === routes.login) {
+                    navigate(routes.login)
+                  } else {
+                    navigate(`${routes.login}?path=${location.pathname}${location.search}`)
+                  }
+                }}
+              >
+                Login
+              </Button>
+            )}
+          </Stack>
+        </Stack>
+
+        <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
           <NetworkSelect />
           <Web3Status />
           <ShowOnMobile breakpoint="md">

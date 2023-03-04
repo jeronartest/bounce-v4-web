@@ -1,0 +1,373 @@
+import inputOptions from './options/input'
+import { ReactComponent as ArrowSVG } from 'assets/imgs/components/arrow.svg'
+import CheckedSVG from 'assets/imgs/components/checked.svg'
+import { CommonColors } from '@mui/material/styles/createPalette'
+import React, { HTMLProps, useCallback } from 'react'
+import MuiCloseIcon from '@mui/icons-material/Close'
+import { Link, IconButton, keyframes, styled, Theme } from '@mui/material'
+import { SxProps } from '@mui/system'
+
+export function CloseIcon({ onClick }: { onClick?: () => void }) {
+  return (
+    <IconButton
+      onClick={onClick}
+      size="large"
+      sx={{
+        padding: 0,
+        position: 'absolute',
+        top: '24px',
+        right: '24px',
+        '&:hover $closeIcon': {
+          color: theme => theme.palette.text.primary
+        }
+      }}
+    >
+      <MuiCloseIcon sx={{ color: theme => theme.palette.grey[500] }} />
+    </IconButton>
+  )
+}
+
+export function ExternalLink({
+  target = '_blank',
+  href,
+  rel = 'noopener noreferrer',
+  style,
+  sx,
+  className,
+  children,
+  underline
+}: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & {
+  href: string
+  style?: React.CSSProperties
+  sx?: SxProps<Theme>
+  underline?: 'always' | 'hover' | 'none'
+  className?: string
+}) {
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      if (target === '_blank' || event.ctrlKey || event.metaKey) {
+      } else {
+        event.preventDefault()
+        window.location.href = href
+      }
+    },
+    [href, target]
+  )
+  return (
+    <Link
+      className={className}
+      target={target}
+      rel={rel}
+      href={href}
+      onClick={handleClick}
+      style={style}
+      sx={sx}
+      underline={underline ?? 'none'}
+    >
+      {children}
+    </Link>
+  )
+}
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+`
+
+export const AnimatedWrapper = styled('div')(`
+pointer-events: none;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+width: 100%;
+`)
+
+export const AnimatedImg = styled('div')(`
+animation: ${pulse} 800ms linear infinite;
+& > * {
+  width: 72px;
+})
+`)
+
+export const Dots = styled('span')(`
+  &::after {
+    display: inline-block;
+    animation: ellipsis 1.25s infinite;
+    content: '.';
+    width: 1em;
+    text-align: left;
+  }
+  @keyframes ellipsis {
+    0% {
+      content: '.';
+    }
+    33% {
+      content: '..';
+    }
+    66% {
+      content: '...';
+    }
+  }
+`)
+
+const buildVar = function (name: string) {
+  const NAMESPACE = '--ps-'
+  return `${NAMESPACE}${name}`
+}
+
+export const ComponentOptions = {
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: (theme: Theme) => {
+        const common = theme.palette.common
+        const vars = Object.keys(common).reduce((prev: any, next) => {
+          prev[buildVar(next)] = common[next as unknown as keyof CommonColors]
+          return prev
+        }, {})
+
+        return {
+          html: {
+            ...vars
+          },
+          body: {
+            fontFamily: `"Sharp Grotesk DB Cyr Book 20"`,
+            fontSize: 14,
+            color: common.text,
+            background: '#F5F5F5'
+          },
+          a: {
+            textDecoration: 'none',
+            color: 'inherit'
+          },
+          picture: { display: 'inline-flex' },
+          input: {
+            '&::placeholder': {},
+            '&:-webkit-autofill, &:-webkit-autofill:focus': {
+              transition: 'background-color 600000s 0s, color 600000s 0s'
+            }
+          }
+        }
+      }
+    },
+    ...inputOptions,
+
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: 'xl',
+        disableGutters: true
+      }
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          '.MuiFormLabel-root + div': {
+            'textarea.MuiOutlinedInput-input': {
+              paddingTop: '0px!important'
+            },
+            '.MuiOutlinedInput-input': {
+              paddingTop: '18px!important',
+              paddingBottom: '0px!important'
+            }
+          }
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: 'var(--ps-text)',
+          '& .MuiInputBase-root': {
+            marginTop: 0
+          }
+        }
+      }
+    },
+    MuiButton: {
+      defaultProps: {
+        disableRipple: true
+      },
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontSize: 14,
+          lineHeight: '20px'
+        },
+        sizeLarge: {
+          height: 72,
+          borderRadius: 36
+        },
+        sizeMedium: {
+          height: 60,
+          borderRadius: 30
+        },
+        sizeSmall: {
+          height: 36,
+          borderRadius: 18
+        },
+        textPrimary: {
+          background: 'var(--ps-gray-50)',
+          color: '#000000',
+          '&:hover': {
+            background: 'var(--ps-gray-50)'
+          },
+          '&:active': {
+            background: '#DFDFDF',
+            color: '#000000'
+          }
+        },
+        containedPrimary: {
+          background: 'var(--ps-gray-900)',
+          color: 'var(--ps-white)',
+          '&:hover': {
+            background: 'var(--ps-gray-800)'
+          },
+          '&:active': {
+            background: 'var(--ps-gray-200)',
+            color: 'var(--ps-gray-900)'
+          },
+          '&:disabled': {
+            background: 'var(--ps-gray-400)',
+            color: 'var(--ps-primary)'
+          }
+        },
+        outlinedPrimary: {
+          border: '1px solid var(--ps-gray-900)',
+          background: 'var(--ps-primary)',
+          color: 'var(--ps-gray-900)',
+          '&:hover': {
+            background: 'var(--ps-gray-200)',
+            border: '1px solid var(--ps-gray-800)'
+          },
+          '&:active': {
+            background: 'var(--ps-gray-900)',
+            color: 'var(--ps-primary)'
+          },
+          '&:disabled': {
+            border: '1px solid var(--ps-gray-700)',
+            color: 'var(--ps-gray-700)'
+          }
+        },
+        containedSecondary: {}
+      }
+    },
+    MuiSelect: {
+      defaultProps: {
+        IconComponent: ArrowSVG,
+        MenuProps: {
+          PaperProps: {
+            sx: {
+              marginTop: 16,
+              border: '1px solid #D7D6D9',
+              borderRadius: 20,
+              maxHeight: 350,
+              boxShadow: 'none',
+              '& .MuiMenu-list .MuiListSubheader-sticky': {
+                color: '#878A8E',
+                fontSize: 12,
+                lineHeight: 20 / 12,
+                marginTop: 10,
+                marginBottom: 10
+              }
+            }
+          },
+          MenuListProps: {
+            sx: {
+              '& .MuiMenuItem-root.Mui-selected': {
+                justifyContent: 'space-between',
+                '&::after': {
+                  content: `' '`,
+                  width: 20,
+                  height: 20,
+                  background: `url(${CheckedSVG}) no-repeat center`
+                }
+              }
+            }
+          }
+        }
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 20,
+          background: 'var(--ps-white)',
+          '&:before': {
+            border: 0
+          },
+          '&:after': {
+            border: 0
+          },
+          '&:hover': {
+            background: 'var(--ps-white)',
+            '&:not(.Mui-disabled):before': {
+              border: 0
+            }
+          },
+
+          '&.Mui-focused': {
+            background: 'var(--ps-white)',
+
+            fieldset: { borderColor: 'var(--ps-gray-900)' }
+          },
+          '&.Mui-disabled': {
+            background: 'var(--ps-white)'
+          }
+        },
+
+        select: {
+          '&:focus': {
+            background: 'none'
+          }
+        },
+
+        icon: {
+          right: 14
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: '#000000',
+          borderRadius: 5,
+          padding: '7px 10px',
+          '&.Mui-checked': {
+            color: '#2663FF'
+          }
+        }
+      }
+    },
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          '& .MuiPagination-ul': {
+            alignItems: 'baseline'
+          },
+          ' .MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
+            border: 0,
+            color: '#908E96',
+            fontFamily: `"Sharp Grotesk DB Cyr Medium 22"`,
+            fontSize: 14,
+            '&.Mui-selected': {
+              color: '#171717',
+              background: 'none'
+            },
+            '&:hover': {
+              backgroundColor: 'white',
+              color: '#171717'
+            }
+          },
+
+          '& .MuiPaginationItem-root': {
+            height: 48,
+            borderRadius: 100,
+            width: 48,
+            margin: '0 12px'
+          }
+        }
+      }
+    }
+  }
+} as any
+
+export default ComponentOptions
