@@ -16,8 +16,9 @@ import ResetPassword from 'bounceComponents/resetPassword'
 import { ThirdParties } from 'bounceComponents/signup/ThirdParties'
 import { ReactComponent as VisibilityOn } from 'assets/imgs/user/visibility_on.svg'
 import { ReactComponent as VisibilityOff } from 'assets/imgs/user/visibility_off.svg'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 const validationSchema = yup.object({
   email: yup.string().trim().required('Email is required').email('email error.'),
@@ -30,7 +31,7 @@ const validationSchema = yup.object({
 })
 
 const Login: React.FC = () => {
-  const params = useParams()
+  const params = useQueryParams()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const { path } = params
   const handleClickShowPassword = () => {

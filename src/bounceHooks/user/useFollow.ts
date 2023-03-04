@@ -4,13 +4,13 @@ import { getUserInfo } from 'api/user'
 import { RootState } from 'store'
 import { UserType } from 'api/market/type'
 import { getCompanyInfo } from 'api/company'
-import { useParams } from 'react-router-dom'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 export const useUserFollow = (type: UserType) => {
   const [personalId, setPersonalId] = useState<number>()
   const [isMe, setIsMe] = useState<boolean>(false)
   const { userInfo, userId } = useSelector((state: RootState) => state.user)
-  const params = useParams()
+  const params = useQueryParams()
   const { id, thirdpartId } = params
 
   useEffect(() => {

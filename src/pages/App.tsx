@@ -55,8 +55,7 @@ const BodyWrapper = styled(Container)(({ theme }) => ({
 }))
 
 export default function App() {
-  const { pathname, search } = useLocation()
-  console.log('🚀 ~ file: App.tsx:60 ~ App ~ params:', search)
+  const { pathname } = useLocation()
 
   useEffect(() => {
     window.scrollTo(0, 0)
