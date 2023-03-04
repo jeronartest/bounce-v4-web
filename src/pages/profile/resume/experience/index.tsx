@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import Head from 'next/head'
 import { useSelector } from 'react-redux'
-import RootWrap from '@/components/company/CompanyTeam/components/RootWrap'
-import EditLayout, { resumeTabsList } from '@/components/company/EditLayout'
-import ResumeExperience from '@/components/profile/ResumeExperience'
+import RootWrap from 'bounceComponents/company/CompanyTeam/components/RootWrap'
+import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
+import ResumeExperience from 'bounceComponents/profile/ResumeExperience'
 import { RootState } from '@/store'
 
 const ResumeExperienceEdit: React.FC = () => {

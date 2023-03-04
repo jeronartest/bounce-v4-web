@@ -7,14 +7,14 @@ import { CompanyActionType } from '../components/CompanyContextProvider'
 import Add from './components/Add'
 import TokensForm from './components/TokensForm'
 import TokensList from './components/TokensList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useGetCompanyTokens } from '@/hooks/company/useGetCompanyTokens'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useGetCompanyTokens } from 'bounceHooks/company/useGetCompanyTokens'
 import { RootState } from '@/store'
-import { useUpdateCompany } from '@/hooks/company/useUpdateCompany'
-import { ICompanyProfileParams, ICompanyTokensListItems } from '@/api/company/type'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
+import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
+import { ICompanyProfileParams, ICompanyTokensListItems } from 'api/company/type'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 
 export type ICompanyTokensProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -24,7 +24,7 @@ export type ICompanyTokensProps = {
 
 const add_text = {
   label: 'Add new company token',
-  description: "Nothing to see for now. When you add new company token, they'll show up here.",
+  description: "Nothing to see for now. When you add new company token, they'll show up here."
 }
 
 const CompanyTokens: React.FC<ICompanyTokensProps> = ({ companyProfileValues, firstEdit, companyProfileDispatch }) => {
@@ -56,11 +56,11 @@ const CompanyTokens: React.FC<ICompanyTokensProps> = ({ companyProfileValues, fi
   }, [data?.data?.list, firstEdit, companyProfileValues?.companyTokens])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -70,43 +70,43 @@ const CompanyTokens: React.FC<ICompanyTokensProps> = ({ companyProfileValues, fi
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new company token',
       fullWidth: true,
-      children: <TokensForm onAdd={addList} />,
+      children: <TokensForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         setFormDirty(false)
         return companyProfileDispatch({
           type: CompanyActionType.SetTokens,
           payload: {
             ...companyProfileValues,
-            companyTokens: ['DIRECTLY'].includes(flag) ? [] : list,
-          },
+            companyTokens: ['DIRECTLY'].includes(flag) ? [] : list
+          }
         })
       }
       runUpdateCompany({ companyTokens: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => setFormDirty(false))
     },
-    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch],
+    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

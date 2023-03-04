@@ -5,9 +5,9 @@ import { useConnect } from 'wagmi'
 import DialogBase from '../DialogBase'
 import WalletButton from './WalletButton'
 
-import MetamaskPNG from '@/assets/imgs/wallets/metamask.png'
-import CoinbaseWalletPNG from '@/assets/imgs/wallets/coinbase_wallet.png'
-import WalletConnectPNG from '@/assets/imgs/wallets/wallet_connect.png'
+import MetamaskPNG from 'assets/imgs/wallets/metamask.png'
+import CoinbaseWalletPNG from 'assets/imgs/wallets/coinbase_wallet.png'
+import WalletConnectPNG from 'assets/imgs/wallets/wallet_connect.png'
 import { coinbaseConnector, metaMaskConnector, walletConnectConnector } from '@/utils/web3/wagmi'
 
 const ConnectWalletDialog = create(() => {
@@ -24,9 +24,9 @@ const ConnectWalletDialog = create(() => {
               method: 'wallet_requestPermissions',
               params: [
                 {
-                  eth_accounts: {},
-                },
-              ],
+                  eth_accounts: {}
+                }
+              ]
             })
             connect({ connector: metaMaskConnector })
             modal.hide()

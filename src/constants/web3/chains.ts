@@ -1,6 +1,6 @@
-import EthSVG from '@/assets/imgs/chains/eth.svg'
-import BscSVG from '@/assets/imgs/chains/bsc.svg'
-import ArbitrumSVG from '@/assets/imgs/icon/arbitrum.svg'
+import EthSVG from 'assets/imgs/chains/eth.svg'
+import BscSVG from 'assets/imgs/chains/bsc.svg'
+import ArbitrumSVG from 'assets/imgs/icon/arbitrum.svg'
 
 export enum SupportedChainId {
   MAINNET = 1,

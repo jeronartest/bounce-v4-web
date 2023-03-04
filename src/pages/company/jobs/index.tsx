@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import CompanyOverviewLayout from '@/components/company/CompanyOverviewLayout'
+import CompanyOverviewLayout from 'bounceComponents/company/CompanyOverviewLayout'
 
 const CompanyJobs: React.FC = () => {
   return (

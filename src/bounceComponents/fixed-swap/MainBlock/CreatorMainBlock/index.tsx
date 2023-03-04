@@ -7,9 +7,9 @@ import NotStartedAlert from '../../Alerts/NotStartedAlert'
 import ClaimBackAlert from '../../Alerts/ClaimBackAlert'
 import AllTokenAuctionedAlert from '../../Alerts/AllTokenAuctionedAlert'
 import AuctionLiveAlert from '../../Alerts/AuctionLiveAlert'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useIsAllTokenSwapped from '@/hooks/auction/useIsAllTokenSwapped'
+import { PoolStatus } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
 
 const CreatorMainBlock = (): JSX.Element => {
   const { data: poolInfo } = usePoolInfo()

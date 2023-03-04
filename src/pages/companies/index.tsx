@@ -12,12 +12,12 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './styles'
-import { ReactComponent as SearchSVG } from '@/assets/imgs/companies/search.svg'
-import ProjectCard from '@/components/companies/ProjectCard'
+import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
+import ProjectCard from 'bounceComponents/companies/ProjectCard'
 
 const Companies = ({}) => {
   const [type, setType] = useState('0')

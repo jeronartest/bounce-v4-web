@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import dayjs from 'dayjs'
 import Picker, { IDateProps } from './components/Picker'
 import { monthEnum } from './components/Month'
-import { ReactComponent as DateSVG } from '@/assets/imgs/components/date.svg'
+import { ReactComponent as DateSVG } from 'assets/imgs/components/date.svg'
 
 export type IDateMonthPickerProps = {
   disabled?: boolean
@@ -15,13 +15,13 @@ const DateMonthPicker: React.FC<IDateMonthPickerProps> = ({ value, onChange, dis
   const [anchorEl, setAnchorEl] = useState<HTMLInputElement | null>(null)
 
   const handleDateChange = useCallback(
-    (val) => {
+    val => {
       onChange(val)
     },
-    [onChange],
+    [onChange]
   )
 
-  const handleClick = useCallback((ev) => {
+  const handleClick = useCallback(ev => {
     setAnchorEl(ev.currentTarget)
   }, [])
 
@@ -43,12 +43,12 @@ const DateMonthPicker: React.FC<IDateMonthPickerProps> = ({ value, onChange, dis
         }
         value={
           value
-            ? `${monthEnum.find((v) => v.value === dayjs(value * 1000)?.month())?.shortLabel} ${dayjs(
-                value * 1000,
+            ? `${monthEnum.find(v => v.value === dayjs(value * 1000)?.month())?.shortLabel} ${dayjs(
+                value * 1000
               )?.year()}`
             : ``
         }
-        onClick={(ev) => !disabled && handleClick(ev)}
+        onClick={ev => !disabled && handleClick(ev)}
       />
       <Popover
         id="date-month-popover"
@@ -57,14 +57,14 @@ const DateMonthPicker: React.FC<IDateMonthPickerProps> = ({ value, onChange, dis
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         PaperProps={{
           sx: {
             borderRadius: 20,
             marginTop: 10,
-            maxWidth: 'calc(38% - 32px)',
-          },
+            maxWidth: 'calc(38% - 32px)'
+          }
         }}
       >
         <Picker date={value ? value * 1000 : Number(dayjs())} onChange={handleDateChange} onClose={handleClose} />

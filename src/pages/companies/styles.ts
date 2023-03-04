@@ -1,11 +1,11 @@
 import { SxProps } from '@mui/material'
-import BannerPNG from '@/assets/imgs/companies/banner.png'
+import BannerPNG from 'assets/imgs/companies/banner.png'
 
 export default {
   root: {},
   head: {
     height: 400,
-    background: `url(${BannerPNG.src})`,
+    background: `url(${BannerPNG.src})`
   },
   search: {
     pr: 0,
@@ -15,11 +15,11 @@ export default {
       background: 'var(--ps-blue)',
       borderRadius: '0px 30px 30px 0px',
       width: 190,
-      flexShrink: 0,
+      flexShrink: 0
     },
     '> fieldset': {
-      border: 0,
-    },
+      border: 0
+    }
   },
   listRoot: {
     borderRadius: 20,
@@ -29,6 +29,6 @@ export default {
     left: 0,
     right: 0,
     px: 48,
-    py: 32,
-  },
+    py: 32
+  }
 } as Record<string, SxProps>

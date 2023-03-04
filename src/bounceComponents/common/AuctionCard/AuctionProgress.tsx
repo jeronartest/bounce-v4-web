@@ -1,7 +1,7 @@
 import React from 'react'
 import { utils } from 'ethers'
 import { Box, LinearProgress, Stack, Typography } from '@mui/material'
-import { PoolStatus } from '@/api/pool/type'
+import { PoolStatus } from 'api/pool/type'
 import { formatNumber } from '@/utils/web3/number'
 
 export type IAuctionProgressProps = {
@@ -17,7 +17,7 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
   decimals,
   supply,
   status,
-  symbol = 'ETH',
+  symbol = 'ETH'
 }) => {
   return (
     <Stack spacing={10} sx={{ pt: 20 }}>
@@ -25,14 +25,14 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
         <Typography component="span" color={status === 2 ? 'var(--ps-green)' : status === 1 ? '' : 'var(--ps-blue)'}>
           {formatNumber(sold, {
             unit: decimals,
-            decimalPlaces: 6,
+            decimalPlaces: 6
           })}
           &nbsp;{symbol}
         </Typography>
         &nbsp;/&nbsp;
         {formatNumber(supply, {
           unit: decimals,
-          decimalPlaces: 6,
+          decimalPlaces: 6
         })}
         &nbsp;
         {symbol}
@@ -46,8 +46,8 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
             height: 6,
             borderRadius: 4,
             '::before': {
-              opacity: status === 1 && 1,
-            },
+              opacity: status === 1 && 1
+            }
           }}
         />
       </Box>

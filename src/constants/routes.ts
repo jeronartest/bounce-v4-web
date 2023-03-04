@@ -1,27 +1,72 @@
 export const routes = {
+  companies: '/companies',
+  company: {
+    index: '/company',
+    activities: '/company/activities',
+    comments: '/company/comments',
+    edit: {
+      investments: '/company/edit/investments',
+      investors: '/company/edit/investors',
+      overview: '/company/edit/overview',
+      team: '/company/edit/team',
+      tokens: '/company/edit/tokens'
+    },
+    funding: '/company/funding',
+    institutionInvestors: '/company/institutionInvestors',
+    jobs: '/company/jobs',
+    startupIdeas: '/company/startupIdeas',
+    summary: '/company/summary',
+    team: '/company/team',
+    basic: '/company/basic'
+  },
+  idea: {
+    create: '/idea/create',
+    detail: '/idea/detail'
+  },
+  jobs: {
+    index: '/jobs'
+  },
+  linkedin: 'linkedin',
   login: '/login',
-  signup: '/signup',
+  investment: {
+    index: '/investment',
+    platform: '/investment/platform'
+  },
+  market: {
+    index: '/market',
+    pools: '/market/pools'
+  },
   profile: {
-    index: '/profile',
-    basic: '/profile/basic',
-    summary: '/profile/summary',
     account: {
       settings: '/profile/account/settings'
     },
+    activities: '/profile/activities',
+    basic: '/profile/basic',
     edit: {
-      overview: '/profile/edit/overview'
-    }
+      investments: '/profile/edit/investments',
+      overview: '/profile/edit/overview',
+      social: '/profile/edit/social'
+    },
+    portfolio: '/profile/portfolio',
+    resume: {
+      index: '/profile/resume',
+      education: '/profile/resume/education',
+      experience: '/profile/resume/experience',
+      job: '/profile/resume/job',
+      preference: '/profile/resume/preference',
+      resume: '/profile/resume/resume'
+    },
+    summary: '/profile/summary'
   },
-  company: {
-    index: '/company',
-    basic: '/company/basic',
-    summary: '/company/summary',
-    edit: {
-      overview: '/company/edit/overview'
-    }
+  signup: {
+    index: '/signup',
+    account: '/signup/account',
+    company: '/signup/company',
+    institutions: '/signup/institutions',
+    thirdPartiesAccount: '/signup/thirdPartiesAccount',
+    thirdPartiesCompany: '/signup/thirdPartiesCompany',
+    thirdPartiesInstitutions: '/signup/thirdPartiesInstitutions'
   },
-  test1: '/test1',
-  test2: '/test2',
-  test3: '/test3',
-  test3Desc: '/:id'
+  token: '/token',
+  verify: '/verify'
 }

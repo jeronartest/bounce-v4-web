@@ -3,16 +3,16 @@ import React, { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
 import Image from 'next/image'
 import PoolInfoItem from '../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
 import { shortenAddress } from '@/utils/web3/address'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
-import CoingeckoSVG from '@/assets/imgs/chains/coingecko.svg'
-import ErrorSVG from '@/assets/imgs/icon/error_outline.svg'
-import PoolProgress from '@/components/common/PoolProgress'
+import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
+import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from '@/constants/auction/color'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
@@ -27,13 +27,13 @@ const LeftBox = (): JSX.Element => {
   const formatedAmountTotal0 = poolInfo?.token0
     ? formatNumber(poolInfo?.amountTotal0, {
         unit: poolInfo.token0.decimals,
-        decimalPlaces: 6,
+        decimalPlaces: 6
       })
     : '-'
   const formatedSwappedAmount0 = poolInfo?.swappedAmount0
     ? formatNumber(poolInfo.swappedAmount0, {
         unit: poolInfo.token0.decimals,
-        decimalPlaces: 6,
+        decimalPlaces: 6
       })
     : '-'
   const formatedMaxAmount1PerWallet =
@@ -42,7 +42,7 @@ const LeftBox = (): JSX.Element => {
     poolInfo.maxAmount1PerWallet !== poolInfo.amountTotal0
       ? `${formatNumber(poolInfo.maxAmount1PerWallet, {
           unit: poolInfo.token1.decimals,
-          decimalPlaces: 6,
+          decimalPlaces: 6
         })} ${poolInfo.token1.symbol}`
       : 'No'
   const swapedPercent = poolInfo?.swappedAmount0

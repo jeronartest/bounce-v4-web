@@ -4,11 +4,11 @@ import moment from 'moment'
 import { useCountDown } from 'ahooks'
 
 import PoolInfoItem from '../../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoinedPool'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 
 const InfoList = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
@@ -20,7 +20,7 @@ const InfoList = () => {
       : // participant.swappedAmount0 from API could be empty string
       poolWithParticipantInfo?.participant.swappedAmount0
       ? formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-          unit: poolWithParticipantInfo.token0.decimals,
+          unit: poolWithParticipantInfo.token0.decimals
         })
       : '0'
 
@@ -30,7 +30,7 @@ const InfoList = () => {
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: isClaimmingDelayed ? poolInfo.claimAt * 1000 : poolInfo.closeAt * 1000,
-    onEnd: getPoolInfo,
+    onEnd: getPoolInfo
   })
 
   return (

@@ -6,21 +6,21 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import styles from './styles'
-import { VerifyStatus } from '@/api/profile/type'
-import { USER_TYPE, FollowListType } from '@/api/user/type'
+import { VerifyStatus } from 'api/profile/type'
+import { USER_TYPE, FollowListType } from 'api/user/type'
 import { RootState } from '@/store'
-import { ReactComponent as CloseIcon } from '@/assets/imgs/user/close.svg'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
+import { ReactComponent as CloseIcon } from 'assets/imgs/user/close.svg'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { getLabel } from '@/utils'
-import { getUserFollowedCount, getUserFollow, getUserFollowUser } from '@/api/user'
-// import Tooltip from '@/components/common/Tooltip'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import { getUserFollowedCount, getUserFollow, getUserFollowUser } from 'api/user'
+// import Tooltip from 'bounceComponents/common/Tooltip'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
-import NoData from '@/components/common/NoData'
+import NoData from 'bounceComponents/common/NoData'
 export const DialogStyle = styled(Dialog)(() => ({
   '.MuiDialog-paper': {
     position: 'relative',
-    borderRadius: '20px',
+    borderRadius: '20px'
   },
   '.cancelBtn': {
     width: '140px',
@@ -31,7 +31,7 @@ export const DialogStyle = styled(Dialog)(() => ({
     borderRadius: `36px`,
     background: '#fff',
     cursor: 'pointer',
-    marginRight: '10px',
+    marginRight: '10px'
   },
   '.saveBtn': {
     width: '140px',
@@ -42,8 +42,8 @@ export const DialogStyle = styled(Dialog)(() => ({
     border: `1px solid #171717`,
     borderRadius: `36px`,
     color: '#fff',
-    cursor: 'pointer',
-  },
+    cursor: 'pointer'
+  }
 }))
 export const TabsStyle = styled(Box)(() => ({
   padding: '52px 40px 0',
@@ -62,8 +62,8 @@ export const TabsStyle = styled(Box)(() => ({
     paddingBottom: '12px',
     marginRight: '36px',
     '&:hover': {
-      opacity: 1,
-    },
+      opacity: 1
+    }
   },
   '.active': {
     fontFamily: 'Sharp Grotesk DB Cyr Medium 22',
@@ -75,8 +75,8 @@ export const TabsStyle = styled(Box)(() => ({
     marginRight: '36px',
     opacity: 1,
     lineHeight: '18px',
-    borderBottom: '2px solid #000000',
-  },
+    borderBottom: '2px solid #000000'
+  }
 }))
 export interface FollowerItem {
   avatar: string
@@ -121,7 +121,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
   fansCount,
   setFansCount,
   followCount,
-  setFollowCount,
+  setFollowCount
 }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
@@ -176,18 +176,18 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
     const res = await getUserFollowUser({
       thirdpartId: thirdpartId,
       userId: userId,
-      following: isSelected,
+      following: isSelected
     })
     if (res.data.success) {
       // tabIndex 0 following-list 1 followers-list
-      const resutl1 = followingData.map((j) => {
+      const resutl1 = followingData.map(j => {
         if ((userId && userId === Number(j.userId)) || (thirdpartId && thirdpartId === Number(j.thirdpartId))) {
           j.loginUserFollowing = isSelected
         }
         return j
       })
       setFollowingData(resutl1)
-      const resutl2 = followersData.map((j) => {
+      const resutl2 = followersData.map(j => {
         if ((userId && userId === Number(j.userId)) || (thirdpartId && thirdpartId === Number(j.thirdpartId))) {
           j.loginUserFollowing = isSelected
         }
@@ -208,7 +208,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
     }
     return router.push(`/company/summary?id=${item?.userId}`)
   }
-  const getPublicRoleLable = (publicRoleId) => {
+  const getPublicRoleLable = publicRoleId => {
     return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)
   }
   return (
@@ -220,7 +220,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
           left: 0,
           width: '100%',
           background: '#fff',
-          zIndex: 2,
+          zIndex: 2
         }}
       >
         <CloseIcon
@@ -228,7 +228,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
             position: 'absolute',
             right: '20px',
             top: '20px',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
           onClick={handleClose}
         />
@@ -255,7 +255,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
           height: '100%',
           borderRadius: '20px',
           overflowX: 'hidden',
-          overflowY: 'auto',
+          overflowY: 'auto'
         }}
       >
         <Box
@@ -265,7 +265,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
             width: '100%',
             height: 'calc(100% - 84px)',
             overflowY: 'auto',
-            padding: '40px',
+            padding: '40px'
           }}
         >
           {tabIndex === FollowListType.follower && followersData.length === 0 && <NoData />}
@@ -281,7 +281,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginRight: '10px',
+                    marginRight: '10px'
                   }}
                 >
                   <Box
@@ -290,21 +290,21 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                       width: '52px',
                       height: '52px',
                       marginRight: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     <Avatar
                       src={item.avatar || DefaultAvatarSVG}
                       sx={{
                         width: '52px',
-                        height: '52px',
+                        height: '52px'
                       }}
                       onClick={() => linkTopage(item)}
                     />
                   </Box>
                   <Box
                     sx={{
-                      flex: 1,
+                      flex: 1
                     }}
                   >
                     <Stack direction={'row'} alignItems="center" spacing={8} mb={4}>
@@ -327,7 +327,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                               variant="body2"
                               sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}
                             >
-                              {item?.publicRole?.map((item) => getPublicRoleLable(item)).join(', ')}
+                              {item?.publicRole?.map(item => getPublicRoleLable(item)).join(', ')}
                             </Typography>
                           )}
                         </>
@@ -370,7 +370,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginRight: '10px',
+                    marginRight: '10px'
                   }}
                 >
                   <Avatar
@@ -380,14 +380,14 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                       width: '52px',
                       height: '52px',
                       marginRight: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                     onClick={() => linkTopage(item)}
                   />
                   <Box
                     sx={{
                       flex: 1,
-                      overflow: 'hidden',
+                      overflow: 'hidden'
                     }}
                   >
                     <Stack direction={'row'} alignItems="center" spacing={8} mb={4}>
@@ -411,7 +411,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
                               variant="body2"
                               sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}
                             >
-                              {item?.publicRole?.map((item) => getPublicRoleLable(item)).join(', ')}
+                              {item?.publicRole?.map(item => getPublicRoleLable(item)).join(', ')}
                             </Typography>
                           )}
                         </>

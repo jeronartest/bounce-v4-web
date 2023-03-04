@@ -5,12 +5,12 @@ import { useRouter } from 'next/router'
 import { hide, show } from '@ebay/nice-modal-react'
 import { parseUnits } from 'ethers/lib/utils.js'
 
-import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
+import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
 import { reverseCall } from '@/utils/web3/contractCalls/fixedSwap'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
 
 const useRegretBid = (options?: {

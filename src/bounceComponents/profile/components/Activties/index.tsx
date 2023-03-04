@@ -9,30 +9,30 @@ import { toast } from 'react-toastify'
 import BigNumber from 'bignumber.js'
 import Image from 'next/image'
 import Link from 'next/link'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import CoingeckoSVG from '@/assets/imgs/chains/coingecko.svg'
-import { ReactComponent as NoPoolFoundSVG } from '@/assets/imgs/noPoolFound.svg'
-import AuctionCard, { AuctionHolder, AuctionListItem } from '@/components/common/AuctionCard'
-import FormItem from '@/components/common/FormItem'
-import { getActivitiesTotal, getUserPoolsFixedSwap } from '@/api/profile'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
+import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
+import FormItem from 'bounceComponents/common/FormItem'
+import { getActivitiesTotal, getUserPoolsFixedSwap } from 'api/profile'
 import { RootState } from '@/store'
-import { usePersonalInfo } from '@/hooks/user/usePersonalInfo'
-import TokenImage from '@/components/common/TokenImage'
+import { usePersonalInfo } from 'bounceHooks/user/usePersonalInfo'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { shortenAddress } from '@/utils/web3/address'
-import { PoolType } from '@/api/pool/type'
+import { PoolType } from 'api/pool/type'
 import { getLabel } from '@/utils'
 import { formatNumber } from '@/utils/web3/number'
-import { getIdeasList } from '@/api/idea'
-import InstitutionCard from '@/components/companies/InstitutionCard'
-import { UserType } from '@/api/market/type'
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
+import { getIdeasList } from 'api/idea'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
+import { UserType } from 'api/market/type'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 
 export type IActivtiesProps = { type }
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.SealedBid]: 'SealedBid'
 }
 const Activties: React.FC<IActivtiesProps> = ({ type }) => {
   const router = useRouter()
@@ -56,12 +56,12 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
     async () => {
       const resp = await getActivitiesTotal({
         chainId: chain,
-        userId: personalId,
+        userId: personalId
       })
       return {
         auctionTotal: resp.data.auctionTotal,
         ideaTotal: resp.data.ideaTotal,
-        nftTotal: resp.data.nftTotal,
+        nftTotal: resp.data.nftTotal
       }
     },
     {
@@ -73,44 +73,44 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
       //   }
       // },
       ready: !!personalId,
-      refreshDeps: [chain, personalId],
-    },
+      refreshDeps: [chain, personalId]
+    }
   )
   const { data: ideaListData, refresh } = useRequest(
     async () => {
       const resp = await getIdeasList({
         offset: 0,
         limit: 1000,
-        UserId: personalId,
+        UserId: personalId
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
       ready: !!personalId,
-      refreshDeps: [personalId],
-    },
+      refreshDeps: [personalId]
+    }
   )
   const { data: fixedSwapData } = useRequest(
     async () => {
       const resp = await getUserPoolsFixedSwap({
         action: isCreated ? 0 : 1,
         chainId: chain,
-        userId: personalId,
+        userId: personalId
       })
       return {
         total: resp.data.total,
         list: resp.data.list,
         createdTotal: resp.data.createdTotal,
-        participatedTotal: resp.data.participatedTotal,
+        participatedTotal: resp.data.participatedTotal
       }
     },
     {
       ready: !!personalId,
-      refreshDeps: [isCreated, chain, personalId],
-    },
+      refreshDeps: [isCreated, chain, personalId]
+    }
   )
 
   return (
@@ -141,7 +141,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
               <Select
                 sx={{ borderRadius: 20 }}
                 defaultValue={chain}
-                onChange={(e) => {
+                onChange={e => {
                   setChain(e.target.value as number)
                 }}
               >
@@ -223,7 +223,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                       component={'a'}
                       target="_blank"
                       href={`/auction/fixed-price/${getLabel(chain, 'shortName', optionDatas?.chainInfoOpt)}/${Number(
-                        fixedSwaptem.poolId,
+                        fixedSwaptem.poolId
                       )}`}
                     >
                       <AuctionCard
@@ -268,7 +268,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                           symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
                           decimals: fixedSwaptem.token0.decimals,
                           sold: fixedSwaptem.swappedAmount0,
-                          supply: fixedSwaptem.amountTotal0,
+                          supply: fixedSwaptem.amountTotal0
                         }}
                         listItems={
                           <>
@@ -352,7 +352,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                     component={'a'}
                     target="_blank"
                     href={`/auction/fixed-price/${getLabel(chain, 'shortName', optionDatas?.chainInfoOpt)}/${Number(
-                      fixedSwaptem.poolId,
+                      fixedSwaptem.poolId
                     )}`}
                   >
                     <AuctionCard
@@ -397,7 +397,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                         symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
                         decimals: fixedSwaptem.token0.decimals,
                         sold: fixedSwaptem.swappedAmount0,
-                        supply: fixedSwaptem.amountTotal0,
+                        supply: fixedSwaptem.amountTotal0
                       }}
                       listItems={
                         <>
@@ -493,7 +493,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                         dislikeCount: ideaListItem.dislikeCount,
                         likeCount: ideaListItem.likeCount,
                         myDislike: ideaListItem.myDislike,
-                        myLike: ideaListItem.myLike,
+                        myLike: ideaListItem.myLike
                       }}
                       acitve={ideaListItem.active}
                       objId={ideaListItem.id}

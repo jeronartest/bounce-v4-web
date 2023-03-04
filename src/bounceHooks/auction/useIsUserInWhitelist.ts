@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 
-import { PoolType } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import { getUserWhitelistProof } from '@/api/user'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
+import { PoolType } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { getUserWhitelistProof } from 'api/user'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 const useIsUserInWhitelist = () => {
   const { data: poolInfo } = usePoolInfo()
@@ -42,7 +42,7 @@ const useIsUserInWhitelist = () => {
         address: account,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend?.id,
-        poolId: String(poolId),
+        poolId: String(poolId)
       })
 
       setIsUserInWhitelist(!!proof)

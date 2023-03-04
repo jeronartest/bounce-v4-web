@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '@/store'
-import { ChainInfoOpt } from '@/api/user/type'
+import { ChainInfoOpt } from 'api/user/type'
 
 const useChainConfigInBackend = (searchKey: keyof ChainInfoOpt, searchValue: any) => {
   const optionDatas = useSelector((state: RootState) => state.configOptions.optionDatas)

@@ -3,8 +3,8 @@ import { useRequest } from 'ahooks'
 import { useAccount, useBalance } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import { balanceOfCall } from '@/utils/web3/contractCalls/erc20'
-import { useErc20Contract } from '@/hooks/web3/useContractHooks/useContract'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import { useErc20Contract } from 'bounceHooks/web3/useContractHooks/useContract'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { NATIVE_TOEN_ADDRESS } from '@/constants/auction'
 
 const useToken1Balance = () => {
@@ -20,14 +20,14 @@ const useToken1Balance = () => {
     async () => balanceOfCall(erc20Contract, account),
     {
       ready: !!erc20Contract && !isToken1Native,
-      refreshDeps: [account, erc20Contract],
-    },
+      refreshDeps: [account, erc20Contract]
+    }
   )
 
   const { data: nativeToken1BalanceResult, isLoading: isNativeToken1BalanceResultLoading } = useBalance({
     address: account,
     enabled: isToken1Native,
-    watch: false,
+    watch: false
   })
 
   const token1Balance = useMemo(() => {
@@ -42,7 +42,7 @@ const useToken1Balance = () => {
 
   return {
     token1Balance,
-    isToken1BalanceLoading,
+    isToken1BalanceLoading
   }
 }
 

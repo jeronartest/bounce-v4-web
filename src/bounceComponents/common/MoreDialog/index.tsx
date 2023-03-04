@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, IconButton, Menu, MenuItem } from '@mui/material'
 import { useRouter } from 'next/router'
-import { ReactComponent as MoreSVG } from '@/assets/imgs/profile/more.svg'
+import { ReactComponent as MoreSVG } from 'assets/imgs/profile/more.svg'
 
 export const MoreDialog: React.FC = () => {
   const router = useRouter()

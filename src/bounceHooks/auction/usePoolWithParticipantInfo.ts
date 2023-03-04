@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import { getPoolInfo } from '@/api/pool'
-import { PoolType } from '@/api/pool/type'
+import { getPoolInfo } from 'api/pool'
+import { PoolType } from 'api/pool/type'
 
 const usePoolWithParticipantInfo = () => {
   const router = useRouter()

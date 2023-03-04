@@ -7,14 +7,14 @@ import EditCancelConfirmation from '../components/EditCancelConfirmation'
 import Add from './components/Add'
 import InvestmentsForm from './components/InvestmentsForm'
 import InvestmentsList from './components/InvestmentsList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useGetBasicInvestments } from '@/hooks/profile/useGetBasicInvestments'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useGetBasicInvestments } from 'bounceHooks/profile/useGetBasicInvestments'
 import { RootState } from '@/store'
-import { useUpdateBasic } from '@/hooks/profile/useUpdateBasic'
-import { IInvestmentItems, IupdateBasicParams } from '@/api/profile/type'
-import DialogTips from '@/components/common/DialogTips'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
+import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
+import { IInvestmentItems, IupdateBasicParams } from 'api/profile/type'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 
 export type IBasicInvestmentsProps = {
   firstEdit?: boolean
@@ -23,7 +23,7 @@ export type IBasicInvestmentsProps = {
 
 const add_text = {
   label: 'Add new investment',
-  description: "Nothing to see for now. When you add new investment, they'll show up here.",
+  description: "Nothing to see for now. When you add new investment, they'll show up here."
 }
 
 const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicProfileValues }) => {
@@ -43,7 +43,7 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
       runGetBasicInvestments({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetBasicInvestments, userId])
 
@@ -58,11 +58,11 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
   }, [firstEdit])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -72,24 +72,24 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new investment',
       fullWidth: true,
-      children: <InvestmentsForm onAdd={addList} />,
+      children: <InvestmentsForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         setFormDirty(false)
         return runUpdateBasic?.({
           ...basicProfileValues,
-          invest: ['DIRECTLY'].includes(flag) ? [] : list,
+          invest: ['DIRECTLY'].includes(flag) ? [] : list
         }).then(() => {
           setFormDirty(false)
           show(DialogTips, {
@@ -103,7 +103,7 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
             cancelBtn: 'Skip',
             againBtn: 'Complete Now',
             onCancel: () => router.push('/profile/summary'),
-            onAgain: () => router.push('/profile/resume'),
+            onAgain: () => router.push('/profile/resume')
           })
         })
       }
@@ -111,17 +111,17 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
         setFormDirty(false)
       })
     },
-    [list, runUpdateBasic, firstEdit, basicProfileValues, router],
+    [list, runUpdateBasic, firstEdit, basicProfileValues, router]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

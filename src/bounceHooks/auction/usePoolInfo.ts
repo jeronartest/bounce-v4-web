@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
 import usePoolHistory from './usePoolHistory'
-import { getPoolInfo } from '@/api/pool'
-import { PoolType } from '@/api/pool/type'
+import { getPoolInfo } from 'api/pool'
+import { PoolType } from 'api/pool/type'
 
 const usePoolInfo = () => {
   const router = useRouter()

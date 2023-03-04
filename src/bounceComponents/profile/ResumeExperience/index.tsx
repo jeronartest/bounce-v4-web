@@ -9,17 +9,17 @@ import { ResumeActionType } from '../components/ResumeContextProvider'
 import Add from './components/Add'
 import ExperienceForm from './components/ExperienceForm'
 import ExperienceList from './components/ExperienceList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useGetResumeExperience } from '@/hooks/profile/useGetResumeExperience'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useGetResumeExperience } from 'bounceHooks/profile/useGetResumeExperience'
 import { RootState } from '@/store'
-import { experienceItems, IUpdatePersonalParams } from '@/api/profile/type'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
+import { experienceItems, IUpdatePersonalParams } from 'api/profile/type'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 
 const add_text = {
   label: 'Add new experience',
-  description: "Nothing to see for now. When you add new experience, they'll show up here.",
+  description: "Nothing to see for now. When you add new experience, they'll show up here."
 }
 
 export type IResumeExperienceProps = {
@@ -31,7 +31,7 @@ export type IResumeExperienceProps = {
 const ResumeExperience: React.FC<IResumeExperienceProps> = ({
   resumeProfileValues,
   firstEdit,
-  resumeProfileDispatch,
+  resumeProfileDispatch
 }) => {
   const { userId } = useSelector((state: RootState) => state.user)
 
@@ -54,7 +54,7 @@ const ResumeExperience: React.FC<IResumeExperienceProps> = ({
       runGetResumeExperience({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetResumeExperience, userId])
 
@@ -67,11 +67,11 @@ const ResumeExperience: React.FC<IResumeExperienceProps> = ({
   }, [data?.data?.list, firstEdit, resumeProfileValues?.experience])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -81,19 +81,19 @@ const ResumeExperience: React.FC<IResumeExperienceProps> = ({
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new experience',
       fullWidth: true,
-      children: <ExperienceForm onAdd={addList} />,
+      children: <ExperienceForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         if (list?.length === 0) {
           return toast.error('Please describe your experience')
@@ -103,26 +103,26 @@ const ResumeExperience: React.FC<IResumeExperienceProps> = ({
           type: ResumeActionType.SetExperience,
           payload: {
             ...resumeProfileValues,
-            experience: ['DIRECTLY'].includes(flag) ? [] : list,
-          },
+            experience: ['DIRECTLY'].includes(flag) ? [] : list
+          }
         })
       }
       runPersonalResume({ experience: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => {
         setFormDirty(false)
       })
     },
-    [list, runPersonalResume, firstEdit, resumeProfileValues, resumeProfileDispatch],
+    [list, runPersonalResume, firstEdit, resumeProfileValues, resumeProfileDispatch]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

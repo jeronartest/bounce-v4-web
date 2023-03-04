@@ -6,13 +6,13 @@ import { useRouter } from 'next/router'
 import ProjectCardSvg from '../common/ProjectCardSvg'
 import LikeUnlike from '../common/LikeUnlike'
 import VerifiedIcon from '../common/VerifiedIcon'
-import { ReactComponent as CommentSVG } from '@/assets/imgs/comment.svg'
-import { ReactComponent as EditSVG } from '@/assets/imgs/components/edit.svg'
-import { ILikeUnlikeRes } from '@/api/idea/type'
-import { ReactComponent as DefaultAvatar } from '@/assets/imgs/profile/default_avatar_ideas.svg'
+import { ReactComponent as CommentSVG } from 'assets/imgs/comment.svg'
+import { ReactComponent as EditSVG } from 'assets/imgs/components/edit.svg'
+import { ILikeUnlikeRes } from 'api/idea/type'
+import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar_ideas.svg'
 import { getLabel } from '@/utils'
 import { RootState } from '@/store'
-import { VerifyStatus } from '@/api/profile/type'
+import { VerifyStatus } from 'api/profile/type'
 
 export type IInstitutionCardProps = {
   icon: string
@@ -50,12 +50,12 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   isTopCompanies,
   status,
   acitve,
-  commentCount,
+  commentCount
 }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
   const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes>(likeAmount)
-  const getPublicPoleLable = (publicRoleId) => {
+  const getPublicPoleLable = publicRoleId => {
     return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)
   }
   const hasRole = useMemo(() => {
@@ -72,8 +72,8 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
         // height: !startup ? 322 : 282,
         '&:hover': {
           boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-          border: '1px solid rgba(23, 23, 23, 0.2)',
-        },
+          border: '1px solid rgba(23, 23, 23, 0.2)'
+        }
       }}
       elevation={0}
     >
@@ -96,7 +96,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
                   background: '#D4F5DE',
                   display: 'flex',
                   alignItems: 'center',
-                  flexDirection: 'row',
+                  flexDirection: 'row'
                 }}
               >
                 <Typography variant="body2" color={'#259C4A'} margin={'0 auto'}>
@@ -116,7 +116,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
               overflow="hidden"
               sx={{
                 alignItems: 'baseline',
-                maxWidth: isVerify ? 198 : 228,
+                maxWidth: isVerify ? 198 : 228
               }}
             >
               {title}
@@ -126,7 +126,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
 
           {isEdit && (
             <IconButton
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault()
                 router.push(`/idea/create?id=${objId}`)
               }}
@@ -159,7 +159,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
                   p: '4px 8px',
                   background: 'var(--ps-gray-50)',
                   display: 'inline-flex',
-                  overflow: index > 0 ? 'hidden' : 'visible',
+                  overflow: index > 0 ? 'hidden' : 'visible'
                 }}
               >
                 <Typography variant="body2" sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
@@ -174,7 +174,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
                 p: '4px 8px',
                 background: 'var(--ps-gray-50)',
                 display: 'inline-flex',
-                overflow: !hasRole ? 'visible' : 'hidden',
+                overflow: !hasRole ? 'visible' : 'hidden'
               }}
             >
               <Typography variant="body2" sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
@@ -189,7 +189,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
                 p: '4px 8px',
                 background: 'var(--ps-gray-50)',
                 display: 'inline-flex',
-                overflow: 'hidden',
+                overflow: 'hidden'
               }}
             >
               <Typography variant="body2" sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
@@ -210,7 +210,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
             WebkitLineClamp: ideaTitle ? 4 : 5,
             mt: 16,
             opacity: 0.8,
-            lineHeight: '20px',
+            lineHeight: '20px'
           }}
         >
           {desc || 'No description yet'}
@@ -222,7 +222,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
               likeObj={isTopCompanies ? 2 : 3}
               objId={objId}
               likeAmount={initLikeAmount}
-              onSuccess={(res) => {
+              onSuccess={res => {
                 setInitLikeAmount(res)
               }}
             />
@@ -231,7 +231,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
                 height: 32,
                 minWidth: 0,
                 background: 'none',
-                color: 'var(--ps-gray-900)',
+                color: 'var(--ps-gray-900)'
               }}
             >
               <CommentSVG />

@@ -5,19 +5,19 @@ import { useSelector } from 'react-redux'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { useRouter } from 'next/router'
 import { RootState } from '@/store'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import { getCompanyInvestors } from '@/api/company'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import { getCompanyInvestors } from 'api/company'
 import {
   ICompanyInvestorsListData,
   ICompanyInvestorsListItems,
   ICompanyListItems,
-  ICompanyOverviewInfo,
-} from '@/api/company/type'
+  ICompanyOverviewInfo
+} from 'api/company/type'
 import { getLabel } from '@/utils'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import Tooltip from '@/components/common/Tooltip'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 
 export type ICompanyProfileInvestorsProps = {
   targetCompanyId?: number
@@ -39,22 +39,22 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
       const resp = await getCompanyInvestors({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId,
+        companyId: targetCompanyId
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
       manual: true,
-      onSuccess: (res) => {
+      onSuccess: res => {
         setDataList(dataList.concat(res.list))
       },
       ready: !!targetCompanyId,
       defaultPageSize: DefaultPageSize,
-      refreshDeps: [targetCompanyId],
-    },
+      refreshDeps: [targetCompanyId]
+    }
   )
 
   useEffect(() => {
@@ -103,8 +103,8 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
                   height: 156,
                   '&:hover': {
                     boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid rgba(23, 23, 23, 0.2)',
-                  },
+                    border: '1px solid rgba(23, 23, 23, 0.2)'
+                  }
                 }}
                 spacing={4}
               >
@@ -113,7 +113,7 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
                   sx={{
                     width: 60,
                     height: 60,
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                   onClick={() => handleLink(item)}
                 />
@@ -128,7 +128,7 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
                       sx={{
                         cursor: 'pointer',
                         maxWidth: '100%',
-                        '&:hover': { textDecoration: 'underline' },
+                        '&:hover': { textDecoration: 'underline' }
                       }}
                       onClick={() => handleLink(item)}
                     >

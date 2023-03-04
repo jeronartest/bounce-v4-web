@@ -2,8 +2,8 @@ import { Avatar, Box, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 import VerifiedIcon from '../VerifiedIcon'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import { VerifyStatus } from '@/api/profile/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { VerifyStatus } from 'api/profile/type'
 
 export type IAuctionHolderProps = {
   avatar: string
@@ -20,7 +20,7 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
       direction="row"
       alignItems="center"
       spacing={12}
-      onClick={(ev) => {
+      onClick={ev => {
         ev.preventDefault()
         history.push(href)
       }}
@@ -30,7 +30,7 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
         mt: 20,
         bgcolor: 'var(--ps-gray-50)',
         borderRadius: 12,
-        '&:hover': { bgcolor: 'var(--ps-gray-200)' },
+        '&:hover': { bgcolor: 'var(--ps-gray-200)' }
       }}
     >
       <Avatar src={avatar || DefaultAvatarSVG} sx={{ width: 52, height: 52 }} />

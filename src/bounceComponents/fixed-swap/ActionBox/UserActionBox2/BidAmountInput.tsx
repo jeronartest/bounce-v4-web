@@ -3,12 +3,12 @@ import { Button, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { parseUnits } from 'ethers/lib/utils.js'
 import PoolInfoItem from '../../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
-import NumberInput from '@/components/common/NumberInput'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import NumberInput from 'bounceComponents/common/NumberInput'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { formatNumber } from '@/utils/web3/number'
-import useToken1Balance from '@/hooks/auction/useToken1Balance'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import useToken1Balance from 'bounceHooks/auction/useToken1Balance'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 import { getUserSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
 
 interface BidAmountInputProps {
@@ -24,7 +24,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
 
   const availableAmount1 = useMemo(
     () => new BigNumber(poolInfo.amountTotal1).minus(new BigNumber(poolInfo.currentTotal1)),
-    [poolInfo.amountTotal1, poolInfo.currentTotal1],
+    [poolInfo.amountTotal1, poolInfo.currentTotal1]
   )
 
   const hasBidLimit = new BigNumber(poolInfo.maxAmount1PerWallet).gt(0)
@@ -36,7 +36,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
       poolWithParticipantInfo?.participant.swappedAmount0,
       poolInfo.token0.decimals,
       poolInfo.token1.decimals,
-      poolInfo.ratio,
+      poolInfo.ratio
     )
 
     console.log('userSwappedAmount1.toString(): ', userSwappedAmount1.toString())
@@ -47,7 +47,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
     poolInfo.ratio,
     poolInfo.token0.decimals,
     poolInfo.token1.decimals,
-    poolWithParticipantInfo?.participant.swappedAmount0,
+    poolWithParticipantInfo?.participant.swappedAmount0
   ])
 
   const leftAllocationToken1 = useMemo(
@@ -55,7 +55,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
       hasBidLimit
         ? new BigNumber(poolInfo.maxAmount1PerWallet).minus(userSwappedAmount1Units)
         : new BigNumber(poolInfo.amountTotal1),
-    [hasBidLimit, poolInfo.amountTotal1, poolInfo.maxAmount1PerWallet, userSwappedAmount1Units],
+    [hasBidLimit, poolInfo.amountTotal1, poolInfo.maxAmount1PerWallet, userSwappedAmount1Units]
   )
 
   const handleMaxButtonClick = useCallback(() => {
@@ -71,8 +71,8 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
       formatNumber(minimum.toString(), {
         unit: poolInfo.token1.decimals,
         decimalPlaces: poolInfo.token1.decimals,
-        shouldSplitByComma: false,
-      }),
+        shouldSplitByComma: false
+      })
     )
   }, [availableAmount1, leftAllocationToken1, poolInfo.token1.decimals, setBidAmount, token1Balance])
 
@@ -87,7 +87,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
         fullWidth
         value={bidAmount}
         placeholder="Enter"
-        onUserInput={(value) => {
+        onUserInput={value => {
           setBidAmount(value)
         }}
         endAdornment={

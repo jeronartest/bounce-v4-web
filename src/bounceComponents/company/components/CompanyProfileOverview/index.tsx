@@ -6,16 +6,16 @@ import english from 'i18n-iso-countries/langs/en.json'
 import { useRouter } from 'next/router'
 import moment from 'moment'
 import styles from './styles'
-import { ReactComponent as TwitterIconSVG } from '@/components/profile/components/PersonalOverview/assets/twitter.svg'
-import { ReactComponent as InstagramIconSVG } from '@/components/profile/components/PersonalOverview/assets/instagram.svg'
-import { ReactComponent as WebsiteSVG } from '@/components/profile/components/PersonalOverview/assets/website.svg'
-import { ReactComponent as LinkedinSVG } from '@/components/profile/components/PersonalOverview/assets/linkedin.svg'
-import { ReactComponent as GithubSVG } from '@/components/profile/components/PersonalOverview/assets/github.svg'
-import ClockSVG from '@/components/profile/components/PersonalOverview/assets/clock.svg'
-import { ReactComponent as EmailSVG } from '@/components/profile/components/PersonalOverview/assets/email.svg'
+import { ReactComponent as TwitterIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/twitter.svg'
+import { ReactComponent as InstagramIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/instagram.svg'
+import { ReactComponent as WebsiteSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/website.svg'
+import { ReactComponent as LinkedinSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/linkedin.svg'
+import { ReactComponent as GithubSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/github.svg'
+import ClockSVG from 'bounceComponents/profile/components/PersonalOverview/assets/clock.svg'
+import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
 import { RootState } from '@/store'
 import { getLabel } from '@/utils'
-import { ICompanyOverviewInfo } from '@/api/company/type'
+import { ICompanyOverviewInfo } from 'api/company/type'
 
 countries.registerLocale(english)
 
@@ -34,35 +34,35 @@ const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) =>
       {
         link: companyInfo?.contactEmail,
         isMail: true,
-        icon: <EmailSVG />,
+        icon: <EmailSVG />
       },
       {
         link: companyInfo?.twitter,
         isMail: false,
-        icon: <TwitterIconSVG />,
+        icon: <TwitterIconSVG />
       },
       {
         link: companyInfo?.instagram,
         isMail: false,
-        icon: <InstagramIconSVG />,
+        icon: <InstagramIconSVG />
       },
       {
         link: companyInfo?.website,
         isMail: false,
-        icon: <WebsiteSVG />,
+        icon: <WebsiteSVG />
       },
       {
         link: companyInfo?.linkedin,
         isMail: false,
-        icon: <LinkedinSVG />,
+        icon: <LinkedinSVG />
       },
       {
         link: companyInfo?.github,
         isMail: false,
-        icon: <GithubSVG />,
-      },
+        icon: <GithubSVG />
+      }
     ],
-    [companyInfo],
+    [companyInfo]
   )
 
   const handleFounder = (userId: number) => {
@@ -117,8 +117,8 @@ const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) =>
                             color: companyInfo?.founders ? 'var(--ps-blue)' : 'var(--ps-gray-900)',
                             '&:hover': {
                               textDecoration: companyInfo?.founders ? 'underline' : 'none',
-                              cursor: companyInfo?.founders ? 'pointer' : 'default',
-                            },
+                              cursor: companyInfo?.founders ? 'pointer' : 'default'
+                            }
                           }}
                           key={item.userId}
                           onClick={() => handleFounder(item.userId)}

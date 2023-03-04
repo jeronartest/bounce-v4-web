@@ -6,9 +6,9 @@ import {
   Typography,
   DialogTitle,
   IconButton,
-  DialogProps as MuiDialogProps,
+  DialogProps as MuiDialogProps
 } from '@mui/material'
-import { ReactComponent as CloseSVG } from '@/assets/imgs/components/close.svg'
+import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 
 export interface DialogProps extends MuiDialogProps {
   title?: string
@@ -25,8 +25,8 @@ const Dialog = ({ title, children, open, onClose, ...restProps }: DialogProps) =
       sx={{
         '& .MuiDialog-paper': {
           maxWidth: 860,
-          borderRadius: 20,
-        },
+          borderRadius: 20
+        }
       }}
     >
       <DialogTitle sx={{ padding: '20px 20px 40px 102px' }}>

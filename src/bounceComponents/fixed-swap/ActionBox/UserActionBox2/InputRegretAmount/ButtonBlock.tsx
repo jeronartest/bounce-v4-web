@@ -2,8 +2,8 @@ import { Button, Stack } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { parseUnits } from 'ethers/lib/utils.js'
 import React from 'react'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 export interface ButtonBlockProps {
   regretAmount: string

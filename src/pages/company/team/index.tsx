@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
 import { RootState } from '@/store'
-import { ReactComponent as EditSVG } from '@/assets/imgs/companies/edit.svg'
-import { ICompanyOverviewInfo } from '@/api/company/type'
-import { getCompanyInfo } from '@/api/company'
-import CompanyOverviewLayout from '@/components/company/CompanyOverviewLayout'
-import Team from '@/components/company/components/Team'
+import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
+import { ICompanyOverviewInfo } from 'api/company/type'
+import { getCompanyInfo } from 'api/company'
+import CompanyOverviewLayout from 'bounceComponents/company/CompanyOverviewLayout'
+import Team from 'bounceComponents/company/components/Team'
 
 const CompanyTeam: React.FC = () => {
   const { companyInfo: initCompanyInfo, userId } = useSelector((state: RootState) => state.user)
@@ -19,7 +19,7 @@ const CompanyTeam: React.FC = () => {
     const getInfo = async () => {
       const res = await getCompanyInfo({
         thirdpartId: thirdpartId ? Number(thirdpartId) : undefined,
-        userId: id ? Number(id) : undefined,
+        userId: id ? Number(id) : undefined
       })
       setCompanyInfo(res.data)
     }
@@ -46,8 +46,8 @@ const CompanyTeam: React.FC = () => {
             background: 'none',
             '&:hover': {
               background: 'none',
-              color: 'var(--ps-blue)',
-            },
+              color: 'var(--ps-blue)'
+            }
           }}
         >
           <EditSVG style={{ marginRight: 10 }} />

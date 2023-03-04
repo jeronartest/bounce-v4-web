@@ -9,19 +9,19 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import React from 'react'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import EducationForm from '../EducationForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
-import { educationItems } from '@/api/profile/type'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+import { educationItems } from 'api/profile/type'
 import { getLabel } from '@/utils'
 import { RootState } from '@/store'
-import MuiDialog from '@/components/common/Dialog'
-import EducationDefaultSVG from '@/assets/imgs/defaultAvatar/education.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 
 export type IEducationListProps = {
   list: educationItems[]
@@ -32,11 +32,11 @@ export type IEducationListProps = {
 const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
 
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     show(MuiDialog, {
       title: 'Edit the education',
       fullWidth: true,
-      children: <EducationForm editData={v} onEdit={onEdit} onDelete={onDelete} />,
+      children: <EducationForm editData={v} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 
@@ -50,7 +50,7 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
             background: 'var(--ps-gray-50)',
             borderRadius: '20px',
             marginBottom: 8,
-            padding: '20px',
+            padding: '20px'
           }}
         >
           <ListItemAvatar sx={{ minWidth: 0, marginRight: 20, marginTop: 0 }}>
@@ -61,8 +61,8 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
                 width: 68,
                 height: 68,
                 '&:hover': {
-                  cursor: v?.university?.link ? 'pointer' : 'default',
-                },
+                  cursor: v?.university?.link ? 'pointer' : 'default'
+                }
               }}
               component={'a'}
               target={v?.university?.link ? '_blank' : '_self'}
@@ -84,8 +84,8 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
                     wordBreak: 'break-word',
                     '&:hover': {
                       textDecoration: v?.university?.link ? 'underline' : 'none',
-                      cursor: v?.university?.link ? 'pointer' : 'default',
-                    },
+                      cursor: v?.university?.link ? 'pointer' : 'default'
+                    }
                   }}
                 >
                   {v?.university?.name}
@@ -110,7 +110,7 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
                     {/* <Typography variant="body2">{v.major}</Typography> */}
                     <Typography variant="body2">
                       {`${dayjs(v.startTime * 1000).format('YYYY')}-${dayjs(v.endTime * 1000).format('YYYY')}(${dayjs(
-                        v.endTime * 1000,
+                        v.endTime * 1000
                       ).diff(dayjs(v.startTime * 1000), 'year')} years)`}
                     </Typography>
                   </Stack>
@@ -122,7 +122,7 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
                       textOverflow: 'ellipsis',
                       display: '-webkit-box',
                       WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 2,
+                      WebkitLineClamp: 2
                     }}
                   >
                     {v.description}

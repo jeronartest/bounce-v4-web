@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import Head from 'next/head'
 import { useSelector } from 'react-redux'
-import RootWrap from '@/components/company/CompanyTeam/components/RootWrap'
-import EditLayout, { profileTabsList } from '@/components/company/EditLayout'
-import BasicInvestments from '@/components/profile/BasicInvestments'
+import RootWrap from 'bounceComponents/company/CompanyTeam/components/RootWrap'
+import EditLayout, { profileTabsList } from 'bounceComponents/company/EditLayout'
+import BasicInvestments from 'bounceComponents/profile/BasicInvestments'
 import { RootState } from '@/store'
 
 const CompanyInvestmentsEdit: React.FC = () => {

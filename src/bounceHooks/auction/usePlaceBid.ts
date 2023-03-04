@@ -9,17 +9,17 @@ import { parseUnits } from '@ethersproject/units'
 
 import { BigNumber } from 'bignumber.js'
 import { ContractReceipt, ContractTransaction } from 'ethers'
-import { useErc20Contract, useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
+import { useErc20Contract, useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
 import { getFixedSwapContractAddress } from '@/utils/web3/contract'
 import { swapCall } from '@/utils/web3/contractCalls/fixedSwap'
 import { allowanceCall, approveCall } from '@/utils/web3/contractCalls/erc20'
-import { PoolStatus, PoolType } from '@/api/pool/type'
-import { getUserWhitelistProof } from '@/api/user'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import { PoolStatus, PoolType } from 'api/pool/type'
+import { getUserWhitelistProof } from 'api/user'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { NATIVE_TOEN_ADDRESS } from '@/constants/auction'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 import { showRequestApprovalDialog, showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
 import { formatNumber } from '@/utils/web3/number'
 
@@ -52,18 +52,18 @@ const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) 
 
       if (poolInfo.enableWhiteList) {
         const {
-          data: { proof: rawProofStr },
+          data: { proof: rawProofStr }
         } = await getUserWhitelistProof({
           address: account,
           category: PoolType.FixedSwap,
           chainId: chainConfigInBackend?.id,
-          poolId: String(poolId),
+          poolId: String(poolId)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
 
         if (Array.isArray(rawProofJson)) {
-          proofArr = rawProofJson.map((rawProof) => `0x${rawProof}`)
+          proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
         }
       }
 
@@ -106,8 +106,8 @@ const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) 
           againBtn: 'Close',
           title: 'Congratulations!',
           content: `You have successfully bid ${formatNumber(new BigNumber(params[0]).div(poolInfo.ratio), {
-            unit: 0,
-          })} ${poolInfo.token0.symbol}`,
+            unit: 0
+          })} ${poolInfo.token0.symbol}`
         })
         options?.onSuccess?.(data)
       },
@@ -119,14 +119,14 @@ const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) 
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: request.refresh,
+          onAgain: request.refresh
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return request

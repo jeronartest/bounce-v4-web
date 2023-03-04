@@ -4,13 +4,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import TokensForm from '../TokensForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { getLabel } from '@/utils'
 import { RootState } from '@/store'
 import { shortenAddress } from '@/utils/web3/address'
-import { ICompanyTokensListItems } from '@/api/company/type'
-import MuiDialog from '@/components/common/Dialog'
-import TokenDefaultSVG from '@/assets/imgs/defaultAvatar/token.svg'
+import { ICompanyTokensListItems } from 'api/company/type'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
 
 export type ITokensListProps = {
   list: ICompanyTokensListItems[]
@@ -21,11 +21,11 @@ export type ITokensListProps = {
 const TokensList: React.FC<ITokensListProps> = ({ list, onEdit, onDelete }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
 
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     show(MuiDialog, {
       title: 'Edit the team member',
       fullWidth: true,
-      children: <TokensForm editData={v} onEdit={onEdit} onDelete={onDelete} />,
+      children: <TokensForm editData={v} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 
@@ -38,7 +38,7 @@ const TokensList: React.FC<ITokensListProps> = ({ list, onEdit, onDelete }) => {
             background: 'var(--ps-gray-50)',
             borderRadius: '20px',
             marginBottom: 8,
-            padding: '16px 20px',
+            padding: '16px 20px'
           }}
         >
           <Stack direction="row" justifyContent="space-between" alignItems="flex-start">

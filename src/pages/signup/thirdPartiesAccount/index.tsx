@@ -1,25 +1,25 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 import { Box, OutlinedInput } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 
-import LoginLayout from '@/components/signup/LoginLayout'
-import { USER_TYPE } from '@/api/user/type'
-import { useRegister } from '@/hooks/user/useRegister'
-import { checkEmail } from '@/api/user'
+import LoginLayout from 'bounceComponents/signup/LoginLayout'
+import { USER_TYPE } from 'api/user/type'
+import { useRegister } from 'bounceHooks/user/useRegister'
+import { checkEmail } from 'api/user'
 
-export type IThirdPartiesAccountProps = {}
+// export type IThirdPartiesAccountProps = {}
 const validationSchema = yup.object({
   email: yup
     .string()
     .trim()
     .required('Please enter your email address')
     .email('Incorrect email address')
-    .test('CHECK_EMAIL', 'This email is registered', async (value) => {
+    .test('CHECK_EMAIL', 'This email is registered', async value => {
       const { code, data } = await checkEmail({ email: value })
       if (code === 200 && data?.exist) {
         return false
@@ -31,15 +31,15 @@ const validationSchema = yup.object({
     .trim()
     .required('Please enter your full name')
     .matches(/^[^\u4E00-\u9FA5]+$/g, 'Incorrect full name')
-    .max(300, 'Full name should contain 1-300 characters'),
+    .max(300, 'Full name should contain 1-300 characters')
 })
 
-const ThirdPartiesAccount: React.FC<IThirdPartiesAccountProps> = ({}) => {
+const ThirdPartiesAccount: React.FC = ({}) => {
   const router = useRouter()
   const { accessToken, oauthType } = router.query as any
   const initialValues = {
     email: '',
-    name: '',
+    name: ''
   }
   const { loading, runAsync: runRegister } = useRegister()
   const handleSubmit = (values: typeof initialValues) => {
@@ -49,7 +49,7 @@ const ThirdPartiesAccount: React.FC<IThirdPartiesAccountProps> = ({}) => {
       password: '',
       accessToken: accessToken,
       registerType: Number(oauthType),
-      userType: USER_TYPE.USER,
+      userType: USER_TYPE.USER
     })
   }
 

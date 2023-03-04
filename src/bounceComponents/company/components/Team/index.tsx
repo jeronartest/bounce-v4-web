@@ -4,12 +4,12 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { RootState } from '@/store'
-import { useGetCompanyTeam } from '@/hooks/company/useGetCompanyTeam'
+import { useGetCompanyTeam } from 'bounceHooks/company/useGetCompanyTeam'
 import { getPrimaryRoleLabel } from '@/utils'
-import { ICompanyOverviewInfo } from '@/api/company/type'
-import NoData from '@/components/common/NoData'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import { ICompanyOverviewInfo } from 'api/company/type'
+import NoData from 'bounceComponents/common/NoData'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type ITeamProps = {
   targetCompanyId: number
@@ -24,7 +24,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
   }, [runGetCompanyTeam, targetCompanyId])
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
 
-  const getrolesName = (item) => {
+  const getrolesName = item => {
     const temp = item?.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
     return temp?.length === 1 ? temp : temp?.join(' & ')
   }
@@ -48,8 +48,8 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
                       height: 156,
                       '&:hover': {
                         boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-                        border: '1px solid rgba(23, 23, 23, 0.2)',
-                      },
+                        border: '1px solid rgba(23, 23, 23, 0.2)'
+                      }
                     }}
                   >
                     <Avatar
@@ -58,7 +58,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
                         width: 100,
                         height: 100,
                         alignSelf: 'center',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                       }}
                       onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
                     />
@@ -90,7 +90,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
                           display="-webkit-box"
                           sx={{
                             WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: getrolesName(item.roleIds)?.length > 28 ? 2 : 3,
+                            WebkitLineClamp: getrolesName(item.roleIds)?.length > 28 ? 2 : 3
                           }}
                         >
                           {item.bio || 'No description yet'}

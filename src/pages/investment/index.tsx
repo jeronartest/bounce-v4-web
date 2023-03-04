@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import React from 'react'
 
-export type IInvestmentProps = {}
+// export type IInvestmentProps = {}
 
-const Investment: React.FC<IInvestmentProps> = ({}) => {
+const Investment: React.FC = ({}) => {
   return (
     <>
       <Head>

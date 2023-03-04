@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import CompanyOverviewLayout from '@/components/company/CompanyOverviewLayout'
-import Activties from '@/components/company/components/Activties'
-import { UserType } from '@/api/market/type'
+import CompanyOverviewLayout from 'bounceComponents/company/CompanyOverviewLayout'
+import Activties from 'bounceComponents/company/components/Activties'
+import { UserType } from 'api/market/type'
 
 const CompanyActivities: React.FC = () => {
   return (

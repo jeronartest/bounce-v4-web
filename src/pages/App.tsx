@@ -6,7 +6,7 @@ import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import Web3ReactManager from '../components/essential/Web3ReactManager'
 // import WarningModal from '../components/Modal/WarningModal'
-import ComingSoon from './ComingSoon'
+// import ComingSoon from './ComingSoon'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -80,11 +80,10 @@ export default function App() {
                 <Web3ReactManager>
                   <Routes>
                     <Route path={routes.login} element={<Login />} />
-                    <Route path={routes.signup} element={<Signup />} />
-                    <Route path={routes.test2} element={<ComingSoon />} />
-                    <Route path={routes.test3} element={<ComingSoon />}>
+                    <Route path={routes.signup.index} element={<Signup />} />
+                    {/* <Route path={routes.test2} element={<ComingSoon />} />
                       <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
-                    </Route>
+                    </Route> */}
                     <Route path="*" element={<Navigate to={routes.login} replace />} />
                   </Routes>
                 </Web3ReactManager>

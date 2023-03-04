@@ -6,7 +6,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  Stack,
+  Stack
 } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -14,13 +14,13 @@ import { show } from '@ebay/nice-modal-react'
 import Typography from '@mui/material/Typography'
 import { useRouter } from 'next/router'
 import TeamForm from '../TeamForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { RootState } from '@/store'
 import { getPrimaryRoleLabel } from '@/utils'
-import MuiDialog from '@/components/common/Dialog'
-import { ICompanyTeamListItems } from '@/api/company/type'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { ICompanyTeamListItems } from 'api/company/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type ITeamListProps = {
   list: ICompanyTeamListItems[]
@@ -32,27 +32,27 @@ const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
 
-  const getrolesName = (item) => {
+  const getrolesName = item => {
     const temp = item.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
     return temp.length === 1 ? temp : temp.join(', ')
   }
 
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     const temp = {
       data: {
         user: {
           userId: v.data.userId,
           name: v.data.userName,
-          avatar: v.data.userAvatar,
+          avatar: v.data.userAvatar
         },
-        roleIds: v.data.roleIds,
+        roleIds: v.data.roleIds
       },
-      index: v.index,
+      index: v.index
     }
     show(MuiDialog, {
       title: 'Edit the team member',
       fullWidth: true,
-      children: <TeamForm editData={temp} onEdit={onEdit} onDelete={onDelete} />,
+      children: <TeamForm editData={temp} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 
@@ -65,7 +65,7 @@ const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
             background: 'var(--ps-gray-50)',
             borderRadius: '20px',
             marginBottom: 8,
-            padding: '14px 0px 14px 10px',
+            padding: '14px 0px 14px 10px'
           }}
         >
           <ListItemAvatar sx={{ minWidth: 0, marginRight: 12 }}>
@@ -83,8 +83,8 @@ const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
                 sx={{
                   '&:hover': {
                     cursor: 'pointer',
-                    textDecoration: 'underline',
-                  },
+                    textDecoration: 'underline'
+                  }
                 }}
                 onClick={() => router.push(`/profile/summary?id=${v?.userId}`)}
               >

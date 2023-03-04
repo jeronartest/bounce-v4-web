@@ -8,14 +8,14 @@ import { CompanyActionType } from '../components/CompanyContextProvider'
 import Add from './components/Add'
 import TeamList from './components/TeamList'
 import TeamForm from './components/TeamForm'
-import { useGetCompanyTeam } from '@/hooks/company/useGetCompanyTeam'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useUpdateCompany } from '@/hooks/company/useUpdateCompany'
-import { ICompanyProfileParams, ICompanyTeamListItems } from '@/api/company/type'
+import { useGetCompanyTeam } from 'bounceHooks/company/useGetCompanyTeam'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
+import { ICompanyProfileParams, ICompanyTeamListItems } from 'api/company/type'
 import { RootState } from '@/store'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 
 export type ICompanyTeamProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -25,7 +25,7 @@ export type ICompanyTeamProps = {
 
 const add_text = {
   label: 'Add new team member',
-  description: "Nothing to see for now. When you add new team member, they'll show up here.",
+  description: "Nothing to see for now. When you add new team member, they'll show up here."
 }
 
 const CompanyTeam: React.FC<ICompanyTeamProps> = ({ companyProfileValues, firstEdit, companyProfileDispatch }) => {
@@ -58,11 +58,11 @@ const CompanyTeam: React.FC<ICompanyTeamProps> = ({ companyProfileValues, firstE
   }, [data?.data?.list, firstEdit, companyProfileValues?.teamMembers])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -72,19 +72,19 @@ const CompanyTeam: React.FC<ICompanyTeamProps> = ({ companyProfileValues, firstE
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new team member',
       fullWidth: true,
-      children: <TeamForm onAdd={addList} />,
+      children: <TeamForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         if (list?.length === 0) {
           return toast.error('Please add your team members')
@@ -94,26 +94,26 @@ const CompanyTeam: React.FC<ICompanyTeamProps> = ({ companyProfileValues, firstE
           type: CompanyActionType.SetTeam,
           payload: {
             ...companyProfileValues,
-            teamMembers: ['DIRECTLY'].includes(flag) ? [] : list,
-          },
+            teamMembers: ['DIRECTLY'].includes(flag) ? [] : list
+          }
         })
       }
       runUpdateCompany({ teamMembers: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => {
         setFormDirty(false)
       })
     },
-    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch],
+    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

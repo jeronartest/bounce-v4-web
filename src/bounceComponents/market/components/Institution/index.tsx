@@ -14,7 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
@@ -22,17 +22,17 @@ import moment from 'moment'
 import { usePagination } from 'ahooks'
 import { useRouter } from 'next/router'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from '@/components/common/NoData'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as CheckCardSVG } from '@/assets/imgs/companies/checkCard.svg'
-import { ReactComponent as CheckTableSVG } from '@/assets/imgs/companies/checkTable.svg'
-import { ReactComponent as CheckNoCardSVG } from '@/assets/imgs/companies/checkNoCard.svg'
-import { ReactComponent as CheckNoTableSVG } from '@/assets/imgs/companies/checkNoTable.svg'
-import { ReactComponent as GameSVG } from '@/assets/imgs/companies/game.svg'
-import InstitutionCard from '@/components/companies/InstitutionCard'
-import { getInstitutionInvestors } from '@/api/market'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import NoData from 'bounceComponents/common/NoData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as CheckCardSVG } from 'assets/imgs/companies/checkCard.svg'
+import { ReactComponent as CheckTableSVG } from 'assets/imgs/companies/checkTable.svg'
+import { ReactComponent as CheckNoCardSVG } from 'assets/imgs/companies/checkNoCard.svg'
+import { ReactComponent as CheckNoTableSVG } from 'assets/imgs/companies/checkNoTable.svg'
+import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
+import { getInstitutionInvestors } from 'api/market'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type IInstitutionProps = {
   userName: string
@@ -46,24 +46,24 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
   const {
     pagination,
     data: institutionInvestorsData,
-    loading: institutionInvestorsLoading,
+    loading: institutionInvestorsLoading
   } = usePagination(
     async ({ current, pageSize }) => {
       const resp = await getInstitutionInvestors({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         name: userName,
-        startup: checkTime === 0 ? 0 : moment().subtract(checkTime, 'year').unix(),
+        startup: checkTime === 0 ? 0 : moment().subtract(checkTime, 'year').unix()
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
       defaultPageSize: defaultPageSize,
-      refreshDeps: [userName, checkTime],
-    },
+      refreshDeps: [userName, checkTime]
+    }
   )
   const handlePageChange = (e, p) => {
     pagination.changeCurrent(p)
@@ -74,7 +74,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <FormItem name="startTime" label="Start time" sx={{ width: 190 }}>
           <Select
-            onChange={(event) => {
+            onChange={event => {
               setCheckTime(event.target.value as number)
             }}
             defaultValue={0}
@@ -132,7 +132,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
                       router.push(
                         `/company/summary?${
                           item?.thirdpartId !== 0 ? `thirdpartId=${item?.thirdpartId}` : `id=${item?.companyId}`
-                        }`,
+                        }`
                       )
                     }}
                   >
@@ -163,7 +163,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
                       <Typography variant="h6" color={'var(--ps-gray-700)'} textTransform={'uppercase'}>
                         {item}
                       </Typography>
-                    </TableCell>,
+                    </TableCell>
                   ])}
                 </TableRow>
               </TableHead>
@@ -191,7 +191,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
                             router.push(
                               `/company/summary?${
                                 row?.thirdpartId !== 0 ? `thirdpartId=${row?.thirdpartId}` : `id=${row?.companyId}`
-                              }`,
+                              }`
                             )
                           }}
                         >

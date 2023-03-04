@@ -7,16 +7,16 @@ import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as DeleteIcon } from '@/assets/imgs/components/delete.svg'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
 import { RootState } from '@/store'
-import { searchEduInfo } from '@/api/optionsData'
-import { educationItems, FormType } from '@/api/profile/type'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import DateMonthPicker from '@/components/common/DateMonthPicker'
+import { searchEduInfo } from 'api/optionsData'
+import { educationItems, FormType } from 'api/profile/type'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
 import { formCheckValid } from '@/utils'
-import EducationDefaultSVG from '@/assets/imgs/defaultAvatar/education.svg'
+import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 
 export type IEducationFormProps = {
   onAdd?: (data: educationItems) => void
@@ -34,7 +34,7 @@ const validationSchema = yup.object({
       .max(300, 'Allow only no more than 300 letters')
       .matches(/^[^\u4E00-\u9FA5]+$/g, 'Incorrect educational institution'),
     link: yup.string(),
-    avatar: yup.string(),
+    avatar: yup.string()
   }),
   startTime: yup
     .number()
@@ -61,7 +61,7 @@ const validationSchema = yup.object({
   description: yup
     .string()
     .required('Please introduce yourself, your GPA')
-    .max(DESCRIPTION_LENGTH, `Allow only no more than ${DESCRIPTION_LENGTH} letters`),
+    .max(DESCRIPTION_LENGTH, `Allow only no more than ${DESCRIPTION_LENGTH} letters`)
 })
 
 const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
@@ -74,13 +74,13 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
         university: {
           avatar: '',
           link: '',
-          name: '',
+          name: ''
         },
         startTime: 0,
         endTime: 0,
         degree: '',
         major: '',
-        description: '',
+        description: ''
       }
 
   const handleSubmit = useCallback(
@@ -92,11 +92,11 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
       }
       modal.hide()
     },
-    [editData, modal, onAdd, onEdit],
+    [editData, modal, onAdd, onEdit]
   )
 
   const handleDelete = useCallback(
-    (handleReset) => {
+    handleReset => {
       if (!editData) {
         handleReset()
       } else {
@@ -104,7 +104,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
         modal.hide()
       }
     },
-    [editData, modal, onDelete],
+    [editData, modal, onDelete]
   )
 
   const [eduOptions, setEduOptions] = useState<ISearchOption[]>([])
@@ -119,20 +119,20 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
     searchEduInfo({
       limit: 100,
       offset: 0,
-      value: searchText,
-    }).then((res) => {
+      value: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
       setEduOptions(
-        data.list.map((v) => {
+        data.list.map(v => {
           return {
             label: v.name,
             icon: v.avatar || EducationDefaultSVG,
-            value: v,
+            value: v
           }
-        }),
+        })
       )
     })
   }, [searchText, first])
@@ -150,7 +150,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
                     selected={{
                       label: values.university.name,
                       icon: values.university.avatar,
-                      value: values.university,
+                      value: values.university
                     }}
                     onSearch={(text: string) => {
                       setfirst(false)
@@ -170,7 +170,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
                 <FormItem name="startTime" label="Start Date" required fieldType="custom">
                   <DateMonthPicker
                     value={values.startTime}
-                    onChange={(val) => {
+                    onChange={val => {
                       const { year, month } = val
                       const tempMonth = month + 1 < 10 ? `0${month + 1}` : month + 1
                       setFieldValue('startTime', moment(`${year}-${tempMonth}-01`).unix())
@@ -182,7 +182,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
                 <FormItem name="endTime" label="End Date" required fieldType="custom">
                   <DateMonthPicker
                     value={values.endTime}
-                    onChange={(val) => {
+                    onChange={val => {
                       const { year, month } = val
                       const tempMonth = month + 1 < 10 ? `0${month + 1}` : month + 1
                       setFieldValue('endTime', moment(`${year}-${tempMonth}-01`).unix())
@@ -193,7 +193,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
               <Grid item xs={12}>
                 <FormItem name="degree" label="Degree Type" required>
                   <Select>
-                    {optionDatas?.degreeOpt.map((v) => (
+                    {optionDatas?.degreeOpt.map(v => (
                       <MenuItem key={v.id} value={v.id}>
                         {v.degree}
                       </MenuItem>

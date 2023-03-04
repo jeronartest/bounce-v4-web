@@ -6,16 +6,16 @@ import { Button, Grid, MenuItem, Select } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as DeleteIcon } from '@/assets/imgs/components/delete.svg'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchUser } from '@/api/optionsData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import { searchUser } from 'api/optionsData'
 import { RootState } from '@/store'
-import { ICompanyInvestorsListItems } from '@/api/company/type'
+import { ICompanyInvestorsListItems } from 'api/company/type'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
+import { FormType } from 'api/profile/type'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 
 export type IInvestorsFormProps = {
   onAdd?: (data: ICompanyInvestorsListItems) => void
@@ -33,9 +33,9 @@ const validationSchema = yup.object({
       .required(formCheckValid('Full name', FormType.Input))
       .max(300, 'Allow only no more than 300 letters')
       .matches(/^[^\u4E00-\u9FA5]+$/g, 'Incorrect full name'),
-    avatar: yup.string(),
+    avatar: yup.string()
   }),
-  investorType: yup.string().required(formCheckValid('Investor type', FormType.Select)),
+  investorType: yup.string().required(formCheckValid('Investor type', FormType.Select))
 })
 
 const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
@@ -48,13 +48,13 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
         userInfo: {
           link: '',
           name: '',
-          avatar: '',
+          avatar: ''
         },
         investorType: '',
         userId: 0,
         thirdpartId: 0,
         linkedinName: '',
-        companyId: 0,
+        companyId: 0
       }
 
   const handleSubmit = useCallback(
@@ -66,11 +66,11 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
       }
       modal.hide()
     },
-    [editData, modal, onAdd, onEdit],
+    [editData, modal, onAdd, onEdit]
   )
 
   const handleDelete = useCallback(
-    (handleReset) => {
+    handleReset => {
       if (!editData) {
         handleReset()
       } else {
@@ -78,7 +78,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
         modal.hide()
       }
     },
-    [editData, modal, onDelete],
+    [editData, modal, onDelete]
   )
 
   const [userData, setUserData] = useState<ISearchOption[]>([])
@@ -90,17 +90,17 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
       limit: 100,
       offset: 0,
       userType: searchType === 2 ? 3 : searchType,
-      value: searchText,
-    }).then((res) => {
+      value: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('System failed. Please try again')
       }
-      const temp = data?.list?.map((v) => {
+      const temp = data?.list?.map(v => {
         return {
           label: v?.name,
           icon: v?.avatar || (searchType === 2 ? CompanyDefaultSVG : DefaultAvatarSVG),
-          value: v,
+          value: v
         }
       })
       setUserData(temp)
@@ -117,13 +117,13 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
                 <FormItem name="investorType" label="Investor type" required fieldType="custom">
                   <Select
                     value={values.investorType}
-                    onChange={(ev) => {
+                    onChange={ev => {
                       setSearchType(ev.target.value)
                       setFieldValue('investorType', ev.target.value)
                       setFieldValue('userInfo', {
                         link: '',
                         name: '',
-                        avatar: '',
+                        avatar: ''
                       })
                       setFieldValue('userId', 0)
                       setFieldValue('thirdpartId', 0)
@@ -131,7 +131,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
                       setFieldValue('companyId', 0)
                     }}
                   >
-                    {optionDatas?.investorTypeOpt?.map((v) => (
+                    {optionDatas?.investorTypeOpt?.map(v => (
                       <MenuItem key={v.id} value={v.id}>
                         {v.investorType}
                       </MenuItem>
@@ -146,7 +146,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
                     selected={{
                       label: values.userInfo.name,
                       icon: values.userInfo.avatar,
-                      value: values.userInfo,
+                      value: values.userInfo
                     }}
                     onSearch={(text: string) => setSearchText(text)}
                     value={values?.userInfo?.name}
@@ -158,7 +158,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
                       setFieldValue('userInfo', {
                         avatar: newVal.value.avatar,
                         link: newVal.value.link || '',
-                        name: newVal.value.name,
+                        name: newVal.value.name
                       })
                       setFieldValue('userId', newVal.value.userId)
                       setFieldValue('thirdpartId', newVal.value.thirdpartId)

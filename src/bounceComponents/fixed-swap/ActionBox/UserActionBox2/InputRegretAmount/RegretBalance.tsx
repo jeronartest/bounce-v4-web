@@ -5,14 +5,14 @@ import { BigNumber } from 'bignumber.js'
 
 import { commify, parseUnits } from 'ethers/lib/utils.js'
 import Image from 'next/image'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
-import PoolInfoItem from '@/components/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import NumberInput from '@/components/common/NumberInput'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import NumberInput from 'bounceComponents/common/NumberInput'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 
-import ErrorSVG from '@/assets/imgs/icon/error_outline.svg'
+import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
 
 const RegretBalance = () => {
   const { data: poolInfo, loading: isPoolInfoLoading } = usePoolInfo()
@@ -22,7 +22,7 @@ const RegretBalance = () => {
     !isPoolInfoLoading && !isPoolWithParticipantInfoLoading
       ? poolWithParticipantInfo?.participant.swappedAmount0
         ? formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-            unit: poolInfo.token0.decimals,
+            unit: poolInfo.token0.decimals
           })
         : '0'
       : '-'

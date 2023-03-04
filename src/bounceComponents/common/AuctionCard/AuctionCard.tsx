@@ -5,9 +5,9 @@ import moment from 'moment'
 import Image from 'next/image'
 import { AuctionProgress, IAuctionProgressProps } from './AuctionProgress'
 import styles from './styles'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
-import PoolStatusBox from '@/components/fixed-swap/ActionBox/PoolStatus'
-import { PoolStatus } from '@/api/pool/type'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { PoolStatus } from 'api/pool/type'
 import { CHAIN_ICONS } from '@/constants/web3/chains'
 
 export type IAuctionCardProps = {
@@ -45,7 +45,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   chainId,
   progress,
   listItems,
-  claimAt,
+  claimAt
 }) => {
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
   const [, { days, hours, minutes, seconds }] = useCountDown({ targetDate: claimAt * 1000 })

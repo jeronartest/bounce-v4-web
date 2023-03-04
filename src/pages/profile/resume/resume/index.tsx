@@ -6,14 +6,14 @@ import { LoadingButton } from '@mui/lab'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import FormItem from '@/components/common/FormItem'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
+import FormItem from 'bounceComponents/common/FormItem'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import { RootState } from '@/store'
-import EditLayout, { resumeTabsList } from '@/components/company/EditLayout'
-import ResumeUpload from '@/components/profile/ResumeFiles/ResumeUpload'
-import { IUpdatePersonalParams } from '@/api/profile/type'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
+import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
+import ResumeUpload from 'bounceComponents/profile/ResumeFiles/ResumeUpload'
+import { IUpdatePersonalParams } from 'api/profile/type'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 
 const validationSchema = yup.object({
   resumes: yup.array().of(
@@ -23,9 +23,9 @@ const validationSchema = yup.object({
       fileThumbnailUrl: yup.string(),
       fileType: yup.string(),
       fileUrl: yup.string(),
-      id: yup.number(),
-    }),
-  ),
+      id: yup.number()
+    })
+  )
 })
 
 export type IResumeFilesProps = {
@@ -45,7 +45,7 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
   }, [firstEdit])
 
   const initialValues = {
-    resumes: userInfo?.resumes || [],
+    resumes: userInfo?.resumes || []
   }
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
@@ -54,7 +54,7 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
     if (firstEdit) {
       return runPersonalResume?.({
         ...resumeProfileValues,
-        resumes: values.resumes,
+        resumes: values.resumes
       }).then(() => {
         e?.resetForm()
         router.push('/profile/portfolio')
@@ -89,14 +89,14 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
               <FormItem label="" name="resumes" fieldType="custom">
                 <ResumeUpload
                   value={values.resumes}
-                  onChange={(files) => {
+                  onChange={files => {
                     setFieldValue('resumes', files)
                     setFormDirty(true)
                   }}
                   maxNum={3}
                   accept={[
                     'application/pdf',
-                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
                   ]}
                   tips={'Only PDF, PPTX Files, Size<50M'}
                   limitSize={50}

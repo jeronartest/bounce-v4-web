@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Avatar,
   Alert,
-  AlertTitle,
+  AlertTitle
 } from '@mui/material'
 import { Field, Form, Formik } from 'formik'
 import React, { SetStateAction } from 'react'
@@ -26,13 +26,13 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 
-import LogoSVG from '@/assets/imgs/components/logo.svg'
+import LogoSVG from 'assets/imgs/components/logo.svg'
 
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 import { formatNumber } from '@/utils/web3/number'
-import Tooltip from '@/components/common/Tooltip'
+import Tooltip from 'bounceComponents/common/Tooltip'
 import { SupportedChainId } from '@/constants/web3/chains'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
 interface FormValues {
   tokenFromAddress: string
@@ -56,7 +56,7 @@ const AuctionParametersForm = (): JSX.Element => {
       .test(
         'DIFFERENT_TOKENS',
         'Please choose a different token',
-        (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress,
+        (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
     swapRatio: Yup.number()
       .positive('Swap ratio must be positive')
@@ -69,13 +69,13 @@ const AuctionParametersForm = (): JSX.Element => {
       .test(
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
-        (value) => !value || (balance && balance.gte(parseUnits(String(value), valuesState.tokenFrom.decimals))),
+        value => !value || (balance && balance.gte(parseUnits(String(value), valuesState.tokenFrom.decimals)))
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
-        then: Yup.number().typeError('Please input valid number').required('Allocation per wallet is required'),
+        then: Yup.number().typeError('Please input valid number').required('Allocation per wallet is required')
       })
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
@@ -87,9 +87,9 @@ const AuctionParametersForm = (): JSX.Element => {
             (value, context) =>
               !context.parent.poolSize ||
               !context.parent.swapRatio ||
-              value <= context.parent.poolSize * context.parent.swapRatio,
-          ),
-      }),
+              value <= context.parent.poolSize * context.parent.swapRatio
+          )
+      })
   })
 
   const valuesState = useValuesState()
@@ -107,7 +107,7 @@ const AuctionParametersForm = (): JSX.Element => {
     swapRatio: valuesState.swapRatio || '',
     poolSize: valuesState.poolSize || '',
     allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
-    allocationPerWallet: valuesState.allocationPerWallet || '',
+    allocationPerWallet: valuesState.allocationPerWallet || ''
   }
 
   const router = useRouter()
@@ -117,20 +117,20 @@ const AuctionParametersForm = (): JSX.Element => {
   const showTokenDialog = (
     chainId: SupportedChainId,
     values: FormValues,
-    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void,
+    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
     show<Token>(TokenDialog, { enableEth: true, chainId })
-      .then((res) => {
+      .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           ...values,
           tokenToAddress: res.address,
           tokenToSymbol: res.symbol,
           tokenToLogoURI: res.logoURI,
-          tokenToDecimals: res.decimals,
+          tokenToDecimals: res.decimals
         })
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('TokenDialog Rejected: ', err)
       })
   }
@@ -142,7 +142,7 @@ const AuctionParametersForm = (): JSX.Element => {
     abi: erc20ABI,
     functionName: 'balanceOf',
     args: [address],
-    enabled: !!valuesState.tokenFrom.address && isConnected,
+    enabled: !!valuesState.tokenFrom.address && isConnected
   })
 
   return (
@@ -152,7 +152,7 @@ const AuctionParametersForm = (): JSX.Element => {
 
       <Formik
         initialValues={internalInitialValues}
-        onSubmit={(values) => {
+        onSubmit={values => {
           console.log('on submit')
           valuesDispatch({
             type: ActionType.CommitAuctionParameters,
@@ -161,13 +161,13 @@ const AuctionParametersForm = (): JSX.Element => {
                 address: values.tokenToAddress,
                 logoURI: values.tokenToLogoURI,
                 symbol: values.tokenToSymbol,
-                decimals: values.tokenToDecimals,
+                decimals: values.tokenToDecimals
               },
               swapRatio: values.swapRatio,
               poolSize: values.poolSize,
               allocationPerWallet: values.allocationPerWallet,
-              allocationStatus: values.allocationStatus,
-            },
+              allocationStatus: values.allocationStatus
+            }
           })
         }}
         validationSchema={validationSchema}
@@ -254,8 +254,8 @@ const AuctionParametersForm = (): JSX.Element => {
                       {balance
                         ? `${formatNumber(balance.toString(), {
                             unit: values.tokenFromDecimals,
-                            decimalPlaces: 2,
-                          })} 
+                            decimalPlaces: 2
+                          })}
                       ${values.tokenFromSymbol}`
                         : '-'}
                     </Typography>
@@ -277,8 +277,8 @@ const AuctionParametersForm = (): JSX.Element => {
                               formatNumber(balance.toString(), {
                                 unit: values.tokenFromDecimals,
                                 shouldSplitByComma: false,
-                                decimalPlaces: 2,
-                              }),
+                                decimalPlaces: 2
+                              })
                             )
                           }}
                         >

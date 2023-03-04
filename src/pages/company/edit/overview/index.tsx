@@ -8,28 +8,28 @@ import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
 import Head from 'next/head'
 import styles from './styles'
-import UploadItem from '@/components/common/UploadCard/UploadItem'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as EmailSVG } from '@/assets/imgs/profile/links/email.svg'
-import { ReactComponent as WebsiteSVG } from '@/assets/imgs/profile/links/website.svg'
-import { ReactComponent as LinkedInSVG } from '@/assets/imgs/profile/links/linkedIn.svg'
-import { ReactComponent as GithubSVG } from '@/assets/imgs/profile/links/github.svg'
-import { ReactComponent as TwitterSVG } from '@/assets/imgs/profile/links/twitter.svg'
-import { ReactComponent as InstagramSVG } from '@/assets/imgs/profile/links/instagram.svg'
-import { ReactComponent as MediumSVG } from '@/assets/imgs/profile/links/medium.svg'
-import LocationTimeZone, { timezone } from '@/components/common/LocationTimeZone'
+import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email.svg'
+import { ReactComponent as WebsiteSVG } from 'assets/imgs/profile/links/website.svg'
+import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedIn.svg'
+import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
+import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
+import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
+import { ReactComponent as MediumSVG } from 'assets/imgs/profile/links/medium.svg'
+import LocationTimeZone, { timezone } from 'bounceComponents/common/LocationTimeZone'
 import { RootState } from '@/store'
-import { useUpdateCompany } from '@/hooks/company/useUpdateCompany'
-import DateMonthPicker from '@/components/common/DateMonthPicker'
-import EditLayout, { companyTabsList } from '@/components/company/EditLayout'
-import { ILinksItem } from '@/pages/profile/edit/social'
-import { SocialLinks } from '@/components/profile/SocialList'
-import { ICompanyProfileParams } from '@/api/company/type'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import { CompanyActionType } from '@/components/company/components/CompanyContextProvider'
+import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
+import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
+import EditLayout, { companyTabsList } from 'bounceComponents/company/EditLayout'
+import { ILinksItem } from 'pages/profile/edit/social'
+import { SocialLinks } from 'bounceComponents/profile/SocialList'
+import { ICompanyProfileParams } from 'api/company/type'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { CompanyActionType } from 'bounceComponents/company/components/CompanyContextProvider'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
+import { FormType } from 'api/profile/type'
 
 const links: ILinksItem[] = [
   {
@@ -37,50 +37,50 @@ const links: ILinksItem[] = [
     label: 'Official email',
     required: true,
     icon: <EmailSVG />,
-    autoComplete: '',
+    autoComplete: ''
   },
   {
     name: 'companyBasicInfo.website',
     label: 'Website',
     required: false,
     icon: <WebsiteSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'companyBasicInfo.linkedin',
     label: 'LinkedIn',
     required: false,
     icon: <LinkedInSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'companyBasicInfo.github',
     label: 'Github',
     required: false,
     icon: <GithubSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'companyBasicInfo.twitter',
     label: 'Twitter',
     required: false,
     icon: <TwitterSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'companyBasicInfo.instagram',
     label: 'Instagram',
     required: false,
     icon: <InstagramSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'companyBasicInfo.medium',
     label: 'Medium',
     required: false,
     icon: <MediumSVG />,
-    autoComplete: 'off',
-  },
+    autoComplete: 'off'
+  }
 ]
 
 const DESCRIPTION_LENGTH = 350
@@ -94,7 +94,7 @@ const validationSchema = yup.object().shape({
       fileThumbnailUrl: yup.string(),
       fileType: yup.string(),
       fileUrl: yup.string().required('Please upload your profile picture'),
-      id: yup.number(),
+      id: yup.number()
     }),
     companyName: yup
       .string()
@@ -133,8 +133,8 @@ const validationSchema = yup.object().shape({
     github: yup.string()?.trim().url('Please enter a valie URL'),
     twitter: yup.string()?.trim().url('Please enter a valie URL'),
     instagram: yup.string()?.trim().url('Please enter a valie URL'),
-    medium: yup.string()?.trim().url('Please enter a valie URL'),
-  }),
+    medium: yup.string()?.trim().url('Please enter a valie URL')
+  })
 })
 
 export interface ICompanyOverviewEditProps {
@@ -146,7 +146,7 @@ export interface ICompanyOverviewEditProps {
 export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
   companyProfileValues,
   firstEdit,
-  companyProfileDispatch,
+  companyProfileDispatch
 }) => {
   const { companyInfo } = useSelector((state: RootState) => state.user)
   const { loading, runAsync: runUpdateCompany } = useUpdateCompany(firstEdit)
@@ -160,7 +160,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
           fileThumbnailUrl: '',
           fileType: '',
           fileUrl: '',
-          id: 0,
+          id: 0
         },
       companyName: companyProfileValues?.companyBasicInfo?.companyName || companyInfo?.companyName || '',
       location: companyProfileValues?.companyBasicInfo?.location || companyInfo?.location || '',
@@ -178,11 +178,11 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
       github: companyProfileValues?.companyBasicInfo?.github || companyInfo?.github || '',
       twitter: companyProfileValues?.companyBasicInfo?.twitter || companyInfo?.twitter || '',
       instagram: companyProfileValues?.companyBasicInfo?.instagram || companyInfo?.instagram || '',
-      medium: companyProfileValues?.companyBasicInfo?.medium || companyInfo?.medium || '',
-    },
+      medium: companyProfileValues?.companyBasicInfo?.medium || companyInfo?.medium || ''
+    }
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     const tempVal = {
       companyBasicInfo: {
         ...values.companyBasicInfo,
@@ -198,16 +198,16 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
         medium: values.companyBasicInfo?.medium?.trim(),
         companyState: Number(values.companyBasicInfo?.companyState),
         marketType: Number(values.companyBasicInfo?.marketType),
-        companySize: Number(values.companyBasicInfo?.companySize),
-      },
+        companySize: Number(values.companyBasicInfo?.companySize)
+      }
     }
     if (firstEdit) {
       return companyProfileDispatch?.({
         type: CompanyActionType.SetIntro,
         payload: {
           ...companyProfileValues,
-          ...tempVal,
-        },
+          ...tempVal
+        }
       })
     }
     runUpdateCompany(tempVal)
@@ -237,9 +237,9 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
               >
                 <UploadItem
                   value={{
-                    fileUrl: values.companyBasicInfo.avatar.fileThumbnailUrl || values.companyBasicInfo.avatar.fileUrl,
+                    fileUrl: values.companyBasicInfo.avatar.fileThumbnailUrl || values.companyBasicInfo.avatar.fileUrl
                   }}
-                  onChange={(file) => {
+                  onChange={file => {
                     setFieldValue('companyBasicInfo.avatar', file)
                   }}
                   sx={{ width: 160, height: 160, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
@@ -256,13 +256,13 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
             <FormItem name="companyBasicInfo.location" label="Location (Time Zone)" required fieldType="custom">
               <LocationTimeZone
                 value={values.companyBasicInfo.location}
-                onChange={(val) => setFieldValue('companyBasicInfo.location', val)}
+                onChange={val => setFieldValue('companyBasicInfo.location', val)}
               />
             </FormItem>
             <FormItem name="companyBasicInfo.startupDate" label="Start Date" required fieldType="custom">
               <DateMonthPicker
                 value={values.companyBasicInfo.startupDate}
-                onChange={(val) => {
+                onChange={val => {
                   const { year, month } = val
                   const tempMonth = month + 1 < 10 ? `0${month + 1}` : month + 1
                   setFieldValue('companyBasicInfo.startupDate', moment(`${year}-${tempMonth}-01`).unix())
@@ -271,7 +271,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
             </FormItem>
             <FormItem name="companyBasicInfo.companyState" label="Company State" required>
               <Select>
-                {optionDatas?.companyStateOpt?.map((item) => {
+                {optionDatas?.companyStateOpt?.map(item => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
                       {item.state}
@@ -282,7 +282,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
             </FormItem>
             <FormItem name="companyBasicInfo.marketType" label="Market Type" required>
               <Select>
-                {optionDatas?.marketTypeOpt?.map((item) => {
+                {optionDatas?.marketTypeOpt?.map(item => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
                       {item.marketType}
@@ -293,7 +293,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
             </FormItem>
             <FormItem name="companyBasicInfo.companySize" label="Company size" required>
               <Select>
-                {optionDatas?.companySizeOpt?.map((item) => {
+                {optionDatas?.companySizeOpt?.map(item => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
                       {item.size}

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Alert, Typography } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import { PoolStatus } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const CreatorAlert = (): JSX.Element => {
   const { data: poolInfo } = usePoolInfo()

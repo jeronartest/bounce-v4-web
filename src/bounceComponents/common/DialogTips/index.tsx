@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { create, register, useModal } from '@ebay/nice-modal-react'
 import Image from 'next/image'
-import { ReactComponent as CloseSvg } from '@/assets/imgs/close.svg'
+import { ReactComponent as CloseSvg } from 'assets/imgs/close.svg'
 
 export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   onAgain?: () => void

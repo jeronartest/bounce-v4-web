@@ -5,16 +5,16 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
-  ListItemText,
+  ListItemText
 } from '@mui/material'
 import React from 'react'
 import dayjs from 'dayjs'
 import { show } from '@ebay/nice-modal-react'
 import InvestmentsForm from '../InvestmentsForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
-import { ICompanyInvestmentsListItems } from '@/api/company/type'
-import MuiDialog from '@/components/common/Dialog'
-import CompanyInvestmentsList from '@/components/company/CompanyInvestmentsList'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+import { ICompanyInvestmentsListItems } from 'api/company/type'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import CompanyInvestmentsList from 'bounceComponents/company/CompanyInvestmentsList'
 
 export type IInvestmentsListProps = {
   list: ICompanyInvestmentsListItems[]
@@ -23,7 +23,7 @@ export type IInvestmentsListProps = {
 }
 
 const InvestmentsList: React.FC<IInvestmentsListProps> = ({ list, onEdit, onDelete }) => {
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     const temp = {
       data: {
         company: v.data.company,
@@ -31,14 +31,14 @@ const InvestmentsList: React.FC<IInvestmentsListProps> = ({ list, onEdit, onDele
         thirdpartId: v.data.thirdpartId,
         investmentDate: v.data.investmentDate,
         investmentType: v.data.investmentType,
-        amount: v.data.amount,
+        amount: v.data.amount
       },
-      index: v.index,
+      index: v.index
     }
     show(MuiDialog, {
       title: 'Edit the investment',
       fullWidth: true,
-      children: <InvestmentsForm editData={temp} onEdit={onEdit} onDelete={onDelete} />,
+      children: <InvestmentsForm editData={temp} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 

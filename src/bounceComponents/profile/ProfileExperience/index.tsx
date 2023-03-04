@@ -7,13 +7,13 @@ import { Stack } from '@mui/system'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { RootState } from '@/store'
-import { experienceItems } from '@/api/profile/type'
-import { IPager } from '@/api/type'
-import { getResumeExperience } from '@/api/profile'
+import { experienceItems } from 'api/profile/type'
+import { IPager } from 'api/type'
+import { getResumeExperience } from 'api/profile'
 import { getPrimaryRoleLabel } from '@/utils'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type IProfileExperienceProps = {
   personalInfoId: number
@@ -34,22 +34,22 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
       const res = await getResumeExperience({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        userId: personalInfoId,
+        userId: personalInfoId
       })
       return {
         total: res?.data?.total,
-        list: res?.data?.list,
+        list: res?.data?.list
       }
     },
     {
       defaultPageSize: 2,
       ready: !!personalInfoId,
-      refreshDeps: [personalInfoId],
-    },
+      refreshDeps: [personalInfoId]
+    }
   )
 
   useEffect(() => {
-    data?.list?.length && setList((val) => [...val, ...data?.list])
+    data?.list?.length && setList(val => [...val, ...data?.list])
   }, [data?.list])
 
   const handleClick = useCallback(() => {
@@ -78,8 +78,8 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
                 width: 68,
                 height: 68,
                 '&:hover': {
-                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                },
+                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default'
+                }
               }}
               onClick={() => handleLink(v)}
             />
@@ -93,8 +93,8 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
                     color: '#2663FF',
                     '&:hover': {
                       cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                      textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none',
-                    },
+                      textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none'
+                    }
                   }}
                   onClick={() => handleLink(v)}
                 >
@@ -129,7 +129,7 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
                     Number(v.isCurrently) === 2 ? 'Present' : dayjs(v.endTime * 1000).format('YYYY')
                   } (${dayjs(Number(v.isCurrently) === 2 ? dayjs() : dayjs(v.endTime * 1000)).diff(
                     dayjs(v.startTime * 1000),
-                    'year',
+                    'year'
                   )} years)`}
                 </Typography>
               </Stack>
@@ -141,7 +141,7 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
                   textOverflow: 'ellipsis',
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
-                  WebkitLineClamp: 2,
+                  WebkitLineClamp: 2
                 }}
               >
                 {v.description}

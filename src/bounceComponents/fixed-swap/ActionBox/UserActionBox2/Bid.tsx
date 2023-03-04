@@ -5,7 +5,7 @@ import BidAmountInput from './BidAmountInput'
 import BidButtonBlock from './BidButtonBlock'
 import BidAmountLimit from './BidAmountLimit'
 import { UserBidAction } from './ActionBlock'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { checkIfAllocationLimitExist } from '@/utils/auction'
 
 interface BidProps {
@@ -25,7 +25,7 @@ const Bid = ({
   handleGoToCheck,
   handleCancelButtonClick,
   handlePlaceBid,
-  isBidding,
+  isBidding
 }: BidProps) => {
   const { data: poolInfo } = usePoolInfo()
   const isAllocationLimitExist = checkIfAllocationLimitExist(poolInfo.maxAmount1PerWallet)

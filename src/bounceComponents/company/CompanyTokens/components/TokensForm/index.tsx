@@ -6,17 +6,17 @@ import { Button, OutlinedInput, Grid, MenuItem, Select, FormControlLabel, Checkb
 import { useModal } from '@ebay/nice-modal-react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as DeleteIcon } from '@/assets/imgs/components/delete.svg'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import { RootState } from '@/store'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import { searchToken } from '@/api/optionsData'
-import { ICompanyTokensListItems } from '@/api/company/type'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import { searchToken } from 'api/optionsData'
+import { ICompanyTokensListItems } from 'api/company/type'
 import { isAddress } from '@/utils/web3/address'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
-import TokenDefaultSVG from '@/assets/imgs/defaultAvatar/token.svg'
+import { FormType } from 'api/profile/type'
+import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
 
 export type ITokensFormProps = {
   onAdd?: (data: ICompanyTokensListItems) => void
@@ -29,7 +29,7 @@ const validationSchema = yup.object({
   chainIdentifierId: yup.number().required(formCheckValid('Chain', FormType.Select)),
   tokenAddress: yup
     .string()
-    .test('CHECK_ADDRESS', 'Incorrect token address', (val) => {
+    .test('CHECK_ADDRESS', 'Incorrect token address', val => {
       if (val && !isAddress(val)) {
         return false
       }
@@ -60,7 +60,7 @@ const validationSchema = yup.object({
       return false
     }
     return true
-  }),
+  })
 })
 
 interface ICheckboxItemsProps {
@@ -89,7 +89,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
         tokenAddress: '',
         tokenLogo: '',
         tokenName: '',
-        tokenType: '',
+        tokenType: ''
       }
 
   const handleSubmit = useCallback(
@@ -99,16 +99,16 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
       } else {
         onEdit?.(
           { ...values, chainIdentifierId: Number(values.chainIdentifierId), tokenType: Number(values.tokenType) },
-          editData.index,
+          editData.index
         )
       }
       modal.hide()
     },
-    [editData, modal, onAdd, onEdit],
+    [editData, modal, onAdd, onEdit]
   )
 
   const handleDelete = useCallback(
-    (handleReset) => {
+    handleReset => {
       if (!editData) {
         handleReset()
       } else {
@@ -116,7 +116,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
         modal.hide()
       }
     },
-    [editData, modal, onDelete],
+    [editData, modal, onDelete]
   )
 
   const [userData, setUserData] = useState<ISearchOption[]>([])
@@ -126,17 +126,17 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
     searchToken({
       limit: 100,
       offset: 0,
-      value: searchText,
-    }).then((res) => {
+      value: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
-      const temp = data?.list?.map((v) => {
+      const temp = data?.list?.map(v => {
         return {
           label: v?.contract,
           icon: v?.smallUrl || TokenDefaultSVG,
-          value: v,
+          value: v
         }
       })
       setUserData(temp)
@@ -152,7 +152,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
               <Grid item xs={12}>
                 <FormItem name="chainIdentifierId" label="Chain" required>
                   <Select>
-                    {optionDatas?.chainInfoOpt.map((v) => (
+                    {optionDatas?.chainInfoOpt.map(v => (
                       <MenuItem key={v.id} value={v.id}>
                         {v.shortName}
                       </MenuItem>
@@ -164,7 +164,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
                 <FormItem name="isIssued" fieldType="custom">
                   <CheckboxItems
                     value={values.isIssued}
-                    onChange={(val) => {
+                    onChange={val => {
                       setFieldValue('isIssued', val.target.checked)
                       setFieldValue('tokenAddress', '')
                       setFieldValue('tokenName', '')
@@ -182,7 +182,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
                     selected={{
                       label: values.tokenAddress,
                       icon: values.tokenLogo,
-                      value: values.tokenAddress,
+                      value: values.tokenAddress
                     }}
                     onSearch={(text: string) => setSearchText(text)}
                     value={values?.tokenAddress}
@@ -210,7 +210,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
               <Grid item xs={12}>
                 <FormItem name="tokenType" label="Token type">
                   <Select disabled={!values.isIssued}>
-                    {optionDatas?.tokenTypeOpt.map((v) => (
+                    {optionDatas?.tokenTypeOpt.map(v => (
                       <MenuItem key={v.id} value={v.id}>
                         {v.name}
                       </MenuItem>

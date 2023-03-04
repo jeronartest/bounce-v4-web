@@ -1,15 +1,15 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
-import { CompletedSteps } from '@/components/create-auction-pool/types'
-import { ActionMap } from '@/components/profile/components/BasicContextProvider'
+import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
+import { ActionMap } from 'bounceComponents/profile/components/BasicContextProvider'
 import {
   ICompanyBasicInfo,
   ICompanyInvestmentsListItems,
   ICompanyInvestorsListItems,
   ICompanyProfileParams,
   ICompanyTeamListItems,
-  ICompanyTokensListItems,
-} from '@/api/company/type'
-import { IFileType } from '@/api/upload/type'
+  ICompanyTokensListItems
+} from 'api/company/type'
+import { IFileType } from 'api/upload/type'
 
 export enum CompanyActionType {
   SetProfilePicture = 'SET_PROFILE_PICTURE',
@@ -19,7 +19,7 @@ export enum CompanyActionType {
   SetInvestors = 'SET_INVESTORS',
   SetInvestments = 'SET_INVESTMENTS',
   SetActiveStep = 'SET_ACTIVE_STEP',
-  HandleStep = 'HANDLE_STEP',
+  HandleStep = 'HANDLE_STEP'
 }
 
 type Payload = {
@@ -88,7 +88,7 @@ const initialValues: ICompanyProfileParams = {
       fileThumbnailUrl: '',
       fileType: '',
       fileUrl: '',
-      id: 0,
+      id: 0
     },
     companyBriefIntro: '',
     companyFullIntro: '',
@@ -105,14 +105,14 @@ const initialValues: ICompanyProfileParams = {
     startupDate: 0,
     timezone: '',
     twitter: '',
-    website: '',
+    website: ''
   },
   companyInvestments: [],
   companyInvestors: [],
   companyTokens: [],
   teamMembers: [],
   activeStep: 0,
-  completed: {},
+  completed: {}
 }
 
 const reducer = (state: ICompanyProfileParams, action: Actions) => {
@@ -120,23 +120,23 @@ const reducer = (state: ICompanyProfileParams, action: Actions) => {
     case CompanyActionType.SetActiveStep:
       return {
         ...state,
-        activeStep: action.payload.activeStep,
+        activeStep: action.payload.activeStep
       }
     case CompanyActionType.HandleStep:
       return {
         ...state,
         activeStep: action.payload.activeStep,
-        completed: { ...state.completed, [action.payload.activeStep]: false },
+        completed: { ...state.completed, [action.payload.activeStep]: false }
       }
     case CompanyActionType.SetProfilePicture:
       return {
         ...state,
         companyBasicInfo: {
           ...state.companyBasicInfo,
-          avatar: action.payload.companyBasicInfo.avatar,
+          avatar: action.payload.companyBasicInfo.avatar
         },
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
 
     case CompanyActionType.SetIntro:
@@ -144,35 +144,35 @@ const reducer = (state: ICompanyProfileParams, action: Actions) => {
         ...state,
         companyBasicInfo: action.payload.companyBasicInfo,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case CompanyActionType.SetTeam:
       return {
         ...state,
         teamMembers: action.payload.teamMembers,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case CompanyActionType.SetTokens:
       return {
         ...state,
         companyTokens: action.payload.companyTokens,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case CompanyActionType.SetInvestors:
       return {
         ...state,
         companyInvestors: action.payload.companyInvestors,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case CompanyActionType.SetInvestments:
       return {
         ...state,
         companyInvestments: action.payload.companyInvestments,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     default:
       return state

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Box, Container, Tab, Tabs } from '@mui/material'
 import styles from './styles'
-import GoBack from '@/components/common/GoBack'
+import GoBack from 'bounceComponents/common/GoBack'
 
 interface TabPanelProps {
   children?: React.ReactNode

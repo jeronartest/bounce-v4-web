@@ -3,9 +3,9 @@ import { Stack } from '@mui/system'
 import { Typography } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
 import InvestmentsForm from '../InvestmentsForm'
-import { ReactComponent as AddBtnSVG } from '@/assets/imgs/profile/investments/add-btn.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { IInvestmentItems } from '@/api/profile/type'
+import { ReactComponent as AddBtnSVG } from 'assets/imgs/profile/investments/add-btn.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { IInvestmentItems } from 'api/profile/type'
 
 export type IAddProps = {
   label: string
@@ -18,7 +18,7 @@ const Add: React.FC<IAddProps> = ({ label, description, onAdd }) => {
     show(MuiDialog, {
       title: 'Add new investment',
       fullWidth: true,
-      children: <InvestmentsForm onAdd={onAdd} />,
+      children: <InvestmentsForm onAdd={onAdd} />
     })
   }, [onAdd])
 
@@ -40,7 +40,7 @@ const Add: React.FC<IAddProps> = ({ label, description, onAdd }) => {
             color: 'var(--ps-gray-900)',
             opacity: 0.5,
             maxWidth: 430,
-            textAlign: 'center',
+            textAlign: 'center'
           }}
         >
           {description}

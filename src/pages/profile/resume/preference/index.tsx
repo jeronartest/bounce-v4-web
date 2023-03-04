@@ -8,7 +8,7 @@ import {
   OutlinedInput,
   Select,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { useMemo } from 'react'
@@ -17,15 +17,15 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 import Head from 'next/head'
-import FormItem from '@/components/common/FormItem'
-import { useOptionsData } from '@/hooks/useOptionsData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { useOptionsData } from 'bounceHooks/useOptionsData'
 import { RootState } from '@/store'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
-import EditLayout, { resumeTabsList } from '@/components/company/EditLayout'
-import { FormType, IUpdatePersonalParams } from '@/api/profile/type'
-import { ResumeActionType } from '@/components/profile/components/ResumeContextProvider'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
+import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
+import { FormType, IUpdatePersonalParams } from 'api/profile/type'
+import { ResumeActionType } from 'bounceComponents/profile/components/ResumeContextProvider'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { formCheckValid } from '@/utils'
 
 interface ICheckboxList {
@@ -47,13 +47,13 @@ const CheckboxItems: React.FC<ICheckboxItemsProps> = ({ listItem, value, onChang
     if (_checked) {
       temp.push(_value)
     } else {
-      temp = temp.filter((v) => v !== _value)
+      temp = temp.filter(v => v !== _value)
     }
     onChange?.(temp)
   }
   return (
     <FormGroup>
-      {listItem.map((item) => {
+      {listItem.map(item => {
         return (
           <FormControlLabel
             key={item.value}
@@ -104,7 +104,7 @@ const validationSchema = yup.object({
     .of(yup.number())
     .required("Please check What's most important in the next job?")
     .min(1, "Please check What's most important in the next job?")
-    .max(2, 'Allow only no more than 2 next job'),
+    .max(2, 'Allow only no more than 2 next job')
 })
 
 export interface IPreferenceItemsProps {
@@ -116,7 +116,7 @@ export interface IPreferenceItemsProps {
 export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
   resumeProfileValues,
   firstEdit,
-  resumeProfileDispatch,
+  resumeProfileDispatch
 }) => {
   const { optionsData } = useOptionsData()
   const { userInfo } = useSelector((state: RootState) => state.user)
@@ -129,18 +129,18 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
     desiredCompanySize: resumeProfileValues?.desiredCompanySize || userInfo?.desiredCompanySize || '',
     desiredMarket: resumeProfileValues?.desiredMarket || userInfo?.desiredMarket || [],
     desiredSalary: resumeProfileValues?.desiredSalary || userInfo?.desiredSalary || '',
-    careJobs: resumeProfileValues?.careJobs || userInfo?.careJobs || [],
+    careJobs: resumeProfileValues?.careJobs || userInfo?.careJobs || []
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     if (firstEdit) {
       return resumeProfileDispatch({
         type: ResumeActionType.SetPreference,
         payload: {
           ...resumeProfileValues,
           ...values,
-          desiredSalary: values?.desiredSalary?.trim(),
-        },
+          desiredSalary: values?.desiredSalary?.trim()
+        }
       })
     }
     runPersonalResume({ ...values, desiredSalary: values?.desiredSalary?.trim() })
@@ -148,10 +148,10 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
 
   const jobCheckboxList = useMemo(() => {
     const _list = []
-    optionsData?.data?.jobCareOpt.map((item) => {
+    optionsData?.data?.jobCareOpt.map(item => {
       const temp = {
         label: item.jobCare,
-        value: item.id,
+        value: item.id
       }
       _list.push(temp)
     })
@@ -181,7 +181,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
           </FormItem>
           <FormItem name="jobTypes" label="Job Types (Max 2)" required>
             <Select multiple>
-              {optionsData?.data?.jobTypeOpt?.map((item) => {
+              {optionsData?.data?.jobTypeOpt?.map(item => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
                     {item.jobType}
@@ -201,7 +201,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
           </FormItem>
           <FormItem name="desiredCompanySize" label="Desired Company Size" required>
             <Select>
-              {optionsData?.data?.companySizeOpt?.map((item) => {
+              {optionsData?.data?.companySizeOpt?.map(item => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
                     {item.size}
@@ -212,7 +212,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
           </FormItem>
           <FormItem name="desiredMarket" label="Desired Market (Max 2)" required>
             <Select multiple>
-              {optionsData?.data?.marketTypeOpt?.map((item) => {
+              {optionsData?.data?.marketTypeOpt?.map(item => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
                     {item.marketType}
@@ -234,7 +234,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
             <CheckboxItems
               listItem={jobCheckboxList}
               value={values.careJobs}
-              onChange={(job) => {
+              onChange={job => {
                 setFieldValue('careJobs', job)
               }}
               sx={{ width: 160, height: 160, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}

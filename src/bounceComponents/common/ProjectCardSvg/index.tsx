@@ -1,13 +1,13 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { ReactComponent as Web3SVG } from '@/assets/imgs/companies/tag/web3.svg'
-import { ReactComponent as DaoSVG } from '@/assets/imgs/companies/tag/dao.svg'
-import { ReactComponent as Defi3SVG } from '@/assets/imgs/companies/tag/defi.svg'
-import { ReactComponent as GaimingSVG } from '@/assets/imgs/companies/tag/gaiming.svg'
-import { ReactComponent as NftSVG } from '@/assets/imgs/companies/tag/nft.svg'
-import { ReactComponent as OtherSVG } from '@/assets/imgs/companies/tag/other.svg'
-import { ReactComponent as ToolSVG } from '@/assets/imgs/companies/tag/tool.svg'
-import { ReactComponent as WalletSVG } from '@/assets/imgs/companies/tag/wallet.svg'
+import { ReactComponent as Web3SVG } from 'assets/imgs/companies/tag/web3.svg'
+import { ReactComponent as DaoSVG } from 'assets/imgs/companies/tag/dao.svg'
+import { ReactComponent as Defi3SVG } from 'assets/imgs/companies/tag/defi.svg'
+import { ReactComponent as GaimingSVG } from 'assets/imgs/companies/tag/gaiming.svg'
+import { ReactComponent as NftSVG } from 'assets/imgs/companies/tag/nft.svg'
+import { ReactComponent as OtherSVG } from 'assets/imgs/companies/tag/other.svg'
+import { ReactComponent as ToolSVG } from 'assets/imgs/companies/tag/tool.svg'
+import { ReactComponent as WalletSVG } from 'assets/imgs/companies/tag/wallet.svg'
 
 export type IProjectCardSvgProps = {
   status: number
@@ -20,7 +20,7 @@ enum StatusType {
   'DAO' = 6,
   'Wallet' = 7,
   'Tool' = 8,
-  'Other' = 9,
+  'Other' = 9
 }
 const tagSvg = (status: number) => {
   switch (status) {
@@ -56,7 +56,7 @@ const ProjectCardSvg: React.FC<IProjectCardSvgProps> = ({ status }) => {
         display: 'inline-flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       {tagSvg(status)}

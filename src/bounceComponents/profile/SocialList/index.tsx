@@ -4,15 +4,15 @@ import React, { ReactNode } from 'react'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import styles from './styles'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as EmailSVG } from '@/assets/imgs/profile/links/email.svg'
-import { ReactComponent as WebsiteSVG } from '@/assets/imgs/profile/links/website.svg'
-import { ReactComponent as LinkedInSVG } from '@/assets/imgs/profile/links/linkedIn.svg'
-import { ReactComponent as GithubSVG } from '@/assets/imgs/profile/links/github.svg'
-import { ReactComponent as TwitterSVG } from '@/assets/imgs/profile/links/twitter.svg'
-import { ReactComponent as InstagramSVG } from '@/assets/imgs/profile/links/instagram.svg'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email.svg'
+import { ReactComponent as WebsiteSVG } from 'assets/imgs/profile/links/website.svg'
+import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedIn.svg'
+import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
+import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
+import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
 import { RootState } from '@/store'
-import { useUpdateBasic } from '@/hooks/profile/useUpdateBasic'
+import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
 
 export interface ILinksItem {
   name: string
@@ -28,7 +28,7 @@ export interface ISocialLinksProps {
 export const SocialLinks: React.FC<ISocialLinksProps> = ({ links }) => {
   return (
     <>
-      {links.map((item) => (
+      {links.map(item => (
         <FormItem
           key={item.name}
           name={item.name}
@@ -49,43 +49,43 @@ const links: ILinksItem[] = [
     label: 'Official email',
     required: true,
     icon: <EmailSVG />,
-    autoComplete: '',
+    autoComplete: ''
   },
   {
     name: 'website',
     label: 'Website',
     required: false,
     icon: <WebsiteSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'linkedin',
     label: 'LinkedIn',
     required: false,
     icon: <LinkedInSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'github',
     label: 'Github',
     required: false,
     icon: <GithubSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'twitter',
     label: 'Twitter',
     required: false,
     icon: <TwitterSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'instagram',
     label: 'Instagram',
     required: false,
     icon: <InstagramSVG />,
-    autoComplete: 'off',
-  },
+    autoComplete: 'off'
+  }
 ]
 
 const validationSchema = yup.object({
@@ -94,7 +94,7 @@ const validationSchema = yup.object({
   linkedin: yup.string().trim().url('Please enter a valie URL'),
   github: yup.string().trim().url('Please enter a valie URL'),
   twitter: yup.string().trim().url('Please enter a valie URL'),
-  instagram: yup.string().trim().url('Please enter a valie URL'),
+  instagram: yup.string().trim().url('Please enter a valie URL')
 })
 
 const SocialList: React.FC = () => {
@@ -107,10 +107,10 @@ const SocialList: React.FC = () => {
     linkedin: userInfo?.linkedin || '',
     github: userInfo?.github || '',
     twitter: userInfo?.twitter || '',
-    instagram: userInfo?.instagram || '',
+    instagram: userInfo?.instagram || ''
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     runUpdateBasic(values)
   }
 

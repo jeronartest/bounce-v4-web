@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import styles from './styles'
 
 // import { ReaderFile } from 'utils'
-import { uploader } from '@/api/upload'
+import { uploader } from 'api/upload'
 
 export type IFile = {
   id?: number
@@ -67,7 +67,7 @@ const Uploader: React.FC<IUploaderProps> = ({
   maxCount = 1,
   accept = [],
   tips = '',
-  validator = { fileType: { disabled: false }, fileSize: { disabled: false } },
+  validator = { fileType: { disabled: false }, fileSize: { disabled: false } }
 }) => {
   const refFile = useRef<HTMLInputElement>(null)
 
@@ -88,7 +88,7 @@ const Uploader: React.FC<IUploaderProps> = ({
       toast.error(msg)
       errors.push({
         msg: msg,
-        error: 'AcceptError',
+        error: 'AcceptError'
       })
     }
 
@@ -104,7 +104,7 @@ const Uploader: React.FC<IUploaderProps> = ({
       toast.error(msg)
       errors.push({
         msg: msg,
-        error: 'LimitError',
+        error: 'LimitError'
       })
     }
 
@@ -117,7 +117,7 @@ const Uploader: React.FC<IUploaderProps> = ({
 
     try {
       const res = (await uploader({
-        file,
+        file
       })) as any
 
       onSuccess?.({
@@ -125,12 +125,12 @@ const Uploader: React.FC<IUploaderProps> = ({
         fileSize: file.size,
         fileType: file.type,
         fileName: file.name,
-        fileUrl: res?.data?.path || '',
+        fileUrl: res?.data?.path || ''
       })
     } catch (err) {
       errors.push({
         msg: `NetworkError`,
-        error: 'NetworkError',
+        error: 'NetworkError'
       })
       console.error('Uploader error:', err)
       return onError?.(errors, file)
@@ -186,7 +186,7 @@ export default Uploader
 Uploader.defaultProps = {
   icon: null,
   disabled: false,
-  onSuccess: (req) => {
+  onSuccess: req => {
     console.log('upload successful:', req)
-  },
+  }
 }

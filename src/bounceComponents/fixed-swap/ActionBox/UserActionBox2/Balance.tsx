@@ -1,8 +1,8 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useToken1Balance from '@/hooks/auction/useToken1Balance'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useToken1Balance from 'bounceHooks/auction/useToken1Balance'
 
 const Balance = () => {
   const { data: poolInfo } = usePoolInfo()

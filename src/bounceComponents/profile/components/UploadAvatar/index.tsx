@@ -4,10 +4,10 @@ import React from 'react'
 import * as yup from 'yup'
 import EditCancelConfirmation from '../EditCancelConfirmation'
 import styles from './styles'
-import UploadItem from '@/components/common/UploadCard/UploadItem'
-import FormItem from '@/components/common/FormItem'
-import { IFileType } from '@/api/upload/type'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
+import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import FormItem from 'bounceComponents/common/FormItem'
+import { IFileType } from 'api/upload/type'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 
 const validationSchema = yup.object({
   avatar: yup.object({
@@ -16,8 +16,8 @@ const validationSchema = yup.object({
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
     fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number(),
-  }),
+    id: yup.number()
+  })
 })
 
 export interface IUploadAvatarProps {
@@ -34,8 +34,8 @@ const UploadAvatar: React.FC<IUploadAvatarProps> = ({ avatar, cancelLink, onSubm
       fileThumbnailUrl: '',
       fileType: '',
       fileUrl: '',
-      id: 0,
-    },
+      id: 0
+    }
   }
 
   return (
@@ -56,9 +56,9 @@ const UploadAvatar: React.FC<IUploadAvatarProps> = ({ avatar, cancelLink, onSubm
             >
               <UploadItem
                 value={{
-                  fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl,
+                  fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
                 }}
-                onChange={(file) => {
+                onChange={file => {
                   setFieldValue('avatar', file)
                 }}
                 sx={{ width: 240, height: 240, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}

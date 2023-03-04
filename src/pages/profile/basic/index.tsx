@@ -6,13 +6,13 @@ import { SocialList } from '../edit/social'
 import BasicContextProvider, {
   ActionType,
   useBasicProfileDispatch,
-  useBasicProfileValues,
-} from '@/components/profile/components/BasicContextProvider'
-import RoundedContainer from '@/components/create-auction-pool/RoundedContainer'
-import Stepper from '@/components/create-auction-pool/Stepper'
-import UploadAvatar from '@/components/profile/components/UploadAvatar'
-import RootWrap from '@/components/company/CompanyTeam/components/RootWrap'
-import BasicInvestments from '@/components/profile/BasicInvestments'
+  useBasicProfileValues
+} from 'bounceComponents/profile/components/BasicContextProvider'
+import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
+import Stepper from 'bounceComponents/create-auction-pool/Stepper'
+import UploadAvatar from 'bounceComponents/profile/components/UploadAvatar'
+import RootWrap from 'bounceComponents/company/CompanyTeam/components/RootWrap'
+import BasicInvestments from 'bounceComponents/profile/BasicInvestments'
 
 const steps = ['1. Profile Picture', '2. Intro', '3. Social profile', '4. Investments']
 
@@ -20,7 +20,7 @@ export enum BasicStep {
   ProfilePicture,
   Intro,
   SocialProfile,
-  Investments,
+  Investments
 }
 
 const ProfileBasic: React.FC = () => {
@@ -35,8 +35,8 @@ const ProfileBasic: React.FC = () => {
     basicProfileDispatch({
       type: ActionType.SetProfileAvatar,
       payload: {
-        avatar: values?.avatar,
-      },
+        avatar: values?.avatar
+      }
     })
   }
 

@@ -6,8 +6,8 @@ import SearchIcon from '@mui/icons-material/Search'
 
 import { Token } from '../types'
 import VirtualizedList from './TokenList'
-import Dialog from '@/components/common/DialogBase'
-import useTokenList from '@/hooks/auction/useTokenList'
+import Dialog from 'bounceComponents/common/DialogBase'
+import useTokenList from 'bounceHooks/auction/useTokenList'
 import { SupportedChainId } from '@/constants/web3/chains'
 
 export interface BasicToken {
@@ -53,7 +53,7 @@ const TokenDialog = create(({ onClose, enableEth, chainId }: TokenDialogProps) =
   const {
     tokenList: tokenList,
     isGettingTokenList,
-    isGettingSingleToken,
+    isGettingSingleToken
   } = useTokenList(chainId, debouncedFilterInputValue, enableEth)
 
   // console.log('>>>>> tokenList: ', tokenList)
@@ -61,7 +61,7 @@ const TokenDialog = create(({ onClose, enableEth, chainId }: TokenDialogProps) =
   return (
     <Dialog title="Select a token" fullWidth {...muiDialogV5(modal)} onClose={handleReject}>
       <OutlinedInput
-        onChange={(event) => {
+        onChange={event => {
           console.log('filterInputValue: ', event.target.value)
           setFilterInputValue(event.target.value)
         }}

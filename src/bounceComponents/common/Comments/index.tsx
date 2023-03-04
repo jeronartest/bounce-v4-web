@@ -7,7 +7,7 @@ import {
   Button,
   OutlinedInput,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
@@ -21,18 +21,18 @@ import FormItem from '../FormItem'
 import VerifiedIcon from '../VerifiedIcon'
 import styles from './styles'
 import { RootState } from '@/store'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import { ReactComponent as DeleteSVG } from '@/components/profile/ResumeFiles/assets/delete.svg'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { ReactComponent as DeleteSVG } from 'bounceComponents/profile/ResumeFiles/assets/delete.svg'
 import {
   useAddComments,
   useAddCommentsReply,
   useDeleteComments,
   useDeleteCommentsReply,
-  useGetComments,
-} from '@/hooks/user/useComments'
-import { ICommentsItem, TopicType, USER_TYPE } from '@/api/user/type'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import { VerifyStatus } from '@/api/profile/type'
+  useGetComments
+} from 'bounceHooks/user/useComments'
+import { ICommentsItem, TopicType, USER_TYPE } from 'api/user/type'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import { VerifyStatus } from 'api/profile/type'
 
 interface ICommentDetail {
   avatar: string
@@ -129,7 +129,7 @@ const CommentItemGroup: React.FC<ICommentItemGroupProps> = ({ item, onRefresh, e
   const { run: runAddCommentsReply } = useAddCommentsReply(onRefresh)
 
   const initialValues = {
-    content: '',
+    content: ''
   }
   const handleComment = (values, { resetForm }) => {
     if (!token) return router.push(`/login?path=${location.pathname}${location.search}`)
@@ -182,7 +182,7 @@ const CommentItemGroup: React.FC<ICommentItemGroupProps> = ({ item, onRefresh, e
                           fullWidth
                           placeholder="Join the discussion"
                           value={replyComment}
-                          onChange={(e) => setReplyComment(e.target.value)}
+                          onChange={e => setReplyComment(e.target.value)}
                         />
                       </FormItem>
                       <Button type="submit" variant="contained" sx={{ width: 140 }} disabled={!values.content.trim()}>
@@ -218,7 +218,7 @@ const Comments: React.FC<ICommentsProps> = ({ topicId, topicType }) => {
   const [expanded, setExpanded] = useState<number | false>(false)
   const { token } = useSelector((state: RootState) => state.user)
   const initialValues = {
-    content: '',
+    content: ''
   }
   const { data: commentsData, refresh: runGetComments } = useGetComments(topicId, topicType)
   const { run: runAddComments } = useAddComments(runGetComments)

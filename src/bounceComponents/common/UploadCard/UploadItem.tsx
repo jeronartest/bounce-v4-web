@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import { ReactComponent as AddSVG } from './assets/add.svg'
 import styles from './styles'
-import Uploader from '@/components/common/Uploader'
-import type { IFile } from '@/components/common/Uploader'
+import Uploader from 'bounceComponents/common/Uploader'
+import type { IFile } from 'bounceComponents/common/Uploader'
 
 export type IUploadItemProps = {
   value?: Partial<IFile>
@@ -54,11 +54,11 @@ const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onCh
           ...styles.item,
           ...sx,
           '&>div:first-of-type': {
-            display: 'block',
+            display: 'block'
           },
           '&:hover .edit': {
-            display: 'block !important',
-          },
+            display: 'block !important'
+          }
         }}
       >
         <Uploader
@@ -67,11 +67,11 @@ const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onCh
           limitSize={limitSize}
           disabled={loading}
           tips={tips}
-          onBefore={(files) => {
+          onBefore={files => {
             setLoading(true)
             return Promise.resolve(files)
           }}
-          onSuccess={(file) => {
+          onSuccess={file => {
             onChange?.(file)
             setLoading(false)
           }}

@@ -2,7 +2,7 @@ import { show } from '@ebay/nice-modal-react'
 import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { useRouter } from 'next/router'
-import DialogTips from '@/components/common/DialogTips'
+import DialogTips from 'bounceComponents/common/DialogTips'
 
 export interface IEditCancelConfirmation {
   routerLink?: string

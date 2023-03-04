@@ -7,15 +7,15 @@ import { useRouter } from 'next/router'
 import Add from './components/Add'
 import InvestmentsForm from './components/InvestmentsForm'
 import InvestmentsList from './components/InvestmentsList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useGetCompanyInvestments } from '@/hooks/company/useGetCompanyInvestments'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useGetCompanyInvestments } from 'bounceHooks/company/useGetCompanyInvestments'
 import { RootState } from '@/store'
-import { useUpdateCompany } from '@/hooks/company/useUpdateCompany'
-import { ICompanyInvestmentsListItems, ICompanyProfileParams } from '@/api/company/type'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import DialogTips from '@/components/common/DialogTips'
+import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
+import { ICompanyInvestmentsListItems, ICompanyProfileParams } from 'api/company/type'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import DialogTips from 'bounceComponents/common/DialogTips'
 
 export type ICompanyInvestmentsProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -25,13 +25,13 @@ export type ICompanyInvestmentsProps = {
 
 const add_text = {
   label: 'Add new investment',
-  description: "Nothing to see for now. When you add new investment, they'll show up here.",
+  description: "Nothing to see for now. When you add new investment, they'll show up here."
 }
 
 const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   companyProfileValues,
   firstEdit,
-  companyProfileDispatch,
+  companyProfileDispatch
 }) => {
   const { userId } = useSelector((state: RootState) => state.user)
 
@@ -63,11 +63,11 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   }, [firstEdit])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -77,24 +77,24 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new investment',
       fullWidth: true,
-      children: <InvestmentsForm onAdd={addList} />,
+      children: <InvestmentsForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         setFormDirty(false)
         return runUpdateCompany({
           ...companyProfileValues,
-          companyInvestments: ['DIRECTLY'].includes(flag) ? [] : list,
+          companyInvestments: ['DIRECTLY'].includes(flag) ? [] : list
         }).then(() => {
           show(DialogTips, {
             title: 'Сongratulations! You have completed company profile',
@@ -103,24 +103,24 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
             cancelBtn: 'Browse Now',
             againBtn: 'My Homepage',
             onCancel: () => router.push('/company/institutionInvestors'),
-            onAgain: () => router.push('/company/summary'),
+            onAgain: () => router.push('/company/summary')
           })
         })
       }
       runUpdateCompany({ companyInvestments: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => setFormDirty(false))
     },
-    [list, runUpdateCompany, firstEdit, companyProfileValues, router],
+    [list, runUpdateCompany, firstEdit, companyProfileValues, router]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

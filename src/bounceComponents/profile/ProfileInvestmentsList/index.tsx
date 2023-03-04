@@ -5,10 +5,10 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { RootState } from '@/store'
 import { getLabel } from '@/utils'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
-import { IInvestmentItems } from '@/api/profile/type'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+import { IInvestmentItems } from 'api/profile/type'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type IProfileInvestmentsListProps = {
   list: IInvestmentItems[]
@@ -19,7 +19,7 @@ export type IProfileInvestmentsListProps = {
 const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
   list,
   showOperation = false,
-  handleEdit,
+  handleEdit
 }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
@@ -46,8 +46,8 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
             marginBottom: 8,
             padding: '14px 0px 14px 10px',
             '&:hover': {
-              background: 'var(--ps-gray-200)',
-            },
+              background: 'var(--ps-gray-200)'
+            }
           }}
           alignItems="center"
         >
@@ -59,8 +59,8 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
                 width: 32,
                 height: 32,
                 '&:hover': {
-                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                },
+                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default'
+                }
               }}
               onClick={() => handleLink(v)}
             />
@@ -75,8 +75,8 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
                 whiteSpace: 'nowrap',
                 '&:hover': {
                   cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                  textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none',
-                },
+                  textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none'
+                }
               }}
               onClick={() => handleLink(v)}
             >

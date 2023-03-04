@@ -1,7 +1,7 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { Box, SxProps, Typography } from '@mui/material'
 import React, { ReactNode } from 'react'
-import Tooltip from '@/components/common/Tooltip'
+import Tooltip from 'bounceComponents/common/Tooltip'
 
 const SubTitle = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="body2" sx={{ color: '#908E96' }}>

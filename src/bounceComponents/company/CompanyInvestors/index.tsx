@@ -7,14 +7,14 @@ import { CompanyActionType } from '../components/CompanyContextProvider'
 import Add from './components/Add'
 import InvestorsForm from './components/InvestorsForm'
 import InvestorsList from './components/InvestorsList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
-import { useGetCompanyInvestors } from '@/hooks/company/useGetCompanyInvestors'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import { useGetCompanyInvestors } from 'bounceHooks/company/useGetCompanyInvestors'
 import { RootState } from '@/store'
-import { useUpdateCompany } from '@/hooks/company/useUpdateCompany'
-import { ICompanyInvestorsListItems, ICompanyProfileParams } from '@/api/company/type'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
+import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
+import { ICompanyInvestorsListItems, ICompanyProfileParams } from 'api/company/type'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 
 export type ICompanyInvestorsProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -24,13 +24,13 @@ export type ICompanyInvestorsProps = {
 
 const add_text = {
   label: 'Add new investor',
-  description: "Nothing to see for now. When you add new investor, they'll show up here.",
+  description: "Nothing to see for now. When you add new investor, they'll show up here."
 }
 
 const CompanyInvestors: React.FC<ICompanyInvestorsProps> = ({
   companyProfileValues,
   firstEdit,
-  companyProfileDispatch,
+  companyProfileDispatch
 }) => {
   const { userId } = useSelector((state: RootState) => state.user)
 
@@ -60,11 +60,11 @@ const CompanyInvestors: React.FC<ICompanyInvestorsProps> = ({
   }, [data?.data?.list, firstEdit, companyProfileValues?.companyInvestors])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -74,43 +74,43 @@ const CompanyInvestors: React.FC<ICompanyInvestorsProps> = ({
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new investor',
       fullWidth: true,
-      children: <InvestorsForm onAdd={addList} />,
+      children: <InvestorsForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         setFormDirty(false)
         return companyProfileDispatch({
           type: CompanyActionType.SetInvestors,
           payload: {
             ...companyProfileValues,
-            companyInvestors: ['DIRECTLY'].includes(flag) ? [] : list,
-          },
+            companyInvestors: ['DIRECTLY'].includes(flag) ? [] : list
+          }
         })
       }
       runUpdateCompany({ companyInvestors: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => setFormDirty(false))
     },
-    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch],
+    [list, runUpdateCompany, firstEdit, companyProfileValues, companyProfileDispatch]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

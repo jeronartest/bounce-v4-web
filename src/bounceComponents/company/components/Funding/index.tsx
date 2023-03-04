@@ -6,9 +6,9 @@ import { useRouter } from 'next/router'
 import CompanyProfileInvestments from '../../CompanyProfileInvestments'
 import InvestorsList from './components/InvestorsList'
 import { RootState } from '@/store'
-import { useGetCompanyInvestors } from '@/hooks/company/useGetCompanyInvestors'
-import { ICompanyOverviewInfo } from '@/api/company/type'
-import { useGetCompanyInvestments } from '@/hooks/company/useGetCompanyInvestments'
+import { useGetCompanyInvestors } from 'bounceHooks/company/useGetCompanyInvestors'
+import { ICompanyOverviewInfo } from 'api/company/type'
+import { useGetCompanyInvestments } from 'bounceHooks/company/useGetCompanyInvestments'
 
 export type IFundingProps = {
   targetCompanyId: number
@@ -41,8 +41,8 @@ const Funding: React.FC<IFundingProps> = ({ targetCompanyId }) => {
                 pathname: '/company/funding',
                 query: {
                   ...router.query,
-                  tab: 'investors',
-                },
+                  tab: 'investors'
+                }
               })
             }}
           >
@@ -56,8 +56,8 @@ const Funding: React.FC<IFundingProps> = ({ targetCompanyId }) => {
                 pathname: '/company/funding',
                 query: {
                   ...router.query,
-                  tab: 'investments',
-                },
+                  tab: 'investments'
+                }
               })
             }}
           >

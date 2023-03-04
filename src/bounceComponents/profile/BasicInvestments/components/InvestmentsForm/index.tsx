@@ -7,14 +7,14 @@ import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as DeleteIcon } from '@/assets/imgs/components/delete.svg'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchCompanyInfo } from '@/api/optionsData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import { searchCompanyInfo } from 'api/optionsData'
 import { RootState } from '@/store'
-import { FormType, IInvestmentItems } from '@/api/profile/type'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import DateMonthPicker from '@/components/common/DateMonthPicker'
+import { FormType, IInvestmentItems } from 'api/profile/type'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
 import { formCheckValid } from '@/utils'
 
 export type IInvestmentsFormProps = {
@@ -28,7 +28,7 @@ const validationSchema = yup.object({
   company: yup.object({
     name: yup.string().required('Please select a company'),
     link: yup.string(),
-    avatar: yup.string(),
+    avatar: yup.string()
   }),
   investDate: yup
     .number()
@@ -61,9 +61,9 @@ const validationSchema = yup.object({
             return true
           }
           return true
-        },
+        }
       })
-    }),
+    })
 })
 
 const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
@@ -76,13 +76,13 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
         company: {
           avatar: '',
           link: '',
-          name: '',
+          name: ''
         },
         companyId: 0,
         thirdpartId: 0,
         investDate: 0,
         investType: '',
-        investAmount: '',
+        investAmount: ''
       }
 
   const handleSubmit = useCallback(
@@ -90,24 +90,24 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
       if (!editData) {
         onAdd?.({
           ...values,
-          investAmount: values.investType === 1 ? Number(values.investAmount).toString() : values.investAmount,
+          investAmount: values.investType === 1 ? Number(values.investAmount).toString() : values.investAmount
         })
       } else {
         onEdit?.(
           {
             ...values,
-            investAmount: values.investType === 1 ? Number(values.investAmount).toString() : values.investAmount,
+            investAmount: values.investType === 1 ? Number(values.investAmount).toString() : values.investAmount
           },
-          editData.index,
+          editData.index
         )
       }
       modal.hide()
     },
-    [editData, modal, onAdd, onEdit],
+    [editData, modal, onAdd, onEdit]
   )
 
   const handleDelete = useCallback(
-    (handleReset) => {
+    handleReset => {
       if (!editData) {
         handleReset()
       } else {
@@ -115,7 +115,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
         modal.hide()
       }
     },
-    [editData, modal, onDelete],
+    [editData, modal, onDelete]
   )
 
   const [companyData, setCompanyData] = useState<ISearchOption[]>([])
@@ -125,20 +125,20 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
     searchCompanyInfo({
       limit: 100,
       offset: 0,
-      value: comSearchText,
-    }).then((res) => {
+      value: comSearchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
       setCompanyData(
-        data.list.map((v) => {
+        data.list.map(v => {
           return {
             label: v.name,
             icon: v.avatar || DefaultAvaSVG,
-            value: v,
+            value: v
           }
-        }),
+        })
       )
     })
   }, [comSearchText])
@@ -156,7 +156,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
                     selected={{
                       label: values.company.name,
                       icon: values.company.avatar,
-                      value: values.company,
+                      value: values.company
                     }}
                     onSearch={(text: string) => setComSearchText(text)}
                     value={values?.company?.name}
@@ -170,7 +170,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
                       setFieldValue('company', {
                         avatar: newVal.value.avatar,
                         link: newVal.value.link,
-                        name: newVal.value.name,
+                        name: newVal.value.name
                       })
                       setFieldValue('companyId', newVal.value.companyId)
                       setFieldValue('thirdpartId', newVal.value.thirdpartId)
@@ -182,7 +182,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
                 <FormItem name="investDate" label="Investment Date" required fieldType="custom">
                   <DateMonthPicker
                     value={values.investDate}
-                    onChange={(val) => {
+                    onChange={val => {
                       const { year, month } = val
                       const tempMonth = month + 1 < 10 ? `0${month + 1}` : month + 1
                       setFieldValue('investDate', moment(`${year}-${tempMonth}-01`).unix())
@@ -194,12 +194,12 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
                 <FormItem name="investType" label="Investment Type" required fieldType="custom">
                   <Select
                     value={values.investType}
-                    onChange={(val) => {
+                    onChange={val => {
                       setFieldValue('investType', val.target.value)
                       setFieldValue('investAmount', '')
                     }}
                   >
-                    {optionDatas?.investmentTypeOpt.map((v) => (
+                    {optionDatas?.investmentTypeOpt.map(v => (
                       <MenuItem key={v.id} value={v.id}>
                         {v.investment_type}
                       </MenuItem>

@@ -10,46 +10,45 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
 import styles from './styles'
-import InstitutionCard from '@/components/companies/InstitutionCard'
-import { IIdeasListData, IIdeasListItems } from '@/api/idea/type'
-import { getIdeasList } from '@/api/idea'
-import { getCompanyInformation, getInstitutionInvestors } from '@/api/market'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
+import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
+import { getIdeasList } from 'api/idea'
+import { getCompanyInformation, getInstitutionInvestors } from 'api/market'
 import { RootState } from '@/store'
-import CompanyBanner from '@/components/company/CompanyBanner'
-import CompanyBanner1 from '@/assets/imgs/company/banner/company.png'
-import CompanyBanner2 from '@/assets/imgs/company/banner/banner4.png'
+import CompanyBanner from 'bounceComponents/company/CompanyBanner'
+import CompanyBanner1 from 'assets/imgs/company/banner/company.png'
+import CompanyBanner2 from 'assets/imgs/company/banner/banner4.png'
 
-export type ICompanyProps = {}
 const defaultIdeaPageSize = 8
 
-const Company: React.FC<ICompanyProps> = ({}) => {
+const Company: React.FC = ({}) => {
   const router = useRouter()
   const {
     data: ideaListData,
     refresh,
-    loading: ideaLoding,
+    loading: ideaLoding
   } = usePagination<IIdeasListItems<IIdeasListData>, Params>(
     async ({ current, pageSize }) => {
       const resp = await getIdeasList({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         UserId: 0,
-        marketType: 0,
+        marketType: 0
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
-      defaultPageSize: defaultIdeaPageSize,
-    },
+      defaultPageSize: defaultIdeaPageSize
+    }
   )
 
   const {
     loading: topCompaniesLoding,
     data: topCompaniesData,
-    refresh: companyInformationRefresh,
+    refresh: companyInformationRefresh
   } = usePagination(
     async ({ current, pageSize }) => {
       const resp = await getCompanyInformation({
@@ -58,16 +57,16 @@ const Company: React.FC<ICompanyProps> = ({}) => {
         name: '',
         startup: 0,
         companyStage: 0,
-        marketCategory: 0,
+        marketCategory: 0
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
-      defaultPageSize: defaultIdeaPageSize,
-    },
+      defaultPageSize: defaultIdeaPageSize
+    }
   )
   const { loading: InstitutionInvestorsLoding, data: institutionInvestorsData } = usePagination(
     async ({ current, pageSize }) => {
@@ -75,27 +74,27 @@ const Company: React.FC<ICompanyProps> = ({}) => {
         offset: (current - 1) * pageSize,
         limit: pageSize,
         name: '',
-        startup: 0,
+        startup: 0
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
-      defaultPageSize: defaultIdeaPageSize,
-    },
+      defaultPageSize: defaultIdeaPageSize
+    }
   )
   const { token } = useSelector((state: RootState) => state.user)
   const bannerList = [
     {
       img: CompanyBanner1,
-      title: 'Everything about  companies and investors in one place',
+      title: 'Everything about  companies and investors in one place'
     },
     {
       img: CompanyBanner2,
-      title: 'Write up your startup idea and get supporters',
-    },
+      title: 'Write up your startup idea and get supporters'
+    }
   ]
   return (
     <>
@@ -177,7 +176,7 @@ const Company: React.FC<ICompanyProps> = ({}) => {
                             dislikeCount: ideaListItem.dislikeCount,
                             likeCount: ideaListItem.likeCount,
                             myDislike: ideaListItem.myDislike,
-                            myLike: ideaListItem.myLike,
+                            myLike: ideaListItem.myLike
                           }}
                           acitve={ideaListItem.active}
                           objId={ideaListItem.id}
@@ -234,7 +233,7 @@ const Company: React.FC<ICompanyProps> = ({}) => {
                               ideaListItem?.thirdpartId !== 0
                                 ? `thirdpartId=${ideaListItem?.thirdpartId}`
                                 : `id=${ideaListItem?.companyId}`
-                            }`,
+                            }`
                           )
                         }}
                       >
@@ -249,7 +248,7 @@ const Company: React.FC<ICompanyProps> = ({}) => {
                             dislikeCount: ideaListItem.dislikeCount,
                             likeCount: ideaListItem.likeCount,
                             myDislike: ideaListItem.myDislike,
-                            myLike: ideaListItem.myLike,
+                            myLike: ideaListItem.myLike
                           }}
                           acitve={ideaListItem.active}
                           objId={ideaListItem.thirdpartId}
@@ -298,7 +297,7 @@ const Company: React.FC<ICompanyProps> = ({}) => {
                           router.push(
                             `/company/summary?${
                               item?.thirdpartId !== 0 ? `thirdpartId=${item?.thirdpartId}` : `id=${item?.companyId}`
-                            }`,
+                            }`
                           )
                         }}
                       >

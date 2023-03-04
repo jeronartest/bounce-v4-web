@@ -9,7 +9,7 @@ import {
   FormHelperText,
   OutlinedInput,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
@@ -24,9 +24,9 @@ import ImportWhitelistDialog from '../ImportWhitelistDialog'
 import { ParticipantStatus } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import SwitchFormItem from '../SwitchFormItem'
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 import { isAddress } from '@/utils/web3/address'
-import Tooltip from '@/components/common/Tooltip'
+import Tooltip from 'bounceComponents/common/Tooltip'
 
 interface MyFormValues {
   poolName: string
@@ -51,7 +51,7 @@ export const DateRangePickerDemo = () => {
     shouldDelayUnlocking: valuesState.shouldDelayUnlocking,
     delayUnlockingTime: valuesState.delayUnlockingTime,
     whitelist: valuesState.whitelist,
-    participantStatus: valuesState.participantStatus,
+    participantStatus: valuesState.participantStatus
   }
 
   const validationSchema = Yup.object({
@@ -85,8 +85,8 @@ export const DateRangePickerDemo = () => {
                 (value.valueOf() > context.parent.startTime.valueOf() &&
                   value.valueOf() > context.parent.endTime.valueOf())
               )
-            },
-          ),
+            }
+          )
       }),
     whitelist: Yup.array()
       .of(Yup.string())
@@ -95,20 +95,20 @@ export const DateRangePickerDemo = () => {
         'Whitelist is required',
         (inputArray, context) =>
           context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.length > 0),
+          (inputArray instanceof Array && inputArray.length > 0)
       )
       .test('VALID_ADDRESS_ARRAY', 'Please make sure all addresses are valid', (inputArray, context) => {
         return (
           context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.every((input) => isAddress(input)))
+          (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
         )
       }),
-    participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status'),
+    participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status')
   })
 
   const showImportWhitelistDialog = (
     values: MyFormValues,
-    setValues: (values: any, shouldValidate?: boolean) => void,
+    setValues: (values: any, shouldValidate?: boolean) => void
   ) => {
     show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
       .then((whitelist: string[]) => {
@@ -116,15 +116,15 @@ export const DateRangePickerDemo = () => {
         valuesDispatch({
           type: ActionType.SetWhitelist,
           payload: {
-            whitelist,
-          },
+            whitelist
+          }
         })
         setValues({
           ...values,
-          whitelist,
+          whitelist
         })
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('ImportWhitelistDialog Rejected: ', err)
       })
   }
@@ -139,7 +139,7 @@ export const DateRangePickerDemo = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={async (formValues) => {
+          onSubmit={async formValues => {
             valuesDispatch({
               type: ActionType.CommitAdvancedSettings,
               payload: {
@@ -149,8 +149,8 @@ export const DateRangePickerDemo = () => {
                 shouldDelayUnlocking: formValues.shouldDelayUnlocking,
                 delayUnlockingTime: formValues.delayUnlockingTime,
                 whitelist: formValues.whitelist,
-                participantStatus: formValues.participantStatus,
-              },
+                participantStatus: formValues.participantStatus
+              }
             })
           }}
         >

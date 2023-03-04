@@ -9,13 +9,13 @@ import EditCancelConfirmation from '../components/EditCancelConfirmation'
 import Add from './components/Add'
 import EducationForm from './components/EducationForm'
 import EducationList from './components/EducationList'
-import { ReactComponent as AddIcon } from '@/assets/imgs/home/add.svg'
-import MuiDialog from '@/components/common/Dialog'
+import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
+import MuiDialog from 'bounceComponents/common/Dialog'
 import { RootState } from '@/store'
-import { useGetResumeEducation } from '@/hooks/profile/useGetResumeEducation'
-import { educationItems, IUpdatePersonalParams } from '@/api/profile/type'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
+import { useGetResumeEducation } from 'bounceHooks/profile/useGetResumeEducation'
+import { educationItems, IUpdatePersonalParams } from 'api/profile/type'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 
 export type IResumeEducationProps = {
   resumeProfileValues?: IUpdatePersonalParams
@@ -25,13 +25,13 @@ export type IResumeEducationProps = {
 
 const add_text = {
   label: 'Add new education',
-  description: "Nothing to see for now. When you add new education, they'll show up here.",
+  description: "Nothing to see for now. When you add new education, they'll show up here."
 }
 
 const ResumeEducation: React.FC<IResumeEducationProps> = ({
   resumeProfileValues,
   firstEdit,
-  resumeProfileDispatch,
+  resumeProfileDispatch
 }) => {
   const { userId } = useSelector((state: RootState) => state.user)
 
@@ -58,7 +58,7 @@ const ResumeEducation: React.FC<IResumeEducationProps> = ({
       runGetResumeEducation({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetResumeEducation, userId])
 
@@ -71,11 +71,11 @@ const ResumeEducation: React.FC<IResumeEducationProps> = ({
   }, [data?.data?.list, firstEdit, resumeProfileValues?.education])
 
   const addList = useCallback(
-    (data) => {
+    data => {
       setlist([...list, data])
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const editList = useCallback(
@@ -85,19 +85,19 @@ const ResumeEducation: React.FC<IResumeEducationProps> = ({
       setlist(temp)
       setFormDirty(true)
     },
-    [list],
+    [list]
   )
 
   const handleAdd = useCallback(() => {
     show(MuiDialog, {
       title: 'Add new education',
       fullWidth: true,
-      children: <EducationForm onAdd={addList} />,
+      children: <EducationForm onAdd={addList} />
     })
   }, [addList])
 
   const handleSubmit = useCallback(
-    (flag) => {
+    flag => {
       if (firstEdit) {
         if (list?.length === 0) {
           return toast.error('Please describe your education')
@@ -107,26 +107,26 @@ const ResumeEducation: React.FC<IResumeEducationProps> = ({
           type: ResumeActionType.SetEducation,
           payload: {
             ...resumeProfileValues,
-            education: ['DIRECTLY'].includes(flag) ? [] : list,
-          },
+            education: ['DIRECTLY'].includes(flag) ? [] : list
+          }
         })
       }
       runPersonalResume({ education: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => {
         setFormDirty(false)
       })
     },
-    [list, runPersonalResume, firstEdit, resumeProfileValues, resumeProfileDispatch],
+    [list, runPersonalResume, firstEdit, resumeProfileValues, resumeProfileDispatch]
   )
 
   const deleteList = useCallback(
-    (i) => {
+    i => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)
       !temp.length && handleSubmit('DIRECTLY')
       setFormDirty(true)
     },
-    [handleSubmit, list],
+    [handleSubmit, list]
   )
 
   if (!list?.length) {

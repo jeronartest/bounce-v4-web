@@ -1,8 +1,8 @@
 import { IAvatarLinkType, IFileType } from '../upload/type'
 import { ILikeUnlikeRes } from '../idea/type'
 import { VerifyStatus } from '../profile/type'
-import { IFile } from '@/components/common/Uploader'
-import { CompletedSteps } from '@/components/create-auction-pool/types'
+import { IFile } from 'bounceComponents/common/Uploader'
+import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
 import { CompanyStep } from '@/pages/company/edit'
 
 export interface IGetCompanyTeamParams {

@@ -6,13 +6,13 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from '@/components/common/NoData'
-import FormItem from '@/components/common/FormItem'
-import { IIdeasListData, IIdeasListItems } from '@/api/idea/type'
-import { getIdeasList } from '@/api/idea'
-import InstitutionCard from '@/components/companies/InstitutionCard'
+import NoData from 'bounceComponents/common/NoData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
+import { getIdeasList } from 'api/idea'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { RootState } from '@/store'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 
 export type IStartupIdeasProps = {
   userId: number
@@ -28,24 +28,24 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
     pagination: ideaPagination,
     data: ideaListData,
     refresh,
-    loading: ideaListLoading,
+    loading: ideaListLoading
   } = usePagination<IIdeasListItems<IIdeasListData>, Params>(
     async ({ current, pageSize }) => {
       const resp = await getIdeasList({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         UserId: userId,
-        marketType: marketType,
+        marketType: marketType
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
       defaultPageSize: defaultIdeaPageSize,
-      refreshDeps: [userId, marketType],
-    },
+      refreshDeps: [userId, marketType]
+    }
   )
   const handlePageChange = (e, p) => {
     ideaPagination.changeCurrent(p)
@@ -56,7 +56,7 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
         <Stack direction="row" spacing={10}>
           <FormItem name="marketCategory" label="Market Category" fieldType="custom" sx={{ width: 190 }}>
             <Select
-              onChange={(event) => {
+              onChange={event => {
                 if (event.target.value === 1) {
                   setMarketType(0)
                 } else {
@@ -100,7 +100,7 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
                       dislikeCount: ideaListItem.dislikeCount,
                       likeCount: ideaListItem.likeCount,
                       myDislike: ideaListItem.myDislike,
-                      myLike: ideaListItem.myLike,
+                      myLike: ideaListItem.myLike
                     }}
                     acitve={ideaListItem.active}
                     objId={ideaListItem.id}

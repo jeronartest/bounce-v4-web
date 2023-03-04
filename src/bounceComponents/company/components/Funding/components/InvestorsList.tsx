@@ -2,12 +2,12 @@ import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useRouter } from 'next/router'
 import { getLabel } from '@/utils'
-import NoData from '@/components/common/NoData'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import Tooltip from '@/components/common/Tooltip'
-import { ICompanyInvestorsListItems } from '@/api/company/type'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
+import NoData from 'bounceComponents/common/NoData'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import { ICompanyInvestorsListItems } from 'api/company/type'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 
 export type IInvestorsListProps = {
   dataList: any
@@ -43,8 +43,8 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ dataList, optionDatas })
                 height: 161,
                 '&:hover': {
                   boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(23, 23, 23, 0.2)',
-                },
+                  border: '1px solid rgba(23, 23, 23, 0.2)'
+                }
               }}
               spacing={4}
             >
@@ -53,7 +53,7 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ dataList, optionDatas })
                 sx={{
                   width: 60,
                   height: 60,
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 onClick={() => handleLink(item)}
               />

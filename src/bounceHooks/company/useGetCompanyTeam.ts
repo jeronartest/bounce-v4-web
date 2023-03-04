@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks'
-import { getCompanyTeam } from '@/api/company'
+import { getCompanyTeam } from 'api/company'
 
 export const useGetCompanyTeam = () => {
   const { data, runAsync } = useRequest(getCompanyTeam, {
@@ -9,7 +9,7 @@ export const useGetCompanyTeam = () => {
       if (response.code === 200) {
         return response.data
       }
-    },
+    }
   })
   return { data, runAsync }
 }

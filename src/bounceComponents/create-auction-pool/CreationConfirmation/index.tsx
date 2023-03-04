@@ -9,13 +9,13 @@ import { useAccount, useNetwork } from 'wagmi'
 import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
 import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import { shortenAddress } from '@/utils/web3/address'
-import ConnectWalletDialog from '@/components/common/ConnectWalletDialog'
-import DialogTips from '@/components/common/DialogTips'
-import useCreateFixedSwapPool from '@/hooks/web3/useCreateFixedSwapPool'
+import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import useCreateFixedSwapPool from 'bounceHooks/web3/useCreateFixedSwapPool'
 import { CHAIN_ICONS, CHAIN_NAMES } from '@/constants/web3/chains'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
-import { ReactComponent as CloseSVG } from '@/assets/imgs/components/close.svg'
+import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 import { formatNumber } from '@/utils/web3/number'
 
 const NO_LIMIT_ALLOCATION = '0'
@@ -39,7 +39,7 @@ const CreatePoolButton = () => {
     onSuccess: (receipt, chainShortName) => {
       console.log('receipt: ', receipt)
       const goToPoolInfoPage = () => {
-        const createdEvent = receipt.events.find((e) => e.event === 'Created')
+        const createdEvent = receipt.events.find(e => e.event === 'Created')
 
         // console.log('chainShortName: ', chainShortName)
 
@@ -67,10 +67,10 @@ const CreatePoolButton = () => {
         content: `You have successfully created the auction.`,
         onAgain: goToPoolInfoPage,
         onCancel: handleCloseDialog,
-        onClose: handleCloseDialog,
+        onClose: handleCloseDialog
       })
     },
-    onError: (error) => {
+    onError: error => {
       console.log('>>>> create error: ', error)
       show(DialogTips, {
         iconType: 'error',
@@ -78,9 +78,9 @@ const CreatePoolButton = () => {
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: 'Something went wrong',
-        onAgain: refresh,
+        onAgain: refresh
       })
-    },
+    }
   })
 
   return (
@@ -104,7 +104,7 @@ const CreatePoolButton = () => {
           tokenFromAddress: values.tokenFrom.address,
           tokenFormDecimal: values.tokenFrom.decimals,
           tokenToAddress: values.tokenTo.address,
-          tokenToDecimal: values.tokenTo.decimals,
+          tokenToDecimal: values.tokenTo.decimals
         })
       }}
     >
@@ -138,8 +138,8 @@ const CreationConfirmation = () => {
           valuesDispatch({
             type: ActionType.HandleStep,
             payload: {
-              activeStep: CreationStep.ADVANCED_SETTINGS,
-            },
+              activeStep: CreationStep.ADVANCED_SETTINGS
+            }
           })
         }}
       >

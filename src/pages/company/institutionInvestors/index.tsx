@@ -1,22 +1,20 @@
 import { Button, OutlinedInput } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Stack } from '@mui/system'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
-import { toast } from 'react-toastify'
 import Head from 'next/head'
-import TopSearchLayout from '@/components/market/TopSearchLayout/idnex'
-import FormItem from '@/components/common/FormItem'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchUser } from '@/api/optionsData'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import Institution from '@/components/market/components/Institution'
+import TopSearchLayout from 'bounceComponents/market/TopSearchLayout/idnex'
+import FormItem from 'bounceComponents/common/FormItem'
+// import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+// import { searchUser } from 'api/optionsData'
+// import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import Institution from 'bounceComponents/market/components/Institution'
 
-export type IInstitutionInvestorsProps = {}
 const validationSchema = yup.object({
   user: yup.string()
 })
-const InstitutionInvestors: React.FC<IInstitutionInvestorsProps> = ({}) => {
+const InstitutionInvestors: React.FC = ({}) => {
   const [userName, setUserName] = useState<string>('')
   const initialValues = {
     user: ''

@@ -8,11 +8,11 @@ import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 import { useSelector } from 'react-redux'
 import SettingsBox from '../../SettingsBox'
 import { ReactComponent as MetaMaskSVG } from './metamask.svg'
-import ConnectWalletDialog from '@/components/common/ConnectWalletDialog'
-import { bindAddress, userGetBindAddress } from '@/api/user'
+import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
+import { bindAddress, userGetBindAddress } from 'api/user'
 import { RootState } from '@/store'
-import useEagerConnect from '@/hooks/web3/useEagerConnect'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
+import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 export type IEVMWalletProps = {}
 
@@ -22,8 +22,8 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
 
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
 
-  const checkoutChainId = (chainId) => {
-    const chainIdData = optionDatas?.chainInfoOpt?.filter((item) => item.ethChainId === chainId)
+  const checkoutChainId = chainId => {
+    const chainIdData = optionDatas?.chainInfoOpt?.filter(item => item.ethChainId === chainId)
     if (chainIdData) {
       return chainIdData[0]?.id
     }
@@ -42,26 +42,26 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
       return userGetBindAddress({
         chainId: chainConfigInBackend.id,
         limit: 3,
-        offset: 0,
+        offset: 0
       })
     },
     {
       // manual: true,
       refreshDeps: [chain?.id, chainConfigInBackend?.id],
-      ready: !!chain?.id && !!chainConfigInBackend,
-    },
+      ready: !!chain?.id && !!chainConfigInBackend
+    }
   )
   // useEffect(() => {
   //   getBindAddress(checkoutChainId(chain?.id))
   // }, [chain?.id, getBindAddress])
 
   const { run: bind_address } = useRequest(
-    (params) => {
+    params => {
       return bindAddress(params)
     },
     {
       manual: true,
-      onSuccess: (res) => {
+      onSuccess: res => {
         const { data, code } = res
         getBindAddress()
       },
@@ -69,8 +69,8 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
         if (err.code === 10449) {
           toast.error('This wallet address has been bound, please change the wallet address binding')
         }
-      },
-    },
+      }
+    }
   )
 
   return (
@@ -114,7 +114,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
                           chainId: item.chainId,
                           isDefault: 2,
                           message: 'Make default',
-                          signature,
+                          signature
                         })
                       } catch (error) {
                         toast.error('User Rejection')
@@ -142,7 +142,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
           endIcon={<AddCircleOutlineRoundedIcon />}
           onClick={async () => {
             if (isConnected) {
-              if (userBindAddressData?.data.list.filter((item) => item.address === address).length > 0) {
+              if (userBindAddressData?.data.list.filter(item => item.address === address).length > 0) {
                 toast.error('This wallet address has been bound, please change the wallet address binding')
               } else {
                 try {
@@ -152,7 +152,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
                     chainId: checkoutChainId(chain?.id),
                     isDefault: 1,
                     message: 'Link wallet',
-                    signature,
+                    signature
                   })
                 } catch (error) {
                   toast.error('Please switch the set account')

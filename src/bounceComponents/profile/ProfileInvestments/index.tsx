@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import ProfileInvestmentsList from '../ProfileInvestmentsList'
-import { IInvestmentItems } from '@/api/profile/type'
+import { IInvestmentItems } from 'api/profile/type'
 import { RootState } from '@/store'
-import { IPager } from '@/api/type'
-import { getBasicInvestments } from '@/api/profile'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import NoData from '@/components/common/NoData'
+import { IPager } from 'api/type'
+import { getBasicInvestments } from 'api/profile'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import NoData from 'bounceComponents/common/NoData'
 
 export type IProfileInvestmentsProps = {
   personalInfoId: number
@@ -27,22 +27,22 @@ const ProfileInvestments: React.FC<IProfileInvestmentsProps> = ({ personalInfoId
       const res = await getBasicInvestments({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        userId: personalInfoId,
+        userId: personalInfoId
       })
       return {
         total: res?.data?.total,
-        list: res?.data?.list,
+        list: res?.data?.list
       }
     },
     {
       defaultPageSize: 4,
       ready: !!personalInfoId,
-      refreshDeps: [personalInfoId],
-    },
+      refreshDeps: [personalInfoId]
+    }
   )
 
   useEffect(() => {
-    data?.list?.length && setList((val) => [...val, ...data?.list])
+    data?.list?.length && setList(val => [...val, ...data?.list])
   }, [data?.list])
 
   const handleClick = useCallback(() => {

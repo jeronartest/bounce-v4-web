@@ -7,7 +7,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  Typography,
+  Typography
 } from '@mui/material'
 import React from 'react'
 import { Stack } from '@mui/system'
@@ -16,13 +16,13 @@ import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import { useRouter } from 'next/router'
 import ExperienceForm from '../ExperienceForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
-import { experienceItems } from '@/api/profile/type'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+import { experienceItems } from 'api/profile/type'
 import { RootState } from '@/store'
 import { getPrimaryRoleLabel } from '@/utils'
-import MuiDialog from '@/components/common/Dialog'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type IExperienceListProps = {
   list: experienceItems[]
@@ -34,12 +34,12 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
 
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     const temp = { data: { ...v.data, isCurrently: v.data.isCurrently === 2 }, index: v.index }
     show(MuiDialog, {
       title: 'Edit the experience',
       fullWidth: true,
-      children: <ExperienceForm editData={temp} onEdit={onEdit} onDelete={onDelete} />,
+      children: <ExperienceForm editData={temp} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 
@@ -65,8 +65,8 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
             marginBottom: 8,
             padding: '20px',
             '&:hover': {
-              background: 'var(--ps-gray-200)',
-            },
+              background: 'var(--ps-gray-200)'
+            }
           }}
         >
           <ListItemAvatar sx={{ minWidth: 0, marginRight: 20, marginTop: 0 }}>
@@ -77,8 +77,8 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
                 width: 68,
                 height: 68,
                 '&:hover': {
-                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                },
+                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default'
+                }
               }}
               onClick={() => handleLink(v)}
             />
@@ -93,8 +93,8 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
                     lineHeight: '20px',
                     '&:hover': {
                       cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                      textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none',
-                    },
+                      textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none'
+                    }
                   }}
                   onClick={() => handleLink(v)}
                 >
@@ -126,7 +126,7 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
                       Number(v.isCurrently) === 2 ? 'Present' : dayjs(v.endTime * 1000).format('YYYY')
                     } (${dayjs(Number(v.isCurrently) === 2 ? dayjs() : dayjs(v.endTime * 1000)).diff(
                       dayjs(v.startTime * 1000),
-                      'year',
+                      'year'
                     )} years)`}
                   </Typography>
                 </Stack>
@@ -138,7 +138,7 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: 2,
+                    WebkitLineClamp: 2
                   }}
                 >
                   {v.description}

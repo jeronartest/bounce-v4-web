@@ -1,6 +1,6 @@
 import { IconButton, Stack, Typography } from '@mui/material'
 import React, { ReactNode } from 'react'
-import { ReactComponent as ChevronLeftSVG } from '@/assets/imgs/profile/chevron-left.svg'
+import { ReactComponent as ChevronLeftSVG } from 'assets/imgs/profile/chevron-left.svg'
 
 export type IGoBackProps = {
   title: string | ReactNode

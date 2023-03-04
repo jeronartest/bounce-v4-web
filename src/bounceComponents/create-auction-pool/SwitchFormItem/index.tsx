@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SwitchProps as MuiSwitchProps } from '@mui/material/Switch'
 import { FieldProps } from 'formik'
-import Switch from '@/components/common/Switch'
+import Switch from 'bounceComponents/common/Switch'
 
 export interface SwitchProps
   extends FieldProps,
@@ -38,7 +38,7 @@ export function fieldToSwitch({
         fieldOnBlur(e ?? field.name)
       },
     ...field,
-    ...props,
+    ...props
   }
 }
 

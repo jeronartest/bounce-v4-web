@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks'
-import { getResumeExperience } from '@/api/profile'
+import { getResumeExperience } from 'api/profile'
 
 export const useGetResumeExperience = () => {
   const { data, runAsync } = useRequest(getResumeExperience, {
@@ -9,7 +9,7 @@ export const useGetResumeExperience = () => {
       if (response.code === 200) {
         return response.data
       }
-    },
+    }
   })
   return { data, runAsync }
 }

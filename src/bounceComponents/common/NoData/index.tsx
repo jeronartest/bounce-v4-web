@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
-import { ReactComponent as NoDataSVG } from '@/assets/imgs/no_data.svg'
+import { ReactComponent as NoDataSVG } from 'assets/imgs/no_data.svg'
 
 export interface INoDataProps {
   svgColor?: string

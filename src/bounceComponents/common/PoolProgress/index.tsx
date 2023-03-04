@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinearProgress, SxProps } from '@mui/material'
-import { PoolStatus } from '@/api/pool/type'
+import { PoolStatus } from 'api/pool/type'
 import { AuctionProgressPrimaryColor } from '@/constants/auction/color'
 
 export interface PoolProgressProps {
@@ -16,27 +16,27 @@ const ProgressColorStyles: Record<
   [PoolStatus.Upcoming]: {
     '&.MuiLinearProgress-root': {
       bgcolor: '#E6E6E6',
-      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Upcoming] },
-    },
+      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Upcoming] }
+    }
   },
   [PoolStatus.Live]: {
     '&.MuiLinearProgress-root': {
       bgcolor: '#D5EEDC',
-      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Live] },
-    },
+      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Live] }
+    }
   },
   [PoolStatus.Cancelled]: {
     '&.MuiLinearProgress-root': {
       bgcolor: '#D6DFF6',
-      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Cancelled] },
-    },
+      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Cancelled] }
+    }
   },
   [PoolStatus.Closed]: {
     '&.MuiLinearProgress-root': {
       bgcolor: '#D6DFF6',
-      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Closed] },
-    },
-  },
+      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Closed] }
+    }
+  }
 }
 
 const PoolProgress = ({ value, sx, poolStatus }: PoolProgressProps) => {
@@ -47,7 +47,7 @@ const PoolProgress = ({ value, sx, poolStatus }: PoolProgressProps) => {
         ...sx,
         borderRadius: 4,
         height: 6,
-        ...(ProgressColorStyles?.[poolStatus] || ProgressColorStyles[PoolStatus.Upcoming]),
+        ...(ProgressColorStyles?.[poolStatus] || ProgressColorStyles[PoolStatus.Upcoming])
       }}
       value={value}
     />

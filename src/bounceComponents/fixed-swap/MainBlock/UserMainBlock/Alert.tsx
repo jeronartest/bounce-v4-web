@@ -4,11 +4,11 @@ import PayAttentionAlert from '../../Alerts/PayAttentionAlert'
 import ClaimYourTokenAlert from '../../Alerts/ClaimYourTokenAlert'
 import AuctionClosedAlert from '../../Alerts/AuctionClosedAlert'
 import NotEligibleAlert from '../../Alerts/NotEligibleAlert'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
-import useIsUserInWhitelist from '@/hooks/auction/useIsUserInWhitelist'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoinedPool'
+import { PoolStatus } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 
 const Alert = () => {
   const { data: poolInfo } = usePoolInfo()

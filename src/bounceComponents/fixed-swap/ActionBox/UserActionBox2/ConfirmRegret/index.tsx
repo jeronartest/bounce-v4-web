@@ -5,8 +5,8 @@ import { ContractReceipt } from 'ethers'
 
 import { parseUnits } from 'ethers/lib/utils.js'
 import RegretButton from './RegretButton'
-import PoolInfoItem from '@/components/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { formatNumber } from '@/utils/web3/number'
 
 export interface ConfirmRegretProps {
@@ -22,14 +22,14 @@ const ConfirmRegret = ({ regretAmount, onCancel, handleRegret, isRegretting }: C
   const formattedToken0RegretAmount = regretAmount
     ? formatNumber(new BigNumber(regretAmount).toString(), {
         unit: 0,
-        decimalPlaces: poolInfo.token0.decimals,
+        decimalPlaces: poolInfo.token0.decimals
       })
     : '0'
 
   const token1RegretAmount = regretAmount
     ? formatNumber(new BigNumber(regretAmount).times(poolInfo.ratio).toString(), {
         unit: 0,
-        decimalPlaces: poolInfo.token1.decimals,
+        decimalPlaces: poolInfo.token1.decimals
       })
     : '0'
 

@@ -9,11 +9,11 @@ import { toast } from 'react-toastify'
 import md5 from 'md5'
 import { ReactComponent as CodeSendSVG } from '../../CodeSend.svg'
 import { ReactComponent as EditPwSvg } from './editPw.svg'
-import FormItem from '@/components/common/FormItem'
-import { changePassword, verifyCode } from '@/api/user'
-import { IChangePasswordParams } from '@/api/user/type'
-import { useLogout } from '@/hooks/user/useLogin'
-import { ReactComponent as CloseSvg } from '@/assets/imgs/close.svg'
+import FormItem from 'bounceComponents/common/FormItem'
+import { changePassword, verifyCode } from 'api/user'
+import { IChangePasswordParams } from 'api/user/type'
+import { useLogout } from 'bounceHooks/user/useLogin'
+import { ReactComponent as CloseSvg } from 'assets/imgs/close.svg'
 
 export type IEditInfoProps = {
   userInfoEmail: string
@@ -30,7 +30,7 @@ const validationSchema = yup.object({
     .string()
     .trim()
     .required('Please enter your email verification code')
-    .length(6, 'Email verification code should contain 6 characters'),
+    .length(6, 'Email verification code should contain 6 characters')
 })
 const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
   const [editBool, setEditBool] = useState<boolean>(false)
@@ -40,20 +40,20 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
     targetDate: showCountDown,
     onEnd: () => {
       setShowCountDown(undefined)
-    },
+    }
   })
 
   const initialValues = {
     password: '',
     email: userInfoEmail,
-    code: '',
+    code: ''
   }
   const { logout } = useLogout()
   const { run: handleChangePassword, loading } = useRequest(
     async (params: IChangePasswordParams) => changePassword(params),
     {
       manual: true,
-      onSuccess: (response) => {
+      onSuccess: response => {
         const { code } = response
         if (code === 200) {
           toast.success('Password successfully reset.')
@@ -65,8 +65,8 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
         } else {
           return toast.error('Please try again')
         }
-      },
-    },
+      }
+    }
   )
 
   const handleSubmit = (values: typeof initialValues) => {
@@ -75,7 +75,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
 
   const { run: sendVerifyCode } = useRequest(async () => verifyCode({ email: userInfoEmail }), {
     manual: true,
-    onSuccess: (response) => {
+    onSuccess: response => {
       const { code } = response
       if (code !== 200) {
         return toast.error('Please wait one minute and try again')
@@ -83,7 +83,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
         setBtnDisable(false)
         return toast.success('Send successfully')
       }
-    },
+    }
   })
   return (
     <Box>
@@ -101,7 +101,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
         <Typography variant="h2">Account Settings</Typography>
         {editBool ? (
           <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-            {(values) => (
+            {values => (
               <Box>
                 <Typography variant="h4" mt={40} mb={20}>
                   Email

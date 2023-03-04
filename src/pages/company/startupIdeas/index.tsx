@@ -1,27 +1,27 @@
-import { Box, Button, Container, Link, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Stack } from '@mui/system'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
-import StartupIdeas from '@/components/market/components/StartupIdeas'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import TopSearchLayout from '@/components/market/TopSearchLayout/idnex'
-import FormItem from '@/components/common/FormItem'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchCreator, searchUser } from '@/api/optionsData'
-import { USER_TYPE } from '@/api/user/type'
+import StartupIdeas from 'bounceComponents/market/components/StartupIdeas'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import TopSearchLayout from 'bounceComponents/market/TopSearchLayout/idnex'
+import FormItem from 'bounceComponents/common/FormItem'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import { searchCreator } from 'api/optionsData'
+import { USER_TYPE } from 'api/user/type'
 
-export type IStartupIdeasPageProps = {}
+// export type IStartupIdeasPageProps = {}
 const validationSchema = yup.object({
   user: yup.object({
     id: yup.number(),
     fullName: yup.string(),
-    avatar: yup.string(),
-  }),
+    avatar: yup.string()
+  })
 })
-const StartupIdeasPage: React.FC<IStartupIdeasPageProps> = ({}) => {
+const StartupIdeasPage: React.FC = ({}) => {
   const [userData, setUserData] = useState<ISearchOption[]>([])
   const [searchText, setSearchText] = useState<string>('')
   const [userId, setUserId] = useState<number>(0)
@@ -29,24 +29,24 @@ const StartupIdeasPage: React.FC<IStartupIdeasPageProps> = ({}) => {
     user: {
       id: '',
       fullName: '',
-      avatar: '',
-    },
+      avatar: ''
+    }
   }
   useEffect(() => {
     searchCreator({
       limit: 100,
       offset: 0,
-      creatorName: searchText,
-    }).then((res) => {
+      creatorName: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
-      const temp = data?.list?.map((v) => {
+      const temp = data?.list?.map(v => {
         return {
           label: v?.fullName,
           icon: v?.avatar || DefaultAvaSVG,
-          value: v,
+          value: v
         }
       })
       setUserData(temp)
@@ -76,9 +76,9 @@ const StartupIdeasPage: React.FC<IStartupIdeasPageProps> = ({}) => {
                   '.MuiOutlinedInput-root': {
                     background: 'var(--ps-black)',
                     border: '1px solid #484848',
-                    color: 'var(--ps-white)',
+                    color: 'var(--ps-white)'
                   },
-                  '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                  '.MuiOutlinedInput-notchedOutline': { border: 0 }
                 }}
                 fieldType="custom"
               >
@@ -87,11 +87,11 @@ const StartupIdeasPage: React.FC<IStartupIdeasPageProps> = ({}) => {
                   selected={{
                     label: values?.user?.fullName,
                     icon: values?.user?.avatar,
-                    value: values?.user,
+                    value: values?.user
                   }}
-                  filterOptions={(list) => list}
+                  filterOptions={list => list}
                   loadingText={'No result'}
-                  renderOption={(option) => {
+                  renderOption={option => {
                     return (
                       <span>
                         {option?.label}
@@ -120,12 +120,12 @@ const StartupIdeasPage: React.FC<IStartupIdeasPageProps> = ({}) => {
                     background: 'var(--ps-blue)',
                     color: 'var(--ps-white)',
                     '&:hover': {
-                      background: 'var(--ps-blue-50)',
+                      background: 'var(--ps-blue-50)'
                     },
                     '&:active': {
-                      background: 'var(--ps-blue-100)',
-                    },
-                  },
+                      background: 'var(--ps-blue-100)'
+                    }
+                  }
                 }}
               >
                 Search

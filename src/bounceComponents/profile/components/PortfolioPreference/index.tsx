@@ -3,7 +3,7 @@ import { Box, Grid, Tab, Tabs, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { ITabsListProps, TabPanel } from '../../ProfileLayout'
 import styles from './styles'
-import { IProfileUserInfo } from '@/api/user/type'
+import { IProfileUserInfo } from 'api/user/type'
 import { getLabel, getPrimaryRoleLabel } from '@/utils'
 import { RootState } from '@/store'
 
@@ -139,15 +139,15 @@ const PortfolioBox: React.FC<IPortfolioBoxProps> = ({ personalInfo }) => {
           <Box>
             <PortfolioPreference personalInfo={personalInfo} />
           </Box>
-        ),
+        )
       },
       {
         labelKey: 'job',
         label: 'Job watchlist',
-        content: <div style={{ padding: '0 48px' }}>39475834</div>,
-      },
+        content: <div style={{ padding: '0 48px' }}>39475834</div>
+      }
     ],
-    [personalInfo],
+    [personalInfo]
   )
 
   return (

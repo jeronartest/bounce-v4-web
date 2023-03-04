@@ -7,8 +7,8 @@ import LivePoolCreatorAlert from '../../Alerts/LivePoolCreatorAlert'
 import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import FundInfoList from './FundInfoList'
 import ButtonBlock from './ButtonBlock'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import { PoolStatus } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const CreatorActionBox = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()

@@ -1,8 +1,8 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
-import { IInvestmentItems, IupdateBasicParams } from '@/api/profile/type'
-import { timezone } from '@/components/common/LocationTimeZone'
-import { IAvatarLinkType, IFileType } from '@/api/upload/type'
-import { CompletedSteps } from '@/components/create-auction-pool/types'
+import { IInvestmentItems, IupdateBasicParams } from 'api/profile/type'
+import { timezone } from 'bounceComponents/common/LocationTimeZone'
+import { IAvatarLinkType, IFileType } from 'api/upload/type'
+import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
 
 export enum ActionType {
   SetProfileAvatar = 'SET_PROFILE_AVATAR',
@@ -10,7 +10,7 @@ export enum ActionType {
   SetSocial = 'SET_SOCIAL',
   SetInvestments = 'SET_INVESTMENTS',
   SetActiveStep = 'SET_ACTIVE_STEP',
-  HandleStep = 'HANDLE_STEP',
+  HandleStep = 'HANDLE_STEP'
 }
 
 type Payload = {
@@ -92,7 +92,7 @@ const initialValues: IupdateBasicParams = {
     fileThumbnailUrl: '',
     fileType: '',
     fileUrl: '',
-    id: 0,
+    id: 0
   },
   fullName: '',
   publicRole: [],
@@ -102,7 +102,7 @@ const initialValues: IupdateBasicParams = {
   company: {
     avatar: '',
     link: '',
-    name: '',
+    name: ''
   },
   companyId: 0,
   thirdpartId: 0,
@@ -117,11 +117,11 @@ const initialValues: IupdateBasicParams = {
   university: {
     avatar: '',
     link: '',
-    name: '',
+    name: ''
   },
   website: '',
   activeStep: 0,
-  completed: {},
+  completed: {}
 }
 
 const reducer = (state: IupdateBasicParams, action: Actions) => {
@@ -129,20 +129,20 @@ const reducer = (state: IupdateBasicParams, action: Actions) => {
     case ActionType.SetActiveStep:
       return {
         ...state,
-        activeStep: action.payload.activeStep,
+        activeStep: action.payload.activeStep
       }
     case ActionType.HandleStep:
       return {
         ...state,
         activeStep: action.payload.activeStep,
-        completed: { ...state.completed, [action.payload.activeStep]: false },
+        completed: { ...state.completed, [action.payload.activeStep]: false }
       }
     case ActionType.SetProfileAvatar:
       return {
         ...state,
         avatar: action.payload.avatar,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.SetIntro:
       return {
@@ -158,7 +158,7 @@ const reducer = (state: IupdateBasicParams, action: Actions) => {
         timezone: action.payload.timezone,
         university: action.payload.university,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.SetSocial:
       return {
@@ -170,14 +170,14 @@ const reducer = (state: IupdateBasicParams, action: Actions) => {
         twitter: action.payload.twitter,
         website: action.payload.website,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.SetInvestments:
       return {
         ...state,
         invest: action.payload.invest,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     default:
       return state

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useWarnIfUnsavedChanges } from '@/hooks/profile/useWarnIfUnsavedChanges'
+import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 
 export interface ILeavePageWarnProps {
   dirty: boolean

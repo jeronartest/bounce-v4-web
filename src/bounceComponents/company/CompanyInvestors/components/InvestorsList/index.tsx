@@ -7,21 +7,21 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import { useRouter } from 'next/router'
 import InvestorsForm from '../InvestorsForm'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { getLabel } from '@/utils'
 import { RootState } from '@/store'
-import { ICompanyInvestorsListItems } from '@/api/company/type'
-import MuiDialog from '@/components/common/Dialog'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
+import { ICompanyInvestorsListItems } from 'api/company/type'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 
 export type IInvestorsListProps = {
   list: ICompanyInvestorsListItems[]
@@ -33,7 +33,7 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
 
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     const temp = {
       data: {
         userInfo: v.data.userInfo,
@@ -41,14 +41,14 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }
         thirdpartId: v.data.thirdpartId,
         linkedinName: v.data.linkedinName,
         companyId: v.data.companyId,
-        investorType: v.data.investorType,
+        investorType: v.data.investorType
       },
-      index: v.index,
+      index: v.index
     }
     show(MuiDialog, {
       title: 'Edit the investor',
       fullWidth: true,
-      children: <InvestorsForm editData={temp} onEdit={onEdit} onDelete={onDelete} />,
+      children: <InvestorsForm editData={temp} onEdit={onEdit} onDelete={onDelete} />
     })
   }
   const handleLink = (item: ICompanyInvestorsListItems) => {
@@ -67,7 +67,7 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }
             background: 'var(--ps-gray-50)',
             borderRadius: '20px',
             marginBottom: 8,
-            padding: '14px 0px 14px 10px',
+            padding: '14px 0px 14px 10px'
           }}
         >
           <ListItemAvatar sx={{ minWidth: 0, marginRight: 12 }}>
@@ -85,8 +85,8 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }
                 sx={{
                   '&:hover': {
                     cursor: 'pointer',
-                    textDecoration: 'underline',
-                  },
+                    textDecoration: 'underline'
+                  }
                 }}
                 onClick={() => handleLink(v)}
               >

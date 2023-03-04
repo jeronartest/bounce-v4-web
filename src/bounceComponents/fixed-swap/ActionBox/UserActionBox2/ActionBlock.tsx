@@ -9,14 +9,14 @@ import ConfirmRegret from './ConfirmRegret'
 import Bid from './Bid'
 import ClaimingCountdownButton from './ClaimingCountdownButton'
 import ClaimButton from './ClaimButton'
-import usePlaceBid from '@/hooks/auction/usePlaceBid'
-import useRegretBid from '@/hooks/auction/useRegretBid'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoinedPool'
-import useIsCurrentChainEqualChainOfPool from '@/hooks/auction/useIsCurrentChainEqualChainOfPool'
-import { PoolStatus } from '@/api/pool/type'
-import useIsUserClaimedPool from '@/hooks/auction/useIsUserClaimedPool'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useUserClaim from '@/hooks/auction/useUserClaim'
+import usePlaceBid from 'bounceHooks/auction/usePlaceBid'
+import useRegretBid from 'bounceHooks/auction/useRegretBid'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
+import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
+import { PoolStatus } from 'api/pool/type'
+import useIsUserClaimedPool from 'bounceHooks/auction/useIsUserClaimedPool'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useUserClaim from 'bounceHooks/auction/useUserClaim'
 import { fixToDecimals } from '@/utils/web3/number'
 
 export type UserAction =
@@ -36,7 +36,7 @@ const getInitialAction = (
   isJoined?: boolean,
   isClaimed?: boolean,
   poolStatus?: PoolStatus,
-  claimAt?: number,
+  claimAt?: number
 ): UserAction => {
   // console.log('internal isJoined: ', isJoined)
   // console.log('internal isClaimed: ', isClaimed)
@@ -87,7 +87,7 @@ const ActionBlock = () => {
   const { run: bid, loading: isBidding } = usePlaceBid({
     onSuccess: () => {
       setAction('BID_OR_REGRET')
-    },
+    }
   })
   const { run: regret, loading: isRegretting } = useRegretBid({
     onRegretAll: () => {
@@ -97,12 +97,12 @@ const ActionBlock = () => {
     onRegretPart: () => {
       console.log('onRegretPart')
       setAction('BID_OR_REGRET')
-    },
+    }
   })
   const { run: claim, loading: isClaiming } = useUserClaim({
     onSuccess: () => {
       setAction('CLAIMED')
-    },
+    }
   })
 
   // console.log('action: ', action)

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { parseUnits } from 'ethers/lib/utils.js'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 import { getUserSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
 
 const useUserSwappedAmount1Units = () => {

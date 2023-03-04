@@ -6,11 +6,11 @@ import { useGetCompanyInvestors } from './useGetCompanyInvestors'
 import { useGetCompanyTeam } from './useGetCompanyTeam'
 import { useGetCompanyTokens } from './useGetCompanyTokens'
 import { useGetCompanyInvestments } from './useGetCompanyInvestments'
-import { updateCompanyProfile } from '@/api/company'
-import { ICompanyProfileParams } from '@/api/company/type'
+import { updateCompanyProfile } from 'api/company'
+import { ICompanyProfileParams } from 'api/company/type'
 import { RootState } from '@/store'
 import { fetchCompanyInfo } from '@/store/user'
-import { timezone } from '@/components/common/LocationTimeZone'
+import { timezone } from 'bounceComponents/common/LocationTimeZone'
 
 export const useUpdateCompany = (firstEdit = false) => {
   const dispatch = useDispatch()

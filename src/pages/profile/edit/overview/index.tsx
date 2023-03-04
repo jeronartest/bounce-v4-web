@@ -8,22 +8,22 @@ import { LoadingButton } from '@mui/lab'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import styles from './styles'
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 import { RootState } from '@/store'
-import { useUpdateBasic } from '@/hooks/profile/useUpdateBasic'
-import UploadItem from '@/components/common/UploadCard/UploadItem'
-import LocationTimeZone, { timezone } from '@/components/common/LocationTimeZone'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchCompanyInfo, searchEduInfo } from '@/api/optionsData'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import EditLayout, { profileTabsList } from '@/components/company/EditLayout'
-import { ActionType } from '@/components/profile/components/BasicContextProvider'
-import { FormType, IupdateBasicParams } from '@/api/profile/type'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
+import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
+import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import LocationTimeZone, { timezone } from 'bounceComponents/common/LocationTimeZone'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import { searchCompanyInfo, searchEduInfo } from 'api/optionsData'
+// import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import EditLayout, { profileTabsList } from 'bounceComponents/company/EditLayout'
+import { ActionType } from 'bounceComponents/profile/components/BasicContextProvider'
+import { FormType, IupdateBasicParams } from 'api/profile/type'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import { formCheckValid } from '@/utils'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import EducationDefaultSVG from '@/assets/imgs/defaultAvatar/education.svg'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 
 const DESCRIPTION_LENGTH = 350
 
@@ -34,7 +34,7 @@ const validationSchema = yup.object({
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
     fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number(),
+    id: yup.number()
   }),
   fullName: yup
     .string()
@@ -58,13 +58,13 @@ const validationSchema = yup.object({
   university: yup.object({
     name: yup.string(),
     avatar: yup.string(),
-    link: yup.string(),
+    link: yup.string()
   }),
   company: yup.object({
     name: yup.string(),
     avatar: yup.string(),
-    link: yup.string(),
-  }),
+    link: yup.string()
+  })
 })
 
 export interface IEditProps {
@@ -89,20 +89,20 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
     searchEduInfo({
       limit: 100,
       offset: 0,
-      value: searchText,
-    }).then((res) => {
+      value: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
       setEduOptions(
-        data.list.map((v) => {
+        data.list.map(v => {
           return {
             label: v.name,
             icon: v.avatar || EducationDefaultSVG,
-            value: v,
+            value: v
           }
-        }),
+        })
       )
     })
   }, [searchText, first])
@@ -111,20 +111,20 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
     searchCompanyInfo({
       limit: 100,
       offset: 0,
-      value: comSearchText,
-    }).then((res) => {
+      value: comSearchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
       setCompanyOptions(
-        data.list.map((v) => {
+        data.list.map(v => {
           return {
             label: v.name,
             icon: v.avatar || CompanyDefaultSVG,
-            value: v,
+            value: v
           }
-        }),
+        })
       )
     })
   }, [comSearchText])
@@ -139,7 +139,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
         fileThumbnailUrl: '',
         fileType: '',
         fileUrl: '',
-        id: 0,
+        id: 0
       },
     fullName: basicProfileValues?.fullName || userInfo?.fullName || '',
     publicRole: basicProfileValues?.publicRole || userInfo?.publicRole || [],
@@ -150,7 +150,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
       userInfo?.company || {
         avatar: '',
         link: '',
-        name: '',
+        name: ''
       },
     companyId: basicProfileValues?.companyId || userInfo?.companyId || 0,
     thirdpartId: basicProfileValues?.thirdpartId || userInfo?.thirdpartId || 0,
@@ -161,17 +161,17 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
       userInfo?.university || {
         avatar: '',
         link: '',
-        name: '',
-      },
+        name: ''
+      }
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     if (firstEdit) {
       return basicProfileDispatch?.({
         type: ActionType.SetIntro,
         payload: {
-          ...values,
-        },
+          ...values
+        }
       })
     }
     runUpdateBasic(values)
@@ -199,9 +199,9 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
               >
                 <UploadItem
                   value={{
-                    fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl,
+                    fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
                   }}
-                  onChange={(file) => {
+                  onChange={file => {
                     setFieldValue('avatar', file)
                   }}
                   sx={{ width: 160, height: 160, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
@@ -216,11 +216,11 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
               <OutlinedInput />
             </FormItem>
             <FormItem name="location" label="Location (Time Zone)" required fieldType="custom">
-              <LocationTimeZone value={values.location} onChange={(val) => setFieldValue('location', val)} />
+              <LocationTimeZone value={values.location} onChange={val => setFieldValue('location', val)} />
             </FormItem>
             <FormItem name="publicRole" label="Public Role (Max 2)" required>
               <Select multiple>
-                {optionDatas?.publicRoleOpt?.map((item) => {
+                {optionDatas?.publicRoleOpt?.map(item => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
                       {item.role}
@@ -235,7 +235,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
                 selected={{
                   label: values.university.name,
                   icon: values.university.avatar,
-                  value: values.university,
+                  value: values.university
                 }}
                 onSearch={(text: string) => {
                   setfirst(false)
@@ -259,8 +259,8 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
                   value: {
                     ...values.company,
                     companyId: values.companyId,
-                    thirdpartId: values.thirdpartId,
-                  },
+                    thirdpartId: values.thirdpartId
+                  }
                 }}
                 onSearch={(text: string) => setComSearchText(text)}
                 value={values?.company?.name}
@@ -274,7 +274,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
                   setFieldValue('company', {
                     avatar: newVal.value.avatar,
                     link: newVal.value.link,
-                    name: newVal.value.name,
+                    name: newVal.value.name
                   })
                   setFieldValue('companyId', newVal.value.companyId)
                   setFieldValue('thirdpartId', newVal.value.thirdpartId)
@@ -288,8 +288,8 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
                   item.child.map((child, index) => [
                     <MenuItem key={index} value={child.id}>
                       {child.level2Name}
-                    </MenuItem>,
-                  ]),
+                    </MenuItem>
+                  ])
                 ])}
               </Select>
             </FormItem>

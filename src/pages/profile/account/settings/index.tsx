@@ -2,16 +2,16 @@ import { Container, Divider } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Head from 'next/head'
-import EditInfo from '@/components/profile/account/components/EditInfo'
+import EditInfo from 'bounceComponents/profile/account/components/EditInfo'
 import { RootState } from '@/store'
-import LoginOpton from '@/components/profile/account/components/LoginOption'
-import EVMWallet from '@/components/profile/account/components/EVMWallet'
-import { USER_TYPE } from '@/api/user/type'
-import useEagerConnect from '@/hooks/web3/useEagerConnect'
+import LoginOpton from 'bounceComponents/profile/account/components/LoginOption'
+import EVMWallet from 'bounceComponents/profile/account/components/EVMWallet'
+import { USER_TYPE } from 'api/user/type'
+import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
 
-export type IAccountSettingsProps = {}
+// export type IAccountSettingsProps = {}
 
-const AccountSettings: React.FC<IAccountSettingsProps> = ({}) => {
+const AccountSettings: React.FC = ({}) => {
   useEagerConnect()
 
   const { userType, userInfo, companyInfo } = useSelector((state: RootState) => state.user)

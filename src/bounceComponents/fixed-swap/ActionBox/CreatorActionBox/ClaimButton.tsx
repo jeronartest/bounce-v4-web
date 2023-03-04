@@ -1,7 +1,7 @@
 import React from 'react'
 import { LoadingButton } from '@mui/lab'
 
-import useIsAllTokenSwapped from '@/hooks/auction/useIsAllTokenSwapped'
+import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
 
 export interface ClaimButtonProps {
   onClick: () => void

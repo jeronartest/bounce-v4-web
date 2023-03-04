@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import { getCompanyInvestments } from '@/api/company'
+import { getCompanyInvestments } from 'api/company'
 
 export const useGetCompanyInvestments = () => {
   const { data, runAsync } = useRequest(getCompanyInvestments, {
@@ -12,7 +12,7 @@ export const useGetCompanyInvestments = () => {
       }
 
       return response.data
-    },
+    }
   })
   return { data, runAsync }
 }

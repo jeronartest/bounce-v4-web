@@ -10,12 +10,12 @@ import type { Token } from '../types'
 import TokenDialog from '../TokenDialog'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 import { ExplorerDataType, getExplorerLink } from '@/utils/web3/getExplorerLink'
 import { SupportedChainId } from '@/constants/web3/chains'
 
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
-import TokenImage from '@/components/common/TokenImage'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
 interface FormValues {
   tokenFromAddress: string
@@ -26,7 +26,7 @@ interface FormValues {
 
 const TokenInformationForm = (): JSX.Element => {
   const validationSchema = Yup.object({
-    tokenFromSymbol: Yup.string().required('Token is required'),
+    tokenFromSymbol: Yup.string().required('Token is required')
   })
 
   const values = useValuesState()
@@ -36,7 +36,7 @@ const TokenInformationForm = (): JSX.Element => {
     tokenFromAddress: values.tokenFrom.address || '',
     tokenFromSymbol: values.tokenFrom.symbol || '',
     tokenFromLogoURI: values.tokenFrom.logoURI || '',
-    tokenFromDecimals: String(values.tokenFrom.decimals || ''),
+    tokenFromDecimals: String(values.tokenFrom.decimals || '')
   }
 
   const { isConnected } = useAccount()
@@ -46,16 +46,16 @@ const TokenInformationForm = (): JSX.Element => {
 
   const showTokenDialog = (chainId: SupportedChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
     show<Token>(TokenDialog, { chainId })
-      .then((res) => {
+      .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           tokenFromAddress: res.address,
           tokenFromSymbol: res.symbol,
           tokenFromLogoURI: res.logoURI,
-          tokenFromDecimals: res.decimals,
+          tokenFromDecimals: res.decimals
         })
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('TokenDialog Rejected: ', err)
       })
   }
@@ -67,7 +67,7 @@ const TokenInformationForm = (): JSX.Element => {
 
       <Formik
         initialValues={internalInitialValues}
-        onSubmit={(values) => {
+        onSubmit={values => {
           valuesDispatch({
             type: ActionType.CommitTokenImformation,
             payload: {
@@ -75,9 +75,9 @@ const TokenInformationForm = (): JSX.Element => {
                 address: values.tokenFromAddress,
                 logoURI: values.tokenFromLogoURI,
                 symbol: values.tokenFromSymbol,
-                decimals: values.tokenFromDecimals,
-              },
-            },
+                decimals: values.tokenFromDecimals
+              }
+            }
           })
         }}
         validationSchema={validationSchema}

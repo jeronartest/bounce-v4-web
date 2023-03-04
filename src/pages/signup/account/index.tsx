@@ -6,25 +6,25 @@ import { Formik, Form } from 'formik'
 import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import md5 from 'md5'
-import { ReactComponent as VisibilityOn } from '@/assets/imgs/user/visibility_on.svg'
-import { ReactComponent as VisibilityOff } from '@/assets/imgs/user/visibility_off.svg'
-import FormItem from '@/components/common/FormItem'
+import { ReactComponent as VisibilityOn } from 'assets/imgs/user/visibility_on.svg'
+import { ReactComponent as VisibilityOff } from 'assets/imgs/user/visibility_off.svg'
+import FormItem from 'bounceComponents/common/FormItem'
 
-import LoginLayout from '@/components/signup/LoginLayout'
-import { ACCOUNT_TYPE, USER_TYPE } from '@/api/user/type'
-import { useRegister } from '@/hooks/user/useRegister'
-import { ThirdParties } from '@/components/signup/ThirdParties'
-import { checkEmail } from '@/api/user'
+import LoginLayout from 'bounceComponents/signup/LoginLayout'
+import { ACCOUNT_TYPE, USER_TYPE } from 'api/user/type'
+import { useRegister } from 'bounceHooks/user/useRegister'
+import { ThirdParties } from 'bounceComponents/signup/ThirdParties'
+import { checkEmail } from 'api/user'
 
-export type IAccountProps = {}
+// export type IAccountProps = {}
 const validationSchema = yup.object({
   email: yup
     .string()
     .trim()
     .required('Please enter your email address')
     .email('Incorrect email address')
-    .test('CHECK_EMAIL', 'This email is registered', async (value) => {
-      const { code, data } = await checkEmail({ email: value })
+    .test('CHECK_EMAIL', 'This email is registered', async value => {
+      const { code, data } = await checkEmail({ email: value || '' })
       if (code === 200 && data?.exist) {
         return false
       }
@@ -41,10 +41,10 @@ const validationSchema = yup.object({
     .trim()
     .required('Please enter your password')
     .min(8, 'Password should contain 8-16 characters')
-    .max(16, 'Password should contain 8-16 characters'),
+    .max(16, 'Password should contain 8-16 characters')
 })
 
-const Account: React.FC<IAccountProps> = ({}) => {
+const Account: React.FC = ({}) => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const handleClickShowPassword = () => {
@@ -53,7 +53,7 @@ const Account: React.FC<IAccountProps> = ({}) => {
   const initialValues = {
     password: '',
     name: '',
-    email: '',
+    email: ''
   }
   const { loading, runAsync: runRegister } = useRegister()
   const handleSubmit = (values: typeof initialValues) => {
@@ -63,14 +63,14 @@ const Account: React.FC<IAccountProps> = ({}) => {
       email: values.email.trim(),
       accessToken: '',
       registerType: ACCOUNT_TYPE.EMAIL,
-      userType: USER_TYPE.USER,
+      userType: USER_TYPE.USER
     })
   }
 
   const handleOauth = (accessToken: string, oauthType: ACCOUNT_TYPE) => {
     router.push({
       pathname: '/signup/thirdPartiesAccount',
-      query: { accessToken, oauthType },
+      query: { accessToken, oauthType }
     })
   }
   return (

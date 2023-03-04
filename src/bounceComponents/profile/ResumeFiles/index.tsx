@@ -5,10 +5,10 @@ import * as yup from 'yup'
 import { LoadingButton } from '@mui/lab'
 import { useSelector } from 'react-redux'
 import ResumeUpload from './ResumeUpload'
-import UploadItem from '@/components/common/UploadCard/UploadItem'
-import FormItem from '@/components/common/FormItem'
-import UploadList from '@/components/common/UploadCard'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
+import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import FormItem from 'bounceComponents/common/FormItem'
+import UploadList from 'bounceComponents/common/UploadCard'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import { RootState } from '@/store'
 
 const validationSchema = yup.object({
@@ -19,20 +19,20 @@ const validationSchema = yup.object({
       fileThumbnailUrl: yup.string(),
       fileType: yup.string(),
       fileUrl: yup.string(),
-      id: yup.number(),
-    }),
-  ),
+      id: yup.number()
+    })
+  )
 })
 
 const ResumeFiles: React.FC = () => {
   const { userInfo } = useSelector((state: RootState) => state.user)
 
   const initialValues = {
-    resumes: userInfo?.resumes || [],
+    resumes: userInfo?.resumes || []
   }
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     runPersonalResume(values)
   }
 
@@ -60,13 +60,13 @@ const ResumeFiles: React.FC = () => {
             <FormItem label="" name="resumes" fieldType="custom">
               <ResumeUpload
                 value={values.resumes}
-                onChange={(files) => {
+                onChange={files => {
                   setFieldValue('resumes', files)
                 }}
                 maxNum={3}
                 accept={[
                   'application/pdf',
-                  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                  'application/vnd.openxmlformats-officedocument.presentationml.presentation'
                 ]}
                 tips={'Only PDF, PPTX Files, Size<50M'}
                 limitSize={50}

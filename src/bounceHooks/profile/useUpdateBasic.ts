@@ -5,10 +5,10 @@ import { useEffect } from 'react'
 import { useGetBasicInvestments } from './useGetBasicInvestments'
 import { useGetResumeExperience } from './useGetResumeExperience'
 import { useGetResumeEducation } from './useGetResumeEducation'
-import { updateBasic, updatePersonal } from '@/api/profile'
+import { updateBasic, updatePersonal } from 'api/profile'
 import { fetchUserInfo } from '@/store/user'
 import { RootState } from '@/store'
-import { timezone } from '@/components/common/LocationTimeZone'
+import { timezone } from 'bounceComponents/common/LocationTimeZone'
 
 export const useUpdateBasic = () => {
   const dispatch = useDispatch()

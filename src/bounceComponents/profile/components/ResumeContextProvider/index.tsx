@@ -1,8 +1,8 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
 import { ActionMap } from '../BasicContextProvider'
-import { educationItems, experienceItems, IUpdatePersonalParams } from '@/api/profile/type'
-import { IFileType } from '@/api/upload/type'
-import { CompletedSteps } from '@/components/create-auction-pool/types'
+import { educationItems, experienceItems, IUpdatePersonalParams } from 'api/profile/type'
+import { IFileType } from 'api/upload/type'
+import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
 
 export enum ResumeActionType {
   SetJobOverview = 'SET_JOB_OVERVIEW',
@@ -11,7 +11,7 @@ export enum ResumeActionType {
   SetPreference = 'SET_PREFERENCE',
   SetResume = 'SET_RESUME',
   SetActiveStep = 'SET_ACTIVE_STEP',
-  HandleStep = 'HANDLE_STEP',
+  HandleStep = 'HANDLE_STEP'
 }
 
 type Payload = {
@@ -89,7 +89,7 @@ const initialValues: IUpdatePersonalParams = {
   skills: '',
   years: 0,
   activeStep: 0,
-  completed: {},
+  completed: {}
 }
 
 const reducer = (state: IUpdatePersonalParams, action: Actions) => {
@@ -97,13 +97,13 @@ const reducer = (state: IUpdatePersonalParams, action: Actions) => {
     case ResumeActionType.SetActiveStep:
       return {
         ...state,
-        activeStep: action.payload.activeStep,
+        activeStep: action.payload.activeStep
       }
     case ResumeActionType.HandleStep:
       return {
         ...state,
         activeStep: action.payload.activeStep,
-        completed: { ...state.completed, [action.payload.activeStep]: false },
+        completed: { ...state.completed, [action.payload.activeStep]: false }
       }
     case ResumeActionType.SetJobOverview:
       return {
@@ -112,21 +112,21 @@ const reducer = (state: IUpdatePersonalParams, action: Actions) => {
         years: action.payload.years,
         skills: action.payload.skills,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ResumeActionType.SetExperience:
       return {
         ...state,
         experience: action.payload.experience,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ResumeActionType.SetEducation:
       return {
         ...state,
         education: action.payload.education,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ResumeActionType.SetPreference:
       return {
@@ -139,14 +139,14 @@ const reducer = (state: IUpdatePersonalParams, action: Actions) => {
         ifRemotely: action.payload.ifRemotely,
         jobTypes: action.payload.jobTypes,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ResumeActionType.SetResume:
       return {
         ...state,
         resumes: action.payload.resumes,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     default:
       return state

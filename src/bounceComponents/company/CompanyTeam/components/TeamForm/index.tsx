@@ -6,15 +6,15 @@ import { toast } from 'react-toastify'
 import { Button, Grid, ListSubheader, MenuItem, Select } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { useSelector } from 'react-redux'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as DeleteIcon } from '@/assets/imgs/components/delete.svg'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchUser } from '@/api/optionsData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import { searchUser } from 'api/optionsData'
 import { RootState } from '@/store'
-import { ICompanyTeamListItems } from '@/api/company/type'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
+import { ICompanyTeamListItems } from 'api/company/type'
+import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
+import { FormType } from 'api/profile/type'
 
 export type ITeamFormProps = {
   onAdd?: (data: ICompanyTeamListItems) => void
@@ -31,13 +31,13 @@ const validationSchema = yup.object({
       .required(formCheckValid('Full Name', FormType.Select))
       .max(300, 'Allow only no more than 300 letters')
       .matches(/^[^\u4E00-\u9FA5]+$/g, 'Incorrect full name'),
-    avatar: yup.string(),
+    avatar: yup.string()
   }),
   roleIds: yup
     .array()
     .of(yup.number())
     .min(1, formCheckValid('Primary Role (Max 2)', FormType.Select))
-    .max(2, 'Allow only no more than 2 primary role'),
+    .max(2, 'Allow only no more than 2 primary role')
 })
 
 const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
@@ -50,9 +50,9 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
         user: {
           userId: 0,
           name: '',
-          avatar: '',
+          avatar: ''
         },
-        roleIds: [],
+        roleIds: []
       }
 
   const handleSubmit = useCallback(
@@ -65,11 +65,11 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
       }
       modal.hide()
     },
-    [editData, modal, onAdd, onEdit],
+    [editData, modal, onAdd, onEdit]
   )
 
   const handleDelete = useCallback(
-    (handleReset) => {
+    handleReset => {
       if (!editData) {
         handleReset()
       } else {
@@ -77,7 +77,7 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
         modal.hide()
       }
     },
-    [editData, modal, onDelete],
+    [editData, modal, onDelete]
   )
 
   const [userData, setUserData] = useState<ISearchOption[]>([])
@@ -88,17 +88,17 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
       limit: 100,
       offset: 0,
       userType: 1,
-      value: searchText,
-    }).then((res) => {
+      value: searchText
+    }).then(res => {
       const { code, data } = res
       if (code !== 200) {
         toast.error('search error')
       }
-      const temp = data?.list?.map((v) => {
+      const temp = data?.list?.map(v => {
         return {
           label: v?.name,
           icon: v?.avatar || DefaultAvaSVG,
-          value: v,
+          value: v
         }
       })
       setUserData(temp)
@@ -118,7 +118,7 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
                     selected={{
                       label: values?.user?.name,
                       icon: values?.user?.avatar,
-                      value: values?.user,
+                      value: values?.user
                     }}
                     onSearch={(text: string) => setSearchText(text)}
                     value={values?.user?.name}
@@ -138,8 +138,8 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
                       item.child.map((child, index) => [
                         <MenuItem key={index} value={child.id}>
                           {child.level2Name}
-                        </MenuItem>,
-                      ]),
+                        </MenuItem>
+                      ])
                     ])}
                   </Select>
                 </FormItem>

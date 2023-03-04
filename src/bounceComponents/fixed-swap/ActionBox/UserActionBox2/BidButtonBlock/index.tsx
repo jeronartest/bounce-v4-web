@@ -7,13 +7,13 @@ import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
 import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useIsCurrentChainEqualChainOfPool from '@/hooks/auction/useIsCurrentChainEqualChainOfPool'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
-import { PoolStatus } from '@/api/pool/type'
-import useIsLimitExceeded from '@/hooks/auction/useIsLimitExceeded'
-import useIsBalanceInsufficient from '@/hooks/auction/useIsBalanceInsufficient'
-import SwitchNetworkButton from '@/components/fixed-swap/SwitchNetworkButton'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { PoolStatus } from 'api/pool/type'
+import useIsLimitExceeded from 'bounceHooks/auction/useIsLimitExceeded'
+import useIsBalanceInsufficient from 'bounceHooks/auction/useIsBalanceInsufficient'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { fixToDecimals } from '@/utils/web3/number'
 
 interface BidButtonBlockProps {
@@ -31,7 +31,7 @@ const BidButtonBlock = ({
   handleGoToCheck,
   handlePlaceBid,
   isBidding,
-  handleCancelButtonClick,
+  handleCancelButtonClick
 }: BidButtonBlockProps) => {
   const { data: poolInfo } = usePoolInfo()
   const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)

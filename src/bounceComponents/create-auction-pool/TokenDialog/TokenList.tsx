@@ -10,13 +10,13 @@ import Image from 'next/image'
 
 import DangerousTokenDialog from '../DangerousTokenDialog'
 import { Token } from '../types'
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
-import TokenImage from '@/components/common/TokenImage'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
 function ItemRender(
   listChildComponentProps: ListChildComponentProps<Token[]>,
   onOk: (tokne: Token) => void,
-  onCancel: () => void,
+  onCancel: () => void
 ) {
   const { data, index, style } = listChildComponentProps
 
@@ -25,7 +25,7 @@ function ItemRender(
       .then(() => {
         onOk(seletedToken)
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('Rejected: ', err)
         onCancel()
       })
@@ -81,7 +81,7 @@ const TokenList = ({ data, onOk, onCancel }: TokenListProps) => {
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {/* TODO: Auto width */}
       <FixedSizeList height={300} width={656} itemSize={50} itemCount={data.length} overscanCount={8} itemData={data}>
-        {(listChildComponentProps) => {
+        {listChildComponentProps => {
           return ItemRender(listChildComponentProps, onOk, onCancel)
         }}
       </FixedSizeList>

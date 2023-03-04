@@ -1,11 +1,11 @@
 import { Box, Card, CardContent, Chip, Stack, SxProps, Typography } from '@mui/material'
 import React from 'react'
-import { ReactComponent as RightJTSVG } from '@/assets/imgs/components/rightJT.svg'
+import { ReactComponent as RightJTSVG } from 'assets/imgs/components/rightJT.svg'
 const styles = {
   card: {
     borderRadius: 20,
-    height: 300,
-  },
+    height: 300
+  }
 } as Record<string, SxProps>
 
 export type ISummaryCardProps = {
@@ -29,8 +29,8 @@ const SummaryCard: React.FC<ISummaryCardProps> = ({ imageUrl, title, description
           ':hover': !active && {
             bgcolor: 'var(--ps-blue)',
             '.MuiChip-root': { bgcolor: 'var(--ps-white)', color: 'var(--ps-blue)' },
-            '.MuiCardContent-root': { color: 'var(--ps-white)' },
-          },
+            '.MuiCardContent-root': { color: 'var(--ps-white)' }
+          }
         } as SxProps
       }
     >
@@ -46,7 +46,7 @@ const SummaryCard: React.FC<ISummaryCardProps> = ({ imageUrl, title, description
                 color: active ? 'var(--ps-blue)' : 'var(--ps-white)',
                 height: 24,
                 bgcolor: active ? 'rgba(38, 99, 255, 0.15)' : 'var(--ps-blue)',
-                '.MuiChip-label': { px: 8, fontSize: 10 },
+                '.MuiChip-label': { px: 8, fontSize: 10 }
               }}
             />
           </Box>

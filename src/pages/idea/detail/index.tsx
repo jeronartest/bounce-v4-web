@@ -9,26 +9,26 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import styles from './styles'
 import { RootState } from '@/store'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { getLabel, getPrimaryRoleLabel } from '@/utils'
-import { ReactComponent as EmailSVG } from '@/components/profile/components/PersonalOverview/assets/email.svg'
-import { ReactComponent as TwitterIconSVG } from '@/components/profile/components/PersonalOverview/assets/twitter.svg'
-import { ReactComponent as InstagramIconSVG } from '@/components/profile/components/PersonalOverview/assets/instagram.svg'
-import { ReactComponent as WebsiteSVG } from '@/components/profile/components/PersonalOverview/assets/website.svg'
-import { ReactComponent as LinkedinSVG } from '@/components/profile/components/PersonalOverview/assets/linkedin.svg'
-import { ReactComponent as GithubSVG } from '@/components/profile/components/PersonalOverview/assets/github.svg'
-import { ReactComponent as ShareSVG } from '@/assets/imgs/profile/share.svg'
+import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
+import { ReactComponent as TwitterIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/twitter.svg'
+import { ReactComponent as InstagramIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/instagram.svg'
+import { ReactComponent as WebsiteSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/website.svg'
+import { ReactComponent as LinkedinSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/linkedin.svg'
+import { ReactComponent as GithubSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/github.svg'
+import { ReactComponent as ShareSVG } from 'assets/imgs/profile/share.svg'
 
-import ResumeUploadItem from '@/components/profile/ResumeFiles/ResumeUploadItem'
-import Comments from '@/components/common/Comments'
-import { IIdeaDetail, LIKE_OBJ, LIKE_STATUS, UNLIKE_STATUS } from '@/api/idea/type'
-import { getIdeaDetail } from '@/api/idea'
-import { getUserInfo } from '@/api/user'
-import { TopicType, USER_TYPE } from '@/api/user/type'
-import { getCompanyInfo } from '@/api/company'
-import LikeUnlike from '@/components/common/LikeUnlike'
-import ProjectCardSvg from '@/components/common/ProjectCardSvg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import ResumeUploadItem from 'bounceComponents/profile/ResumeFiles/ResumeUploadItem'
+import Comments from 'bounceComponents/common/Comments'
+import { IIdeaDetail, LIKE_OBJ, LIKE_STATUS, UNLIKE_STATUS } from 'api/idea/type'
+import { getIdeaDetail } from 'api/idea'
+import { getUserInfo } from 'api/user'
+import { TopicType, USER_TYPE } from 'api/user/type'
+import { getCompanyInfo } from 'api/company'
+import LikeUnlike from 'bounceComponents/common/LikeUnlike'
+import ProjectCardSvg from 'bounceComponents/common/ProjectCardSvg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 countries.registerLocale(english)
 
@@ -46,7 +46,7 @@ const UserSkeleton: React.FC = () => {
         </Stack>
 
         <Stack direction={'row'} sx={styles.linkBox} spacing={9}>
-          {[0, 1, 2]?.map((item) => {
+          {[0, 1, 2]?.map(item => {
             return <Skeleton key={item} variant="circular" width={36} height={36} />
           })}
         </Stack>
@@ -79,7 +79,7 @@ const IdeaSkeleton: React.FC = () => {
       <Box sx={{ p: '40px 48px 48px' }}>
         <Stack direction={'row'} justifyContent="space-between" spacing={80}>
           <Stack width={875} spacing={24}>
-            {[0, 1, 2].map((item) => {
+            {[0, 1, 2].map(item => {
               return <Skeleton key={item} variant="rounded" width="100%" height={18} />
             })}
             <Skeleton variant="rounded" width="50%" height={18} />
@@ -138,35 +138,35 @@ const IdeaDetail: React.FC = () => {
       {
         link: token ? userInfo?.contactEmail : '',
         isMail: true,
-        icon: <EmailSVG />,
+        icon: <EmailSVG />
       },
       {
         link: userInfo?.twitter,
         isMail: false,
-        icon: <TwitterIconSVG />,
+        icon: <TwitterIconSVG />
       },
       {
         link: userInfo?.instagram,
         isMail: false,
-        icon: <InstagramIconSVG />,
+        icon: <InstagramIconSVG />
       },
       {
         link: userInfo?.website,
         isMail: false,
-        icon: <WebsiteSVG />,
+        icon: <WebsiteSVG />
       },
       {
         link: userInfo?.linkedin,
         isMail: false,
-        icon: <LinkedinSVG />,
+        icon: <LinkedinSVG />
       },
       {
         link: userInfo?.github,
         isMail: false,
-        icon: <GithubSVG />,
-      },
+        icon: <GithubSVG />
+      }
     ],
-    [userInfo, token],
+    [userInfo, token]
   )
 
   const goToProfile = () => {
@@ -232,7 +232,7 @@ const IdeaDetail: React.FC = () => {
                   color="#383838"
                   sx={{ whiteSpace: 'pre-wrap' }}
                   dangerouslySetInnerHTML={{
-                    __html: ideaDetail?.detail,
+                    __html: ideaDetail?.detail
                   }}
                 ></Typography>
                 <LikeUnlike
@@ -242,16 +242,16 @@ const IdeaDetail: React.FC = () => {
                     dislikeCount: ideaDetail?.dislikeCount,
                     likeCount: ideaDetail?.likeCount,
                     myDislike: ideaDetail?.myDislike,
-                    myLike: ideaDetail?.myLike,
+                    myLike: ideaDetail?.myLike
                   }}
                   onSuccess={getDetail}
                   likeSx={{
                     ...styles.like,
-                    ...(ideaDetail?.myLike === LIKE_STATUS.yes ? styles.activeLike : ''),
+                    ...(ideaDetail?.myLike === LIKE_STATUS.yes ? styles.activeLike : '')
                   }}
                   unlikeSx={{
                     ...styles.like,
-                    ...(ideaDetail?.myDislike === UNLIKE_STATUS.yes ? styles.activeLike : ''),
+                    ...(ideaDetail?.myDislike === UNLIKE_STATUS.yes ? styles.activeLike : '')
                   }}
                 />
               </Stack>
@@ -261,7 +261,7 @@ const IdeaDetail: React.FC = () => {
                     Downloads
                   </Typography>
                   <Stack direction={'row'} spacing={19} sx={{ mt: 32 }}>
-                    {ideaDetail?.posts?.map((file) => {
+                    {ideaDetail?.posts?.map(file => {
                       return <ResumeUploadItem key={file.fileUrl} value={file} />
                     })}
                   </Stack>
@@ -289,7 +289,7 @@ const IdeaDetail: React.FC = () => {
                         lineHeight: '32px',
                         color: 'var(--ps-blue)',
                         cursor: 'pointer',
-                        '&: hover': { textDecoration: 'underline' },
+                        '&: hover': { textDecoration: 'underline' }
                       }}
                       onClick={goToProfile}
                     >

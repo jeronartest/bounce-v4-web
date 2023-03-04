@@ -9,15 +9,15 @@ import { LoadingButton } from '@mui/lab'
 import { show } from '@ebay/nice-modal-react'
 import Head from 'next/head'
 import styles from './styles'
-import FormItem from '@/components/common/FormItem'
-import ResumeUpload from '@/components/profile/ResumeFiles/ResumeUpload'
+import FormItem from 'bounceComponents/common/FormItem'
+import ResumeUpload from 'bounceComponents/profile/ResumeFiles/ResumeUpload'
 import { RootState } from '@/store'
-import { createUpdateIdea, deleteIdea, getIdeaDetail } from '@/api/idea'
-import { IIdeaDetail } from '@/api/idea/type'
-import { ReactComponent as DeleteSVG } from '@/components/profile/ResumeFiles/assets/delete.svg'
-import DialogTips from '@/components/common/DialogTips'
+import { createUpdateIdea, deleteIdea, getIdeaDetail } from 'api/idea'
+import { IIdeaDetail } from 'api/idea/type'
+import { ReactComponent as DeleteSVG } from 'bounceComponents/profile/ResumeFiles/assets/delete.svg'
+import DialogTips from 'bounceComponents/common/DialogTips'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
+import { FormType } from 'api/profile/type'
 
 const SUMMARY_INFO_LENGTH = 140
 const DETAILS_INFO_LENGTH = 3000
@@ -47,9 +47,9 @@ const validationSchema = yup.object({
       fileThumbnailUrl: yup.string(),
       fileType: yup.string(),
       fileUrl: yup.string(),
-      id: yup.number(),
-    }),
-  ),
+      id: yup.number()
+    })
+  )
 })
 
 const IdeaCreate: React.FC = () => {
@@ -77,19 +77,19 @@ const IdeaCreate: React.FC = () => {
       marketType: ideaDetail?.marketType || '',
       detail: ideaDetail?.detail || '',
       posts: ideaDetail?.posts || [],
-      id: ideaDetail?.id || ideaId || 0,
+      id: ideaDetail?.id || ideaId || 0
     }
   }, [ideaDetail, ideaId])
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     setLoading(true)
     createUpdateIdea({
       ...values,
       title: values.title?.trim(),
       summary: values.summary?.trim(),
-      detail: values.detail?.trim(),
+      detail: values.detail?.trim()
     })
-      .then((res) => {
+      .then(res => {
         toast.success(`${ideaId ? 'Save' : 'Propose'} idea succeed`)
         router.push(`/idea/detail?id=${res.data?.ideaId}`)
       })
@@ -99,7 +99,7 @@ const IdeaCreate: React.FC = () => {
   }
 
   const deleteIdeaItem = () => {
-    deleteIdea({ ideaId: Number(ideaId) }).then((res) => {
+    deleteIdea({ ideaId: Number(ideaId) }).then(res => {
       if (res.code === 200) {
         toast.success('Delete succeed')
         setTimeout(() => {
@@ -118,7 +118,7 @@ const IdeaCreate: React.FC = () => {
       content: <Typography variant="body1">Are you sure you want to delete this idea?</Typography>,
       cancelBtn: 'Cancel',
       againBtn: 'Delete',
-      iconType: 'error',
+      iconType: 'error'
     })
   }
 
@@ -162,8 +162,8 @@ const IdeaCreate: React.FC = () => {
                   <FormItem name="marketType" label="Market Category" required>
                     <Select>
                       {optionDatas?.marketTypeOpt
-                        ?.filter((item) => item?.id !== 1)
-                        ?.map((item) => {
+                        ?.filter(item => item?.id !== 1)
+                        ?.map(item => {
                           return (
                             <MenuItem key={item.id} value={item.id}>
                               {item.marketType}
@@ -194,7 +194,7 @@ const IdeaCreate: React.FC = () => {
                   <FormItem label="" name="posts" fieldType="custom">
                     <ResumeUpload
                       value={values.posts}
-                      onChange={(files) => {
+                      onChange={files => {
                         setFieldValue('posts', files)
                       }}
                       tips={'Only Size<50M'}

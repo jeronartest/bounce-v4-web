@@ -3,12 +3,12 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { ICompanyInvestmentsListItems } from '@/api/company/type'
+import { ICompanyInvestmentsListItems } from 'api/company/type'
 import { RootState } from '@/store'
 import { getLabel } from '@/utils'
-import { ReactComponent as EditBtnSVG } from '@/assets/imgs/profile/investments/edit-btn.svg'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type ICompanyInvestmentsListProps = {
   list: ICompanyInvestmentsListItems[]
@@ -19,7 +19,7 @@ export type ICompanyInvestmentsListProps = {
 const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
   list,
   showOperation = false,
-  handleEdit,
+  handleEdit
 }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const router = useRouter()
@@ -46,8 +46,8 @@ const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
             marginBottom: 8,
             padding: '14px 0px 14px 10px',
             '&:hover': {
-              background: 'var(--ps-gray-200)',
-            },
+              background: 'var(--ps-gray-200)'
+            }
           }}
           alignItems="center"
         >
@@ -69,8 +69,8 @@ const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
                 whiteSpace: 'nowrap',
                 '&:hover': {
                   textDecoration: v?.companyId || v?.thirdpartId ? 'underline' : 'none',
-                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default',
-                },
+                  cursor: v?.companyId || v?.thirdpartId ? 'pointer' : 'default'
+                }
               }}
               onClick={() => handleLink(v)}
             >

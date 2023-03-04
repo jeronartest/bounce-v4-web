@@ -9,11 +9,11 @@ import { useErc20Contract, useFixedSwapContract } from './useContractHooks/useCo
 import { approveErc20TokenAllowance, getErc20TokenAllowance } from './useContractHooks/useErc20'
 import useChainConfigInBackend from './useChainConfigInBackend'
 import { getFixedSwapContractAddress } from '@/utils/web3/contract'
-import { getPoolCreationSignature, getWhitelistMerkleTreeRoot } from '@/api/pool'
-import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolType } from '@/api/pool/type'
+import { getPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
+import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
 import { NULL_BYTES } from '@/constants/web3/contracts'
 import { createFixedSwapPoolCall } from '@/utils/web3/contractCalls/fixedSwap'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 
 interface Params {
   whitelist: string[]

@@ -5,13 +5,13 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import { useRouter } from 'next/router'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import { ICompanyMembersListData, ICompanyListItems, ICompanyOverviewInfo } from '@/api/company/type'
-import { getCompanyMembersList } from '@/api/company'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import { ICompanyMembersListData, ICompanyListItems, ICompanyOverviewInfo } from 'api/company/type'
+import { getCompanyMembersList } from 'api/company'
 import { RootState } from '@/store'
 import { getPrimaryRoleLabel } from '@/utils'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type ICompanyProfileTeamProps = {
   targetCompanyId?: number
@@ -24,7 +24,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
   const [showBtn, setShowBtn] = useState<boolean>(false)
   const [dataList, setDataList] = useState<ICompanyMembersListData[]>([])
   const router = useRouter()
-  const getrolesName = (item) => {
+  const getrolesName = item => {
     const temp = item?.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
     return temp?.length === 1 ? temp : temp?.join(' & ')
   }
@@ -38,22 +38,22 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
       const resp = await getCompanyMembersList({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId,
+        companyId: targetCompanyId
       })
 
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
-      onSuccess: (res) => {
+      onSuccess: res => {
         setDataList(dataList.concat(res.list))
       },
       ready: !!targetCompanyId,
       defaultPageSize: DefaultPageSize,
-      refreshDeps: [targetCompanyId],
-    },
+      refreshDeps: [targetCompanyId]
+    }
   )
 
   useEffect(() => {
@@ -89,8 +89,8 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
                   height: 156,
                   '&:hover': {
                     boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid rgba(23, 23, 23, 0.2)',
-                  },
+                    border: '1px solid rgba(23, 23, 23, 0.2)'
+                  }
                 }}
               >
                 <Avatar
@@ -98,7 +98,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
                   sx={{
                     width: 100,
                     height: 100,
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                   onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
                 />
@@ -130,7 +130,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
                       display="-webkit-box"
                       sx={{
                         WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: getrolesName(item.roleIds)?.length > 28 ? 2 : 3,
+                        WebkitLineClamp: getrolesName(item.roleIds)?.length > 28 ? 2 : 3
                       }}
                     >
                       {item.bio || 'No description yet'}

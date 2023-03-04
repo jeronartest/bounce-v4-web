@@ -8,37 +8,37 @@ import BigNumber from 'bignumber.js'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from './styles'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import SummaryCard from '@/components/investment/platform/SummaryCard'
-import NoData from '@/components/common/NoData'
-import CoingeckoSVG from '@/assets/imgs/chains/coingecko.svg'
-import AuctionCard, { AuctionHolder, AuctionListItem } from '@/components/common/AuctionCard'
-import NFTLaunchpadCard from '@/components/common/AuctionCard/NFTLaunchpadCard'
-import { getPools } from '@/api/market'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import SummaryCard from 'bounceComponents/investment/platform/SummaryCard'
+// import NoData from 'bounceComponents/common/NoData'
+import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
+// import NFTLaunchpadCard from 'bounceComponents/common/AuctionCard/NFTLaunchpadCard'
+import { getPools } from 'api/market'
 import { getLabel } from '@/utils'
 import { RootState } from '@/store'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { shortenAddress } from '@/utils/web3/address'
-import { PoolType } from '@/api/pool/type'
-import { formatNumber } from '@/utils/web3/number'
-import { UserType } from '@/api/market/type'
-import CompanyBanner from '@/components/company/CompanyBanner'
-import CompanyBanner3 from '@/assets/imgs/company/banner/banner1.png'
-import CompanyBanner4 from '@/assets/imgs/company/banner/banner2.png'
-import CompanyBanner5 from '@/assets/imgs/company/banner/banner3.png'
-import MarketPNG from '@/assets/imgs/company/banner/market.png'
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
-import Marketcard from '@/components/investment/marketcard/Marketcard'
+import { PoolType } from 'api/pool/type'
+// import { formatNumber } from '@/utils/web3/number'
+import { UserType } from 'api/market/type'
+import CompanyBanner from 'bounceComponents/company/CompanyBanner'
+import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
+import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
+import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
+import MarketPNG from 'assets/imgs/company/banner/market.png'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import Marketcard from 'bounceComponents/investment/marketcard/Marketcard'
 
-export type IMarketProps = {}
+// export type IMarketProps = {}
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.SealedBid]: 'SealedBid'
 }
-const Market: React.FC<IMarketProps> = ({}) => {
+const Market: React.FC = ({}) => {
   const router = useRouter()
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const { data, loading } = useRequest(async () => {
@@ -52,17 +52,17 @@ const Market: React.FC<IMarketProps> = ({}) => {
       orderBy: 'trending',
       poolId: '',
       poolName: '',
-      token0Address: '',
+      token0Address: ''
     })
     return {
       list: resp.data.fixedSwapList.list,
-      total: resp.data.fixedSwapList.total,
+      total: resp.data.fixedSwapList.total
     }
   })
   const bannerList = [
     {
       img: MarketPNG,
-      title: 'Explore the market place & participate in Auctions',
+      title: 'Explore the market place & participate in Auctions'
     },
     // {
     //   img: CompanyBanner2,
@@ -70,16 +70,16 @@ const Market: React.FC<IMarketProps> = ({}) => {
     // },
     {
       img: CompanyBanner3,
-      title: 'Build any type of auction with any tokens permissionlessly',
+      title: 'Build any type of auction with any tokens permissionlessly'
     },
     {
       img: CompanyBanner4,
-      title: 'Launch your NFT through Bounce and activate differernt auction tools',
+      title: 'Launch your NFT through Bounce and activate differernt auction tools'
     },
     {
       img: CompanyBanner5,
-      title: 'Bounce Token to boost your market',
-    },
+      title: 'Bounce Token to boost your market'
+    }
   ]
   return (
     <>
@@ -203,7 +203,7 @@ const Market: React.FC<IMarketProps> = ({}) => {
                         href={`/auction/fixed-price/${getLabel(
                           fixedSwaptem.chainId,
                           'shortName',
-                          optionDatas?.chainInfoOpt,
+                          optionDatas?.chainInfoOpt
                         )}/${Number(fixedSwaptem.poolId)}`}
                       >
                         <AuctionCard
@@ -245,7 +245,7 @@ const Market: React.FC<IMarketProps> = ({}) => {
                             symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
                             decimals: fixedSwaptem.token0.decimals,
                             sold: fixedSwaptem.swappedAmount0,
-                            supply: fixedSwaptem.amountTotal0,
+                            supply: fixedSwaptem.amountTotal0
                           }}
                           listItems={
                             <>

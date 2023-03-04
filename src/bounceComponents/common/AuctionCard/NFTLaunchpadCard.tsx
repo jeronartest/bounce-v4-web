@@ -3,8 +3,8 @@ import { Box } from '@mui/system'
 import React from 'react'
 import AuctionStatus from './AuctionStatus'
 import styles from './styles'
-import { ReactComponent as NftTagSVG } from '@/assets/imgs/components/nftTag.svg'
-import { ReactComponent as ChainIconSVG } from '@/assets/imgs/components/chainIcon.svg'
+import { ReactComponent as NftTagSVG } from 'assets/imgs/components/nftTag.svg'
+import { ReactComponent as ChainIconSVG } from 'assets/imgs/components/chainIcon.svg'
 
 export type INFTLaunchpadCardProps = {
   poolId: string
@@ -26,7 +26,7 @@ const NFTLaunchpadCard: React.FC<INFTLaunchpadCardProps> = ({
   price,
   title,
   poolId,
-  holder,
+  holder
 }) => {
   return (
     <Card sx={styles.card} elevation={0} style={{ minWidth: 355, padding: 0 }}>
@@ -39,7 +39,7 @@ const NFTLaunchpadCard: React.FC<INFTLaunchpadCardProps> = ({
               fontSize: 12,
               bgcolor: 'var(--ps-white)',
               color: 'var(--ps-black)',
-              border: '1px solid var(--ps-gray-50)',
+              border: '1px solid var(--ps-gray-50)'
             }}
           />
           <AuctionStatus status={status} dateStr={dateStr} />

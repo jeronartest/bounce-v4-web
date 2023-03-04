@@ -5,9 +5,9 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
 import { Button, OutlinedInput, TextField, Typography } from '@mui/material'
-import FormItem from '@/components/common/FormItem'
+import FormItem from 'bounceComponents/common/FormItem'
 import { isAddress } from '@/utils/web3/address'
-import Dialog from '@/components/common/DialogBase'
+import Dialog from 'bounceComponents/common/DialogBase'
 
 interface FormValues {
   whitelist: string
@@ -32,22 +32,22 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
       .test(
         'VALID_ADDRESS_ARRAY',
         'Please make sure all addresses are valid',
-        (addressInput) =>
+        addressInput =>
           !addressInput ||
           addressInput
             .trim()
             .split(/[\n,]/g)
-            .every((input) => isAddress(input)),
+            .every(input => isAddress(input))
       )
       .test(
         'NOT_GRATER_THAN_300_ADDRESSES',
         'Only allow addresses up to 300',
-        (addressInput) => !addressInput || addressInput.split(/[\n,]/g).length <= 300,
-      ),
+        addressInput => !addressInput || addressInput.split(/[\n,]/g).length <= 300
+      )
   })
 
   const initialValues: FormValues = {
-    whitelist: whitelist.join('\n') || '',
+    whitelist: whitelist.join('\n') || ''
   }
 
   return (
@@ -56,7 +56,7 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
-        onSubmit={(values) => {
+        onSubmit={values => {
           console.log('whitelist values: ', values)
           handleResolve(values.whitelist)
         }}

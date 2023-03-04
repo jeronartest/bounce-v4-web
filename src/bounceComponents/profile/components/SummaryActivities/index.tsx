@@ -8,22 +8,22 @@ import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import Image from 'next/image'
 import Link from 'next/link'
-import AuctionCard, { AuctionListItem } from '@/components/common/AuctionCard'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import CoingeckoSVG from '@/assets/imgs/chains/coingecko.svg'
-import { IAuctionPoolsData, IAuctionPoolsItems } from '@/api/profile/type'
-import { getUserActivitiesPool } from '@/api/profile'
-import TokenImage from '@/components/common/TokenImage'
+import AuctionCard, { AuctionListItem } from 'bounceComponents/common/AuctionCard'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+import { IAuctionPoolsData, IAuctionPoolsItems } from 'api/profile/type'
+import { getUserActivitiesPool } from 'api/profile'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { shortenAddress } from '@/utils/web3/address'
-import { PoolType } from '@/api/pool/type'
-import { IIdeasListData, IIdeasListItems } from '@/api/idea/type'
-import { getIdeasList } from '@/api/idea'
-import InstitutionCard from '@/components/companies/InstitutionCard'
-import NoData from '@/components/common/NoData'
+import { PoolType } from 'api/pool/type'
+import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
+import { getIdeasList } from 'api/idea'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
+import NoData from 'bounceComponents/common/NoData'
 import { getLabel } from '@/utils'
-import { ReactComponent as NoPoolFoundSVG } from '@/assets/imgs/noPoolFound.svg'
+import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import { RootState } from '@/store'
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 
 export type IActivitieProps = {
   personalInfoId: number
@@ -34,7 +34,7 @@ const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.SealedBid]: 'SealedBid'
 }
 
 const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
@@ -47,44 +47,44 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
         const resp = await getUserActivitiesPool({
           offset: (current - 1) * pageSize,
           limit: pageSize,
-          userId: personalInfoId,
+          userId: personalInfoId
         })
         return {
           total: resp.data.total,
-          list: resp.data.list,
+          list: resp.data.list
         }
       }
     },
     {
       ready: !!personalInfoId,
       defaultPageSize: defaultPageSize,
-      refreshDeps: [personalInfoId],
-    },
+      refreshDeps: [personalInfoId]
+    }
   )
 
   const {
     pagination: ideaPagination,
     data: ideaListData,
-    refresh,
+    refresh
   } = usePagination<IIdeasListItems<IIdeasListData>, Params>(
     async ({ current, pageSize }) => {
       if (personalInfoId) {
         const resp = await getIdeasList({
           offset: (current - 1) * pageSize,
           limit: pageSize,
-          UserId: personalInfoId,
+          UserId: personalInfoId
         })
         return {
           total: resp.data.total,
-          list: resp.data.list,
+          list: resp.data.list
         }
       }
     },
     {
       ready: !!personalInfoId,
       defaultPageSize: defaultIdeaPageSize,
-      refreshDeps: [personalInfoId],
-    },
+      refreshDeps: [personalInfoId]
+    }
   )
   const handlePageChange = (e, p) => {
     if (btnSta === 'Auction') {
@@ -130,7 +130,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                 onChange={handlePageChange}
                 sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
                 count={Math.ceil(auctionPoolData?.total / defaultPageSize || 0)}
-                renderItem={(item) => {
+                renderItem={item => {
                   if (item.type === 'previous' || item.type === 'next') {
                     return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
                   }
@@ -145,7 +145,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                 onChange={handlePageChange}
                 sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
                 count={Math.ceil(ideaListData?.total / defaultIdeaPageSize || 0)}
-                renderItem={(item) => {
+                renderItem={item => {
                   if (item.type === 'previous' || item.type === 'next') {
                     return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
                   }
@@ -169,7 +169,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                     href={`/auction/fixed-price/${getLabel(
                       auctionPoolItem.chainId,
                       'shortName',
-                      optionDatas?.chainInfoOpt,
+                      optionDatas?.chainInfoOpt
                     )}/${Number(auctionPoolItem.poolId)}`}
                   >
                     <AuctionCard
@@ -245,7 +245,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                         dislikeCount: ideaListItem.dislikeCount,
                         likeCount: ideaListItem.likeCount,
                         myDislike: ideaListItem.myDislike,
-                        myLike: ideaListItem.myLike,
+                        myLike: ideaListItem.myLike
                       }}
                       acitve={ideaListItem.active}
                       objId={ideaListItem.id}

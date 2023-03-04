@@ -14,7 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -22,21 +22,21 @@ import { usePagination } from 'ahooks'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from '@/components/common/NoData'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as CheckCardSVG } from '@/assets/imgs/companies/checkCard.svg'
-import { ReactComponent as CheckTableSVG } from '@/assets/imgs/companies/checkTable.svg'
-import { ReactComponent as CheckNoCardSVG } from '@/assets/imgs/companies/checkNoCard.svg'
-import { ReactComponent as CheckNoTableSVG } from '@/assets/imgs/companies/checkNoTable.svg'
-import { ReactComponent as GameSVG } from '@/assets/imgs/companies/game.svg'
-import ProjectCard from '@/components/companies/ProjectCard'
+import NoData from 'bounceComponents/common/NoData'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as CheckCardSVG } from 'assets/imgs/companies/checkCard.svg'
+import { ReactComponent as CheckTableSVG } from 'assets/imgs/companies/checkTable.svg'
+import { ReactComponent as CheckNoCardSVG } from 'assets/imgs/companies/checkNoCard.svg'
+import { ReactComponent as CheckNoTableSVG } from 'assets/imgs/companies/checkNoTable.svg'
+import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
+import ProjectCard from 'bounceComponents/companies/ProjectCard'
 import { RootState } from '@/store'
-import { getCompanyInformation } from '@/api/market'
-import InstitutionCard from '@/components/companies/InstitutionCard'
-import ProjectCardSvg from '@/components/common/ProjectCardSvg'
+import { getCompanyInformation } from 'api/market'
+import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
+import ProjectCardSvg from 'bounceComponents/common/ProjectCardSvg'
 import { getLabel } from '@/utils'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 export type ICompaniesProps = {
   userName: string
@@ -57,7 +57,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
     pagination,
     data: topCompaniesData,
     refresh,
-    loading: topCompaniesLoading,
+    loading: topCompaniesLoading
   } = usePagination(
     async ({ current, pageSize }) => {
       const resp = await getCompanyInformation({
@@ -66,17 +66,17 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
         name: userName,
         startup: checkTime === 0 ? 0 : moment().subtract(checkTime, 'year').unix(),
         companyStage: stageType,
-        marketCategory: marketType,
+        marketCategory: marketType
       })
       return {
         total: resp.data.total,
-        list: resp.data.list,
+        list: resp.data.list
       }
     },
     {
       defaultPageSize: defaultPageSize,
-      refreshDeps: [userName, checkTime, marketType, stageType],
-    },
+      refreshDeps: [userName, checkTime, marketType, stageType]
+    }
   )
   const handlePageChange = (e, p) => {
     pagination.changeCurrent(p)
@@ -89,7 +89,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
         <Stack direction="row" spacing={10}>
           <FormItem name="marketCategory" label="Market Category" fieldType="custom" sx={{ width: 190 }}>
             <Select
-              onChange={(event) => {
+              onChange={event => {
                 if (event.target.value === 1) {
                   setMarketType(0)
                 } else {
@@ -107,7 +107,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
           </FormItem>
           <FormItem name="companyStage" label="Company stage" sx={{ width: 190 }}>
             <Select
-              onChange={(event) => {
+              onChange={event => {
                 setStageType(event.target.value as number)
               }}
               defaultValue={0}
@@ -122,7 +122,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
           </FormItem>
           <FormItem name="startTime" label="Start time" sx={{ width: 190 }}>
             <Select
-              onChange={(event) => {
+              onChange={event => {
                 setCheckTime(event.target.value as number)
               }}
               defaultValue={0}
@@ -182,7 +182,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                           ideaListItem?.thirdpartId !== 0
                             ? `thirdpartId=${ideaListItem?.thirdpartId}`
                             : `id=${ideaListItem?.companyId}`
-                        }`,
+                        }`
                       )
                     }}
                   >
@@ -196,7 +196,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                         dislikeCount: ideaListItem.dislikeCount,
                         likeCount: ideaListItem.likeCount,
                         myDislike: ideaListItem.myDislike,
-                        myLike: ideaListItem.myLike,
+                        myLike: ideaListItem.myLike
                       }}
                       acitve={ideaListItem.active}
                       objId={ideaListItem.id}
@@ -252,7 +252,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                             router.push(
                               `/company/summary?${
                                 row?.thirdpartId !== 0 ? `thirdpartId=${row?.thirdpartId}` : `id=${row?.companyId}`
-                              }`,
+                              }`
                             )
                           }}
                         >
@@ -272,7 +272,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                               background: !!row.companyState && 'var(--ps-gray-50)',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              flexDirection: 'row',
+                              flexDirection: 'row'
                             }}
                           >
                             <Typography variant="body2" margin={'0 auto'}>

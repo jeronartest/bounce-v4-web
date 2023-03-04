@@ -3,8 +3,8 @@ import { useRequest } from 'ahooks'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import { getPoolHistory } from '@/api/pool'
-import { PoolType } from '@/api/pool/type'
+import { getPoolHistory } from 'api/pool'
+import { PoolType } from 'api/pool/type'
 
 const usePoolHistory = () => {
   const router = useRouter()

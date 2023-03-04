@@ -4,14 +4,14 @@ import React from 'react'
 import Image from 'next/image'
 import { useNetwork } from 'wagmi'
 import { Token } from '../types'
-import LogoSVG from '@/assets/imgs/components/logo.svg'
+import LogoSVG from 'assets/imgs/components/logo.svg'
 import { shortenAddress } from '@/utils/web3/address'
-import Dialog from '@/components/common/DialogBase'
+import Dialog from 'bounceComponents/common/DialogBase'
 import { ExplorerDataType, getExplorerLink } from '@/utils/web3/getExplorerLink'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import OpenInNewSVG from '@/assets/imgs/icon/open_in_new.svg'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import OpenInNewSVG from 'assets/imgs/icon/open_in_new.svg'
 
-const DangerousTokenDialog = create<Token>((selectedToken) => {
+const DangerousTokenDialog = create<Token>(selectedToken => {
   // console.log('DangerousTokenDialog selectedToken: ', selectedToken)
 
   const modal = useModal()
@@ -49,7 +49,7 @@ const DangerousTokenDialog = create<Token>((selectedToken) => {
           mb: 32,
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <Typography>{shortenAddress(selectedToken.address)}</Typography>

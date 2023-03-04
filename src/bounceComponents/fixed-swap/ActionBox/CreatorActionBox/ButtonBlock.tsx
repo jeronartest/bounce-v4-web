@@ -5,10 +5,10 @@ import SwitchNetworkButton from '../../SwitchNetworkButton'
 import CancelButton from './CancelButton'
 import ClaimButton from './ClaimButton'
 import ConnectWalletButton from './ConnectWalletButton'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
-import useCreatorClaim from '@/hooks/auction/useCreatorClaim'
+import { PoolStatus } from 'api/pool/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import useCreatorClaim from 'bounceHooks/auction/useCreatorClaim'
 
 const ButtonBlock = () => {
   const { isConnected } = useAccount()

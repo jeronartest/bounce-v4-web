@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks'
-import { getCompanyInvestors } from '@/api/company'
+import { getCompanyInvestors } from 'api/company'
 
 export const useGetCompanyInvestors = () => {
   const { data, runAsync } = useRequest(getCompanyInvestors, {
@@ -9,7 +9,7 @@ export const useGetCompanyInvestors = () => {
       if (response.code === 200) {
         return response.data
       }
-    },
+    }
   })
   return { data, runAsync }
 }

@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks'
-import { getBasicInvestments } from '@/api/profile'
+import { getBasicInvestments } from 'api/profile'
 
 export const useGetBasicInvestments = () => {
   const { data, runAsync } = useRequest(getBasicInvestments, {
@@ -9,7 +9,7 @@ export const useGetBasicInvestments = () => {
       if (response.code === 200) {
         return response.data
       }
-    },
+    }
   })
   return { data, runAsync }
 }

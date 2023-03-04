@@ -3,14 +3,14 @@ import React from 'react'
 
 import { useAccount } from 'wagmi'
 import Head from 'next/head'
-import CreatorMainBlock from '@/components/fixed-swap/MainBlock/CreatorMainBlock'
-import CreatorInfoCard from '@/components/fixed-swap/CreatorInfoCard'
-import ActionHistory from '@/components/fixed-swap/ActionHistory'
-import Header from '@/components/fixed-swap/Header'
-import UserMainBlock from '@/components/fixed-swap/MainBlock/UserMainBlock'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useEagerConnect from '@/hooks/web3/useEagerConnect'
-import { BounceAnime } from '@/components/common/BounceAnime'
+import CreatorMainBlock from 'bounceComponents/fixed-swap/MainBlock/CreatorMainBlock'
+import CreatorInfoCard from 'bounceComponents/fixed-swap/CreatorInfoCard'
+import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import Header from 'bounceComponents/fixed-swap/Header'
+import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 const FixedSwapPoolPageContent = () => {
   const { address: account } = useAccount()

@@ -1,11 +1,10 @@
 import { Box, Container, Grid, Paper, Stack, Typography } from '@mui/material'
-import React from 'react'
 import styles from './styles'
-import SummaryCard from '@/components/investment/platform/SummaryCard'
-import { ReactComponent as OutSVG } from '@/assets/imgs/investment/platform/out.svg'
-import NoData from '@/components/common/NoData'
-import AuctionCard, { AuctionHolder, AuctionListItem } from '@/components/common/AuctionCard'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
+import SummaryCard from 'bounceComponents/investment/platform/SummaryCard'
+import { ReactComponent as OutSVG } from 'assets/imgs/investment/platform/out.svg'
+import NoData from 'bounceComponents/common/NoData'
+// import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
+// import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
 const Platform = ({}) => {
   // const datas = []

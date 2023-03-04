@@ -2,18 +2,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { isAddress } from '@ethersproject/address'
 
-import { useErc20Contract } from '@/hooks/web3/useContractHooks/useContract'
+import { useErc20Contract } from 'bounceHooks/web3/useContractHooks/useContract'
 import { GOERLI_TOKEN_LIST, NATIVE_TOKENS, TOKEN_LIST_API } from '@/constants/auction'
-import { Token } from '@/components/fixed-swap/type'
+import { Token } from 'bounceComponents/fixed-swap/type'
 import { SupportedChainId } from '@/constants/web3/chains'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
-    (token) =>
+    token =>
       token.name.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
       token.symbol.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
       (isAddress(filterValue.trim().toLowerCase()) &&
-        token.address.toLowerCase().includes(filterValue.trim().toLowerCase())),
+        token.address.toLowerCase().includes(filterValue.trim().toLowerCase()))
   )
 }
 
@@ -31,12 +31,12 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
   const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(() => getGetApiTokenList(chainId), {
     cacheKey: `API_TOKEN_LIST_${chainId}`,
     ready: !!chainId && isChainHasTokenApi,
-    refreshDeps: [chainId],
+    refreshDeps: [chainId]
   })
 
   const baseTokenList = useMemo(
     () => (chainId === SupportedChainId.GOERLI ? GOERLI_TOKEN_LIST : apiTokenList ?? []),
-    [apiTokenList, chainId],
+    [apiTokenList, chainId]
   )
 
   const filteredApiTokenList = useMemo(() => {
@@ -64,7 +64,7 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
         symbol,
         name,
         decimals,
-        dangerous: true,
+        dangerous: true
       }
     },
     {
@@ -72,14 +72,14 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
       ready: !!contract && !!isAddress(filterValue) && filterToken(baseTokenList, filterValue).length <= 0,
       refreshDeps: [filterValue],
       debounceWait: 300,
-      onSuccess: (data) => {
+      onSuccess: data => {
         // console.log('>>>>> single token: ', data)
         setSingleToken(data)
       },
-      onError: (error) => {
+      onError: error => {
         // console.log('query token info error: ', error)
-      },
-    },
+      }
+    }
   )
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
   return {
     tokenList,
     isGettingTokenList: chainId === SupportedChainId.GOERLI ? false : isGettingApiTokenList,
-    isGettingSingleToken,
+    isGettingSingleToken
   }
 }
 

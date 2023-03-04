@@ -2,10 +2,10 @@ import { Button, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import styles from './styles'
-import { ReactComponent as LikeSVG } from '@/assets/imgs/like.svg'
-import { ReactComponent as UnlikeSVG } from '@/assets/imgs/unlike.svg'
-import { useLike } from '@/hooks/like/useLike'
-import { ILikeUnlikeRes, LIKE_OBJ, LIKE_STATUS, LIKE_TYPE, UNLIKE_STATUS } from '@/api/idea/type'
+import { ReactComponent as LikeSVG } from 'assets/imgs/like.svg'
+import { ReactComponent as UnlikeSVG } from 'assets/imgs/unlike.svg'
+import { useLike } from 'bounceHooks/like/useLike'
+import { ILikeUnlikeRes, LIKE_OBJ, LIKE_STATUS, LIKE_TYPE, UNLIKE_STATUS } from 'api/idea/type'
 
 export interface ILikeUnlikeProps {
   likeObj: LIKE_OBJ
@@ -24,7 +24,7 @@ const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, on
       const res = await postLike({
         likeType: likeType,
         likeObj,
-        objId,
+        objId
       })
       onSuccess?.(res?.data)
     } catch (err) {
@@ -55,7 +55,7 @@ const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, on
     <Stack
       direction={'row'}
       spacing={6}
-      onClick={(e) => {
+      onClick={e => {
         e.preventDefault()
       }}
     >
@@ -64,9 +64,9 @@ const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, on
           ...styles.like,
           ...(likeAmount?.myLike === LIKE_STATUS.yes ? styles.activeLike : ''),
           '&:hover': {
-            color: '#259C4A',
+            color: '#259C4A'
           },
-          ...likeSx,
+          ...likeSx
         }}
         onClick={handleLike}
       >
@@ -80,9 +80,9 @@ const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, on
           ...styles.like,
           ...(likeAmount?.myDislike === UNLIKE_STATUS.yes ? styles.activeUnlike : ''),
           '&:hover': {
-            color: '#CA2020',
+            color: '#CA2020'
           },
-          ...unlikeSx,
+          ...unlikeSx
         }}
         onClick={handleUnlike}
       >

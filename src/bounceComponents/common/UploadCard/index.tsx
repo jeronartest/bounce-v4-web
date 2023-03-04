@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Stack } from '@mui/material'
 
 import UploadItem from './UploadItem'
-import type { IFile } from '@/components/common/Uploader'
+import type { IFile } from 'bounceComponents/common/Uploader'
 export type IUploadCardProps = {
   accept?: string[]
   maxNum?: number
@@ -39,7 +39,7 @@ const UploadList: React.FC<IUploadCardProps> = ({ value, accept, maxNum = Infini
         <UploadItem
           key={file.fileUrl}
           value={file}
-          onChange={(file) => {
+          onChange={file => {
             handleChange(file, index)
           }}
           onRemove={() => {
@@ -51,7 +51,7 @@ const UploadList: React.FC<IUploadCardProps> = ({ value, accept, maxNum = Infini
         <UploadItem
           limitSize={limitSize}
           accept={accept || []}
-          onChange={(file) => {
+          onChange={file => {
             handleChange(file, files.length)
           }}
         />

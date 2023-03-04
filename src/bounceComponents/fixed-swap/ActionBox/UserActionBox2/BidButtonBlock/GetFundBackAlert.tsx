@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 
-import RotateSVG from '@/assets/imgs/auction/rotate.svg'
+import RotateSVG from 'assets/imgs/auction/rotate.svg'
 
 const GetFundBackAlert = () => {
   return (

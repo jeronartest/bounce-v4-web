@@ -6,12 +6,12 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import { Stack } from '@mui/system'
 import dayjs from 'dayjs'
 import { RootState } from '@/store'
-import { educationItems } from '@/api/profile/type'
-import { IPager } from '@/api/type'
-import { getResumeEducation } from '@/api/profile'
+import { educationItems } from 'api/profile/type'
+import { IPager } from 'api/type'
+import { getResumeEducation } from 'api/profile'
 import { getLabel } from '@/utils'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import EducationDefaultSVG from '@/assets/imgs/defaultAvatar/education.svg'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 
 export type IProfileEducationProps = {
   personalInfoId: number
@@ -31,22 +31,22 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
       const res = await getResumeEducation({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        userId: personalInfoId,
+        userId: personalInfoId
       })
       return {
         total: res?.data?.total,
-        list: res?.data?.list,
+        list: res?.data?.list
       }
     },
     {
       defaultPageSize: 2,
       ready: !!personalInfoId,
-      refreshDeps: [personalInfoId],
-    },
+      refreshDeps: [personalInfoId]
+    }
   )
 
   useEffect(() => {
-    data?.list?.length && setList((val) => [...val, ...data?.list])
+    data?.list?.length && setList(val => [...val, ...data?.list])
   }, [data?.list])
 
   const handleClick = useCallback(() => {
@@ -65,8 +65,8 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
                 width: 68,
                 height: 68,
                 '&:hover': {
-                  cursor: v?.university?.link ? 'pointer' : 'default',
-                },
+                  cursor: v?.university?.link ? 'pointer' : 'default'
+                }
               }}
               component={'a'}
               target={v?.university?.link ? '_blank' : '_self'}
@@ -86,8 +86,8 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
                   wordBreak: 'break-word',
                   '&:hover': {
                     textDecoration: v?.university?.link ? 'underline' : 'none',
-                    cursor: v?.university?.link ? 'pointer' : 'default',
-                  },
+                    cursor: v?.university?.link ? 'pointer' : 'default'
+                  }
                 }}
               >
                 {v?.university?.name}
@@ -109,7 +109,7 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
                 <Typography variant="body2">{v.major}</Typography>
                 <Typography variant="body2">
                   {`${dayjs(v.startTime * 1000).format('YYYY')}-${dayjs(v.endTime * 1000).format('YYYY')}(${dayjs(
-                    v.endTime * 1000,
+                    v.endTime * 1000
                   ).diff(dayjs(v.startTime * 1000), 'year')} years)`}
                 </Typography>
               </Stack>
@@ -121,7 +121,7 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
                   textOverflow: 'ellipsis',
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
-                  WebkitLineClamp: 2,
+                  WebkitLineClamp: 2
                 }}
               >
                 {v.description}

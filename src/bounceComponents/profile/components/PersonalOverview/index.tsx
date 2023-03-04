@@ -15,9 +15,9 @@ import ClockSVG from './assets/clock.svg'
 import styles from './styles'
 import { RootState } from '@/store'
 import { getLabel, getPrimaryRoleLabel } from '@/utils'
-import { IProfileUserInfo } from '@/api/user/type'
-import CompanyDefaultSVG from '@/assets/imgs/defaultAvatar/company.svg'
-import EducationDefaultSVG from '@/assets/imgs/defaultAvatar/education.svg'
+import { IProfileUserInfo } from 'api/user/type'
+import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 
 countries.registerLocale(english)
 
@@ -38,35 +38,35 @@ const PersonalOverview: React.FC<IPersonalOverview> = ({ personalInfo }) => {
       {
         link: personalInfo?.contactEmail,
         isMail: true,
-        icon: <EmailSVG />,
+        icon: <EmailSVG />
       },
       {
         link: personalInfo?.twitter,
         isMail: false,
-        icon: <TwitterIconSVG />,
+        icon: <TwitterIconSVG />
       },
       {
         link: personalInfo?.instagram,
         isMail: false,
-        icon: <InstagramIconSVG />,
+        icon: <InstagramIconSVG />
       },
       {
         link: personalInfo?.website,
         isMail: false,
-        icon: <WebsiteSVG />,
+        icon: <WebsiteSVG />
       },
       {
         link: personalInfo?.linkedin,
         isMail: false,
-        icon: <LinkedinSVG />,
+        icon: <LinkedinSVG />
       },
       {
         link: personalInfo?.github,
         isMail: false,
-        icon: <GithubSVG />,
-      },
+        icon: <GithubSVG />
+      }
     ],
-    [personalInfo],
+    [personalInfo]
   )
 
   return (
@@ -158,7 +158,7 @@ const PersonalOverview: React.FC<IPersonalOverview> = ({ personalInfo }) => {
                       width={40}
                       height={40}
                       style={{
-                        borderRadius: '50%',
+                        borderRadius: '50%'
                       }}
                     />
                   </picture>
@@ -169,8 +169,8 @@ const PersonalOverview: React.FC<IPersonalOverview> = ({ personalInfo }) => {
                     sx={{
                       '&:hover': {
                         cursor: personalInfo?.company?.link ? 'pointer' : 'default',
-                        textDecoration: personalInfo?.company?.link ? 'underline' : 'none',
-                      },
+                        textDecoration: personalInfo?.company?.link ? 'underline' : 'none'
+                      }
                     }}
                   >
                     {personalInfo?.company?.name}
@@ -209,8 +209,8 @@ const PersonalOverview: React.FC<IPersonalOverview> = ({ personalInfo }) => {
                     sx={{
                       '&:hover': {
                         cursor: personalInfo?.university?.link ? 'pointer' : 'default',
-                        textDecoration: personalInfo?.university?.link ? 'underline' : 'none',
-                      },
+                        textDecoration: personalInfo?.university?.link ? 'underline' : 'none'
+                      }
                     }}
                   >
                     {personalInfo?.university?.name}

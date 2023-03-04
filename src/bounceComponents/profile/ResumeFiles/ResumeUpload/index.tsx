@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Stack } from '@mui/material'
 
 import ResumeUploadItem from '../ResumeUploadItem'
-import type { IFile } from '@/components/common/Uploader'
+import type { IFile } from 'bounceComponents/common/Uploader'
 export type IUploadCardProps = {
   accept?: string[]
   maxNum?: number

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { IconButton, Stack, Typography } from '@mui/material'
-import { ReactComponent as ArrowSVG } from '@/assets/imgs/components/arrow.svg'
+import { ReactComponent as ArrowSVG } from 'assets/imgs/components/arrow.svg'
 
 export type IYearProps = {
   year: number
@@ -11,13 +11,13 @@ const Year: React.FC<IYearProps> = ({ year, onChange }) => {
   const [val, setVal] = useState<number>(year)
 
   const handlePreviousClick = useCallback(() => {
-    setVal((val) => {
+    setVal(val => {
       return val < 1900 ? 1900 : val - 1
     })
   }, [])
 
   const handleNextClick = useCallback(() => {
-    setVal((val) => val + 1)
+    setVal(val => val + 1)
   }, [])
 
   useEffect(() => {

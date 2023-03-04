@@ -6,15 +6,15 @@ import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
-import FormItem from '@/components/common/FormItem'
-import { useOptionsData } from '@/hooks/useOptionsData'
-import { usePersonalResume } from '@/hooks/profile/useUpdateBasic'
+import FormItem from 'bounceComponents/common/FormItem'
+import { useOptionsData } from 'bounceHooks/useOptionsData'
+import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import { RootState } from '@/store'
-import EditLayout, { resumeTabsList } from '@/components/company/EditLayout'
-import { FormType, IUpdatePersonalParams } from '@/api/profile/type'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import { ResumeActionType } from '@/components/profile/components/ResumeContextProvider'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
+import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
+import { FormType, IUpdatePersonalParams } from 'api/profile/type'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { ResumeActionType } from 'bounceComponents/profile/components/ResumeContextProvider'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import { formCheckValid } from '@/utils'
 
 const SKILLS_LENGTH = 140
@@ -26,7 +26,7 @@ const validationSchema = yup.object({
     .string()
     .trim()
     .required('Please tell employers more about your skills...')
-    .max(SKILLS_LENGTH, `Allow only no more than ${SKILLS_LENGTH} letters`),
+    .max(SKILLS_LENGTH, `Allow only no more than ${SKILLS_LENGTH} letters`)
 })
 
 export interface IJobOverviewProps {
@@ -41,19 +41,19 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
   const initialValues = {
     primaryRole: resumeProfileValues?.primaryRole || userInfo?.primaryRole || '',
     years: resumeProfileValues?.years || userInfo?.years || '',
-    skills: resumeProfileValues?.skills || userInfo?.skills || '',
+    skills: resumeProfileValues?.skills || userInfo?.skills || ''
   }
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     if (firstEdit) {
       return resumeProfileDispatch({
         type: ResumeActionType.SetJobOverview,
         payload: {
           ...resumeProfileValues,
           ...values,
-          skills: values.skills.trim(),
-        },
+          skills: values.skills.trim()
+        }
       })
     }
     runPersonalResume({ ...values, skills: values.skills.trim() })
@@ -83,14 +83,14 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
                 item.child.map((child, index) => [
                   <MenuItem key={index} value={child.id}>
                     {child.level2Name}
-                  </MenuItem>,
-                ]),
+                  </MenuItem>
+                ])
               ])}
             </Select>
           </FormItem>
           <FormItem name="years" label="Experience" required>
             <Select>
-              {optionsData?.data?.experienceYearOpt.map((item) => {
+              {optionsData?.data?.experienceYearOpt.map(item => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
                     {item.years}

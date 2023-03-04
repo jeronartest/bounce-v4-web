@@ -1,9 +1,9 @@
 import { Box, Container, Stack, Typography } from '@mui/material'
 import React from 'react'
 
-export type ITokenProps = {}
+// export type ITokenProps = {}
 
-const Token: React.FC<ITokenProps> = ({}) => {
+const Token: React.FC = ({}) => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 64, width: '100%', height: 775, background: '#FFFFFF', borderRadius: 20 }}>

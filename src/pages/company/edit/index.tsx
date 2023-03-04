@@ -3,19 +3,19 @@ import { Box } from '@mui/material'
 
 import Head from 'next/head'
 import { CompanyOverviewEdit } from './overview'
-import RoundedContainer from '@/components/create-auction-pool/RoundedContainer'
-import Stepper from '@/components/create-auction-pool/Stepper'
+import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
+import Stepper from 'bounceComponents/create-auction-pool/Stepper'
 import CompanyContextProvider, {
   CompanyActionType,
   useCompanyProfileDispatch,
-  useCompanyProfileValues,
-} from '@/components/company/components/CompanyContextProvider'
-import UploadAvatar from '@/components/profile/components/UploadAvatar'
-import RootWrap from '@/components/company/CompanyTeam/components/RootWrap'
-import CompanyTeam from '@/components/company/CompanyTeam'
-import CompanyTokens from '@/components/company/CompanyTokens'
-import CompanyInvestors from '@/components/company/CompanyInvestors'
-import CompanyInvestments from '@/components/company/CompanyInvestments'
+  useCompanyProfileValues
+} from 'bounceComponents/company/components/CompanyContextProvider'
+import UploadAvatar from 'bounceComponents/profile/components/UploadAvatar'
+import RootWrap from 'bounceComponents/company/CompanyTeam/components/RootWrap'
+import CompanyTeam from 'bounceComponents/company/CompanyTeam'
+import CompanyTokens from 'bounceComponents/company/CompanyTokens'
+import CompanyInvestors from 'bounceComponents/company/CompanyInvestors'
+import CompanyInvestments from 'bounceComponents/company/CompanyInvestments'
 
 const steps = ['1. Profile Picture', '2. Intro', '3. Team', '4. Tokens', '5. Investors', '6. Investments']
 
@@ -25,7 +25,7 @@ export enum CompanyStep {
   Team,
   Tokens,
   Investors,
-  Investments,
+  Investments
 }
 
 const CompanyEdit: React.FC = () => {
@@ -41,9 +41,9 @@ const CompanyEdit: React.FC = () => {
       type: CompanyActionType.SetProfilePicture,
       payload: {
         companyBasicInfo: {
-          avatar: values?.avatar,
-        },
-      },
+          avatar: values?.avatar
+        }
+      }
     })
   }
 

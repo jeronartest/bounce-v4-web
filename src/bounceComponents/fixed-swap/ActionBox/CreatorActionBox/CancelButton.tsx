@@ -4,10 +4,10 @@ import { useRequest } from 'ahooks'
 import { hide, show } from '@ebay/nice-modal-react'
 
 import { creatorClaimCall } from '@/utils/web3/contractCalls/fixedSwap'
-import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 
 const CancelButton = (): JSX.Element => {
   const contract = useFixedSwapContract()
@@ -21,7 +21,7 @@ const CancelButton = (): JSX.Element => {
       show(DialogConfirmation, {
         title: 'Bounce waiting for transaction settlement',
         subTitle:
-          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
       })
 
       return tx.wait(1)
@@ -32,7 +32,7 @@ const CancelButton = (): JSX.Element => {
       onBefore: () => {
         show(DialogConfirmation, {
           title: 'Bounce requests wallet interaction',
-          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.',
+          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
         })
       },
       onSuccess: () => {
@@ -41,7 +41,7 @@ const CancelButton = (): JSX.Element => {
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: `You have successfully cancelled the pool and claimed your tokens`,
+          content: `You have successfully cancelled the pool and claimed your tokens`
         })
       },
       onError: (error: Error & { reason: string }) => {
@@ -53,14 +53,14 @@ const CancelButton = (): JSX.Element => {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: cancelPool,
+          onAgain: cancelPool
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return (

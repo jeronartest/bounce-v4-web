@@ -6,12 +6,12 @@ import { BigNumber } from 'bignumber.js'
 import { commify, parseUnits } from 'ethers/lib/utils.js'
 import Image from 'next/image'
 import RegretBalance from './RegretBalance'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
-import PoolInfoItem from '@/components/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import NumberInput from '@/components/common/NumberInput'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import NumberInput from 'bounceComponents/common/NumberInput'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 
 interface RegretAmountInputProps {
   regretAmount: string
@@ -33,8 +33,8 @@ const RegretAmountInput = ({ regretAmount, setRegretAmount }: RegretAmountInputP
       formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
         unit: poolInfo.token0.decimals,
         decimalPlaces: poolInfo.token0.decimals,
-        shouldSplitByComma: false,
-      }),
+        shouldSplitByComma: false
+      })
     )
   }, [poolInfo.token0.decimals, poolWithParticipantInfo.participant.swappedAmount0, setRegretAmount])
 
@@ -44,7 +44,7 @@ const RegretAmountInput = ({ regretAmount, setRegretAmount }: RegretAmountInputP
       fullWidth
       placeholder="Enter"
       value={regretAmount}
-      onUserInput={(value) => {
+      onUserInput={value => {
         setRegretAmount(value)
       }}
       endAdornment={

@@ -3,11 +3,11 @@ import { Box, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 
 import PoolInfoItem from '../../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
 import { shortenAddress } from '@/utils/web3/address'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const TX_FEE_RATIO = 0.025
 
@@ -16,18 +16,18 @@ const FundInfoList = () => {
 
   const formatedSwappedAmount0 = formatNumber(poolInfo.swappedAmount0, {
     unit: poolInfo.token0.decimals,
-    decimalPlaces: 6,
+    decimalPlaces: 6
   })
   const formatedSwappedAmount1 = formatNumber(new BigNumber(poolInfo.swappedAmount0).times(poolInfo.ratio).toString(), {
     unit: poolInfo.token0.decimals,
-    decimalPlaces: 6,
+    decimalPlaces: 6
   })
   const formatedChargedFee = formatNumber(
     new BigNumber(poolInfo.swappedAmount0).times(poolInfo.ratio).times(TX_FEE_RATIO).toString(),
     {
       unit: poolInfo.token0.decimals,
-      decimalPlaces: 6,
-    },
+      decimalPlaces: 6
+    }
   )
 
   return (

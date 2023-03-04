@@ -5,15 +5,15 @@ import { JobOverview } from './job'
 import { PreferenceItems } from './preference'
 import { ResumeFiles } from './resume'
 
-import RoundedContainer from '@/components/create-auction-pool/RoundedContainer'
-import Stepper from '@/components/create-auction-pool/Stepper'
-import RootWrap from '@/components/company/CompanyTeam/components/RootWrap'
+import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
+import Stepper from 'bounceComponents/create-auction-pool/Stepper'
+import RootWrap from 'bounceComponents/company/CompanyTeam/components/RootWrap'
 import ResumeContextProvider, {
   useResumeProfileDispatch,
-  useResumeProfileValues,
-} from '@/components/profile/components/ResumeContextProvider'
-import ResumeExperience from '@/components/profile/ResumeExperience'
-import ResumeEducation from '@/components/profile/ResumeEducation'
+  useResumeProfileValues
+} from 'bounceComponents/profile/components/ResumeContextProvider'
+import ResumeExperience from 'bounceComponents/profile/ResumeExperience'
+import ResumeEducation from 'bounceComponents/profile/ResumeEducation'
 
 const steps = ['1. Job Overview', '2. Experience', '3. Education', '4. Preference', '5. Resume']
 
@@ -22,7 +22,7 @@ export enum ResumeStep {
   Experience,
   Education,
   Preference,
-  Resume,
+  Resume
 }
 
 const ProfileResume: React.FC = () => {
@@ -37,7 +37,7 @@ const ProfileResume: React.FC = () => {
     <RoundedContainer
       maxWidth="md"
       sx={{
-        pt: 22,
+        pt: 22
       }}
     >
       <Box sx={{ px: 22 }}>

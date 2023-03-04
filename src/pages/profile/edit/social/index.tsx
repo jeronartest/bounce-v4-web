@@ -8,21 +8,21 @@ import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 import { IEditProps } from '../overview'
 import styles from './styles'
-import FormItem from '@/components/common/FormItem'
-import { ReactComponent as EmailSVG } from '@/assets/imgs/profile/links/email.svg'
-import { ReactComponent as WebsiteSVG } from '@/assets/imgs/profile/links/website.svg'
-import { ReactComponent as LinkedInSVG } from '@/assets/imgs/profile/links/linkedIn.svg'
-import { ReactComponent as GithubSVG } from '@/assets/imgs/profile/links/github.svg'
-import { ReactComponent as TwitterSVG } from '@/assets/imgs/profile/links/twitter.svg'
-import { ReactComponent as InstagramSVG } from '@/assets/imgs/profile/links/instagram.svg'
+import FormItem from 'bounceComponents/common/FormItem'
+import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email.svg'
+import { ReactComponent as WebsiteSVG } from 'assets/imgs/profile/links/website.svg'
+import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedIn.svg'
+import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
+import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
+import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
 import { RootState } from '@/store'
-import { useUpdateBasic } from '@/hooks/profile/useUpdateBasic'
-import EditLayout, { profileTabsList } from '@/components/company/EditLayout'
-import { ActionType } from '@/components/profile/components/BasicContextProvider'
-import EditCancelConfirmation from '@/components/profile/components/EditCancelConfirmation'
-import { LeavePageWarn } from '@/components/common/LeavePageWarn'
+import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
+import EditLayout, { profileTabsList } from 'bounceComponents/company/EditLayout'
+import { ActionType } from 'bounceComponents/profile/components/BasicContextProvider'
+import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import { formCheckValid } from '@/utils'
-import { FormType } from '@/api/profile/type'
+import { FormType } from 'api/profile/type'
 
 export interface ILinksItem {
   name: string
@@ -38,7 +38,7 @@ export interface ISocialLinksProps {
 export const SocialLinks: React.FC<ISocialLinksProps> = ({ links }) => {
   return (
     <>
-      {links.map((item) => (
+      {links.map(item => (
         <FormItem
           key={item.name}
           name={item.name}
@@ -59,43 +59,43 @@ const links: ILinksItem[] = [
     label: 'Official email',
     required: true,
     icon: <EmailSVG />,
-    autoComplete: '',
+    autoComplete: ''
   },
   {
     name: 'website',
     label: 'Website',
     required: false,
     icon: <WebsiteSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'linkedin',
     label: 'LinkedIn',
     required: false,
     icon: <LinkedInSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'github',
     label: 'Github',
     required: false,
     icon: <GithubSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'twitter',
     label: 'Twitter',
     required: false,
     icon: <TwitterSVG />,
-    autoComplete: 'off',
+    autoComplete: 'off'
   },
   {
     name: 'instagram',
     label: 'Instagram',
     required: false,
     icon: <InstagramSVG />,
-    autoComplete: 'off',
-  },
+    autoComplete: 'off'
+  }
 ]
 
 const validationSchema = yup.object({
@@ -109,7 +109,7 @@ const validationSchema = yup.object({
   linkedin: yup.string().trim().url('Please enter a valie URL'),
   github: yup.string().trim().url('Please enter a valie URL'),
   twitter: yup.string().trim().url('Please enter a valie URL'),
-  instagram: yup.string().trim().url('Please enter a valie URL'),
+  instagram: yup.string().trim().url('Please enter a valie URL')
 })
 
 export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues, basicProfileDispatch }) => {
@@ -122,16 +122,16 @@ export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues
     linkedin: basicProfileValues?.linkedin || userInfo?.linkedin || '',
     github: basicProfileValues?.github || userInfo?.github || '',
     twitter: basicProfileValues?.twitter || userInfo?.twitter || '',
-    instagram: basicProfileValues?.instagram || userInfo?.instagram || '',
+    instagram: basicProfileValues?.instagram || userInfo?.instagram || ''
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     if (firstEdit) {
       return basicProfileDispatch?.({
         type: ActionType.SetSocial,
         payload: {
-          ...values,
-        },
+          ...values
+        }
       })
     }
     runUpdateBasic(values)

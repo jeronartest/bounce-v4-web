@@ -11,7 +11,7 @@ import {
   Pagination,
   Select,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
@@ -20,38 +20,38 @@ import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Image from 'next/image'
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
+// import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import BigNumber from 'bignumber.js'
 import Head from 'next/head'
-import ErrorSVG from '@/assets/imgs/icon/error_filled.svg'
-import { ReactComponent as SearchSVG } from '@/assets/imgs/companies/search.svg'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
-import CoingeckoSVG from '@/assets/imgs/chains/coingecko.svg'
-import AuctionCard, { AuctionHolder, AuctionListItem } from '@/components/common/AuctionCard'
-import FormItem from '@/components/common/FormItem'
+import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
+import FormItem from 'bounceComponents/common/FormItem'
 import { RootState } from '@/store'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { shortenAddress } from '@/utils/web3/address'
-import { PoolType } from '@/api/pool/type'
+import { PoolType } from 'api/pool/type'
 import { getLabel } from '@/utils'
-import { formatNumber } from '@/utils/web3/number'
-import NoData from '@/components/common/NoData'
-import { Token } from '@/components/create-auction-pool/types'
-import TokenDialog from '@/components/create-auction-pool/TokenDialog'
-import { getPools } from '@/api/market'
-import TotalPaginationBox from '@/components/market/components/TotalPaginationBox'
-import FakeOutlinedInput from '@/components/create-auction-pool/FakeOutlinedInput'
-import { UserType } from '@/api/market/type'
-import { ReactComponent as CloseSVG } from '@/assets/imgs/auction/close.svg'
-export type IPoolsProps = {}
+// import { formatNumber } from '@/utils/web3/number'
+import NoData from 'bounceComponents/common/NoData'
+import { Token } from 'bounceComponents/create-auction-pool/types'
+import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
+import { getPools } from 'api/market'
+import TotalPaginationBox from 'bounceComponents/market/components/TotalPaginationBox'
+import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
+import { UserType } from 'api/market/type'
+// import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
+// export type IPoolsProps = {}
+
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.SealedBid]: 'SealedBid'
 }
 const initialValues = {
   searchText: '',
@@ -63,7 +63,7 @@ const initialValues = {
   tokenFromDecimals: '',
   poolStatus: 0,
   auctionType: 1,
-  chain: 1,
+  chain: 1
 }
 const defaultIdeaPageSize = 12
 const searchOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Address']
@@ -101,19 +101,19 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   return null
 }
 
-const Pools: React.FC<IPoolsProps> = ({}) => {
+const Pools: React.FC = ({}) => {
   const router = useRouter()
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
   const [chain, setChain] = useState<number>(3)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabel(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
-      .then((res) => {
+      .then(res => {
         setFieldValue('tokenFromAddress', res.address)
         setFieldValue('tokenFromSymbol', res.symbol)
         setFieldValue('tokenFromLogoURI', res.logoURI)
         setFieldValue('tokenFromDecimals', res.decimals)
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('TokenDialog Rejected: ', err)
       })
   }
@@ -122,7 +122,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
     pagination: poolsPagination,
     data: poolsData,
     run,
-    params,
+    params
   } = usePagination<any, Params>(
     async ({
       current,
@@ -135,7 +135,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
       poolId,
       poolName,
       poolStatusFrontend,
-      token0Address,
+      token0Address
     }) => {
       if (!chainId) {
         return Promise.reject(new Error('No ChainId'))
@@ -152,34 +152,34 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
         poolId: poolId,
         poolName: poolName,
         poolStatusFrontend: poolStatusFrontend === 0 ? null : poolStatusFrontend,
-        token0Address: token0Address,
+        token0Address: token0Address
       })
       if (category === 1) {
         return {
           list: resp.data.fixedSwapList.list,
-          total: resp.data.fixedSwapList.total,
+          total: resp.data.fixedSwapList.total
         }
       } else if (category === 2) {
         return {
           list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total,
+          total: resp.data.dutchPoolList.total
         }
       } else if (category === 3) {
         return {
           list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total,
+          total: resp.data.lotteryPoolList.total
         }
       } else {
         return {
           list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total,
+          total: resp.data.sealedBidPoolList.total
         }
       }
     },
     {
       manual: true,
-      defaultPageSize: defaultIdeaPageSize,
-    },
+      defaultPageSize: defaultIdeaPageSize
+    }
   )
 
   const handleSubmit = (values: typeof initialValues) => {
@@ -195,7 +195,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
       poolId: values.searchType === 1 ? values.searchText : '',
       poolName: values.searchType === 0 ? values.searchText : '',
       poolStatusFrontend: values.poolStatus,
-      token0Address: values.tokenFromAddress,
+      token0Address: values.tokenFromAddress
     })
   }
 
@@ -227,7 +227,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                           {searchOptions.map((opt, index) => [
                             <MenuItem value={index} key={index}>
                               {opt}
-                            </MenuItem>,
+                            </MenuItem>
                           ])}
                         </Select>
                       </FormItem>
@@ -250,12 +250,12 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                             background: 'var(--ps-blue)',
                             color: 'var(--ps-white)',
                             '&:hover': {
-                              background: 'var(--ps-blue-50)',
+                              background: 'var(--ps-blue-50)'
                             },
                             '&:active': {
-                              background: 'var(--ps-blue-100)',
-                            },
-                          },
+                              background: 'var(--ps-blue-100)'
+                            }
+                          }
                         }}
                       >
                         Search
@@ -293,7 +293,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                               sx={{ maxWidth: 200 }}
                               endAdornment={
                                 <IconButton
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     e.stopPropagation()
                                     setFieldValue('tokenFromAddress', '')
                                     setFieldValue('tokenFromSymbol', '')
@@ -301,7 +301,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                                       ...params,
                                       tokenFromAddress: '',
                                       current: 1,
-                                      pageSize: 12,
+                                      pageSize: 12
                                     })
                                   }}
                                 >
@@ -355,7 +355,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                                 href={`/auction/fixed-price/${getLabel(
                                   chain,
                                   'shortName',
-                                  optionDatas?.chainInfoOpt,
+                                  optionDatas?.chainInfoOpt
                                 )}/${Number(fixedSwaptem.poolId)}`}
                               >
                                 <AuctionCard
@@ -402,7 +402,7 @@ const Pools: React.FC<IPoolsProps> = ({}) => {
                                     symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
                                     decimals: fixedSwaptem.token0.decimals,
                                     sold: fixedSwaptem.swappedAmount0,
-                                    supply: fixedSwaptem.amountTotal0,
+                                    supply: fixedSwaptem.amountTotal0
                                   }}
                                   listItems={
                                     <>

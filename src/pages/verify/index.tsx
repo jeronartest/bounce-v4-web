@@ -8,9 +8,9 @@ import {
   OutlinedInput,
   Radio,
   Stack,
-  Typography,
+  Typography
 } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Image from 'next/image'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
@@ -20,26 +20,26 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { useLocalStorageState } from 'ahooks'
 import { LoadingButton } from '@mui/lab'
-import PaperBox from '@/components/signup/PaperBox'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import FormItem from '@/components/common/FormItem'
-import VerifySuccessSVG from '@/assets/imgs/verify/verifySuccess.svg'
-import LinkedInSVG from '@/assets/imgs/verify/linkedIn.svg'
-import TwitterSVG from '@/assets/imgs/verify/twitter.svg'
-import { ReactComponent as CheckRadioSVG } from '@/assets/imgs/verify/checkRadio.svg'
-import { ReactComponent as UnCheckRadioSVG } from '@/assets/imgs/verify/unCheckRadio.svg'
-import { useClaimCheck, useGetUserUnverify, useVerifyAccount } from '@/hooks/user/useVerify'
-import { ACCOUNT_TYPE, USER_TYPE } from '@/api/user/type'
-import { ReactComponent as VisibilityOn } from '@/assets/imgs/user/visibility_on.svg'
-import { ReactComponent as VisibilityOff } from '@/assets/imgs/user/visibility_off.svg'
-import { CACHE_USER_LOGININFO, ICacheLoginInfo, useLinkedInOauth, useOauth } from '@/hooks/user/useLogin'
-import DialogTips from '@/components/common/DialogTips'
+import PaperBox from 'bounceComponents/signup/PaperBox'
+import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+import FormItem from 'bounceComponents/common/FormItem'
+import VerifySuccessSVG from 'assets/imgs/verify/verifySuccess.svg'
+import LinkedInSVG from 'assets/imgs/verify/linkedIn.svg'
+import TwitterSVG from 'assets/imgs/verify/twitter.svg'
+import { ReactComponent as CheckRadioSVG } from 'assets/imgs/verify/checkRadio.svg'
+import { ReactComponent as UnCheckRadioSVG } from 'assets/imgs/verify/unCheckRadio.svg'
+import { useClaimCheck, useGetUserUnverify, useVerifyAccount } from 'bounceHooks/user/useVerify'
+import { USER_TYPE } from 'api/user/type'
+import { ReactComponent as VisibilityOn } from 'assets/imgs/user/visibility_on.svg'
+import { ReactComponent as VisibilityOff } from 'assets/imgs/user/visibility_off.svg'
+import { useLinkedInOauth, useOauth } from 'state/users/hooks'
+import DialogTips from 'bounceComponents/common/DialogTips'
 import { fetchCompanyInfo, fetchUserInfo, saveLoginInfo } from '@/store/user'
-import { checkEmail } from '@/api/user'
+import { checkEmail } from 'api/user'
 
 enum SocialPlatformType {
   Twitter = 3,
-  LinkedIn = 4,
+  LinkedIn = 4
 }
 
 const validationSchema = yup.object({
@@ -48,8 +48,8 @@ const validationSchema = yup.object({
     .trim()
     .required('Please enter your email address')
     .email('Incorrect email address')
-    .test('CHECK_EMAIL', 'This email is registered', async (value) => {
-      const { code, data } = await checkEmail({ email: value })
+    .test('CHECK_EMAIL', 'This email is registered', async value => {
+      const { code, data } = await checkEmail({ email: value || '' })
       if (code === 200 && data?.exist) {
         return false
       }
@@ -60,7 +60,7 @@ const validationSchema = yup.object({
     .trim()
     .required('Please enter your password')
     .min(8, 'Password should contain 8-16 characters')
-    .max(16, 'Password should contain 8-16 characters'),
+    .max(16, 'Password should contain 8-16 characters')
 })
 
 const Verify: React.FC = () => {
@@ -81,7 +81,7 @@ const Verify: React.FC = () => {
     const { code, data } = await runAsyncClaimCheck({
       accessToken,
       claimType: checked,
-      thirdpartId,
+      thirdpartId
     })
     if (code === 200) {
       setAccessToken(data?.accessToken ?? accessToken)
@@ -99,7 +99,7 @@ const Verify: React.FC = () => {
       return toast.error('Your account has been registered, please login')
     }
   }
-  const { linkedInLogin } = useLinkedInOauth(async (accessToken) => {
+  const { linkedInLogin } = useLinkedInOauth(async accessToken => {
     handleClaimCheck(accessToken)
   })
 
@@ -115,7 +115,7 @@ const Verify: React.FC = () => {
     linkedIn: '',
     twitter: '',
     name: '',
-    userType: 0,
+    userType: 0
   }
   const handleOauthVerify = async () => {
     if (checked === SocialPlatformType.Twitter) {
@@ -133,7 +133,7 @@ const Verify: React.FC = () => {
       password: md5(values.password.trim()),
       claimType: checked,
       thirdpartId,
-      userType: values.userType,
+      userType: values.userType
     })
     const { code, data } = res
     if (code !== 200) {
@@ -142,28 +142,28 @@ const Verify: React.FC = () => {
     setCacheLoginInfo({
       token: data?.token,
       userId: data?.userId,
-      userType: data?.userType,
+      userType: data?.userType
     })
     dispatch(
       saveLoginInfo({
         token: data?.token,
         userId: data?.userId,
-        userType: data?.userType,
-      }),
+        userType: data?.userType
+      })
     )
     if (data?.userType === USER_TYPE.USER) {
       dispatch(
         fetchUserInfo({
-          userId: data?.userId,
-        }),
+          userId: data?.userId
+        })
       )
     } else {
       dispatch(
         fetchCompanyInfo({
           companyId: data?.userId,
           thirdpartId: 0,
-          userId: data?.userId,
-        }),
+          userId: data?.userId
+        })
       )
     }
     show(DialogTips, {
@@ -178,15 +178,15 @@ const Verify: React.FC = () => {
       againBtn: 'Edit Now',
       onClose: () => router.push(`/company/summary?id=${data?.userId}`),
       onCancel: () => router.push(`/company/summary?id=${data?.userId}`),
-      onAgain: () => router.push('/company/edit'),
+      onAgain: () => router.push('/company/edit')
     })
   }
   useEffect(() => {
     if (companyData) {
-      const resulst = companyData?.list?.map((item) => ({
+      const resulst = companyData?.list?.map(item => ({
         label: item?.name,
         icon: item?.avatar,
-        value: item,
+        value: item
       }))
       setOptions(resulst)
     }
@@ -217,13 +217,13 @@ const Verify: React.FC = () => {
                       options={options}
                       loadingText="No result"
                       onChange={(_, value) => {
-                        const result = companyData?.list?.filter((item) => item.name === value)
+                        const result = companyData?.list?.filter(item => item.name === value)
                         setValues({
                           ...values,
                           linkedIn: result.length ? result?.[0]?.linkedin : '',
                           twitter: result.length ? result?.[0]?.twitter : '',
                           name: result.length ? result?.[0]?.name : '',
-                          userType: result.length ? result?.[0]?.userType : 0,
+                          userType: result.length ? result?.[0]?.userType : 0
                         })
                         setThirdpartId(result.length ? result?.[0]?.id : 0)
                         if (result?.[0]?.linkedin) {
@@ -234,13 +234,13 @@ const Verify: React.FC = () => {
                         }
                       }}
                       onSelect={(_, newValue) => {
-                        const result = companyData?.list?.filter((item) => item.id === newValue.value.id)
+                        const result = companyData?.list?.filter(item => item.id === newValue.value.id)
                         setValues({
                           ...values,
                           linkedIn: result?.[0]?.linkedin,
                           twitter: result?.[0]?.twitter,
                           name: result.length ? result?.[0]?.name : '',
-                          userType: result.length ? result?.[0]?.userType : 0,
+                          userType: result.length ? result?.[0]?.userType : 0
                         })
                         setThirdpartId(newValue.value?.id)
                         if (result?.[0]?.linkedin) {

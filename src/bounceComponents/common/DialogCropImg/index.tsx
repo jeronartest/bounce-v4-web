@@ -3,10 +3,10 @@ import React, { useState, useCallback, useRef } from 'react'
 import { Box, Typography, Dialog, styled } from '@mui/material'
 import { toast } from 'react-toastify'
 import Cropper from 'react-easy-crop'
-import { ReactComponent as CloseIcon } from '@/assets/imgs/user/close.svg'
-import { ReactComponent as UploadIcon } from '@/assets/imgs/profile/bg-upload.svg'
-import { uploader } from '@/api/upload'
-import { updateUserBanner } from '@/api/user/index'
+import { ReactComponent as CloseIcon } from 'assets/imgs/user/close.svg'
+import { ReactComponent as UploadIcon } from 'assets/imgs/profile/bg-upload.svg'
+import { uploader } from 'api/upload'
+import { updateUserBanner } from 'api/user/index'
 export interface ICropperViewProps {
   imgUrl: string | ArrayBuffer
   onCropComplete: (croppedArea: any, croppedAreaPixels: any) => void
@@ -32,7 +32,7 @@ const CropperView = (props: ICropperViewProps) => {
 export const DialogStyle = styled(Dialog)(() => ({
   '.MuiDialog-paper': {
     position: 'relative',
-    borderRadius: '20px',
+    borderRadius: '20px'
   },
   '.cancelBtn': {
     width: '140px',
@@ -43,7 +43,7 @@ export const DialogStyle = styled(Dialog)(() => ({
     borderRadius: `36px`,
     background: '#fff',
     cursor: 'pointer',
-    marginRight: '10px',
+    marginRight: '10px'
   },
   '.saveBtn': {
     width: '140px',
@@ -54,8 +54,8 @@ export const DialogStyle = styled(Dialog)(() => ({
     border: `1px solid #171717`,
     borderRadius: `36px`,
     color: '#fff',
-    cursor: 'pointer',
-  },
+    cursor: 'pointer'
+  }
 }))
 export interface ICropParams {
   height: number
@@ -75,7 +75,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
   setShowBgEditDialog,
   showBgEditCropDialog,
   setShowBgEditCropDialog,
-  setProfileBg,
+  setProfileBg
 }) => {
   const [profileBgBeforeSave, setProfileBgBeforeSave] = useState<ArrayBuffer | string>('')
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<ICropParams>(null)
@@ -91,11 +91,11 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
       if (fileData) {
         try {
           uploader({
-            file: fileData,
-          }).then((res) => {
+            file: fileData
+          }).then(res => {
             if (res) {
               const bannerPath = res.data.path
-              updateUserBanner({ banner: bannerPath }).then((res) => {
+              updateUserBanner({ banner: bannerPath }).then(res => {
                 if (res) {
                   setProfileBg(bannerPath)
                   clearBgimg()
@@ -110,7 +110,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
       }
     })
   }
-  const dataURLtoBlob = (dataurl) => {
+  const dataURLtoBlob = dataurl => {
     const arr = dataurl.split(',')
     const mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1])
@@ -144,7 +144,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
           0,
           0,
           croppedAreaPixels.width,
-          croppedAreaPixels.height,
+          croppedAreaPixels.height
         )
       const dataURL = canvas.toDataURL('image/jpeg')
       const blob = dataURLtoBlob(dataURL)
@@ -181,7 +181,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
           left: 0,
           width: '100%',
           background: '#fff',
-          zIndex: 2,
+          zIndex: 2
         }}
       >
         <CloseIcon
@@ -189,7 +189,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
             position: 'absolute',
             right: '20px',
             top: '20px',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
           onClick={() => {
             setProfileBgBeforeSave('')
@@ -203,7 +203,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
           height: '100%',
           borderRadius: '20px',
           overflowX: 'hidden',
-          overflowY: 'auto',
+          overflowY: 'auto'
         }}
       >
         <Box
@@ -213,7 +213,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
             width: '100%',
             height: 'calc(100% - 84px)',
             overflowY: 'auto',
-            padding: '44px 40px',
+            padding: '44px 40px'
           }}
         >
           {!profileBgBeforeSave && (
@@ -227,7 +227,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                 style={{
                   width: 0,
                   height: 0,
-                  overflow: 'hidden',
+                  overflow: 'hidden'
                 }}
               />
               <Typography
@@ -238,7 +238,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                   color: '#171717',
                   fontSize: '22px',
                   lineHeight: '28px',
-                  marginBottom: '60px',
+                  marginBottom: '60px'
                 }}
               >
                 Upload a cover photo
@@ -253,7 +253,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                   flexFlow: 'column nowrap',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 onClick={() => {
                   refFile?.current?.click()
@@ -261,7 +261,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
               >
                 <UploadIcon
                   style={{
-                    marginBottom: '14px',
+                    marginBottom: '14px'
                   }}
                 />
                 <Typography
@@ -272,7 +272,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                     fontSize: '16px',
                     lineHeight: '20px',
                     marginBottom: '16px',
-                    textDecoration: `underline`,
+                    textDecoration: `underline`
                   }}
                 >
                   Upload photo
@@ -287,7 +287,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                     lineHeight: '20px',
                     margin: '0 auto 16px',
                     opacity: 0.5,
-                    textAlign: 'center',
+                    textAlign: 'center'
                   }}
                 >
                   The recommended resolution is 1920 x 640. Format - JPG, WEBP, or PNG.
@@ -305,7 +305,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                   color: '#171717',
                   fontSize: '22px',
                   lineHeight: '28px',
-                  marginBottom: '8px',
+                  marginBottom: '8px'
                 }}
               >
                 Edit the cover photo
@@ -318,7 +318,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                   fontSize: '16px',
                   lineHeight: '20px',
                   marginBottom: '32px',
-                  opacity: 0.5,
+                  opacity: 0.5
                 }}
               >
                 The selected area will be shown on your page.
@@ -328,7 +328,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                   position: 'relative',
                   width: '100%',
                   height: '447px',
-                  marginBottom: '32px',
+                  marginBottom: '32px'
                 }}
               >
                 <CropperView imgUrl={profileBgBeforeSave} onCropComplete={onCropComplete} />
@@ -337,7 +337,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                 sx={{
                   display: 'flex',
                   flexFlow: 'row nowrap',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'flex-end'
                 }}
               >
                 <Box className="cancelBtn" onClick={() => clearBgimg()}>

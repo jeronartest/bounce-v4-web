@@ -3,7 +3,7 @@ import { Box, Button, Container, Stack, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styles from './styles'
-import GoBack from '@/components/common/GoBack'
+import GoBack from 'bounceComponents/common/GoBack'
 
 export const companyTabsList: ITabsListProps[] = [
   {

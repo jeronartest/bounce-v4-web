@@ -2,20 +2,20 @@ import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
-import { getCompanyInfo } from '@/api/company'
-import { getUserInfo } from '@/api/user'
-import { USER_TYPE } from '@/api/user/type'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
-import { CreatorUserInfo } from '@/api/pool/type'
-import { ReactComponent as TwitterSVG } from '@/assets/imgs/auction/twitter.svg'
-import { ReactComponent as InstagramSVG } from '@/assets/imgs/auction/instagram.svg'
-import { ReactComponent as WebsiteSVG } from '@/assets/imgs/auction/website.svg'
-import { ReactComponent as LinkedinSVG } from '@/assets/imgs/auction/linkedin.svg'
-import { ReactComponent as GithubSVG } from '@/assets/imgs/auction/github.svg'
-import { ReactComponent as EmailSVG } from '@/assets/imgs/auction/email.svg'
-import Tooltip from '@/components/common/Tooltip'
+import { getCompanyInfo } from 'api/company'
+import { getUserInfo } from 'api/user'
+import { USER_TYPE } from 'api/user/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { CreatorUserInfo } from 'api/pool/type'
+import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
+import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
+import { ReactComponent as WebsiteSVG } from 'assets/imgs/auction/website.svg'
+import { ReactComponent as LinkedinSVG } from 'assets/imgs/auction/linkedin.svg'
+import { ReactComponent as GithubSVG } from 'assets/imgs/auction/github.svg'
+import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
+import Tooltip from 'bounceComponents/common/Tooltip'
 import { RootState } from '@/store'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 interface ICreatorInfoCardProps {
   creatorUserInfo: CreatorUserInfo
@@ -66,7 +66,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
         flexDirection: 'column',
         alignItems: 'center',
         py: 28,
-        px: 24,
+        px: 24
       }}
     >
       <Avatar
@@ -96,7 +96,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
             textOverflow: 'ellipsis',
             display: '-webkit-box',
             '-webkitLineClamp': '3',
-            '-webkitBoxOrient': 'vertical',
+            '-webkitBoxOrient': 'vertical'
           }}
         >
           {userInfo?.description || userInfo?.briefIntro}

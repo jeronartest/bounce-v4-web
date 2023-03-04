@@ -1,9 +1,9 @@
 import React from 'react'
 import { show } from '@ebay/nice-modal-react'
 import InvestmentsForm from '../InvestmentsForm'
-import { IInvestmentItems } from '@/api/profile/type'
-import MuiDialog from '@/components/common/Dialog'
-import ProfileInvestmentsList from '@/components/profile/ProfileInvestmentsList'
+import { IInvestmentItems } from 'api/profile/type'
+import MuiDialog from 'bounceComponents/common/Dialog'
+import ProfileInvestmentsList from 'bounceComponents/profile/ProfileInvestmentsList'
 
 export type IInvestmentsListProps = {
   list: IInvestmentItems[]
@@ -12,11 +12,11 @@ export type IInvestmentsListProps = {
 }
 
 const InvestmentsList: React.FC<IInvestmentsListProps> = ({ list, onEdit, onDelete }) => {
-  const handleEdit = (v) => {
+  const handleEdit = v => {
     show(MuiDialog, {
       title: 'Edit the investment',
       fullWidth: true,
-      children: <InvestmentsForm editData={v} onEdit={onEdit} onDelete={onDelete} />,
+      children: <InvestmentsForm editData={v} onEdit={onEdit} onDelete={onDelete} />
     })
   }
 

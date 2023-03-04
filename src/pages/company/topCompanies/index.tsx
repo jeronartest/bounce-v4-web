@@ -1,28 +1,27 @@
 //  TopCompanies
 
 import { Button, OutlinedInput } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Stack } from '@mui/system'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
-import { toast } from 'react-toastify'
 import Head from 'next/head'
-import TopSearchLayout from '@/components/market/TopSearchLayout/idnex'
-import FormItem from '@/components/common/FormItem'
-import SearchInput, { ISearchOption } from '@/components/common/SearchInput'
-import { searchUser } from '@/api/optionsData'
-import DefaultAvaSVG from '@/assets/imgs/components/defaultAva.svg'
-import Companies from '@/components/market/components/Companies'
+import TopSearchLayout from 'bounceComponents/market/TopSearchLayout/idnex'
+import FormItem from 'bounceComponents/common/FormItem'
+// import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
+// import { searchUser } from 'api/optionsData'
+// import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+// import Companies from 'bounceComponents/market/components/Companies'
 
-export type ITopCompaniesProps = {}
+// export type ITopCompaniesProps = {}
 const validationSchema = yup.object({
-  user: yup.string(),
+  user: yup.string()
 })
-const TopCompanies: React.FC<ITopCompaniesProps> = ({}) => {
+const TopCompanies: React.FC = ({}) => {
   const [userName, setUserName] = useState<string>('')
 
   const initialValues = {
-    user: '',
+    user: ''
   }
 
   const handleSubmit = (values: typeof initialValues) => {
@@ -49,9 +48,9 @@ const TopCompanies: React.FC<ITopCompaniesProps> = ({}) => {
                   '.MuiOutlinedInput-root': {
                     background: 'var(--ps-black)',
                     border: '1px solid #484848',
-                    color: 'var(--ps-white)',
+                    color: 'var(--ps-white)'
                   },
-                  '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                  '.MuiOutlinedInput-notchedOutline': { border: 0 }
                 }}
               >
                 <OutlinedInput />
@@ -64,12 +63,12 @@ const TopCompanies: React.FC<ITopCompaniesProps> = ({}) => {
                     background: 'var(--ps-blue)',
                     color: 'var(--ps-white)',
                     '&:hover': {
-                      background: 'var(--ps-blue-50)',
+                      background: 'var(--ps-blue-50)'
                     },
                     '&:active': {
-                      background: 'var(--ps-blue-100)',
-                    },
-                  },
+                      background: 'var(--ps-blue-100)'
+                    }
+                  }
                 }}
               >
                 Search

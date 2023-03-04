@@ -1,8 +1,8 @@
 import { Avatar, Box } from '@mui/material'
 import React from 'react'
 import styles from './styles'
-import { ReactComponent as DefaultAvatar } from '@/assets/imgs/profile/default_avatar.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar.svg'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 interface IProfileAvatar {
   src: string

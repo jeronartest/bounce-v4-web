@@ -1,14 +1,14 @@
 import React from 'react'
 import { useCountDown } from 'ahooks'
 import { Box, Button, Typography } from '@mui/material'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const ClaimingCountdownButton = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: poolInfo.claimAt * 1000,
-    onEnd: getPoolInfo,
+    onEnd: getPoolInfo
   })
 
   return (
@@ -18,7 +18,7 @@ const ClaimingCountdownButton = () => {
           display: 'flex',
           justifyContent: countdown > 0 ? 'space-between' : 'center',
           alignItems: 'center',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Typography component="span">Claim Token</Typography>

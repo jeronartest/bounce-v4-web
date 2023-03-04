@@ -2,9 +2,9 @@ import { Box, Container, Stack, Typography } from '@mui/material'
 import Head from 'next/head'
 import React from 'react'
 
-export type IJobsProps = {}
+// export type IJobsProps = {}
 
-const Jobs: React.FC<IJobsProps> = ({}) => {
+const Jobs: React.FC = ({}) => {
   return (
     <section>
       <Head>

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { parseUnits } from 'ethers/lib/utils.js'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import useToken1Balance from '@/hooks/auction/useToken1Balance'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import useToken1Balance from 'bounceHooks/auction/useToken1Balance'
 
 const useIsBalanceInsufficient = (bidAmount: string) => {
   const { data: poolInfo } = usePoolInfo()

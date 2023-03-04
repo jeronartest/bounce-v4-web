@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
-import { ReactComponent as VectorSVG } from '@/assets/imgs/icon/vector.svg'
+import { ReactComponent as VectorSVG } from 'assets/imgs/icon/vector.svg'
 export type IMarketcardProps = {
   title: string
   imageUrl: string
@@ -24,8 +24,8 @@ const Marketcard: React.FC<IMarketcardProps> = ({ title, imageUrl, hover, handle
         cursor: hover && 'pointer',
         ':hover': hover && {
           boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-          'div:nth-child(3)': { visibility: 'visible' },
-        },
+          'div:nth-child(3)': { visibility: 'visible' }
+        }
       }}
     >
       <picture style={{ width: 40, height: 40, marginLeft: 20, marginRight: 10 }}>

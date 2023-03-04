@@ -10,9 +10,9 @@ import { ReactComponent as LogoSVG } from './logo.svg'
 import Search from './Search'
 import CreateBtn from './CreateBtn'
 import { RootState } from '@/store'
-import { useLogout } from '@/hooks/user/useLogin'
-import { USER_TYPE } from '@/api/user/type'
-import DefaultAvatarSVG from '@/assets/imgs/profile/yellow_avatar.svg'
+import { useLogout } from 'bounceHooks/user/useLogin'
+import { USER_TYPE } from 'api/user/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 
 const Header: React.FC = () => {
   const router = useRouter()
@@ -32,33 +32,33 @@ const Header: React.FC = () => {
       onClose={handleUserMenuClose}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'left',
+        horizontal: 'left'
       }}
       transformOrigin={{
         vertical: 'top',
-        horizontal: 'center',
+        horizontal: 'center'
       }}
       sx={{
         mt: 4,
         '& .MuiPopover-paper': {
           borderRadius: 20,
-          padding: '10px 0px',
+          padding: '10px 0px'
         },
         '& .MuiList-padding': {
           padding: '0px 0px 0px 0px',
           background: '#FFFFFF',
           boxShadow: 'none',
-          borderRadius: 20,
+          borderRadius: 20
         },
         '& .MuiMenuItem-gutters': {
-          padding: '10px 20px',
-        },
+          padding: '10px 20px'
+        }
       }}
     >
       <MenuItem
         onClick={() => {
           router.push(
-            Number(userType) === USER_TYPE.USER ? `/profile/summary?id=${userId}` : `/company/summary?id=${userId}`,
+            Number(userType) === USER_TYPE.USER ? `/profile/summary?id=${userId}` : `/company/summary?id=${userId}`
           )
           setAnchorEl(null)
         }}
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
                         height: 52,
                         padding: 0,
                         cursor: 'pointer',
-                        border: 0,
+                        border: 0
                       }}
                       onClick={handleUserClick}
                     />

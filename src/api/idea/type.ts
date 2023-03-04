@@ -1,6 +1,6 @@
 import { USER_TYPE } from '../user/type'
 import { VerifyStatus } from '../profile/type'
-import { IFile } from '@/components/common/Uploader'
+import { IFile } from 'bounceComponents/common/Uploader'
 
 export interface IUpdateIdeaParams {
   detail: string

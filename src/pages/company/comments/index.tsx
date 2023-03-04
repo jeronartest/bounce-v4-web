@@ -2,9 +2,9 @@ import { Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
-import CompanyOverviewLayout from '@/components/company/CompanyOverviewLayout'
-import { TopicType } from '@/api/user/type'
-import Comments from '@/components/common/Comments'
+import CompanyOverviewLayout from 'bounceComponents/company/CompanyOverviewLayout'
+import { TopicType } from 'api/user/type'
+import Comments from 'bounceComponents/common/Comments'
 import { RootState } from '@/store'
 
 const CompanyComments: React.FC = () => {
@@ -17,17 +17,17 @@ const CompanyComments: React.FC = () => {
     if (Number(thirdpartId)) {
       setCommentsParams({
         topicId: Number(thirdpartId),
-        topicType: TopicType.ThirdPartyCompany,
+        topicType: TopicType.ThirdPartyCompany
       })
     } else if (Number(id)) {
       setCommentsParams({
         topicId: Number(id),
-        topicType: TopicType.Company,
+        topicType: TopicType.Company
       })
     } else {
       setCommentsParams({
         topicId: companyInfo?.companyId,
-        topicType: TopicType.Company,
+        topicType: TopicType.Company
       })
     }
   }, [id, thirdpartId, companyInfo])

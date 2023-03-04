@@ -1,7 +1,7 @@
 import React from 'react'
 import PoolInfoItem from '../../PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/usePoolWithParticipantInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
 import { formatNumber } from '@/utils/web3/number'
 import { getUserSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
 
@@ -12,7 +12,7 @@ const BidAmountLimit = () => {
   const formatedMMaxAmount1PerWallet = poolInfo.maxAmount1PerWallet
     ? formatNumber(poolInfo.maxAmount1PerWallet, {
         unit: poolInfo.token1.decimals,
-        decimalPlaces: 6,
+        decimalPlaces: 6
       })
     : '-'
 
@@ -20,7 +20,7 @@ const BidAmountLimit = () => {
     poolWithParticipantInfo?.participant.swappedAmount0,
     poolInfo.token0.decimals,
     poolInfo.token1.decimals,
-    poolInfo.ratio,
+    poolInfo.ratio
   )
 
   const userSwappedUnits1 = getUserSwappedUnits1(userSwappedAmount1, poolInfo.token1.decimals)

@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
 import JoinStatus from '../JoinStatus'
-import usePoolInfo from '@/hooks/auction/usePoolInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const Header = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()

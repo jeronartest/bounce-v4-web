@@ -4,11 +4,11 @@ import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { useRouter } from 'next/router'
 import CompanyInvestmentsList from '../CompanyInvestmentsList'
-import { ICompanyInvestmentsListItems } from '@/api/company/type'
-import { IPager } from '@/api/type'
-import { getCompanyInvestments } from '@/api/company'
-import ViewMoreListBox from '@/components/company/ViewMoreListBox'
-import NoData from '@/components/common/NoData'
+import { ICompanyInvestmentsListItems } from 'api/company/type'
+import { IPager } from 'api/type'
+import { getCompanyInvestments } from 'api/company'
+import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
+import NoData from 'bounceComponents/common/NoData'
 
 export const InvestmentList: React.FC<{ list: ICompanyInvestmentsListItems[] }> = ({ list }) => {
   const router = useRouter()
@@ -56,22 +56,22 @@ const CompanyProfileInvestments: React.FC<ICompanyProfileInvestmentsProps> = ({ 
       const res = await getCompanyInvestments({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId,
+        companyId: targetCompanyId
       })
       return {
         total: res?.data?.total,
-        list: res?.data?.list,
+        list: res?.data?.list
       }
     },
     {
       defaultPageSize: ['ALL'].includes(type) ? 100 : 4,
       refreshDeps: [targetCompanyId],
-      ready: !!targetCompanyId,
-    },
+      ready: !!targetCompanyId
+    }
   )
 
   useEffect(() => {
-    data?.list?.length && setList((val) => [...val, ...data?.list])
+    data?.list?.length && setList(val => [...val, ...data?.list])
   }, [data?.list])
 
   const handleClick = useCallback(() => {

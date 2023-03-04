@@ -6,9 +6,9 @@ import { ReactComponent as LinkedInSVG } from '../../../../signup/assets/linkedI
 import { ReactComponent as TwitterSVG } from '../../../../signup/assets/twitter.svg'
 import { ReactComponent as GoogleSVG } from './BoxLayout/googleLog.svg'
 import BoxLayout from './BoxLayout/BoxLayout'
-import { useLinkedInOauth, useOauth } from '@/hooks/user/useLogin'
-import { ACCOUNT_TYPE } from '@/api/user/type'
-import { useBindThirdPart } from '@/hooks/user/useBindThirdPart'
+import { useLinkedInOauth, useOauth } from 'bounceHooks/user/useLogin'
+import { ACCOUNT_TYPE } from 'api/user/type'
+import { useBindThirdPart } from 'bounceHooks/user/useBindThirdPart'
 export type ILoginOptonProps = {
   googleEmail: string
   twitter: string
@@ -22,14 +22,14 @@ const LoginOpton: React.FC<ILoginOptonProps> = ({ googleEmail, twitter, linkedin
     const accessToken = await handleOauth(oauthName)
     run({
       accessToken: accessToken,
-      thirdpartType: oauthType,
+      thirdpartType: oauthType
     })
   }
   const { linkedInLogin } = useLinkedInOauth((accessToken, oauthType) =>
     run({
       accessToken: accessToken,
-      thirdpartType: oauthType,
-    }),
+      thirdpartType: oauthType
+    })
   )
   const handleThirdLinkedinOauth = async () => {
     linkedInLogin()

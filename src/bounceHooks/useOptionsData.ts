@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks'
 import { useDispatch } from 'react-redux'
-import { getOptionsData } from '@/api/optionsData'
+import { getOptionsData } from 'api/optionsData'
 
 export const useOptionsData = () => {
   const dispatch = useDispatch()

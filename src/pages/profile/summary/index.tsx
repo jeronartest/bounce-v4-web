@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { Box, Button } from '@mui/material'
-import ProfileOverviewLayout from '@/components/profile/ProfileOverviewLayout'
-import PersonalOverview from '@/components/profile/components/PersonalOverview'
+import ProfileOverviewLayout from 'bounceComponents/profile/ProfileOverviewLayout'
+import PersonalOverview from 'bounceComponents/profile/components/PersonalOverview'
 
-import ProfileInvestments from '@/components/profile/ProfileInvestments'
-import ProfileExperience from '@/components/profile/ProfileExperience'
-import ProfileEducation from '@/components/profile/ProfileEducation'
-import { getUserInfo } from '@/api/user'
+import ProfileInvestments from 'bounceComponents/profile/ProfileInvestments'
+import ProfileExperience from 'bounceComponents/profile/ProfileExperience'
+import ProfileEducation from 'bounceComponents/profile/ProfileEducation'
+import { getUserInfo } from 'api/user'
 import { RootState } from '@/store'
-import { IProfileUserInfo } from '@/api/user/type'
-import { ReactComponent as EditSVG } from '@/assets/imgs/companies/edit.svg'
-import Activitie from '@/components/profile/components/SummaryActivities'
+import { IProfileUserInfo } from 'api/user/type'
+import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
+import Activitie from 'bounceComponents/profile/components/SummaryActivities'
 
 const ProfileSummary: React.FC = () => {
   const [personalInfo, setPersonalInfo] = useState<IProfileUserInfo>()
@@ -48,8 +48,8 @@ const ProfileSummary: React.FC = () => {
             background: 'none',
             '&:hover': {
               background: 'none',
-              color: 'var(--ps-blue)',
-            },
+              color: 'var(--ps-blue)'
+            }
           }}
         >
           <EditSVG style={{ marginRight: 10 }} />

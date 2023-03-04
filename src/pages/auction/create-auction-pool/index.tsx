@@ -8,7 +8,7 @@ import {
   Select,
   FormHelperText,
   TextField,
-  InputAdornment,
+  InputAdornment
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -20,13 +20,13 @@ import { show } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
 
 import Head from 'next/head'
-import FormItem from '@/components/common/FormItem'
-import RoundedContainer from '@/components/create-auction-pool/RoundedContainer'
+import FormItem from 'bounceComponents/common/FormItem'
+import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
 import { CHAIN_NAMES, SupportedChainId } from '@/constants/web3/chains'
-import ConnectWalletDialog from '@/components/common/ConnectWalletDialog'
-import { userGetBindAddress } from '@/api/user'
-import { ReactComponent as RepeatSVG } from '@/assets/imgs/icon/repeat.svg'
-import useEagerConnect from '@/hooks/web3/useEagerConnect'
+import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
+import { userGetBindAddress } from 'api/user'
+import { ReactComponent as RepeatSVG } from 'assets/imgs/icon/repeat.svg'
+import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
 
 const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLessThan3?: boolean }) => (
   <>
@@ -45,11 +45,11 @@ const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLe
 )
 
 const validationSchema = Yup.object({
-  auctionType: Yup.string().required('Auction Type is required'),
+  auctionType: Yup.string().required('Auction Type is required')
 })
 
 const initialValues = {
-  auctionType: 'fixed-price',
+  auctionType: 'fixed-price'
 }
 
 const CreateAuctionPoolIntroPage = () => {
@@ -76,13 +76,13 @@ const CreateAuctionPoolIntroPage = () => {
     () => {
       return userGetBindAddress({
         limit: 100,
-        offset: 0,
+        offset: 0
       })
     },
-    { ready: isConnected },
+    { ready: isConnected }
   )
 
-  const isAddressReadyToCreatePool = !!userBindAddressData?.data.list.find((item) => item.address === account)
+  const isAddressReadyToCreatePool = !!userBindAddressData?.data.list.find(item => item.address === account)
 
   const isBoundAddressLessThan3 = userBindAddressData?.data ? userBindAddressData?.data.list.length < 3 : undefined
 
@@ -129,7 +129,7 @@ const CreateAuctionPoolIntroPage = () => {
                   <Select<SupportedChainId | string>
                     value={chain?.id || ''}
                     displayEmpty
-                    onChange={(event) => {
+                    onChange={event => {
                       // switchChain(Number(event.target.value))
                       // connect({ connector: metaMaskConnector })
                       if (isConnected) {
@@ -138,7 +138,7 @@ const CreateAuctionPoolIntroPage = () => {
                         show(ConnectWalletDialog)
                       }
                     }}
-                    renderValue={(value) => {
+                    renderValue={value => {
                       if (!value) {
                         return <em>Not Connected</em>
                       }
@@ -173,7 +173,7 @@ const CreateAuctionPoolIntroPage = () => {
                                   height: 26,
                                   color: '#2DAB50',
                                   background: '#E4FFEC',
-                                  borderRadius: 20,
+                                  borderRadius: 20
                                 }}
                               >
                                 Linked √
@@ -186,7 +186,7 @@ const CreateAuctionPoolIntroPage = () => {
                                   height: 26,
                                   color: '#F53030',
                                   background: '#FFF4F5',
-                                  borderRadius: 20,
+                                  borderRadius: 20
                                 }}
                               >
                                 Wrong X
@@ -200,7 +200,7 @@ const CreateAuctionPoolIntroPage = () => {
                               height: 26,
                               minWidth: 'unset',
                               color: '#2DAB50',
-                              background: '#D6DFF6',
+                              background: '#D6DFF6'
                             }}
                             onClick={() => {
                               show(ConnectWalletDialog)
@@ -210,7 +210,7 @@ const CreateAuctionPoolIntroPage = () => {
                           </Button>
                         </Box>
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
 
