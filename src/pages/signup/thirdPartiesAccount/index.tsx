@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import React from 'react'
-import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 import { Box, OutlinedInput } from '@mui/material'
@@ -11,6 +9,9 @@ import LoginLayout from 'bounceComponents/signup/LoginLayout'
 import { USER_TYPE } from 'api/user/type'
 import { useRegister } from 'bounceHooks/user/useRegister'
 import { checkEmail } from 'api/user'
+import { Link } from 'react-router-dom'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { routes } from 'constants/routes'
 
 // export type IThirdPartiesAccountProps = {}
 const validationSchema = yup.object({
@@ -20,7 +21,7 @@ const validationSchema = yup.object({
     .required('Please enter your email address')
     .email('Incorrect email address')
     .test('CHECK_EMAIL', 'This email is registered', async value => {
-      const { code, data } = await checkEmail({ email: value })
+      const { code, data } = await checkEmail({ email: value || '' })
       if (code === 200 && data?.exist) {
         return false
       }
@@ -35,8 +36,7 @@ const validationSchema = yup.object({
 })
 
 const ThirdPartiesAccount: React.FC = ({}) => {
-  const router = useRouter()
-  const { accessToken, oauthType } = router.query as any
+  const { accessToken, oauthType } = useQueryParams()
   const initialValues = {
     email: '',
     name: ''
@@ -47,14 +47,14 @@ const ThirdPartiesAccount: React.FC = ({}) => {
       name: values.name.trim(),
       email: values.email.trim(),
       password: '',
-      accessToken: accessToken,
+      accessToken: accessToken?.toString() || '',
       registerType: Number(oauthType),
       userType: USER_TYPE.USER
     })
   }
 
   return (
-    <LoginLayout title={'Create Individual Account'} subTitle={<Link href={'/login'}>Sign in</Link>}>
+    <LoginLayout title={'Create Individual Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {() => (
           <Box component={Form} noValidate>

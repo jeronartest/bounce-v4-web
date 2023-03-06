@@ -1,18 +1,11 @@
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
-
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { Box, Container, Stack, Typography, IconButton, Button, Skeleton } from '@mui/material'
-
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
-import Head from 'next/head'
 import styles from './styles'
 import { IProfileUserInfo, FollowListType } from 'api/user/type'
 import { ITabsListProps } from 'bounceComponents/profile/ProfileLayout'
 import ProfileAvatar from 'bounceComponents/profile/ProfileAvatar'
-import { RootState } from '@/store'
 import { ReactComponent as QRCodeSVG } from 'assets/imgs/profile/qr-code.svg'
 import { ReactComponent as ShareSVG } from 'assets/imgs/profile/share.svg'
 import { ReactComponent as EditIcon } from 'assets/imgs/profile/bg-edit.svg'
@@ -21,10 +14,15 @@ import { ReactComponent as UploadIcon } from 'assets/imgs/profile/bg-upload.svg'
 import CropImg from 'bounceComponents/common/DialogCropImg'
 import DialogFollowList, { FollowerItem } from 'bounceComponents/common/DialogFollowList'
 
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { getUserInfo, getUserFollowedCount, getUserFollow, getUserFollowUser } from 'api/user'
 // import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useUserInfo } from 'state/users/hooks'
+import { useLocation, Link } from 'react-router-dom'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { routes } from 'constants/routes'
 
 interface IProfileOverviewLayout {
   children?: React.ReactNode
@@ -37,17 +35,16 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
   const [openFollow, setOpenFollow] = useState<boolean>(false)
   const [followersData, setFollowersData] = useState<Array<FollowerItem>>([])
   const [followingData, setFollowingData] = useState<Array<FollowerItem>>([])
-  const { userInfo, userId } = useSelector((state: RootState) => state.user)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const { userInfo, userId, token } = useUserInfo()
+  const optionDatas = useOptionDatas()
   const [tabIndex, setTabIndex] = useState<number>(0) // tabIndex 0 following-list 1 followers-list
-  const router = useRouter()
+  const { pathname, search } = useLocation()
   const [isFolloing, setIsFollowing] = useState<boolean>(false)
-  const { id } = router.query
+  const { id } = useQueryParams()
   const [showBgEditBtn, setShowBgEditBtn] = useState(false)
   const [showBgEditDialog, setShowBgEditDialog] = useState(false)
   const [showBgEditCropDialog, setShowBgEditCropDialog] = useState(false)
   const [profileBg, setProfileBg] = useState('/imgs/profile/banner1.png')
-  const token = useSelector((state: RootState) => state.user.token)
   const isLoginUser = useMemo(() => {
     return Number(userId) === Number(id)
   }, [userId, id])
@@ -78,7 +75,7 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
   }, [id, isLoginUser, userId, userInfo])
 
   const refreshCount = useCallback(async () => {
-    const params = { userId }
+    const params: { [key in string]: number } = { userId: Number(userId) }
     id && (params.userId = Number(id))
     for (const key in params) {
       if (!params[key]) {
@@ -103,27 +100,28 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
       {
         labelKey: 'summary',
         label: 'Summary',
-        href: '/profile/summary'
+        href: routes.profile.summary
       },
       {
         labelKey: 'portfolio',
         label: 'Portfolio',
-        href: '/profile/portfolio'
+        href: routes.profile.portfolio
       },
       {
         labelKey: 'activities',
         label: 'Activities',
-        href: '/profile/activities'
+        href: routes.profile.activities
       }
     ],
     []
   )
-  const hasActive = (path: string) => {
-    return router.asPath.indexOf(path) > -1
+  const hasActive = (path: string | undefined) => {
+    if (!path) return false
+    return pathname.indexOf(path) > -1
   }
   const copyShare = () => {
     const baseUrl = process.env.REACT_APP_SHARE_BASEURL
-    return baseUrl + `/profile/summary?id=${router?.query?.id || userId}`
+    return baseUrl + `${routes.profile.summary}?id=${id || userId}`
 
     // if (router.asPath?.indexOf('id') > -1) {
     //   return baseUrl + `/profile/summary?id=${router?.query?.id}`
@@ -173,11 +171,6 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
 
   return (
     <>
-      <Head>
-        <title>Profile | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <Container maxWidth="xl" sx={{ position: 'relative', mb: 80 }}>
         <Box sx={{ height: 448 }}>
           <picture
@@ -291,13 +284,15 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
                 ) : (
                   <ProfileAvatar src={personalInfo?.avatar?.fileThumbnailUrl || personalInfo?.avatar?.fileUrl} />
                 )}
-                <VerifiedIcon
-                  isVerify={personalInfo?.isVerify}
-                  width={42}
-                  height={42}
-                  showVerify={personalInfo?.id === userId}
-                  sx={{ position: 'absolute', right: -28, bottom: 0 }}
-                />
+                {personalInfo?.isVerify && (
+                  <VerifiedIcon
+                    isVerify={personalInfo.isVerify}
+                    width={42}
+                    height={42}
+                    showVerify={personalInfo?.id === userId}
+                    sx={{ position: 'absolute', right: -28, bottom: 0 }}
+                  />
+                )}
               </Box>
               <Box sx={{ width: '100%', ml: 48 }}>
                 <Stack direction={'row'} justifyContent="space-between" alignItems={'center'}>
@@ -389,14 +384,9 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
                     <Typography
                       variant="h4"
                       key={item.labelKey}
-                      sx={{ ...styles.menu, ...(hasActive(item.href) ? styles.menuActive : ({} as any)) }}
+                      sx={{ ...styles.menu, ...(hasActive(item?.href) ? styles.menuActive : ({} as any)) }}
                     >
-                      <Link
-                        href={`${item.href}${
-                          router?.asPath?.split('?')?.[1] ? '?' + router?.asPath?.split('?')?.[1] : ''
-                        }`}
-                        legacyBehavior
-                      >
+                      <Link to={`${item.href}${search.split('?')?.[1] ? '?' + search.split('?')?.[1] : ''}`}>
                         {item.label}
                       </Link>
                     </Typography>
@@ -410,7 +400,7 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
         </Box>
         {/* following & follower list */}
         <DialogFollowList
-          userId={userId}
+          userId={userId ? Number(userId) : undefined}
           setIsFollowing={setIsFollowing}
           setOpenFollow={setOpenFollow}
           openFollow={openFollow}

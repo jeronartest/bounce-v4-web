@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import EditCancelConfirmation from '../components/EditCancelConfirmation'
 import Add from './components/Add'
 import InvestmentsForm from './components/InvestmentsForm'
@@ -10,11 +8,13 @@ import InvestmentsList from './components/InvestmentsList'
 import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { useGetBasicInvestments } from 'bounceHooks/profile/useGetBasicInvestments'
-import { RootState } from '@/store'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
 import { IInvestmentItems, IupdateBasicParams } from 'api/profile/type'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IBasicInvestmentsProps = {
   firstEdit?: boolean
@@ -27,8 +27,8 @@ const add_text = {
 }
 
 const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicProfileValues }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
 
   const { data, runAsync: runGetBasicInvestments } = useGetBasicInvestments()
   const { runAsync: runUpdateBasic } = useUpdateBasic()
@@ -58,7 +58,7 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
   }, [firstEdit])
 
   const addList = useCallback(
-    data => {
+    (data: IInvestmentItems) => {
       setlist([...list, data])
       setFormDirty(true)
     },
@@ -66,7 +66,7 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
   )
 
   const editList = useCallback(
-    (v, i) => {
+    (v: IInvestmentItems, i: number) => {
       const temp = [...list]
       temp.splice(i, 1, v)
       setlist(temp)
@@ -102,16 +102,17 @@ const BasicInvestments: React.FC<IBasicInvestmentsProps> = ({ firstEdit, basicPr
             iconType: 'success',
             cancelBtn: 'Skip',
             againBtn: 'Complete Now',
-            onCancel: () => router.push('/profile/summary'),
-            onAgain: () => router.push('/profile/resume')
+            onCancel: () => navigate(routes.profile.summary),
+            onAgain: () => navigate(routes.profile.resume.resume)
           })
         })
       }
       runUpdateBasic({ invest: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => {
         setFormDirty(false)
       })
+      return
     },
-    [list, runUpdateBasic, firstEdit, basicProfileValues, router]
+    [firstEdit, runUpdateBasic, list, basicProfileValues, navigate]
   )
 
   const deleteList = useCallback(

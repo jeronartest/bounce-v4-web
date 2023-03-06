@@ -13,20 +13,19 @@ import {
 import { Form, Formik } from 'formik'
 import React, { useMemo } from 'react'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
-import Head from 'next/head'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useOptionsData } from 'bounceHooks/useOptionsData'
-import { RootState } from '@/store'
+import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
 import { FormType, IUpdatePersonalParams } from 'api/profile/type'
 import { ResumeActionType } from 'bounceComponents/profile/components/ResumeContextProvider'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 interface ICheckboxList {
   label: string
@@ -39,7 +38,7 @@ interface ICheckboxItemsProps {
   sx?: any
 }
 
-const CheckboxItems: React.FC<ICheckboxItemsProps> = ({ listItem, value, onChange, sx }) => {
+const CheckboxItems: React.FC<ICheckboxItemsProps> = ({ listItem, value, onChange }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const _value = Number(event.target.value)
     const _checked = event.target.checked
@@ -118,11 +117,11 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
   firstEdit,
   resumeProfileDispatch
 }) => {
-  const { optionsData } = useOptionsData()
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const { optionsData } = useGetOptionsData()
+  const { userInfo } = useUserInfo()
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
-  const initialValues = {
+  const initialValues: Partial<IUpdatePersonalParams> = {
     currentState: resumeProfileValues?.currentState || userInfo?.currentState || 'Active',
     jobTypes: resumeProfileValues?.jobTypes || userInfo?.jobTypes || [],
     ifRemotely: resumeProfileValues?.ifRemotely || userInfo?.ifRemotely || '',
@@ -132,8 +131,8 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
     careJobs: resumeProfileValues?.careJobs || userInfo?.careJobs || []
   }
 
-  const handleSubmit = values => {
-    if (firstEdit) {
+  const handleSubmit = (values: Partial<IUpdatePersonalParams>) => {
+    if (firstEdit && resumeProfileDispatch) {
       return resumeProfileDispatch({
         type: ResumeActionType.SetPreference,
         payload: {
@@ -144,10 +143,14 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
       })
     }
     runPersonalResume({ ...values, desiredSalary: values?.desiredSalary?.trim() })
+    return
   }
 
   const jobCheckboxList = useMemo(() => {
-    const _list = []
+    const _list: {
+      label: string
+      value: number
+    }[] = []
     optionsData?.data?.jobCareOpt.map(item => {
       const temp = {
         label: item.jobCare,
@@ -167,7 +170,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
     >
       {({ values, setFieldValue, dirty, resetForm }) => (
         <Stack component={Form} spacing={20} noValidate>
-          <LeavePageWarn dirty={dirty || (firstEdit && resumeProfileValues?.activeStep !== 4)} />
+          <LeavePageWarn dirty={dirty || !!(firstEdit && resumeProfileValues?.activeStep !== 4)} />
           {firstEdit && (
             <Typography variant="h2" mb={20}>
               Your preferences
@@ -233,7 +236,7 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
           <FormItem name="careJobs" label="" fieldType="custom" required style={{ marginTop: 9 }}>
             <CheckboxItems
               listItem={jobCheckboxList}
-              value={values.careJobs}
+              value={values.careJobs || []}
               onChange={job => {
                 setFieldValue('careJobs', job)
               }}
@@ -262,18 +265,13 @@ export const PreferenceItems: React.FC<IPreferenceItemsProps> = ({
 }
 
 const PreferenceItemsPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
+  const { userId } = useUserInfo()
   const goBack = () => {
-    router.push(`/profile/portfolio?id=${userId}`)
+    navigate(`${routes.profile.portfolio}?id=${userId}`)
   }
   return (
     <section>
-      <Head>
-        <title>Edit Portfolio | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <EditLayout tabsList={resumeTabsList} title="Edit portfolio" goBack={goBack}>
         <PreferenceItems />
       </EditLayout>

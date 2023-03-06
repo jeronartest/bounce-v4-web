@@ -1,5 +1,5 @@
 import { IconButton, Tooltip } from '@mui/material'
-import Image from 'next/image'
+import Image from 'components/Image'
 import React, { useEffect, useState } from 'react'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import CopySVG from './assets/copy.svg'
@@ -20,7 +20,7 @@ const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children }) =>
     }
   }, [copied])
   return (
-    <div onClick={(ev) => ev.preventDefault()}>
+    <div onClick={ev => ev.preventDefault()}>
       <ReactCopyToClipboard
         text={text}
         onCopy={() => {

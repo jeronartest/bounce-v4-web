@@ -1,9 +1,7 @@
 import { Box, Grid, IconButton, Link, Stack, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import countries from 'i18n-iso-countries'
 import english from 'i18n-iso-countries/langs/en.json'
-import { useRouter } from 'next/router'
 import { ExperienctAndSkill } from '../PortfolioPreference'
 import { ReactComponent as EmailSVG } from './assets/email.svg'
 import { ReactComponent as TwitterIconSVG } from './assets/twitter.svg'
@@ -13,11 +11,11 @@ import { ReactComponent as LinkedinSVG } from './assets/linkedin.svg'
 import { ReactComponent as GithubSVG } from './assets/github.svg'
 import ClockSVG from './assets/clock.svg'
 import styles from './styles'
-import { RootState } from '@/store'
-import { getLabel, getPrimaryRoleLabel } from '@/utils'
+import { getPrimaryRoleLabel } from 'utils'
 import { IProfileUserInfo } from 'api/user/type'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 countries.registerLocale(english)
 
@@ -28,11 +26,7 @@ interface IPersonalOverview {
 }
 
 const PersonalOverview: React.FC<IPersonalOverview> = ({ personalInfo }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-
-  const router = useRouter()
-  const { id } = router.query
+  const optionDatas = useOptionDatas()
   const linkIcon = useMemo(
     () => [
       {

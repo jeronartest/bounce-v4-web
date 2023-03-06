@@ -2,7 +2,6 @@ import { Avatar, Box, Button, IconButton, Paper, Stack, Typography } from '@mui/
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import { useRouter } from 'next/router'
 import ProjectCardSvg from '../common/ProjectCardSvg'
 import LikeUnlike from '../common/LikeUnlike'
 import VerifiedIcon from '../common/VerifiedIcon'
@@ -10,9 +9,11 @@ import { ReactComponent as CommentSVG } from 'assets/imgs/comment.svg'
 import { ReactComponent as EditSVG } from 'assets/imgs/components/edit.svg'
 import { ILikeUnlikeRes } from 'api/idea/type'
 import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar_ideas.svg'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { RootState } from '@/store'
 import { VerifyStatus } from 'api/profile/type'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IInstitutionCardProps = {
   icon: string
@@ -41,7 +42,6 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   isVerify,
   likeAmount,
   isEdit,
-  refresh,
   companyState,
   startup,
   objId,
@@ -53,9 +53,9 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   commentCount
 }) => {
   const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
-  const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes>(likeAmount)
-  const getPublicPoleLable = publicRoleId => {
+  const navigate = useNavigate()
+  const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes | undefined>(likeAmount)
+  const getPublicPoleLable = (publicRoleId: number) => {
     return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)
   }
   const hasRole = useMemo(() => {
@@ -121,14 +121,14 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
             >
               {title}
             </Typography>
-            <VerifiedIcon isVerify={isVerify} />
+            {isVerify !== undefined && <VerifiedIcon isVerify={isVerify} />}
           </Stack>
 
           {isEdit && (
             <IconButton
               onClick={e => {
                 e.preventDefault()
-                router.push(`/idea/create?id=${objId}`)
+                navigate(`${routes.idea.create}?id=${objId}`)
               }}
             >
               <EditSVG />
@@ -218,14 +218,16 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
 
         {likeAmount && (
           <Box justifyContent={'space-between'} display={'flex'} mt={10}>
-            <LikeUnlike
-              likeObj={isTopCompanies ? 2 : 3}
-              objId={objId}
-              likeAmount={initLikeAmount}
-              onSuccess={res => {
-                setInitLikeAmount(res)
-              }}
-            />
+            {objId !== undefined && initLikeAmount !== undefined && (
+              <LikeUnlike
+                likeObj={isTopCompanies ? 2 : 3}
+                objId={objId}
+                likeAmount={initLikeAmount}
+                onSuccess={res => {
+                  setInitLikeAmount(res)
+                }}
+              />
+            )}
             <Button
               sx={{
                 height: 32,

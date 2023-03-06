@@ -1,14 +1,13 @@
 import { Stack } from '@mui/system'
 import React from 'react'
-import { toast } from 'react-toastify'
 import SettingsBox from '../../SettingsBox'
 import { ReactComponent as LinkedInSVG } from '../../../../signup/assets/linkedIn.svg'
 import { ReactComponent as TwitterSVG } from '../../../../signup/assets/twitter.svg'
 import { ReactComponent as GoogleSVG } from './BoxLayout/googleLog.svg'
 import BoxLayout from './BoxLayout/BoxLayout'
-import { useLinkedInOauth, useOauth } from 'bounceHooks/user/useLogin'
 import { ACCOUNT_TYPE } from 'api/user/type'
 import { useBindThirdPart } from 'bounceHooks/user/useBindThirdPart'
+import { useLinkedInOauth, useOauth } from 'state/users/hooks'
 export type ILoginOptonProps = {
   googleEmail: string
   twitter: string

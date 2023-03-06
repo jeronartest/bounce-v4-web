@@ -1,11 +1,9 @@
 import { Stack, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import ProfileInvestmentsList from '../ProfileInvestmentsList'
 import { IInvestmentItems } from 'api/profile/type'
-import { RootState } from '@/store'
 import { IPager } from 'api/type'
 import { getBasicInvestments } from 'api/profile'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
@@ -50,7 +48,12 @@ const ProfileInvestments: React.FC<IProfileInvestmentsProps> = ({ personalInfoId
   }, [pagination])
 
   return (
-    <ViewMoreListBox show={list?.length < data?.total} title="Investments" loading={loading} handleClick={handleClick}>
+    <ViewMoreListBox
+      show={list?.length < (data?.total || 0)}
+      title="Investments"
+      loading={loading}
+      handleClick={handleClick}
+    >
       {list?.length ? (
         <Stack spacing={16}>
           <Stack direction="row" justifyContent="space-between" color="var(--ps-gray-700)">

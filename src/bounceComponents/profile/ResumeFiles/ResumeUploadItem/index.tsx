@@ -8,7 +8,7 @@ import styles from 'bounceComponents/common/UploadCard/styles'
 import { ReactComponent as AddSVG } from 'bounceComponents/common/UploadCard/assets/add.svg'
 import Uploader from 'bounceComponents/common/Uploader'
 import type { IFile } from 'bounceComponents/common/Uploader'
-import { getfilesize } from '@/utils'
+import { getfilesize } from 'utils'
 
 export const IMAGE_FILES: string[] = [
   'image/png',
@@ -16,7 +16,7 @@ export const IMAGE_FILES: string[] = [
   'image/jp2', // .jpeg200
   'image/jpm', // .jpeg200
   'image/gif',
-  'image/webp',
+  'image/webp'
 ]
 
 export type IUploadItemProps = {
@@ -32,13 +32,14 @@ export type IUploadItemProps = {
 const ResumeUploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onChange, onRemove, sx, tips }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const getFileIcon = () => {
+    if (!value) return null
     if (value.fileType === 'application/pdf') {
       return <PdfSVG />
     }
     if (value.fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
       return <PPTSVG />
     }
-    if (IMAGE_FILES.includes(value.fileType)) {
+    if (value.fileType && IMAGE_FILES.includes(value.fileType)) {
       return (
         <picture>
           <img
@@ -69,7 +70,7 @@ const ResumeUploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     textOverflow: 'ellipsis',
-                    mb: 12,
+                    mb: 12
                   }}
                 >
                   {value.fileName}
@@ -131,8 +132,8 @@ const ResumeUploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize
           ...sx,
 
           '&>div:first-of-type': {
-            display: 'block',
-          },
+            display: 'block'
+          }
         }}
         style={{ width: 355, height: 84 }}
       >
@@ -142,11 +143,11 @@ const ResumeUploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize
           tips={tips}
           limitSize={limitSize}
           disabled={loading}
-          onBefore={(files) => {
+          onBefore={files => {
             setLoading(true)
             return Promise.resolve(files)
           }}
-          onSuccess={(file) => {
+          onSuccess={file => {
             onChange?.(file)
             setLoading(false)
           }}

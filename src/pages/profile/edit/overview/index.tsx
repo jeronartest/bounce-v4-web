@@ -2,14 +2,10 @@ import { Box, Button, ListSubheader, MenuItem, OutlinedInput, Select, Stack, Typ
 import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
 import styles from './styles'
 import FormItem from 'bounceComponents/common/FormItem'
-import { RootState } from '@/store'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import LocationTimeZone, { timezone } from 'bounceComponents/common/LocationTimeZone'
@@ -21,9 +17,13 @@ import { ActionType } from 'bounceComponents/profile/components/BasicContextProv
 import { FormType, IupdateBasicParams } from 'api/profile/type'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const DESCRIPTION_LENGTH = 350
 
@@ -74,8 +74,8 @@ export interface IEditProps {
 }
 
 export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDispatch, basicProfileValues }) => {
-  const optionDatas = useSelector((state: RootState) => state.configOptions.optionDatas)
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const optionDatas = useOptionDatas()
+  const { userInfo } = useUserInfo()
   const [eduOptions, setEduOptions] = useState<ISearchOption[]>([])
   const [searchText, setSearchText] = useState<string>('')
   const [companyOptions, setCompanyOptions] = useState<ISearchOption[]>([])
@@ -96,7 +96,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
         toast.error('search error')
       }
       setEduOptions(
-        data.list.map(v => {
+        data.list.map((v: { name: any; avatar: any }) => {
           return {
             label: v.name,
             icon: v.avatar || EducationDefaultSVG,
@@ -118,7 +118,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
         toast.error('search error')
       }
       setCompanyOptions(
-        data.list.map(v => {
+        data.list.map((v: { name: any; avatar: any }) => {
           return {
             label: v.name,
             icon: v.avatar || CompanyDefaultSVG,
@@ -165,7 +165,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
       }
   }
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: any) => {
     if (firstEdit) {
       return basicProfileDispatch?.({
         type: ActionType.SetIntro,
@@ -187,7 +187,7 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
       {({ values, setFieldValue, dirty }) => {
         return (
           <Stack component={Form} spacing={20} noValidate>
-            <LeavePageWarn dirty={dirty || (firstEdit && basicProfileValues?.activeStep !== 3)} />
+            <LeavePageWarn dirty={dirty || !!(firstEdit && basicProfileValues?.activeStep !== 3)} />
             {firstEdit && <Typography variant="h2">Tell us about yourself</Typography>}
             {!firstEdit && (
               <FormItem
@@ -336,18 +336,13 @@ export const BasicOverview: React.FC<IEditProps> = ({ firstEdit, basicProfileDis
 }
 
 const BasicOverviewPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
+  const { userId } = useUserInfo()
   const goBack = () => {
-    router.push(`/profile/summary?id=${userId}`)
+    navigate(`${routes.profile.summary}?id=${userId}`)
   }
   return (
     <section>
-      <Head>
-        <title>Edit Summary | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <EditLayout tabsList={profileTabsList} title="Edit summary" goBack={goBack}>
         <BasicOverview />
       </EditLayout>

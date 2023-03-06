@@ -6,6 +6,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { CurrencyAmount, Percent } from '../constants/token/fractions'
 import JSBI from 'jsbi'
 import { ChainId, SUPPORTED_NETWORKS } from '../constants/chain'
+import { FormType } from 'api/profile/type'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -179,4 +180,44 @@ export function isSocialUrl(name: 'discord' | 'twitter' | 'github' | 'opensea' |
 
 export function getCurrentTimeStamp(date?: Date | string | number) {
   return Number(((date ? new Date(date) : new Date()).getTime() / 1000).toFixed())
+}
+
+export const getLabel = (id: number | string, key: string, list: any[]) => {
+  if (!id || !key || !list?.length) return ''
+  const item = list.find(v => Number(v.id) === Number(id))
+  return item ? item[key] : ''
+}
+
+export const formCheckValid = (label: string, type: FormType, text?: string | '') => {
+  if (type === FormType.Custom) {
+    return text
+  }
+  if (type === FormType.Input) {
+    return `Please enter your ${label.toLocaleLowerCase()}`
+  }
+  if (type === FormType.Select) {
+    return `Please select your ${label.toLocaleLowerCase()}`
+  }
+  return text
+}
+
+export const getPrimaryRoleLabel = (id: number | string, list: any[]) => {
+  if (!id || !list?.length) return ''
+  const temp: any[] = []
+  list.map(v => {
+    temp.push(...v?.child)
+  })
+  if (!temp.length) return ''
+  return getLabel(id, 'level2Name', temp)
+}
+
+export const getfilesize = (size: number): string => {
+  if (!size) return '0KB'
+  const num = 1024 //byte
+  if (size < num) return size + 'B'
+  if (size < Math.pow(num, 2)) return (size / num).toFixed(0) + 'KB' //kb
+  if (size < Math.pow(num, 3)) return (size / Math.pow(num, 2)).toFixed(0) + 'MB' //M
+  if (size < Math.pow(num, 4)) return (size / Math.pow(num, 3)).toFixed(0) + 'GB' //G
+  if (size < Math.pow(num, 5)) return (size / Math.pow(num, 4)).toFixed(0) + 'TB' //T
+  return size + 'B'
 }

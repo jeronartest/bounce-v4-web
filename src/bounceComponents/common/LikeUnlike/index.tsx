@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { toast } from 'react-toastify'
 import styles from './styles'
 import { ReactComponent as LikeSVG } from 'assets/imgs/like.svg'
@@ -19,7 +19,7 @@ export interface ILikeUnlikeProps {
 const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, onSuccess, likeSx, unlikeSx }) => {
   const { postLike } = useLike()
 
-  const postLikeStatus = async (likeType: LIKE_TYPE) => {
+  const postLikeStatus = async (likeType: LIKE_TYPE): Promise<any> => {
     try {
       const res = await postLike({
         likeType: likeType,
@@ -27,7 +27,7 @@ const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, on
         objId
       })
       onSuccess?.(res?.data)
-    } catch (err) {
+    } catch (err: any) {
       if (err?.code === 20000) {
         return toast.error('Please login first!')
       }

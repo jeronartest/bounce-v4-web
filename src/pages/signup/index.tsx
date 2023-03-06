@@ -8,6 +8,7 @@ import SignupLayout from 'bounceComponents/signup/SignupLayout'
 import PaperBox from 'bounceComponents/signup/PaperBox'
 import SelectCard from 'bounceComponents/signup/SelectCard'
 import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const SignUp: React.FC = ({}) => {
   const navigate = useNavigate()
@@ -24,14 +25,14 @@ const SignUp: React.FC = ({}) => {
               <SelectCard
                 icon={<AccountSVG />}
                 title={'Individual Account'}
-                path="/signup/account"
+                path={routes.signup.account}
                 description={'Individual Investor, DeFi User, Freelancer, Project Founder etc'}
                 buttonText="Continue"
               />
               <SelectCard
                 icon={<CompanttSVG />}
                 title={'Company Account'}
-                path="/signup/company"
+                path={routes.signup.company}
                 description={
                   'Serving all stages of commercial ventures, from early stage startups to more established businesses and projects.'
                 }
@@ -46,7 +47,7 @@ const SignUp: React.FC = ({}) => {
                     (Invited Only)
                   </>
                 }
-                path="/signup/institutions"
+                path={routes.signup.institutions}
                 description={'Insurance Companies, Funds, Endowments, Commercial Trusts, Banks and more'}
                 buttonText="Continue"
               />
@@ -59,7 +60,7 @@ const SignUp: React.FC = ({}) => {
                 variant="body1"
                 color="#2663FF"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => navigate('/verify')}
+                onClick={() => navigate(routes.verify)}
               >
                 Verify your account
               </Typography>

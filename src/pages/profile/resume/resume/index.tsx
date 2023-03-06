@@ -3,17 +3,16 @@ import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { LoadingButton } from '@mui/lab'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
 import FormItem from 'bounceComponents/common/FormItem'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
-import { RootState } from '@/store'
 import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
 import ResumeUpload from 'bounceComponents/profile/ResumeFiles/ResumeUpload'
 import { IUpdatePersonalParams } from 'api/profile/type'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const validationSchema = yup.object({
   resumes: yup.array().of(
@@ -34,8 +33,8 @@ export type IResumeFilesProps = {
 }
 
 export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProfileValues }) => {
-  const { userInfo } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
+  const { userInfo } = useUserInfo()
+  const navigate = useNavigate()
   const [formDirty, setFormDirty] = useState<boolean>(false)
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
   }
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
-  const handleSubmit = (values, e) => {
+  const handleSubmit = (values: { resumes: any }, e: { resetForm: () => void }) => {
     setFormDirty(false)
     if (firstEdit) {
       return runPersonalResume?.({
@@ -57,10 +56,11 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
         resumes: values.resumes
       }).then(() => {
         e?.resetForm()
-        router.push('/profile/portfolio')
+        navigate(routes.profile.portfolio)
       })
     }
     runPersonalResume(values)
+    return
   }
 
   return (
@@ -82,7 +82,7 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ values, setFieldValue, dirty, resetForm }) => {
+        {({ values, setFieldValue, resetForm }) => {
           return (
             <Stack component={Form} spacing={20} noValidate>
               <LeavePageWarn dirty={formDirty} />
@@ -133,19 +133,13 @@ export const ResumeFiles: React.FC<IResumeFilesProps> = ({ firstEdit, resumeProf
 }
 
 const ResumeFilesPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
   const goBack = () => {
-    router.push(`/profile/portfolio?id=${userId}`)
+    navigate(`${routes.profile.portfolio}?id=${userId}`)
   }
   return (
     <section>
-      <Head>
-        <title>Edit Portfolio | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <EditLayout tabsList={resumeTabsList} title="Edit portfolio" goBack={goBack}>
         <ResumeFiles />
       </EditLayout>

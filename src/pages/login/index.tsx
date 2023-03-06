@@ -65,7 +65,7 @@ const Login: React.FC = () => {
   }
   return (
     <section>
-      <LoginLayout title={'Login'} subTitle={<Link to={routes.signup}>Sign up</Link>}>
+      <LoginLayout title={'Login'} subTitle={<Link to={routes.signup.index}>Sign up</Link>}>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           {() => (
             <Box component={Form}>

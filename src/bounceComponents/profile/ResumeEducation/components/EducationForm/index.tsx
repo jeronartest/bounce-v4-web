@@ -5,18 +5,17 @@ import * as yup from 'yup'
 import { Button, Grid, MenuItem, OutlinedInput, Select, Typography } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
 import moment from 'moment'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
-import { RootState } from '@/store'
 import { searchEduInfo } from 'api/optionsData'
 import { educationItems, FormType } from 'api/profile/type'
-import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+// import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IEducationFormProps = {
   onAdd?: (data: educationItems) => void
@@ -50,7 +49,7 @@ const validationSchema = yup.object({
       }
       return true
     })
-    .test('CHECK_CURRENTLY', formCheckValid('End Date', FormType.Select), (value, ctx) => {
+    .test('CHECK_CURRENTLY', formCheckValid('End Date', FormType.Select) || '', (value, ctx) => {
       if (!ctx?.parent?.isCurrently && !value) {
         return false
       }
@@ -66,7 +65,7 @@ const validationSchema = yup.object({
 
 const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -96,7 +95,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -126,7 +125,7 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
         toast.error('search error')
       }
       setEduOptions(
-        data.list.map(v => {
+        data.list.map((v: { name: any; avatar: any }) => {
           return {
             label: v.name,
             icon: v.avatar || EducationDefaultSVG,
@@ -241,6 +240,6 @@ const EducationForm: React.FC<IEducationFormProps> = ({ onAdd, editData, onEdit,
 }
 
 export default EducationForm
-function dayjs(value: any) {
-  throw new Error('Function not implemented.')
-}
+// function dayjs(value: any) {
+//   throw new Error('Function not implemented.')
+// }

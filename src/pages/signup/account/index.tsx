@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
@@ -15,6 +13,9 @@ import { ACCOUNT_TYPE, USER_TYPE } from 'api/user/type'
 import { useRegister } from 'bounceHooks/user/useRegister'
 import { ThirdParties } from 'bounceComponents/signup/ThirdParties'
 import { checkEmail } from 'api/user'
+import { Link, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { stringify } from 'querystring'
 
 // export type IAccountProps = {}
 const validationSchema = yup.object({
@@ -45,7 +46,7 @@ const validationSchema = yup.object({
 })
 
 const Account: React.FC = ({}) => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
@@ -68,13 +69,10 @@ const Account: React.FC = ({}) => {
   }
 
   const handleOauth = (accessToken: string, oauthType: ACCOUNT_TYPE) => {
-    router.push({
-      pathname: '/signup/thirdPartiesAccount',
-      query: { accessToken, oauthType }
-    })
+    navigate(routes.signup.thirdPartiesAccount + '?' + stringify({ accessToken, oauthType }))
   }
   return (
-    <LoginLayout title={'Create Individual Account'} subTitle={<Link href={'/login'}>Sign in</Link>}>
+    <LoginLayout title={'Create Individual Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {() => (
           <Box component={Form} noValidate>

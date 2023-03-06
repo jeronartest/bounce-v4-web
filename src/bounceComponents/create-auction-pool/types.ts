@@ -16,19 +16,19 @@ export enum CreationStep {
   'TOKEN_INFORMATION',
   'AUCTION_PARAMETERS',
   'ADVANCED_SETTINGS',
-  'CREATION_CONFIRMATION',
+  'CREATION_CONFIRMATION'
 }
 
 export type CompletedSteps = { [k: number]: boolean }
 
 export enum ParticipantStatus {
   'Public' = 'PUBLIC',
-  'Whitelist' = 'WHITELIST',
+  'Whitelist' = 'WHITELIST'
 }
 
 export enum AllocationStatus {
   'NoLimits' = 'NO_LIMITS',
-  'Limited' = 'LIMITED',
+  'Limited' = 'LIMITED'
 }
 
 export interface AuctionPool {

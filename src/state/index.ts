@@ -7,6 +7,7 @@ import user from './user/reducer'
 import transactions from './transactions/reducer'
 import multicall from './multicall/reducer'
 import users from './users/reducer'
+import configOptions from './configOptions/reducer'
 
 const PERSISTED_KEYS: string[] = ['users', 'transactions']
 
@@ -16,7 +17,8 @@ const store = configureStore({
     user,
     transactions,
     multicall,
-    users
+    users,
+    configOptions
   },
   middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })

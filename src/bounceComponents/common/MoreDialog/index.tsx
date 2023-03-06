@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Box, IconButton, Menu, MenuItem } from '@mui/material'
-import { useRouter } from 'next/router'
 import { ReactComponent as MoreSVG } from 'assets/imgs/profile/more.svg'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export const MoreDialog: React.FC = () => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const userOpen = Boolean(anchorEl)
   const handleUserMenuClose = () => {
@@ -22,8 +23,8 @@ export const MoreDialog: React.FC = () => {
           color: 'var(--ps-gray-900)',
           '&:hover': {
             background: 'var(--ps-gray-900)',
-            color: '#FFF',
-          },
+            color: '#FFF'
+          }
         }}
         onClick={handleMorelick}
       >
@@ -36,27 +37,27 @@ export const MoreDialog: React.FC = () => {
         onClose={handleUserMenuClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         sx={{
           mt: 4,
           '& .MuiPopover-paper': {
             borderRadius: 20,
-            padding: '10px 0px',
+            padding: '10px 0px'
           },
           '& .MuiList-padding': {
             padding: '0px 0px 0px 0px',
             background: '#FFFFFF',
             boxShadow: 'none',
-            borderRadius: 20,
+            borderRadius: 20
           },
           '& .MuiMenuItem-gutters': {
-            padding: '10px 20px',
-          },
+            padding: '10px 20px'
+          }
         }}
       >
         {/* <MenuItem
@@ -69,7 +70,7 @@ export const MoreDialog: React.FC = () => {
         </MenuItem> */}
         <MenuItem
           onClick={() => {
-            router.push('/verify')
+            navigate(routes.verify)
             setAnchorEl(null)
           }}
         >

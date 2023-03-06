@@ -1,37 +1,37 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
-import React, { useCallback, useEffect } from 'react'
+import React from 'react'
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded'
-import { show } from '@ebay/nice-modal-react'
 import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import { useAccount, useNetwork, useSignMessage } from 'wagmi'
-import { useSelector } from 'react-redux'
 import SettingsBox from '../../SettingsBox'
 import { ReactComponent as MetaMaskSVG } from './metamask.svg'
-import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
 import { bindAddress, userGetBindAddress } from 'api/user'
-import { RootState } from '@/store'
-import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { ChainId } from 'constants/chain'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useActiveWeb3React } from 'hooks'
+import { useSignMessage } from 'hooks/useWeb3Instance'
 
-export type IEVMWalletProps = {}
+// export type IEVMWalletProps = {}
 
-const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
-  const { address, isConnected } = useAccount()
-  const { chain } = useNetwork()
+const EVMWallet: React.FC = ({}) => {
+  const walletModalToggle = useWalletModalToggle()
+  const { account, chainId, library } = useActiveWeb3React()
+  library?.provider
 
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
-  const checkoutChainId = chainId => {
+  const checkoutChainId = (chainId: ChainId) => {
     const chainIdData = optionDatas?.chainInfoOpt?.filter(item => item.ethChainId === chainId)
     if (chainIdData) {
       return chainIdData[0]?.id
     }
     return
   }
-  const { signMessageAsync } = useSignMessage()
+  const signMessageAsync = useSignMessage()
 
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain?.id)
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   // const chainIdInBackEnd = checkoutChainId(chain?.id)
   // console.log('checkoutChainId>>', checkoutChainId(chain?.id))
 
@@ -40,15 +40,15 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
       // console.log('chainID>>', chainId)
 
       return userGetBindAddress({
-        chainId: chainConfigInBackend.id,
+        chainId: chainConfigInBackend?.id,
         limit: 3,
         offset: 0
       })
     },
     {
       // manual: true,
-      refreshDeps: [chain?.id, chainConfigInBackend?.id],
-      ready: !!chain?.id && !!chainConfigInBackend
+      refreshDeps: [chainId, chainConfigInBackend?.id],
+      ready: !!chainId && !!chainConfigInBackend
     }
   )
   // useEffect(() => {
@@ -61,8 +61,8 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
     },
     {
       manual: true,
-      onSuccess: res => {
-        const { data, code } = res
+      onSuccess: () => {
+        // const { data, code } = res
         getBindAddress()
       },
       onError: (err: any) => {
@@ -103,12 +103,12 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
               <Box
                 sx={{ cursor: 'pointer', ml: 'auto', alignSelf: 'auto' }}
                 onClick={async () => {
-                  if (isConnected) {
-                    if (address !== item.address) {
+                  if (account) {
+                    if (account !== item.address) {
                       toast.error('Please switch the set account')
                     } else {
                       try {
-                        const signature = await signMessageAsync({ message: 'Make default' })
+                        const signature = await signMessageAsync('Make default')
                         bind_address({
                           address: item.address,
                           chainId: item.chainId,
@@ -121,7 +121,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
                       }
                     }
                   } else {
-                    show(ConnectWalletDialog)
+                    walletModalToggle()
                   }
                 }}
               >
@@ -133,7 +133,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
           </Box>
         ))}
       </Stack>
-      {userBindAddressData?.data.total >= 3 ? (
+      {userBindAddressData?.data?.total && userBindAddressData?.data?.total >= 3 ? (
         <Box pb={40} />
       ) : (
         <Button
@@ -141,15 +141,19 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
           sx={{ width: 168, mb: 40 }}
           endIcon={<AddCircleOutlineRoundedIcon />}
           onClick={async () => {
-            if (isConnected) {
-              if (userBindAddressData?.data.list.filter(item => item.address === address).length > 0) {
+            if (account) {
+              if (
+                userBindAddressData &&
+                userBindAddressData?.data?.list?.filter(item => item.address === account).length > 0
+              ) {
                 toast.error('This wallet address has been bound, please change the wallet address binding')
               } else {
                 try {
-                  const signature = await signMessageAsync({ message: 'Link wallet' })
+                  const signature = await signMessageAsync('Link wallet')
+                  if (!chainId) return
                   bind_address({
-                    address: address,
-                    chainId: checkoutChainId(chain?.id),
+                    address: account,
+                    chainId: checkoutChainId(chainId),
                     isDefault: 1,
                     message: 'Link wallet',
                     signature
@@ -159,7 +163,7 @@ const EVMWallet: React.FC<IEVMWalletProps> = ({}) => {
                 }
               }
             } else {
-              show(ConnectWalletDialog)
+              walletModalToggle()
             }
           }}
         >

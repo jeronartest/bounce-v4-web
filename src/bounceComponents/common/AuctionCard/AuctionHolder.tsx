@@ -1,9 +1,9 @@
-import { Avatar, Box, Stack, Typography } from '@mui/material'
-import { useRouter } from 'next/router'
+import { Avatar, Stack, Typography } from '@mui/material'
 import React from 'react'
 import VerifiedIcon from '../VerifiedIcon'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { VerifyStatus } from 'api/profile/type'
+import { useNavigate } from 'react-router-dom'
 
 export type IAuctionHolderProps = {
   avatar: string
@@ -14,7 +14,7 @@ export type IAuctionHolderProps = {
 }
 
 export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, description, name, href, isVerify }) => {
-  const history = useRouter()
+  const navigate = useNavigate()
   return (
     <Stack
       direction="row"
@@ -22,7 +22,7 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
       spacing={12}
       onClick={ev => {
         ev.preventDefault()
-        history.push(href)
+        navigate(href)
       }}
       sx={{
         px: 10,

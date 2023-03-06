@@ -19,13 +19,12 @@ const ResumeUpload: React.FC<IUploadCardProps> = ({
   maxNum = Infinity,
   limitSize,
   onChange,
-  showRemove,
-  tips = '',
+  tips = ''
 }) => {
   const [files, setFiles] = useState<IFile[]>([])
 
   useEffect(() => {
-    setFiles(value)
+    setFiles(value || [])
   }, [value])
 
   const handleChange = (file: IFile, index: number) => {
@@ -54,7 +53,7 @@ const ResumeUpload: React.FC<IUploadCardProps> = ({
         <ResumeUploadItem
           key={file.fileUrl}
           value={file}
-          onChange={(file) => {
+          onChange={file => {
             handleChange(file, index)
           }}
           onRemove={() => {
@@ -67,7 +66,7 @@ const ResumeUpload: React.FC<IUploadCardProps> = ({
           limitSize={limitSize}
           accept={accept || []}
           tips={tips}
-          onChange={(file) => {
+          onChange={file => {
             handleChange(file, files.length)
           }}
         />

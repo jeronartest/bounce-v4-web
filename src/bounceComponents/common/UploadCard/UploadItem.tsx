@@ -15,7 +15,7 @@ export type IUploadItemProps = {
   tips?: string
 }
 
-const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onChange, onRemove, sx, tips }) => {
+const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onChange, sx, tips }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const UploadContent = useMemo(() => {

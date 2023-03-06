@@ -1,5 +1,4 @@
 import { ApiInstance } from '..'
-import { IResponse } from '../type'
 import { IIdeasListParams, ILikeUnlikeParams, IUpdateIdeaParams } from './type'
 
 // 创建/更新idea
@@ -8,7 +7,7 @@ export const createUpdateIdea = (body: IUpdateIdeaParams) => {
 }
 
 // 查询单个idea详情
-export const getIdeaDetail = body => {
+export const getIdeaDetail = (body: { ideaId: number }) => {
   return ApiInstance.post('/user/idea', body)
 }
 

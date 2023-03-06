@@ -14,14 +14,14 @@ export default {
           fontSize: 16,
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        },
-      },
+          whiteSpace: 'nowrap'
+        }
+      }
     },
     '&:hover': {
       boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-      border: '1px solid rgba(23, 23, 23, 0.2)',
-    },
+      border: '1px solid rgba(23, 23, 23, 0.2)'
+    }
   },
   statusTag: {
     height: 24,
@@ -29,6 +29,6 @@ export default {
     px: 8,
     py: 4,
     fontSize: 12,
-    backgroundColor: 'var(--ps-gray-200)',
-  },
+    backgroundColor: 'var(--ps-gray-200)'
+  }
 } as Record<string, SxProps>

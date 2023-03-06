@@ -27,7 +27,7 @@ const ProjectCard: React.FC<Partial<IProjectCardProps>> = ({ icon, title, desc }
                 background: '#D4F5DE',
                 display: 'flex',
                 alignItems: 'center',
-                flexDirection: 'row',
+                flexDirection: 'row'
               }}
             >
               <Typography variant="body2" color={'#259C4A'} margin={'0 auto'}>

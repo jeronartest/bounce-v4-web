@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { ReactComponent as Web3SVG } from 'assets/imgs/companies/tag/web3.svg'
 import { ReactComponent as DaoSVG } from 'assets/imgs/companies/tag/dao.svg'
@@ -41,6 +41,7 @@ const tagSvg = (status: number) => {
     case 9:
       return <OtherSVG />
     default:
+      return null
       break
   }
 }

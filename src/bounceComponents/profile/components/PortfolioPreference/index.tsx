@@ -1,14 +1,13 @@
-import React, { useMemo, useState } from 'react'
-import { Box, Grid, Tab, Tabs, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { ITabsListProps, TabPanel } from '../../ProfileLayout'
-import styles from './styles'
+import React from 'react'
+import { Box, Grid, Typography } from '@mui/material'
+// import { ITabsListProps } from '../../ProfileLayout'
+// import styles from './styles'
 import { IProfileUserInfo } from 'api/user/type'
-import { getLabel, getPrimaryRoleLabel } from '@/utils'
-import { RootState } from '@/store'
+import { getLabel, getPrimaryRoleLabel } from 'utils'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export const ExperienctAndSkill: React.FC<IPortfolioPreferenceProps> = ({ personalInfo }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   return (
     <Grid container sx={{ padding: '20px 16px', borderRadius: 20, background: 'var(--ps-gray-50)' }}>
@@ -38,7 +37,7 @@ interface IPortfolioPreferenceProps {
 }
 
 export const PortfolioPreference: React.FC<IPortfolioPreferenceProps> = ({ personalInfo }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   return (
     <Box px={48} pb={56}>
@@ -125,30 +124,30 @@ interface IPortfolioBoxProps {
 }
 
 const PortfolioBox: React.FC<IPortfolioBoxProps> = ({ personalInfo }) => {
-  const [tabValue, setTabValue] = useState<string>('portfolio')
+  // const [tabValue, setTabValue] = useState<string>('portfolio')
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setTabValue(newValue)
-  }
-  const tabsList: ITabsListProps[] = useMemo(
-    () => [
-      {
-        labelKey: 'portfolio',
-        label: 'Portfolio',
-        content: (
-          <Box>
-            <PortfolioPreference personalInfo={personalInfo} />
-          </Box>
-        )
-      },
-      {
-        labelKey: 'job',
-        label: 'Job watchlist',
-        content: <div style={{ padding: '0 48px' }}>39475834</div>
-      }
-    ],
-    [personalInfo]
-  )
+  // const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  //   setTabValue(newValue)
+  // }
+  // const tabsList: ITabsListProps[] = useMemo(
+  //   () => [
+  //     {
+  //       labelKey: 'portfolio',
+  //       label: 'Portfolio',
+  //       content: (
+  //         <Box>
+  //           <PortfolioPreference personalInfo={personalInfo} />
+  //         </Box>
+  //       )
+  //     },
+  //     {
+  //       labelKey: 'job',
+  //       label: 'Job watchlist',
+  //       content: <div style={{ padding: '0 48px' }}>39475834</div>
+  //     }
+  //   ],
+  //   [personalInfo]
+  // )
 
   return (
     <Box>

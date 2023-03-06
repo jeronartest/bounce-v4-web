@@ -13,15 +13,14 @@ import {
 } from '@mui/material'
 import React from 'react'
 import dayjs from 'dayjs'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import EducationForm from '../EducationForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { educationItems } from 'api/profile/type'
-import { getLabel } from '@/utils'
-import { RootState } from '@/store'
+import { getLabel } from 'utils'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IEducationListProps = {
   list: educationItems[]
@@ -30,9 +29,9 @@ export type IEducationListProps = {
 }
 
 const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
-  const handleEdit = v => {
+  const handleEdit = (v: { data: educationItems; index: number } | undefined) => {
     show(MuiDialog, {
       title: 'Edit the education',
       fullWidth: true,

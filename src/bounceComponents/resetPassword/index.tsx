@@ -14,7 +14,7 @@ import { changePassword, verifyCode } from 'api/user'
 import { IChangePasswordParams } from 'api/user/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 
-export type IResetPasswordProps = {}
+// export type IResetPasswordProps = {}
 const validationSchema = yup.object({
   email: yup.string().trim().required('Please enter your email address').email('Incorrect email address'),
   code: yup
@@ -36,11 +36,11 @@ const validationSchema = yup.object({
   confirmPassword: yup
     .string()
     .when('password', (password, schema) => {
-      return schema.test('verify consistency', 'Please enter the same password', value => value === password)
+      return schema.test('verify consistency', 'Please enter the same password', (value: any) => value === password)
     })
     .required('Please enter your password')
 })
-const ResetPassword: React.FC<IResetPasswordProps> = () => {
+const ResetPassword: React.FC = () => {
   const modal = useModal()
   const [showCountDown, setShowCountDown] = useState<number>()
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
@@ -82,6 +82,7 @@ const ResetPassword: React.FC<IResetPasswordProps> = () => {
         } else if (code === 10500) {
           return toast.error('Please wait one minute and try again')
         }
+        return ''
       }
     }
   )

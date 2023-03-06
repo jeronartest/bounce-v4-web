@@ -3,7 +3,7 @@ import { SxProps } from '@mui/material'
 export default {
   root: {
     position: 'relative',
-    display: 'inline-block',
+    display: 'inline-block'
   },
   uploaderFile: {
     position: 'absolute',
@@ -23,7 +23,7 @@ export default {
       width: '100%',
       height: '100%',
       paddingTop: '1000px',
-      cursor: 'pointer',
+      cursor: 'pointer'
     },
 
     '> img': {
@@ -35,10 +35,10 @@ export default {
       maxWidth: '50%',
       maxHeight: '50%',
       margin: 'auto',
-      pointerEvents: 'none',
-    },
+      pointerEvents: 'none'
+    }
   },
   uploaderFileMasked: {
-    backgroundColor: 'var(--ps-borderDark)',
-  },
+    backgroundColor: 'var(--ps-borderDark)'
+  }
 } as Record<string, SxProps>

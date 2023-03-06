@@ -1,10 +1,7 @@
 import { Box, Button, IconButton, OutlinedInput, Stack, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { ReactNode } from 'react'
-import Head from 'next/head'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 import { IEditProps } from '../overview'
 import styles from './styles'
@@ -15,14 +12,16 @@ import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedI
 import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
 import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
-import { RootState } from '@/store'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
 import EditLayout, { profileTabsList } from 'bounceComponents/company/EditLayout'
 import { ActionType } from 'bounceComponents/profile/components/BasicContextProvider'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
+import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 export interface ILinksItem {
   name: string
@@ -113,7 +112,7 @@ const validationSchema = yup.object({
 })
 
 export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues, basicProfileDispatch }) => {
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const { userInfo } = useUserInfo()
   const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
 
   const initialValues = {
@@ -125,7 +124,7 @@ export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues
     instagram: basicProfileValues?.instagram || userInfo?.instagram || ''
   }
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: any) => {
     if (firstEdit) {
       return basicProfileDispatch?.({
         type: ActionType.SetSocial,
@@ -146,7 +145,7 @@ export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues
     >
       {({ dirty, resetForm }) => (
         <Stack component={Form} spacing={20} noValidate>
-          <LeavePageWarn dirty={dirty || (firstEdit && basicProfileValues?.activeStep !== 3)} />
+          <LeavePageWarn dirty={dirty || !!(firstEdit && basicProfileValues?.activeStep !== 3)} />
           {firstEdit && (
             <Typography variant="h2" mb={20}>
               Link your socials
@@ -175,19 +174,13 @@ export const SocialList: React.FC<IEditProps> = ({ firstEdit, basicProfileValues
 }
 
 export const SocialListPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
   const goBack = () => {
-    router.push(`/profile/summary?id=${userId}`)
+    navigate(`${routes.profile.summary}?id=${userId}`)
   }
   return (
     <section>
-      <Head>
-        <title>Edit Summary | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <EditLayout tabsList={profileTabsList} title="Edit summary" goBack={goBack}>
         <SocialList />
       </EditLayout>

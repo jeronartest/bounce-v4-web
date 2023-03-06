@@ -15,17 +15,16 @@ import {
 } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
 import moment from 'moment'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import { experienceItems, FormType } from 'api/profile/type'
 import SearchInput from 'bounceComponents/common/SearchInput'
 import { searchCompanyInfo } from 'api/optionsData'
-import { RootState } from '@/store'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IExperienceFormProps = {
   onAdd?: (data: experienceItems) => void
@@ -70,7 +69,7 @@ const validationSchema = yup.object({
     //     return yup.number().required('輸入數字')
     //   },
     // })
-    .test('CHECK_CURRENTLY', formCheckValid('End Date', FormType.Select), (value, ctx) => {
+    .test('CHECK_CURRENTLY', formCheckValid('End Date', FormType.Select) || '', (value, ctx) => {
       if (!ctx?.parent?.isCurrently && !value) {
         return false
       }
@@ -98,7 +97,7 @@ const CheckboxItems: React.FC<ICheckboxItemsProps> = ({ value, onChange }) => {
 
 const ExperienceForm: React.FC<IExperienceFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -133,7 +132,7 @@ const ExperienceForm: React.FC<IExperienceFormProps> = ({ onAdd, editData, onEdi
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -158,7 +157,7 @@ const ExperienceForm: React.FC<IExperienceFormProps> = ({ onAdd, editData, onEdi
         toast.error('search error')
       }
       setCompanyData(
-        data.list.map(v => {
+        data.list.map((v: { name: any; avatar: any }) => {
           return {
             label: v.name,
             icon: v.avatar || DefaultAvaSVG,
@@ -207,10 +206,10 @@ const ExperienceForm: React.FC<IExperienceFormProps> = ({ onAdd, editData, onEdi
               <Grid item xs={12}>
                 <FormItem name="position" label="Primary Role" required>
                   <Select>
-                    {optionDatas?.primaryRoleOpt?.map((item, index) => [
+                    {optionDatas?.primaryRoleOpt?.map((item: any, index: number) => [
                       <ListSubheader key={index}>{item.level1Name}</ListSubheader>,
-                      item.child.map((child, index) => [
-                        <MenuItem key={index} value={child.id}>
+                      item.child.map((child: any, idx: number) => [
+                        <MenuItem key={idx} value={child.id}>
                           {child.level2Name}
                         </MenuItem>
                       ])

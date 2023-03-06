@@ -25,7 +25,7 @@ const AuctionStep = ({ label, completed, active, disabled, onClick }: AuctionSte
             borderRadius: 2,
             height: 4,
             width: '100%',
-            mt: 10,
+            mt: 10
           }}
         />
       </Box>
@@ -59,8 +59,8 @@ const AuctionCreationStepper: React.FC<IAuctionCreationStepperProps> = ({ steps,
               valuesDispatch?.({
                 type: ActionType.HandleStep,
                 payload: {
-                  activeStep: index,
-                },
+                  activeStep: index
+                }
               })
             }
           }}

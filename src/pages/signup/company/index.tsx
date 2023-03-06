@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
@@ -14,7 +12,10 @@ import { useRegister } from 'bounceHooks/user/useRegister'
 import { ThirdParties } from 'bounceComponents/signup/ThirdParties'
 import { ACCOUNT_TYPE, USER_TYPE } from 'api/user/type'
 import { checkEmail } from 'api/user'
-export type ICompanyProps = {}
+import { Link, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { stringify } from 'querystring'
+// export type ICompanyProps = {}
 const validationSchema = yup.object({
   email: yup
     .string()
@@ -42,8 +43,8 @@ const validationSchema = yup.object({
     .max(16, 'Password should contain 8-16 characters')
 })
 
-const Company: React.FC<ICompanyProps> = ({}) => {
-  const router = useRouter()
+const Company: React.FC = ({}) => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
@@ -66,13 +67,10 @@ const Company: React.FC<ICompanyProps> = ({}) => {
     })
   }
   const handleOauth = (accessToken: string, oauthType: ACCOUNT_TYPE) => {
-    router.push({
-      pathname: '/signup/thirdPartiesCompany',
-      query: { accessToken, oauthType }
-    })
+    navigate(routes.signup.thirdPartiesCompany + '?' + stringify({ accessToken, oauthType }))
   }
   return (
-    <LoginLayout title={'Create Company Account'} subTitle={<Link href={'/login'}>Sign in</Link>}>
+    <LoginLayout title={'Create Company Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {() => (
           <Box component={Form}>

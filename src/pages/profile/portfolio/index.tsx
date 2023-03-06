@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { Box, Button } from '@mui/material'
 import ProfileOverviewLayout from 'bounceComponents/profile/ProfileOverviewLayout'
 import ProfileExperience from 'bounceComponents/profile/ProfileExperience'
 import ProfileEducation from 'bounceComponents/profile/ProfileEducation'
 import { getUserInfo } from 'api/user'
-import { RootState } from '@/store'
 import { IProfileUserInfo } from 'api/user/type'
 import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
 import PortfolioBox from 'bounceComponents/profile/components/PortfolioPreference'
 import DownloadResume from 'bounceComponents/profile/components/DownloadResume'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const ProfilePortfolio: React.FC = () => {
   const [personalInfo, setPersonalInfo] = useState<IProfileUserInfo>()
-  const { userInfo, userId } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
-  const { id } = router.query
+  const { userInfo, userId } = useUserInfo()
+  const { id } = useQueryParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getInfo = async () => {
@@ -36,9 +37,9 @@ const ProfilePortfolio: React.FC = () => {
         <Button
           onClick={() => {
             if (userInfo?.primaryRole) {
-              router.push('/profile/resume/job')
+              navigate(routes.profile.resume.job)
             } else {
-              router.push('/profile/resume')
+              navigate(routes.profile.resume.index)
             }
           }}
           size="small"

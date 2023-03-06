@@ -1,24 +1,23 @@
-import { Avatar, Box, Divider, Link, Typography } from '@mui/material'
+import { Avatar, Divider, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { Stack } from '@mui/system'
 import dayjs from 'dayjs'
-import { RootState } from '@/store'
 import { educationItems } from 'api/profile/type'
 import { IPager } from 'api/type'
 import { getResumeEducation } from 'api/profile'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IProfileEducationProps = {
   personalInfoId: number
 }
 
 const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const [list, setList] = useState<educationItems[]>([])
 
@@ -28,7 +27,7 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
 
   const { data, loading, pagination } = usePagination<IPager<educationItems>, Params>(
     async ({ current, pageSize }) => {
-      const res = await getResumeEducation({
+      const res: any = await getResumeEducation({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         userId: personalInfoId
@@ -54,7 +53,12 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
   }, [pagination])
 
   return list?.length ? (
-    <ViewMoreListBox show={list?.length < data?.total} title="Education" loading={loading} handleClick={handleClick}>
+    <ViewMoreListBox
+      show={!!data?.total && list?.length < data?.total}
+      title="Education"
+      loading={loading}
+      handleClick={handleClick}
+    >
       <Stack spacing={32}>
         {list?.map((v, i) => (
           <Stack key={i} direction="row" spacing={20}>

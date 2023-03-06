@@ -10,7 +10,7 @@ export default {
     bottom: 0,
     left: 0,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   item: {
     position: 'relative',
@@ -21,12 +21,12 @@ export default {
     justifyContent: 'center',
     border: '1px dashed var(--ps-borderDark)',
     '&:hover': {
-      borderColor: 'var(--ps-text)',
+      borderColor: 'var(--ps-text)'
     },
     img: {
       maxWidth: '100%',
-      maxHeight: '100%',
-    },
+      maxHeight: '100%'
+    }
   },
   removeBtn: {
     position: 'absolute',
@@ -38,15 +38,15 @@ export default {
     bgcolor: 'var(--ps-darkBrown)',
     border: '1px solid var(--ps-borderDark)',
     '&:hover': {
-      borderColor: 'var(--ps-text)',
-    },
+      borderColor: 'var(--ps-text)'
+    }
   },
   imgBox: {
     position: 'relative',
     width: 80,
     height: 80,
     borderRadius: '50%',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   addItem: {
     border: '1px solid #D7D6D9',
@@ -56,11 +56,11 @@ export default {
     color: '#000',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   content: {
     height: '100%',
-    width: '100%',
+    width: '100%'
   },
   editBox: {
     position: 'relative',
@@ -68,9 +68,9 @@ export default {
     overflow: 'hidden',
     '&:hover': {
       '& p': {
-        display: 'block',
-      },
-    },
+        display: 'block'
+      }
+    }
   },
   edit: {
     background: 'rgba(255, 255, 255, 0.2)',
@@ -83,7 +83,7 @@ export default {
     bottom: 0,
     zIndex: 10,
     display: 'none',
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
 
   fileBox: {
@@ -94,7 +94,7 @@ export default {
     padding: 16,
     '&:hover': {
       boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-      border: '1px solid rgba(23, 23, 23, 0.2)',
-    },
-  },
+      border: '1px solid rgba(23, 23, 23, 0.2)'
+    }
+  }
 } as Record<string, SxProps>

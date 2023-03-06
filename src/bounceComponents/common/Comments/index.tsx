@@ -11,16 +11,13 @@ import {
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import * as yup from 'yup'
+// import * as yup from 'yup'
 import moment, { unix } from 'moment'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import FormItem from '../FormItem'
 import VerifiedIcon from '../VerifiedIcon'
 import styles from './styles'
-import { RootState } from '@/store'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { ReactComponent as DeleteSVG } from 'bounceComponents/profile/ResumeFiles/assets/delete.svg'
 import {
@@ -31,8 +28,11 @@ import {
   useGetComments
 } from 'bounceHooks/user/useComments'
 import { ICommentsItem, TopicType, USER_TYPE } from 'api/user/type'
-import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+// import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import { VerifyStatus } from 'api/profile/type'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useUserInfo } from 'state/users/hooks'
 
 interface ICommentDetail {
   avatar: string
@@ -52,8 +52,8 @@ interface ICommentItemProps {
 }
 
 const CommentItem: React.FC<ICommentItemProps> = ({ item, onRefresh, commentId, commentReplyId }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
   const { run: runDeleteComments } = useDeleteComments(onRefresh)
   const { run: runDeleteCommentsReply } = useDeleteCommentsReply(onRefresh)
   const handleDelete = () => {
@@ -66,9 +66,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({ item, onRefresh, commentId, 
   }
   const handleLink = () => {
     if (item?.userType === USER_TYPE.USER) {
-      return router.push(`/profile/summary?id=${item?.userId}`)
+      return navigate(`${routes.profile.summary}?id=${item?.userId}`)
     }
-    return router.push(`/company/summary?id=${item?.userId}`)
+    return navigate(`${routes.company.summary}?id=${item?.userId}`)
   }
   return (
     <Box>
@@ -122,8 +122,8 @@ interface ICommentItemGroupProps {
 }
 
 const CommentItemGroup: React.FC<ICommentItemGroupProps> = ({ item, onRefresh, expanded, setExpanded }) => {
-  const router = useRouter()
-  const { token, userInfo, companyInfo, userType } = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
+  const { token, userInfo, companyInfo, userType } = useUserInfo()
   const [replyComment, setReplyComment] = useState<string>('')
   const [clickedReply, setClickedReply] = useState<boolean>(false)
   const { run: runAddCommentsReply } = useAddCommentsReply(onRefresh)
@@ -131,13 +131,13 @@ const CommentItemGroup: React.FC<ICommentItemGroupProps> = ({ item, onRefresh, e
   const initialValues = {
     content: ''
   }
-  const handleComment = (values, { resetForm }) => {
-    if (!token) return router.push(`/login?path=${location.pathname}${location.search}`)
+  const handleComment = (values: any, { resetForm }: any) => {
+    if (!token) return navigate(`${routes.login}?path=${location.pathname}${location.search}`)
     const { content } = values
     runAddCommentsReply({ commentId: item?.commentId, content })
     resetForm()
   }
-  const handleChange = (panel: number) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+  const handleChange = (panel: number) => (_: React.ChangeEvent<any>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false)
   }
 
@@ -214,18 +214,18 @@ interface ICommentsProps {
   topicType: TopicType
 }
 const Comments: React.FC<ICommentsProps> = ({ topicId, topicType }) => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState<number | false>(false)
-  const { token } = useSelector((state: RootState) => state.user)
+  const { token } = useUserInfo()
   const initialValues = {
     content: ''
   }
   const { data: commentsData, refresh: runGetComments } = useGetComments(topicId, topicType)
   const { run: runAddComments } = useAddComments(runGetComments)
-  const handleComment = (values, { resetForm }) => {
+  const handleComment = (values: any, { resetForm }: any) => {
     if (!token) {
       toast.error('Please login')
-      router.push(`/login?path=${location.pathname}${location.search}`)
+      navigate(`${routes.login}?path=${location.pathname}${location.search}`)
     }
     const { content } = values
     runAddComments({ content, topicId, topicType })
@@ -259,7 +259,7 @@ const Comments: React.FC<ICommentsProps> = ({ topicId, topicType }) => {
             All comments
           </Typography>
           <Box>
-            {commentsData?.list?.map((item: ICommentsItem, index) => {
+            {commentsData?.list?.map((item: ICommentsItem, index: number) => {
               return (
                 <CommentItemGroup
                   key={`${item?.commentId}_${index}`}

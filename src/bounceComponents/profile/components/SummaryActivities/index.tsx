@@ -4,26 +4,24 @@ import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from 'components/Image'
 import AuctionCard, { AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import { IAuctionPoolsData, IAuctionPoolsItems } from 'api/profile/type'
 import { getUserActivitiesPool } from 'api/profile'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { shortenAddress } from '@/utils/web3/address'
 import { PoolType } from 'api/pool/type'
 import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
-import NoData from 'bounceComponents/common/NoData'
-import { getLabel } from '@/utils'
+// import NoData from 'bounceComponents/common/NoData'
+import { getLabel, shortenAddress } from 'utils'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
-import { RootState } from '@/store'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { routes } from 'constants/routes'
+import { Link } from 'react-router-dom'
 
 export type IActivitieProps = {
   personalInfoId: number
@@ -38,8 +36,7 @@ const poolType: Record<PoolType, string> = {
 }
 
 const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
   const [btnSta, setBtnSta] = useState<string>('Auction')
   const { pagination, data: auctionPoolData } = usePagination<IAuctionPoolsItems<IAuctionPoolsData>, Params>(
     async ({ current, pageSize }) => {
@@ -53,6 +50,10 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
           total: resp.data.total,
           list: resp.data.list
         }
+      }
+      return {
+        total: 0,
+        list: []
       }
     },
     {
@@ -79,6 +80,10 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
           list: resp.data.list
         }
       }
+      return {
+        total: 0,
+        list: []
+      }
     },
     {
       ready: !!personalInfoId,
@@ -86,7 +91,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
       refreshDeps: [personalInfoId]
     }
   )
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (_: any, p: number) => {
     if (btnSta === 'Auction') {
       pagination.changeCurrent(p)
     } else {
@@ -123,32 +128,34 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
         </Stack>
         <Stack direction="row">
           {btnSta === 'Auction' ? (
-            auctionPoolData?.total <= defaultPageSize ? (
+            auctionPoolData && auctionPoolData?.total <= defaultPageSize ? (
               <></>
             ) : (
               <Pagination
                 onChange={handlePageChange}
                 sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
-                count={Math.ceil(auctionPoolData?.total / defaultPageSize || 0)}
+                count={Math.ceil(auctionPoolData?.total || 0 / defaultPageSize || 0)}
                 renderItem={item => {
                   if (item.type === 'previous' || item.type === 'next') {
                     return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
                   }
+                  return null
                 }}
               />
             )
           ) : btnSta === 'Ideas' ? (
-            ideaListData?.total <= defaultIdeaPageSize ? (
+            ideaListData && ideaListData?.total <= defaultIdeaPageSize ? (
               <></>
             ) : (
               <Pagination
                 onChange={handlePageChange}
                 sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
-                count={Math.ceil(ideaListData?.total / defaultIdeaPageSize || 0)}
+                count={Math.ceil(ideaListData?.total || 0 / defaultIdeaPageSize || 0)}
                 renderItem={item => {
                   if (item.type === 'previous' || item.type === 'next') {
                     return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
                   }
+                  return null
                 }}
               />
             )
@@ -159,14 +166,14 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
       </Box>
       {btnSta === 'Auction' ? (
         <Box>
-          {auctionPoolData?.total > 0 ? (
+          {auctionPoolData && auctionPoolData?.total > 0 ? (
             <Grid container spacing={18}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                   <Box
                     component={'a'}
                     target="_blank"
-                    href={`/auction/fixed-price/${getLabel(
+                    href={`${routes.auction.fixedPrice}/${getLabel(
                       auctionPoolItem.chainId,
                       'shortName',
                       optionDatas?.chainInfoOpt
@@ -210,7 +217,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                           />
                         </>
                       }
-                      categoryName={poolType[auctionPoolItem.category]}
+                      categoryName={poolType[auctionPoolItem.category as PoolType]}
                       whiteList={auctionPoolItem.enableWhiteList ? 'Whitelist' : 'Public'}
                       chainId={auctionPoolItem.chainId}
                     />
@@ -229,11 +236,11 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
         </Box>
       ) : (
         <Box>
-          {ideaListData?.total > 0 ? (
+          {ideaListData && ideaListData?.total > 0 ? (
             <Grid container spacing={18}>
               {ideaListData?.list?.map((ideaListItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
-                  <Link target="_blank" href={`/idea/detail?id=${ideaListItem?.id}`}>
+                  <Link to={`${routes.idea.detail}?id=${ideaListItem?.id}`}>
                     <InstitutionCard
                       icon={ideaListItem.avatar}
                       status={ideaListItem.marketType}

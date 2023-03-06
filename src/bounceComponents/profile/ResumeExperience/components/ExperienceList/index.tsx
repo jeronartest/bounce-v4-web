@@ -12,17 +12,17 @@ import {
 import React from 'react'
 import { Stack } from '@mui/system'
 import dayjs from 'dayjs'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
-import { useRouter } from 'next/router'
 import ExperienceForm from '../ExperienceForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { experienceItems } from 'api/profile/type'
-import { RootState } from '@/store'
-import { getPrimaryRoleLabel } from '@/utils'
+import { getPrimaryRoleLabel } from 'utils'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IExperienceListProps = {
   list: experienceItems[]
@@ -31,10 +31,10 @@ export type IExperienceListProps = {
 }
 
 const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
-  const handleEdit = v => {
+  const handleEdit = (v: { data: any; index: any }) => {
     const temp = { data: { ...v.data, isCurrently: v.data.isCurrently === 2 }, index: v.index }
     show(MuiDialog, {
       title: 'Edit the experience',
@@ -45,10 +45,10 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
 
   const handleLink = (item: experienceItems) => {
     if (item?.companyId) {
-      return router.push(`/company/summary?id=${item?.companyId}`)
+      return navigate(`${routes.profile.summary}?id=${item?.companyId}`)
     }
     if (item?.thirdpartId) {
-      return router.push(`/company/summary?thirdpartId=${item?.thirdpartId}`)
+      return navigate(`${routes.profile.summary}?thirdpartId=${item?.thirdpartId}`)
     }
     return
   }
@@ -119,7 +119,7 @@ const ExperienceList: React.FC<IExperienceListProps> = ({ list, onEdit, onDelete
                   spacing={8}
                 >
                   <Typography variant="body2">
-                    {getPrimaryRoleLabel(v.position, optionDatas?.primaryRoleOpt)}
+                    {getPrimaryRoleLabel(v.position, optionDatas?.primaryRoleOpt || [])}
                   </Typography>
                   <Typography variant="body2">
                     {`${dayjs(v.startTime * 1000).format('YYYY')}-${

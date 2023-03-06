@@ -15,9 +15,9 @@ const LocationTimeZone: React.FC<{ value: string; onChange: (val: string) => voi
   return (
     <Select
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={e => onChange(e.target.value)}
       sx={{ maxHeight: 300 }}
-      renderValue={(value) => {
+      renderValue={value => {
         const Flag = Flags[value as ICountryType]
         const label = countries.getName(value, 'en')
         return (
@@ -35,15 +35,15 @@ const LocationTimeZone: React.FC<{ value: string; onChange: (val: string) => voi
       }}
     >
       {shortCountries
-        .filter((country) => !!countries.getName(country, 'en'))
-        .map((country) => {
+        .filter(country => !!countries.getName(country, 'en'))
+        .map(country => {
           return {
             longCountry: countries.getName(country, 'en'),
-            shortCountry: country,
+            shortCountry: country
           }
         })
         .sort((a, b) => (a.longCountry > b.longCountry ? 1 : -1))
-        .map((country) => {
+        .map(country => {
           const Flag = Flags[country.shortCountry as ICountryType]
           return (
             <MenuItem key={country.shortCountry} value={country.shortCountry}>

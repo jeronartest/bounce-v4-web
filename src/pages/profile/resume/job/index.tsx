@@ -1,21 +1,20 @@
 import { Box, Button, ListSubheader, MenuItem, OutlinedInput, Select, Stack, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React from 'react'
-import Head from 'next/head'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useOptionsData } from 'bounceHooks/useOptionsData'
+import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
-import { RootState } from '@/store'
 import EditLayout, { resumeTabsList } from 'bounceComponents/company/EditLayout'
 import { FormType, IUpdatePersonalParams } from 'api/profile/type'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { ResumeActionType } from 'bounceComponents/profile/components/ResumeContextProvider'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const SKILLS_LENGTH = 140
 
@@ -36,7 +35,7 @@ export interface IJobOverviewProps {
 }
 
 export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, firstEdit, resumeProfileDispatch }) => {
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const { userInfo } = useUserInfo()
 
   const initialValues = {
     primaryRole: resumeProfileValues?.primaryRole || userInfo?.primaryRole || '',
@@ -45,8 +44,8 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
   }
   const { loading, runAsync: runPersonalResume } = usePersonalResume()
 
-  const handleSubmit = values => {
-    if (firstEdit) {
+  const handleSubmit = (values: { skills: string }) => {
+    if (firstEdit && resumeProfileDispatch) {
       return resumeProfileDispatch({
         type: ResumeActionType.SetJobOverview,
         payload: {
@@ -59,7 +58,7 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
     runPersonalResume({ ...values, skills: values.skills.trim() })
   }
 
-  const { optionsData } = useOptionsData()
+  const { optionsData } = useGetOptionsData()
 
   return (
     <Formik
@@ -70,7 +69,7 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
     >
       {({ values, dirty }) => (
         <Stack component={Form} spacing={20} noValidate>
-          <LeavePageWarn dirty={dirty || (firstEdit && resumeProfileValues?.activeStep !== 4)} />
+          <LeavePageWarn dirty={dirty || !!(firstEdit && resumeProfileValues?.activeStep !== 4)} />
           {firstEdit && (
             <Typography variant="h2" mb={20}>
               Introduce yourself
@@ -135,18 +134,13 @@ export const JobOverview: React.FC<IJobOverviewProps> = ({ resumeProfileValues, 
 }
 
 const JobOverviewPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
   const goBack = () => {
-    router.push(`/profile/portfolio?id=${userId}`)
+    navigate(`${routes.profile.portfolio}?id=${userId}`)
   }
   return (
     <section>
-      <Head>
-        <title>Edit Portfolio | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <EditLayout tabsList={resumeTabsList} title="Edit portfolio" goBack={goBack}>
         <JobOverview />
       </EditLayout>

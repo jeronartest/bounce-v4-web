@@ -1,14 +1,14 @@
 import { useRequest } from 'ahooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { bindThirdpart } from 'api/user'
 import { IBindThirdpartParams, USER_TYPE } from 'api/user/type'
-import { fetchCompanyInfo, fetchUserInfo } from 'store/user'
-import { RootState } from 'store'
+import { fetchCompanyInfo, fetchUserInfo } from 'state/users/reducer'
+import { useUserInfo } from 'state/users/hooks'
 
 export const useBindThirdPart = () => {
   const dispatch = useDispatch()
-  const { userType, userId } = useSelector((state: RootState) => state.user)
+  const { userType, userId } = useUserInfo()
   return useRequest(async (params: IBindThirdpartParams) => bindThirdpart(params), {
     manual: true,
     onSuccess: (data: any) => {

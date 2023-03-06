@@ -12,8 +12,8 @@ import { ReactComponent as EditPwSvg } from './editPw.svg'
 import FormItem from 'bounceComponents/common/FormItem'
 import { changePassword, verifyCode } from 'api/user'
 import { IChangePasswordParams } from 'api/user/type'
-import { useLogout } from 'bounceHooks/user/useLogin'
 import { ReactComponent as CloseSvg } from 'assets/imgs/close.svg'
+import { useLogout } from 'state/users/hooks'
 
 export type IEditInfoProps = {
   userInfoEmail: string
@@ -65,6 +65,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
         } else {
           return toast.error('Please try again')
         }
+        return
       }
     }
   )

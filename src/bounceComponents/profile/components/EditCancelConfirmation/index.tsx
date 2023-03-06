@@ -1,18 +1,18 @@
-import { show } from '@ebay/nice-modal-react'
-import { Button, Typography } from '@mui/material'
+// import { show } from '@ebay/nice-modal-react'
+import { Button } from '@mui/material'
 import React from 'react'
-import { useRouter } from 'next/router'
-import DialogTips from 'bounceComponents/common/DialogTips'
+import { useNavigate } from 'react-router-dom'
+// import DialogTips from 'bounceComponents/common/DialogTips'
 
 export interface IEditCancelConfirmation {
   routerLink?: string
   onResetForm?: () => void
 }
 
-const EditCancelConfirmation: React.FC<IEditCancelConfirmation> = ({ routerLink, onResetForm }) => {
-  const router = useRouter()
+const EditCancelConfirmation: React.FC<IEditCancelConfirmation> = ({ routerLink }) => {
+  const navigate = useNavigate()
   const handleCancle = () => {
-    router.push(routerLink)
+    navigate(routerLink || '')
     // show(DialogTips, {
     //   title: 'Leave the page',
     //   iconType: 'error',

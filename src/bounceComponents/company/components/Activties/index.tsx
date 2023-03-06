@@ -2,33 +2,33 @@ import { Button, Grid, MenuItem, Select, Typography } from '@mui/material'
 import { Box, Stack } from '@mui/system'
 import React, { useState } from 'react'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import { useRouter } from 'next/router'
 import { useRequest } from 'ahooks'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import BigNumber from 'bignumber.js'
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from 'components/Image'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
+// import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import FormItem from 'bounceComponents/common/FormItem'
 import { getActivitiesTotal, getUserPoolsFixedSwap } from 'api/profile'
-import { RootState } from '@/store'
 import { usePersonalInfo } from 'bounceHooks/user/usePersonalInfo'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { shortenAddress } from '@/utils/web3/address'
 import { PoolType } from 'api/pool/type'
-import { getLabel } from '@/utils'
-import { formatNumber } from '@/utils/web3/number'
-import NoData from 'bounceComponents/common/NoData'
+import { getLabel, shortenAddress } from 'utils'
+// import { formatNumber } from '@/utils/web3/number'
+// import NoData from 'bounceComponents/common/NoData'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { UserType } from 'api/market/type'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+import { Link, useNavigate } from 'react-router-dom'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { routes } from 'constants/routes'
+import { useUserInfo } from 'state/users/hooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
-export type IActivtiesProps = { type }
+export type IActivtiesProps = { type: UserType }
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
@@ -36,25 +36,26 @@ const poolType: Record<PoolType, string> = {
   [PoolType.SealedBid]: 'SealedBid'
 }
 const Activties: React.FC<IActivtiesProps> = ({ type }) => {
-  const router = useRouter()
-  const { thirdpartId } = router.query
-  const { token } = useSelector((state: RootState) => state.user)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const navigate = useNavigate()
+  const { thirdpartId } = useQueryParams()
+  const { token } = useUserInfo()
+  const optionDatas = useOptionDatas()
   const [btnSta, setBtnSta] = useState<string>('Auction')
-  const [poolBtnSta, setPoolBtnSta] = useState<string>('Fixed')
+  const [poolBtnSta] = useState<string>('Fixed')
   const [chain, setChain] = useState<number>(1)
   const handleCreateBtnClick = () => {
     if (!token) {
       toast.error('Please login')
-      router.push(`/login?path=/auction/create-auction-pool?redirect=/company/activities`)
+      navigate(`${routes.login}?path=${routes.auction.createAuctionPool}?redirect=${routes.company.activities}`)
     } else {
-      router.push('/auction/create-auction-pool?redirect=/company/activities')
+      navigate(`${routes.auction.createAuctionPool}?redirect=${routes.company.activities}`)
     }
   }
   const { personalId, isMe } = usePersonalInfo(type)
 
   const { data: activitiesTotalData } = useRequest(
     async () => {
+      if (!personalId) return
       const resp = await getActivitiesTotal({
         chainId: chain,
         userId: personalId
@@ -79,6 +80,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
   )
   const { data: ideaListData, refresh } = useRequest(
     async () => {
+      if (!personalId) return
       const resp = await getIdeasList({
         offset: 0,
         limit: 1000,
@@ -96,6 +98,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
   )
   const { data: fixedSwapData } = useRequest(
     async () => {
+      if (!personalId) return
       const resp = await getUserPoolsFixedSwap({
         chainId: chain,
         userId: personalId
@@ -144,7 +147,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                   setChain(e.target.value as number)
                 }}
               >
-                {optionDatas?.chainInfoOpt?.map((item, index) => (
+                {optionDatas?.chainInfoOpt?.map((item: any, index: number) => (
                   <MenuItem key={index} value={item.id}>
                     {item.chainName.split(' ')[0]}
                   </MenuItem>
@@ -171,9 +174,9 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
               onClick={() => {
                 if (!token) {
                   toast.error('Please login')
-                  router.push('/login?path=/idea/create')
+                  navigate(`${routes.login}?path=${routes.idea.create}`)
                 } else {
-                  router.push('/idea/create')
+                  navigate(`${routes.idea.create}`)
                 }
               }}
             >
@@ -190,14 +193,14 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
 
           {poolBtnSta === 'Fixed' && fixedSwapData?.createdTotal > 0 ? (
             <Grid container spacing={18}>
-              {fixedSwapData?.list?.map((fixedSwaptem, index) => (
+              {fixedSwapData?.list?.map((fixedSwaptem: any, index: number) => (
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                   <Box
                     component={'a'}
                     target="_blank"
-                    href={`/auction/fixed-price/${getLabel(chain, 'shortName', optionDatas?.chainInfoOpt)}/${Number(
-                      fixedSwaptem.poolId
-                    )}`}
+                    href={routes.auction.fixedPrice
+                      .replace(':chainShortName', getLabel(chain, 'shortName', optionDatas?.chainInfoOpt))
+                      .replace(':poolId', fixedSwaptem.poolId)}
                   >
                     <AuctionCard
                       poolId={fixedSwaptem.poolId}
@@ -212,12 +215,12 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                       holder={
                         fixedSwaptem.creatorUserInfo?.userType === UserType.Profile ? (
                           <AuctionHolder
-                            href={`/profile/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                            href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                             avatar={fixedSwaptem.creatorUserInfo?.avatar}
                             name={fixedSwaptem.creatorUserInfo?.name}
                             description={
                               fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item, index) => {
+                                ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
                                     return (
                                       getLabel(item, 'role', optionDatas?.publicRoleOpt) +
                                       `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
@@ -297,7 +300,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                           />{' '}
                         </>
                       }
-                      categoryName={poolType[fixedSwaptem.category]}
+                      categoryName={poolType[fixedSwaptem.category as PoolType]}
                       whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                       chainId={fixedSwaptem.chainId}
                     />
@@ -321,9 +324,9 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
           </Typography>
           {ideaListData?.total > 0 ? (
             <Grid container spacing={18} mt={12}>
-              {ideaListData?.list?.map((ideaListItem, index) => (
+              {ideaListData?.list?.map((ideaListItem: any, index: number) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
-                  <Link target="_blank" href={`/idea/detail?id=${ideaListItem?.id}`}>
+                  <Link to={`${routes.idea.detail}?id=${ideaListItem?.id}`}>
                     <InstitutionCard
                       icon={ideaListItem.avatar}
                       status={ideaListItem.marketType}

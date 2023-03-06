@@ -11,14 +11,12 @@ import {
   Typography
 } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import Image from 'next/image'
+import Image from 'components/Image'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
 import md5 from 'md5'
 import { show } from '@ebay/nice-modal-react'
-import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import { useLocalStorageState } from 'ahooks'
 import { LoadingButton } from '@mui/lab'
 import PaperBox from 'bounceComponents/signup/PaperBox'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
@@ -34,8 +32,9 @@ import { ReactComponent as VisibilityOn } from 'assets/imgs/user/visibility_on.s
 import { ReactComponent as VisibilityOff } from 'assets/imgs/user/visibility_off.svg'
 import { useLinkedInOauth, useOauth } from 'state/users/hooks'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { fetchCompanyInfo, fetchUserInfo, saveLoginInfo } from '@/store/user'
+import { fetchCompanyInfo, fetchUserInfo, saveLoginInfo } from 'state/users/reducer'
 import { checkEmail } from 'api/user'
+import { useNavigate } from 'react-router-dom'
 
 enum SocialPlatformType {
   Twitter = 3,
@@ -64,9 +63,8 @@ const validationSchema = yup.object({
 })
 
 const Verify: React.FC = () => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [_, setCacheLoginInfo] = useLocalStorageState<ICacheLoginInfo>(CACHE_USER_LOGININFO)
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [checked, setChecked] = useState<SocialPlatformType>(SocialPlatformType.LinkedIn)
   const [accessToken, setAccessToken] = useState<string>('')
@@ -98,6 +96,7 @@ const Verify: React.FC = () => {
       // linkedin
       return toast.error('Your account has been registered, please login')
     }
+    return
   }
   const { linkedInLogin } = useLinkedInOauth(async accessToken => {
     handleClaimCheck(accessToken)
@@ -139,11 +138,6 @@ const Verify: React.FC = () => {
     if (code !== 200) {
       return toast.error('Verify failed')
     }
-    setCacheLoginInfo({
-      token: data?.token,
-      userId: data?.userId,
-      userType: data?.userType
-    })
     dispatch(
       saveLoginInfo({
         token: data?.token,
@@ -176,14 +170,15 @@ const Verify: React.FC = () => {
       iconType: 'success',
       cancelBtn: 'Skip',
       againBtn: 'Edit Now',
-      onClose: () => router.push(`/company/summary?id=${data?.userId}`),
-      onCancel: () => router.push(`/company/summary?id=${data?.userId}`),
-      onAgain: () => router.push('/company/edit')
+      onClose: () => navigate.push(`/company/summary?id=${data?.userId}`),
+      onCancel: () => navigate.push(`/company/summary?id=${data?.userId}`),
+      onAgain: () => navigate.push('/company/edit')
     })
+    return
   }
   useEffect(() => {
     if (companyData) {
-      const resulst = companyData?.list?.map(item => ({
+      const resulst = companyData?.list?.map((item: { name: any; avatar: any }) => ({
         label: item?.name,
         icon: item?.avatar,
         value: item
@@ -217,7 +212,7 @@ const Verify: React.FC = () => {
                       options={options}
                       loadingText="No result"
                       onChange={(_, value) => {
-                        const result = companyData?.list?.filter(item => item.name === value)
+                        const result = companyData?.list?.filter((item: { name: string }) => item.name === value)
                         setValues({
                           ...values,
                           linkedIn: result.length ? result?.[0]?.linkedin : '',
@@ -234,7 +229,7 @@ const Verify: React.FC = () => {
                         }
                       }}
                       onSelect={(_, newValue) => {
-                        const result = companyData?.list?.filter(item => item.id === newValue.value.id)
+                        const result = companyData?.list?.filter((item: { id: any }) => item.id === newValue.value.id)
                         setValues({
                           ...values,
                           linkedIn: result?.[0]?.linkedin,

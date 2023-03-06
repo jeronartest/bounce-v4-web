@@ -1,14 +1,14 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import { RootState } from '@/store'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { IInvestmentItems } from 'api/profile/type'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IProfileInvestmentsListProps = {
   list: IInvestmentItems[]
@@ -21,15 +21,15 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
   showOperation = false,
   handleEdit
 }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
   const handleLink = (item: IInvestmentItems) => {
     if (item?.companyId) {
-      return router.push(`/company/summary?id=${item?.companyId}`)
+      return navigate(`${routes.company.summary}?id=${item?.companyId}`)
     }
     if (item?.thirdpartId) {
-      return router.push(`/company/summary?thirdpartId=${item?.thirdpartId}`)
+      return navigate(`${routes.company.summary}?thirdpartId=${item?.thirdpartId}`)
     }
     return
   }
@@ -82,7 +82,7 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
             >
               {v?.company?.name}
             </Typography>
-            <VerifiedIcon isVerify={v?.isVerify} sx={{ mr: 8 }} />
+            <VerifiedIcon isVerify={!!v?.isVerify} sx={{ mr: 8 }} />
             <Typography
               variant="body2"
               sx={{ background: ' rgba(23, 23, 23, 0.05)', borderRadius: 10, padding: '6px 8px' }}

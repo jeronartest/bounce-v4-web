@@ -1,6 +1,6 @@
 import { useActiveWeb3React } from './index'
 import Web3 from 'web3'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { provider } from 'web3-core'
 
 export function useWeb3Instance() {
@@ -15,4 +15,18 @@ export function useWeb3Instance() {
   }, [active, library])
 
   return web3jsInstance
+}
+
+export function useSignMessage() {
+  const { account } = useActiveWeb3React()
+  const web3 = useWeb3Instance()
+  return useCallback(
+    (message: string) => {
+      if (!account || !web3) {
+        throw new Error('account not find')
+      }
+      return web3?.eth.personal.sign(message, account, '')
+    },
+    [account, web3]
+  )
 }

@@ -1,18 +1,19 @@
-import Link from 'next/link'
 import React from 'react'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 import { Box, OutlinedInput } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useRouter } from 'next/router'
 import FormItem from 'bounceComponents/common/FormItem'
 
 import LoginLayout from 'bounceComponents/signup/LoginLayout'
 import { USER_TYPE } from 'api/user/type'
 import { useRegister } from 'bounceHooks/user/useRegister'
 import { checkEmail } from 'api/user'
+import { Link } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useQueryParams } from 'hooks/useQueryParams'
 
-export type IThirdPartiesCompanyProps = {}
+// export type IThirdPartiesCompanyProps = {}
 const validationSchema = yup.object({
   email: yup
     .string()
@@ -20,7 +21,7 @@ const validationSchema = yup.object({
     .required('Please enter your email address')
     .email('Incorrect email address')
     .test('CHECK_EMAIL', 'This email is registered', async value => {
-      const { code, data } = await checkEmail({ email: value })
+      const { code, data } = await checkEmail({ email: value || '' })
       if (code === 200 && data?.exist) {
         return false
       }
@@ -34,9 +35,8 @@ const validationSchema = yup.object({
     .max(300, 'Company name should contain 1-300 characters')
 })
 
-const ThirdPartiesCompany: React.FC<IThirdPartiesCompanyProps> = ({}) => {
-  const router = useRouter()
-  const { accessToken, oauthType } = router.query as any
+const ThirdPartiesCompany: React.FC = ({}) => {
+  const { accessToken, oauthType } = useQueryParams()
   const initialValues = {
     email: '',
     name: ''
@@ -46,7 +46,7 @@ const ThirdPartiesCompany: React.FC<IThirdPartiesCompanyProps> = ({}) => {
     runRegister({
       email: values.email.trim(),
       name: values.name.trim(),
-      accessToken: accessToken,
+      accessToken: accessToken?.toString() || '',
       password: '',
       registerType: Number(oauthType),
       userType: USER_TYPE.COMPANY
@@ -54,7 +54,7 @@ const ThirdPartiesCompany: React.FC<IThirdPartiesCompanyProps> = ({}) => {
   }
 
   return (
-    <LoginLayout title={'Create Company Account'} subTitle={<Link href={'/login'}>Sign in</Link>}>
+    <LoginLayout title={'Create Company Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {() => (
           <Box component={Form} noValidate>

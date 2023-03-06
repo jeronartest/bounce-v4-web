@@ -1,18 +1,18 @@
 import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { useGetBasicInvestments } from './useGetBasicInvestments'
 import { useGetResumeExperience } from './useGetResumeExperience'
 import { useGetResumeEducation } from './useGetResumeEducation'
 import { updateBasic, updatePersonal } from 'api/profile'
-import { fetchUserInfo } from '@/store/user'
-import { RootState } from '@/store'
 import { timezone } from 'bounceComponents/common/LocationTimeZone'
+import { useUserInfo } from 'state/users/hooks'
+import { fetchUserInfo } from 'state/users/reducer'
 
 export const useUpdateBasic = () => {
   const dispatch = useDispatch()
-  const { userId, userInfo } = useSelector((state: RootState) => state.user)
+  const { userId, userInfo } = useUserInfo()
   const { data: investData, runAsync: runGetBasicInvestments } = useGetBasicInvestments()
 
   useEffect(() => {
@@ -20,12 +20,12 @@ export const useUpdateBasic = () => {
       runGetBasicInvestments({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetBasicInvestments, userId])
 
   return useRequest(
-    async (params) => {
+    async params => {
       const _params = {
         avatar: userInfo?.avatar || {
           fileName: '',
@@ -33,7 +33,7 @@ export const useUpdateBasic = () => {
           fileThumbnailUrl: '',
           fileType: '',
           fileUrl: '',
-          id: 0,
+          id: 0
         },
         fullName: userInfo?.fullName || '',
         publicRole: userInfo?.publicRole || [],
@@ -43,7 +43,7 @@ export const useUpdateBasic = () => {
         company: userInfo?.company || {
           avatar: '',
           link: '',
-          name: '',
+          name: ''
         },
         contactEmail: userInfo?.contactEmail || '',
         github: userInfo?.github || '',
@@ -56,17 +56,17 @@ export const useUpdateBasic = () => {
         university: userInfo?.university || {
           avatar: '',
           link: '',
-          name: '',
+          name: ''
         },
         website: userInfo?.website || '',
-        ...params,
+        ...params
       }
       return updateBasic(_params)
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        const { code, data } = res
+      onSuccess: res => {
+        const { code } = res
         if (code !== 200) {
           return toast.error('submit fail')
         }
@@ -76,16 +76,17 @@ export const useUpdateBasic = () => {
           runGetBasicInvestments({
             userId,
             limit: 100,
-            offset: 0,
+            offset: 0
           })
-      },
-    },
+        return
+      }
+    }
   )
 }
 
 export const usePersonalResume = () => {
   const dispatch = useDispatch()
-  const { userId, userInfo } = useSelector((state: RootState) => state.user)
+  const { userId, userInfo } = useUserInfo()
   const { data: experienceData, runAsync: runGetResumeExperience } = useGetResumeExperience()
   const { data: educationData, runAsync: runGetResumeEducation } = useGetResumeEducation()
 
@@ -94,7 +95,7 @@ export const usePersonalResume = () => {
       runGetResumeExperience({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetResumeExperience, userId])
 
@@ -103,12 +104,12 @@ export const usePersonalResume = () => {
       runGetResumeEducation({
         userId,
         limit: 100,
-        offset: 0,
+        offset: 0
       })
   }, [runGetResumeEducation, userId])
 
   return useRequest(
-    async (params) => {
+    async (params: any) => {
       const _params = {
         primaryRole: userInfo?.primaryRole || 0,
         years: userInfo?.years || 0,
@@ -123,14 +124,14 @@ export const usePersonalResume = () => {
         ifRemotely: userInfo?.ifRemotely || undefined,
         jobTypes: userInfo?.jobTypes || [],
         resumes: userInfo?.resumes || [],
-        ...params,
+        ...params
       }
       return updatePersonal(_params)
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        const { code, data } = res
+      onSuccess: res => {
+        const { code } = res
         if (code !== 200) {
           return toast.error('submit fail')
         }
@@ -140,15 +141,17 @@ export const usePersonalResume = () => {
           runGetResumeExperience({
             userId,
             limit: 100,
-            offset: 0,
+            offset: 0
           })
         userId &&
           runGetResumeEducation({
             userId,
             limit: 100,
-            offset: 0,
+            offset: 0
           })
-      },
-    },
+
+        return
+      }
+    }
   )
 }

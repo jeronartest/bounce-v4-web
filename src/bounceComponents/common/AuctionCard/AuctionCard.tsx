@@ -2,13 +2,13 @@ import { Card, CardHeader, Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useCountDown } from 'ahooks'
 import moment from 'moment'
-import Image from 'next/image'
+import Image from 'components/Image'
 import { AuctionProgress, IAuctionProgressProps } from './AuctionProgress'
 import styles from './styles'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { PoolStatus } from 'api/pool/type'
-import { CHAIN_ICONS } from '@/constants/web3/chains'
+import { ChainId, ChainListMap } from 'constants/chain'
 
 export type IAuctionCardProps = {
   poolId: string
@@ -18,8 +18,8 @@ export type IAuctionCardProps = {
   holder?: React.ReactNode
   progress?: Omit<IAuctionProgressProps, 'status'>
   listItems?: React.ReactNode
-  claimAt?: number
-  closeAt?: number
+  claimAt: number
+  closeAt: number
   categoryName: string
   isMe?: boolean
   creatorClaimed?: boolean
@@ -99,7 +99,11 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
         <Chip
           icon={
             <Image
-              src={CHAIN_ICONS?.[chainConfigInBackend?.ethChainId]}
+              src={
+                chainConfigInBackend?.ethChainId
+                  ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.link || ''
+                  : ''
+              }
               width={12}
               height={12}
               alt={chainConfigInBackend?.shortName}

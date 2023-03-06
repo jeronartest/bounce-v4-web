@@ -37,24 +37,24 @@ export enum LIKE_TYPE {
   like = 1,
   cancelLike = 2,
   dislike = 3,
-  cancelDislike = 4,
+  cancelDislike = 4
 }
 
 export enum LIKE_OBJ {
   company = 1,
   thirdpartCompany = 2,
   idea = 3,
-  pool = 4,
+  pool = 4
 }
 
 export enum LIKE_STATUS {
   no = 1,
-  yes = 2,
+  yes = 2
 }
 
 export enum UNLIKE_STATUS {
   no = 1,
-  yes = 2,
+  yes = 2
 }
 
 export interface IIdeasListParams {

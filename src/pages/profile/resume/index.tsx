@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
-import Head from 'next/head'
 import { JobOverview } from './job'
 import { PreferenceItems } from './preference'
 import { ResumeFiles } from './resume'
@@ -95,12 +94,6 @@ const ProfileResume: React.FC = () => {
 const ProfileResumePage: React.FC = () => {
   return (
     <section>
-      <Head>
-        <title>Edit Portfolio | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <ResumeContextProvider>
         <ProfileResume />
       </ResumeContextProvider>

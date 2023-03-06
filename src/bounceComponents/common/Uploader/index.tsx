@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import type { SxProps } from '@mui/material'
 import { Box } from '@mui/material'
-import Image from 'next/image'
+import Image from 'components/Image'
 import { toast } from 'react-toastify'
 import styles from './styles'
 
@@ -66,8 +66,8 @@ const Uploader: React.FC<IUploaderProps> = ({
   limitSize = 10,
   maxCount = 1,
   accept = [],
-  tips = '',
-  validator = { fileType: { disabled: false }, fileSize: { disabled: false } }
+  tips = ''
+  // validator = { fileType: { disabled: false }, fileSize: { disabled: false } }
 }) => {
   const refFile = useRef<HTMLInputElement>(null)
 

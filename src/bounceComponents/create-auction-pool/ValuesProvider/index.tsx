@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
-import React, { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
-import { AllocationStatus, AuctionPool, CompletedSteps, CreationStep, ParticipantStatus } from '../types'
+import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
+import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -26,13 +26,13 @@ const initialValues: AuctionPool = {
     address: '',
     logoURI: '',
     symbol: '',
-    decimals: '',
+    decimals: ''
   },
   tokenTo: {
     address: '',
     logoURI: '',
     symbol: '',
-    decimals: '',
+    decimals: ''
   },
   swapRatio: '',
   poolSize: '',
@@ -46,7 +46,7 @@ const initialValues: AuctionPool = {
   whitelist: [],
   activeStep: 0,
   completed: {},
-  participantStatus: ParticipantStatus.Public,
+  participantStatus: ParticipantStatus.Public
 }
 
 export enum ActionType {
@@ -56,7 +56,7 @@ export enum ActionType {
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
-  SetWhitelist = 'SET_WHITELIST',
+  SetWhitelist = 'SET_WHITELIST'
 }
 
 type Payload = {
@@ -135,32 +135,32 @@ const reducer = (state: AuctionPool, action: Actions) => {
         ...state,
         tokenFrom: {
           ...state.tokenFrom,
-          ...action.payload.tokenFrom,
-        },
+          ...action.payload.tokenFrom
+        }
       }
     case ActionType.CommitTokenImformation:
       return {
         ...state,
         tokenFrom: {
           ...state.tokenFrom,
-          ...action.payload.tokenFrom,
+          ...action.payload.tokenFrom
         },
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.CommitAuctionParameters:
       return {
         ...state,
         tokenTo: {
           ...state.tokenTo,
-          ...action.payload.tokenTo,
+          ...action.payload.tokenTo
         },
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
         allocationStatus: action.payload.allocationStatus,
         allocationPerWallet: action.payload.allocationPerWallet,
         activeStep: state.activeStep + 1,
-        completed: { ...state.completed, [state.activeStep]: true },
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.CommitAdvancedSettings:
       return {
@@ -173,19 +173,19 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true },
         participantStatus: action.payload.participantStatus,
-        shouldDelayUnlocking: action.payload.shouldDelayUnlocking,
+        shouldDelayUnlocking: action.payload.shouldDelayUnlocking
       }
 
     case ActionType.HandleStep:
       return {
         ...state,
         activeStep: action.payload.activeStep,
-        completed: { ...state.completed, [action.payload.activeStep]: false },
+        completed: { ...state.completed, [action.payload.activeStep]: false }
       }
     case ActionType.SetWhitelist:
       return {
         ...state,
-        whitelist: action.payload.whitelist,
+        whitelist: action.payload.whitelist
       }
     default:
       return state

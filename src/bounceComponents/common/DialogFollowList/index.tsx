@@ -2,21 +2,22 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Box, Stack, Typography, Dialog, styled, Avatar } from '@mui/material'
 
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import styles from './styles'
 import { VerifyStatus } from 'api/profile/type'
 import { USER_TYPE, FollowListType } from 'api/user/type'
-import { RootState } from '@/store'
 import { ReactComponent as CloseIcon } from 'assets/imgs/user/close.svg'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { getUserFollowedCount, getUserFollow, getUserFollowUser } from 'api/user'
 // import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 import NoData from 'bounceComponents/common/NoData'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { useUserInfo } from 'state/users/hooks'
 export const DialogStyle = styled(Dialog)(() => ({
   '.MuiDialog-paper': {
     position: 'relative',
@@ -123,10 +124,10 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
   followCount,
   setFollowCount
 }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
-  const { id } = router.query
-  const token = useSelector((state: RootState) => state.user.token)
+  const optionDatas = useOptionDatas()
+  const { id } = useQueryParams()
+  const navigate = useNavigate()
+  const { token } = useUserInfo()
   const [loading, setLoading] = useState<boolean>(false)
   const isLoginUser = useMemo(() => {
     return Number(userId) === Number(id)
@@ -136,29 +137,29 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
     const params = { userId }
     id && (params.userId = Number(id))
     for (const key in params) {
-      if (!params[key]) {
+      if (typeof key === 'number' && !params[key]) {
         delete params[key]
       }
     }
     const res = await getUserFollowedCount(params)
     const { fanCount, followingCount, following } = res.data
-    setFansCount(fanCount || 0)
-    setFollowCount(followingCount || 0)
-    setIsFollowing(following)
+    setFansCount && setFansCount(fanCount || 0)
+    setFollowCount && setFollowCount(followingCount || 0)
+    setIsFollowing && setIsFollowing(following)
   }, [id, setFansCount, setFollowCount, setIsFollowing, userId])
   const handleClose = useCallback(async () => {
-    setOpenFollow(false)
+    setOpenFollow && setOpenFollow(false)
     refreshCount()
   }, [refreshCount, setOpenFollow])
   useEffect(() => {
     id && handleClose()
   }, [handleClose, id])
   const handleChange = async (newValue: FollowListType) => {
-    setTabIndex(newValue)
+    setTabIndex && setTabIndex(newValue)
     if (isLoginUser && newValue === FollowListType.following) {
       const res2 = await getUserFollow({ userId: Number(userId), followListType: FollowListType.following })
       const result2 = res2.data.list
-      setFollowingData(result2 || [])
+      setFollowingData && setFollowingData(result2 || [])
     }
   }
   const triggerFollowItem = async (item: FollowerItem) => {
@@ -201,12 +202,12 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
   const linkTopage = (item: FollowerItem) => {
     const { thirdpartId, userType, userId } = item
     if (thirdpartId) {
-      return router.push(`/company/summary?thirdpartId=${thirdpartId}`)
+      return navigate(`/company/summary?thirdpartId=${thirdpartId}`)
     }
     if (userType === USER_TYPE.USER) {
-      return router.push(`/profile/summary?id=${userId}`)
+      return navigate(`/profile/summary?id=${userId}`)
     }
-    return router.push(`/company/summary?id=${item?.userId}`)
+    return navigate(`/company/summary?id=${item?.userId}`)
   }
   const getPublicRoleLable = publicRoleId => {
     return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)

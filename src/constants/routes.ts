@@ -1,4 +1,9 @@
 export const routes = {
+  auction: {
+    index: '/auction',
+    createAuctionPool: '/auction/create-auction-pool',
+    fixedPrice: '/auction/fixed-price/:chainShortName/:poolId'
+  },
   companies: '/companies',
   company: {
     index: '/company',
@@ -17,7 +22,7 @@ export const routes = {
     startupIdeas: '/company/startupIdeas',
     summary: '/company/summary',
     team: '/company/team',
-    basic: '/company/basic'
+    topCompanies: '/company/topCompanies'
   },
   idea: {
     create: '/idea/create',

@@ -1,17 +1,13 @@
 import { Box, Container, Stack, Typography, IconButton, Button, Skeleton } from '@mui/material'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
-import Head from 'next/head'
 import styles from './styles'
 import { ITabsListProps } from 'bounceComponents/profile/ProfileLayout'
 import ProfileAvatar from 'bounceComponents/profile/ProfileAvatar'
-import { RootState } from '@/store'
 import { ReactComponent as QRCodeSVG } from 'assets/imgs/profile/qr-code.svg'
 import { ReactComponent as ShareSVG } from 'assets/imgs/profile/share.svg'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { ICompanyOverviewInfo } from 'api/company/type'
 import { getCompanyInfo } from 'api/company'
 import { USER_TYPE, FollowListType } from 'api/user/type'
@@ -25,15 +21,21 @@ import DialogFollowList, { FollowerItem } from 'bounceComponents/common/DialogFo
 import { ReactComponent as EditIcon } from 'assets/imgs/profile/bg-edit.svg'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/profile/bg-delete.svg'
 import { ReactComponent as UploadIcon } from 'assets/imgs/profile/bg-upload.svg'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useUserInfo } from 'state/users/hooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { routes } from 'constants/routes'
 interface ICompanyOverviewLayout {
   children?: React.ReactNode
   extraLink?: React.ReactNode
 }
 const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, extraLink }) => {
-  const { companyInfo: initCompanyInfo, userId } = useSelector((state: RootState) => state.user)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
-  const { id, thirdpartId } = router.query
+  const { companyInfo: initCompanyInfo, userId, token } = useUserInfo()
+  const optionDatas = useOptionDatas()
+  const { id, thirdpartId } = useQueryParams()
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
   const [companyInfo, setCompanyInfo] = useState<ICompanyOverviewInfo>()
   const [likeObject, setLikeObject] = useState<ILikeUnlikeRes>()
   const [fansCount, setFansCount] = useState<number>(0)
@@ -43,7 +45,6 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
   const [followingData, setFollowingData] = useState<Array<FollowerItem>>([])
   const [isFolloing, setIsFollowing] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<FollowListType>(FollowListType.follower) // tabIndex 0 following-list 1 followers-list
-  const token = useSelector((state: RootState) => state.user.token)
   const [showBgEditBtn, setShowBgEditBtn] = useState(false)
   const [showBgEditDialog, setShowBgEditDialog] = useState(false)
   const [showBgEditCropDialog, setShowBgEditCropDialog] = useState(false)
@@ -51,10 +52,10 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
 
   useEffect(() => {
     setLikeObject({
-      dislikeCount: companyInfo?.dislikeCount,
-      likeCount: companyInfo?.likeCount,
-      myDislike: companyInfo?.myDislike,
-      myLike: companyInfo?.myLike
+      dislikeCount: companyInfo?.dislikeCount || 0,
+      likeCount: companyInfo?.likeCount || 0,
+      myDislike: companyInfo?.myDislike || 0,
+      myLike: companyInfo?.myLike || 0
     })
   }, [companyInfo])
   const tabsList: ITabsListProps[] = useMemo(
@@ -93,15 +94,10 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
     []
   )
   const hasActive = (path: string) => {
-    return path.indexOf(router.pathname) > -1
+    return path.indexOf(pathname) > -1
   }
   const linkHref = (href: string) => {
-    return router.push({
-      pathname: href,
-      query: {
-        ...router.query
-      }
-    })
+    return navigate(href + search)
   }
   const copyShare = () => {
     const baseUrl = process.env.REACT_APP_SHARE_BASEURL
@@ -109,9 +105,9 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
     //   return baseUrl + `/company/summary?id=${router.query?.id}`
     // }
     if (router.asPath?.indexOf('thirdpartId') > -1) {
-      return baseUrl + `/company/summary?thirdpartId=${router.query?.thirdpartId}`
+      return baseUrl + `${routes.company.summary}?thirdpartId=${thirdpartId}`
     }
-    return baseUrl + `/company/summary?id=${router.query?.id || userId}`
+    return baseUrl + `${routes.company.summary}?id=${id || userId}`
     // if (router.asPath?.indexOf('?') > -1) {
     //   return baseUrl + router.asPath + `&id=${userId}`
     // }
@@ -152,7 +148,7 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
     thirdpartId && (params.thirdpartId = Number(thirdpartId))
     id && (params.userId = Number(id))
     for (const key in params) {
-      if (!params[key]) {
+      if (typeof key === 'number' && !params[key]) {
         delete params[key]
       }
     }
@@ -208,11 +204,6 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
 
   return (
     <section>
-      <Head>
-        <title>Profile | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <Container maxWidth="xl" sx={{ position: 'relative', mb: 80 }}>
         <Box sx={{ height: 448 }}>
           <picture
@@ -327,7 +318,7 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
                   <ProfileAvatar src={companyInfo?.avatar?.fileThumbnailUrl || companyInfo?.avatar?.fileUrl} />
                 )}
                 <VerifiedIcon
-                  isVerify={companyInfo?.isVerify}
+                  isVerify={companyInfo?.isVerify || 1}
                   width={42}
                   height={42}
                   showVerify={companyInfo?.companyId === userId}
@@ -416,7 +407,7 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
                   <Typography variant="body1" sx={{ maxWidth: 576 }}>
                     {companyInfo?.briefIntro}
                   </Typography>
-                  {companyInfo?.userType === USER_TYPE.COMPANY && (
+                  {companyInfo?.userType === USER_TYPE.COMPANY && likeObject && (
                     <LikeUnlike
                       likeObj={thirdpartId ? LIKE_OBJ.thirdpartCompany : LIKE_OBJ.company}
                       objId={companyInfo?.companyId}
@@ -473,8 +464,8 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
                     <Typography
                       variant="h4"
                       key={item.labelKey}
-                      sx={{ ...styles.menu, ...(hasActive(item.href) ? styles.menuActive : ({} as any)) }}
-                      onClick={() => linkHref(item.href)}
+                      sx={{ ...styles.menu, ...(hasActive(item?.href || '') ? styles.menuActive : ({} as any)) }}
+                      onClick={() => linkHref(item?.href || '')}
                     >
                       {item.label}
                     </Typography>
@@ -488,7 +479,7 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
         </Box>
         {/* following & follower list */}
         <DialogFollowList
-          userId={userId}
+          userId={Number(userId)}
           setIsFollowing={setIsFollowing}
           setOpenFollow={setOpenFollow}
           openFollow={openFollow}

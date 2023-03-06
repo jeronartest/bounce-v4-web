@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
-import Head from 'next/head'
 import { BasicOverview } from '../edit/overview'
 import { SocialList } from '../edit/social'
 import BasicContextProvider, {
@@ -83,12 +82,6 @@ const ProfileBasic: React.FC = () => {
 const ProfileBasicPage: React.FC = () => {
   return (
     <section>
-      <Head>
-        <title>Edit Summary | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <BasicContextProvider>
         <ProfileBasic />
       </BasicContextProvider>

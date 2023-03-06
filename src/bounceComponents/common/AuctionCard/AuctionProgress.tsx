@@ -1,8 +1,7 @@
 import React from 'react'
-import { utils } from 'ethers'
 import { Box, LinearProgress, Stack, Typography } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
-import { formatNumber } from '@/utils/web3/number'
+import { formatNumber } from 'utils/number'
 
 export type IAuctionProgressProps = {
   status: PoolStatus
@@ -46,7 +45,7 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
             height: 6,
             borderRadius: 4,
             '::before': {
-              opacity: status === 1 && 1
+              opacity: status === 1 ? 1 : 'inherit'
             }
           }}
         />

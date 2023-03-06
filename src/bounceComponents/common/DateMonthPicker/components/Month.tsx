@@ -5,63 +5,63 @@ export const monthEnum = [
   {
     value: 0,
     label: 'January',
-    shortLabel: 'Jan',
+    shortLabel: 'Jan'
   },
   {
     value: 1,
     label: 'February',
-    shortLabel: 'Feb',
+    shortLabel: 'Feb'
   },
   {
     value: 2,
     label: 'March',
-    shortLabel: 'Mar',
+    shortLabel: 'Mar'
   },
   {
     value: 3,
     label: 'April',
-    shortLabel: 'Apr',
+    shortLabel: 'Apr'
   },
   {
     value: 4,
     label: 'May',
-    shortLabel: 'May',
+    shortLabel: 'May'
   },
   {
     value: 5,
     label: 'June',
-    shortLabel: 'Jun',
+    shortLabel: 'Jun'
   },
   {
     value: 6,
     label: 'July',
-    shortLabel: 'Jul',
+    shortLabel: 'Jul'
   },
   {
     value: 7,
     label: 'August',
-    shortLabel: 'Aug',
+    shortLabel: 'Aug'
   },
   {
     value: 8,
     label: 'September',
-    shortLabel: 'Sep',
+    shortLabel: 'Sep'
   },
   {
     value: 9,
     label: 'October',
-    shortLabel: 'Oct',
+    shortLabel: 'Oct'
   },
   {
     value: 10,
     label: 'November',
-    shortLabel: 'Nov',
+    shortLabel: 'Nov'
   },
   {
     value: 11,
     label: 'December',
-    shortLabel: 'Dec',
-  },
+    shortLabel: 'Dec'
+  }
 ]
 
 export type IMonthProps = {
@@ -76,13 +76,13 @@ const Month: React.FC<IMonthProps> = ({ month, onChange }) => {
     onChange(val)
   }, [onChange, val])
 
-  const handleClick = useCallback((val) => {
+  const handleClick = useCallback(val => {
     setVal(val)
   }, [])
 
   return (
     <Stack direction="row" sx={{ display: 'flex', flexWrap: 'wrap', margin: '24px 0 40px' }}>
-      {monthEnum.map((v) => (
+      {monthEnum.map(v => (
         <Typography
           key={v.value}
           variant="body1"
@@ -95,10 +95,10 @@ const Month: React.FC<IMonthProps> = ({ month, onChange }) => {
             borderRadius: '18px',
             cursor: 'pointer',
             '&:hover': {
-              backgroundColor: val !== v.value ? 'rgba(0, 0, 0, 0.04)' : '',
+              backgroundColor: val !== v.value ? 'rgba(0, 0, 0, 0.04)' : ''
             },
             color: val === v.value ? 'rgb(255, 255, 255)' : '',
-            backgroundColor: val === v.value ? 'rgb(25, 118, 210)' : '',
+            backgroundColor: val === v.value ? 'rgb(25, 118, 210)' : ''
           }}
           onClick={() => handleClick(v.value)}
         >

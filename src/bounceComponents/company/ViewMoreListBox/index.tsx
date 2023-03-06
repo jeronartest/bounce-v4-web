@@ -18,7 +18,7 @@ const ViewMoreListBox: React.FC<IViewMoreListBoxProps> = ({
   loading,
   handleClick,
   show,
-  showDivider = true,
+  showDivider = true
 }) => {
   return (
     <Container sx={{ px: 0 }}>

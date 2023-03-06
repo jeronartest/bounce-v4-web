@@ -1,29 +1,19 @@
 import { Container, Divider } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import Head from 'next/head'
 import EditInfo from 'bounceComponents/profile/account/components/EditInfo'
-import { RootState } from '@/store'
 import LoginOpton from 'bounceComponents/profile/account/components/LoginOption'
 import EVMWallet from 'bounceComponents/profile/account/components/EVMWallet'
 import { USER_TYPE } from 'api/user/type'
-import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
+import { useUserInfo } from 'state/users/hooks'
 
 // export type IAccountSettingsProps = {}
 
 const AccountSettings: React.FC = ({}) => {
-  useEagerConnect()
-
-  const { userType, userInfo, companyInfo } = useSelector((state: RootState) => state.user)
+  const { userType, userInfo, companyInfo } = useUserInfo()
 
   const tempInfo = Number(userType) === USER_TYPE.USER ? userInfo : companyInfo
   return (
     <>
-      <Head>
-        <title>Account Setting | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <Container maxWidth="lg" sx={{ mt: 40 }}>
         <Container maxWidth="md" sx={{ mt: 24, background: '#FFFFFF', borderRadius: 20 }}>
           <EditInfo userInfoEmail={tempInfo?.email} />

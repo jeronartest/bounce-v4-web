@@ -1,27 +1,27 @@
-import { Avatar, Divider, Link, Typography } from '@mui/material'
+import { Avatar, Divider, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { Stack } from '@mui/system'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import { RootState } from '@/store'
 import { experienceItems } from 'api/profile/type'
 import { IPager } from 'api/type'
 import { getResumeExperience } from 'api/profile'
-import { getPrimaryRoleLabel } from '@/utils'
+import { getPrimaryRoleLabel } from 'utils'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IProfileExperienceProps = {
   personalInfoId: number
 }
 
 const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
   const [list, setList] = useState<experienceItems[]>([])
 
@@ -58,16 +58,21 @@ const ProfileExperience: React.FC<IProfileExperienceProps> = ({ personalInfoId }
 
   const handleLink = (item: experienceItems) => {
     if (item?.companyId) {
-      return router.push(`/company/summary?id=${item?.companyId}`)
+      return navigate(`${routes.company.summary}?id=${item?.companyId}`)
     }
     if (item?.thirdpartId) {
-      return router.push(`/company/summary?thirdpartId=${item?.thirdpartId}`)
+      return navigate(`${routes.company.summary}?thirdpartId=${item?.thirdpartId}`)
     }
     return
   }
 
   return list?.length ? (
-    <ViewMoreListBox show={list?.length < data?.total} title="Experience" loading={loading} handleClick={handleClick}>
+    <ViewMoreListBox
+      show={!!data?.total && list?.length < data?.total}
+      title="Experience"
+      loading={loading}
+      handleClick={handleClick}
+    >
       <Stack spacing={32}>
         {list?.map((v, i) => (
           <Stack key={i} direction="row" spacing={20}>

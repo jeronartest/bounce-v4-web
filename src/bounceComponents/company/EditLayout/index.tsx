@@ -1,82 +1,82 @@
 import React, { ReactNode } from 'react'
 import { Box, Button, Container, Stack, Typography } from '@mui/material'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import styles from './styles'
 import GoBack from 'bounceComponents/common/GoBack'
+import { Link, useLocation } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export const companyTabsList: ITabsListProps[] = [
   {
     labelKey: 'overview',
     label: 'Overview',
-    href: '/company/edit/overview',
+    href: routes.company.edit.overview
   },
   {
     labelKey: 'team',
     label: 'Team',
-    href: '/company/edit/team',
+    href: routes.company.edit.team
   },
   {
     labelKey: 'tokens',
     label: 'Tokens',
-    href: '/company/edit/tokens',
+    href: routes.company.edit.tokens
   },
   {
     labelKey: 'investors',
     label: 'Investors',
-    href: '/company/edit/investors',
+    href: routes.company.edit.investors
   },
   {
     labelKey: 'investments',
     label: 'Investments',
-    href: '/company/edit/investments',
-  },
+    href: routes.company.edit.investments
+  }
 ]
 
 export const profileTabsList: ITabsListProps[] = [
   {
     labelKey: 'overview',
     label: 'Overview',
-    href: '/profile/edit/overview',
+    href: routes.profile.edit.overview
   },
   {
     labelKey: 'social',
     label: 'Social profile',
-    href: '/profile/edit/social',
+    href: routes.profile.edit.social
   },
   {
     labelKey: 'investments',
     label: 'Investments',
-    href: '/profile/edit/investments',
-  },
+    href: routes.profile.edit.investments
+  }
 ]
 
 export const resumeTabsList: ITabsListProps[] = [
   {
     labelKey: 'job',
     label: 'Job Overview',
-    href: '/profile/resume/job',
+    href: routes.profile.resume.job
   },
   {
     labelKey: 'experience',
     label: 'Experience',
-    href: '/profile/resume/experience',
+    href: routes.profile.resume.experience
   },
   {
     labelKey: 'education',
     label: 'Education',
-    href: '/profile/resume/education',
+    href: routes.profile.resume.education
   },
   {
     labelKey: 'preference',
     label: 'Preference',
-    href: '/profile/resume/preference',
+    href: routes.profile.resume.preference
   },
   {
     labelKey: 'resume',
     label: 'Resume',
-    href: '/profile/resume/resume',
-  },
+    href: routes.profile.resume.resume
+  }
 ]
 
 interface TabPanelProps {
@@ -85,7 +85,7 @@ interface TabPanelProps {
   tabValue: number | string
 }
 
-export const TabPanel: React.FC<TabPanelProps> = (props) => {
+export const TabPanel: React.FC<TabPanelProps> = props => {
   const { children, panelValue, tabValue } = props
 
   return <div hidden={panelValue !== tabValue}>{panelValue === tabValue && <Box>{children}</Box>}</div>
@@ -106,10 +106,11 @@ interface ICompanyEditLayout {
 }
 
 const EditLayout: React.FC<ICompanyEditLayout> = ({ title, tabsList, goBack, children }) => {
-  const router = useRouter()
+  const { pathname, search } = useLocation()
 
-  const hasActive = (path: string) => {
-    return router.asPath.indexOf(path) > -1
+  const hasActive = (path: string | undefined) => {
+    if (!path) return false
+    return pathname.indexOf(path) > -1
   }
 
   return (
@@ -118,18 +119,17 @@ const EditLayout: React.FC<ICompanyEditLayout> = ({ title, tabsList, goBack, chi
 
       <Box sx={{ display: 'grid', gridTemplateColumns: '320px auto', gridColumnGap: '20px', mt: 34 }}>
         <Stack spacing={8} sx={styles.menuBox}>
-          {tabsList.map((item) => {
+          {tabsList.map(item => {
             return (
               <Link
-                href={`${item.href}${router?.asPath?.split('?')?.[1] ? '?' + router?.asPath?.split('?')?.[1] : ''}`}
-                legacyBehavior
+                to={`${item.href}${search?.split('?')?.[1] ? '?' + search?.split('?')?.[1] : ''}`}
                 key={item.labelKey}
               >
                 <Button
                   fullWidth
                   size="large"
-                  variant={hasActive(item.href) ? 'contained' : 'text'}
-                  sx={{ ...styles.menu, ...(hasActive(item.href) ? styles.menuActive : ({} as any)) }}
+                  variant={hasActive(item?.href) ? 'contained' : 'text'}
+                  sx={{ ...styles.menu, ...(hasActive(item?.href) ? styles.menuActive : ({} as any)) }}
                 >
                   <Typography variant="h4">{item.label}</Typography>
                 </Button>

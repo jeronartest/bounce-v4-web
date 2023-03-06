@@ -5,7 +5,7 @@ export default {
     position: 'relative',
     width: '100%',
     borderRadius: 20,
-    background: 'var(--ps-primary)',
+    background: 'var(--ps-primary)'
   },
   tabsBox: {
     marginTop: 73,
@@ -13,30 +13,30 @@ export default {
     paddingLeft: 48,
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '0px 48px',
+    padding: '0px 48px'
   },
   menu: {
     paddingBottom: 9,
     color: 'rgba(23, 23, 23, 0.5)',
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   menuActive: {
     borderBottom: '2px solid #000',
-    color: 'var(--ps-gray-900)',
+    color: 'var(--ps-gray-900)'
   },
   like: {
     p: '7px 16px',
     borderRadius: 16,
     background: '#F5F5F5',
-    color: 'var(--ps-gray-900)',
+    color: 'var(--ps-gray-900)'
   },
   activeLike: {
     background: 'var(--ps-gray-900)',
     color: '#FFFFFF',
     '&:hover': {
       background: 'var(--ps-gray-900)',
-      color: '#FFFFFF',
-    },
+      color: '#FFFFFF'
+    }
   },
   followerItemStyle: {
     background: '#FFFFFF',
@@ -60,8 +60,8 @@ export default {
       color: '#171717',
       cursor: 'pointer',
       '&:hover': {
-        textDecoration: 'underline',
-      },
+        textDecoration: 'underline'
+      }
     },
     '.description': {
       width: '100%',
@@ -72,7 +72,7 @@ export default {
       color: '#878A8E',
       textOverflow: 'ellipsis',
       overflow: 'hidden',
-      whiteSpace: 'nowrap',
+      whiteSpace: 'nowrap'
     },
     '.followerBtn': {
       background: '#FFFFFF',
@@ -82,22 +82,22 @@ export default {
       padding: '8px 16px',
       fontFamily: 'Sharp Grotesk DB Cyr Book 20',
       '.following': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '.unfollow': {
-        display: 'none',
+        display: 'none'
       },
       '&:hover': {
         background: `rgba(245, 48, 48, 0.1)`,
         border: `1px solid rgba(245, 48, 48, 0.3)`,
         color: '#F53030',
         '.unfollow': {
-          display: 'inline-block',
+          display: 'inline-block'
         },
         '.following': {
-          display: 'none',
-        },
-      },
+          display: 'none'
+        }
+      }
     },
     '.unfollowerBtn': {
       background: '#171717',
@@ -108,22 +108,22 @@ export default {
       padding: '8px 16px',
       fontFamily: 'Sharp Grotesk DB Cyr Book 20',
       '.following': {
-        display: 'none',
+        display: 'none'
       },
       '.unfollow': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '&:hover': {
         background: `#404040`,
         border: `1px solid #171717`,
         color: '#fff',
         '.unfollow': {
-          display: 'none',
+          display: 'none'
         },
         '.following': {
-          display: 'inline-block',
-        },
-      },
+          display: 'inline-block'
+        }
+      }
     },
     '.followingBtn': {
       background: '#FFFFFF',
@@ -133,22 +133,22 @@ export default {
       padding: '8px 16px',
       fontFamily: 'Sharp Grotesk DB Cyr Book 20',
       '.following': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '.unfollow': {
-        display: 'none',
+        display: 'none'
       },
       '&:hover': {
         background: `rgba(245, 48, 48, 0.1)`,
         border: `1px solid rgba(245, 48, 48, 0.3)`,
         color: '#F53030',
         '.unfollow': {
-          display: 'inline-block',
+          display: 'inline-block'
         },
         '.following': {
-          display: 'none',
-        },
-      },
+          display: 'none'
+        }
+      }
     },
     '.unfollowingBtn': {
       background: '#FFFFFF',
@@ -158,23 +158,23 @@ export default {
       padding: '8px 16px',
       fontFamily: 'Sharp Grotesk DB Cyr Book 20',
       '.following': {
-        display: 'none',
+        display: 'none'
       },
       '.unfollow': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '&:hover': {
         background: `#404040`,
         border: `1px solid #404040`,
         color: '#fff',
         '.unfollow': {
-          display: 'none',
+          display: 'none'
         },
         '.following': {
-          display: 'inline-block',
-        },
-      },
-    },
+          display: 'inline-block'
+        }
+      }
+    }
   },
   followerBtn: {
     background: '#FFFFFF',
@@ -184,22 +184,22 @@ export default {
     padding: '8px 16px',
     fontFamily: 'Sharp Grotesk DB Cyr Book 20',
     '.following': {
-      display: 'inline-block',
+      display: 'inline-block'
     },
     '.unfollow': {
-      display: 'none',
+      display: 'none'
     },
     '&:hover': {
       background: `rgba(245, 48, 48, 0.1)`,
       border: `1px solid rgba(245, 48, 48, 0.3)`,
       color: '#F53030',
       '.unfollow': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '.following': {
-        display: 'none',
-      },
-    },
+        display: 'none'
+      }
+    }
   },
   unfollowerBtn: {
     background: '#171717',
@@ -210,22 +210,22 @@ export default {
     padding: '8px 16px',
     fontFamily: 'Sharp Grotesk DB Cyr Book 20',
     '.following': {
-      display: 'none',
+      display: 'none'
     },
     '.unfollow': {
-      display: 'inline-block',
+      display: 'inline-block'
     },
     '&:hover': {
       background: `#404040`,
       border: `1px solid #171717`,
       color: '#fff',
       '.unfollow': {
-        display: 'none',
+        display: 'none'
       },
       '.following': {
-        display: 'inline-block',
-      },
-    },
+        display: 'inline-block'
+      }
+    }
   },
   followingBtn: {
     background: '#FFFFFF',
@@ -235,22 +235,22 @@ export default {
     padding: '8px 16px',
     fontFamily: 'Sharp Grotesk DB Cyr Book 20',
     '.following': {
-      display: 'inline-block',
+      display: 'inline-block'
     },
     '.unfollow': {
-      display: 'none',
+      display: 'none'
     },
     '&:hover': {
       background: `rgba(245, 48, 48, 0.1)`,
       border: `1px solid rgba(245, 48, 48, 0.3)`,
       color: '#F53030',
       '.unfollow': {
-        display: 'inline-block',
+        display: 'inline-block'
       },
       '.following': {
-        display: 'none',
-      },
-    },
+        display: 'none'
+      }
+    }
   },
   unfollowingBtn: {
     background: '#171717',
@@ -261,21 +261,21 @@ export default {
     fontFamily: 'Sharp Grotesk DB Cyr Book 20',
     color: '#fff',
     '.following': {
-      display: 'none',
+      display: 'none'
     },
     '.unfollow': {
-      display: 'inline-block',
+      display: 'inline-block'
     },
     '&:hover': {
       background: `#404040`,
       border: `1px solid #404040`,
       color: '#fff',
       '.unfollow': {
-        display: 'none',
+        display: 'none'
       },
       '.following': {
-        display: 'inline-block',
-      },
-    },
-  },
+        display: 'inline-block'
+      }
+    }
+  }
 } as Record<string, SxProps>

@@ -7,10 +7,10 @@ import {
   DialogTitle,
   DialogProps as MuiDialogProps,
   Button,
-  Box,
+  Box
 } from '@mui/material'
 import { create, register, useModal } from '@ebay/nice-modal-react'
-import Image from 'next/image'
+import Image from 'components/Image'
 import { ReactComponent as CloseSvg } from 'assets/imgs/close.svg'
 
 export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
@@ -24,7 +24,7 @@ export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   againBtn?: string
 }
 
-const DialogTips: React.FC<DialogProps> = create((props) => {
+const DialogTips = create((props: DialogProps) => {
   const { content, title, onAgain, onClose, cancelBtn, againBtn, onCancel, iconType, ...rest } = props
   const modal = useModal()
   const handleCancel = () => {
@@ -47,8 +47,8 @@ const DialogTips: React.FC<DialogProps> = create((props) => {
         '& .MuiDialog-paper': {
           minWidth: 480,
           borderRadius: 20,
-          width: 480,
-        },
+          width: 480
+        }
       }}
       {...rest}
     >

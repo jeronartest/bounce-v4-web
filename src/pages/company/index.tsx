@@ -4,25 +4,23 @@ import AddCircleOutlineSharpIcon from '@mui/icons-material/AddCircleOutlineSharp
 import React from 'react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import Head from 'next/head'
 import styles from './styles'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
 import { getIdeasList } from 'api/idea'
 import { getCompanyInformation, getInstitutionInvestors } from 'api/market'
-import { RootState } from '@/store'
 import CompanyBanner from 'bounceComponents/company/CompanyBanner'
 import CompanyBanner1 from 'assets/imgs/company/banner/company.png'
 import CompanyBanner2 from 'assets/imgs/company/banner/banner4.png'
+import { Link, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useUserInfo } from 'state/users/hooks'
 
 const defaultIdeaPageSize = 8
 
 const Company: React.FC = ({}) => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const {
     data: ideaListData,
     refresh,
@@ -85,7 +83,7 @@ const Company: React.FC = ({}) => {
       defaultPageSize: defaultIdeaPageSize
     }
   )
-  const { token } = useSelector((state: RootState) => state.user)
+  const { token } = useUserInfo()
   const bannerList = [
     {
       img: CompanyBanner1,
@@ -98,23 +96,6 @@ const Company: React.FC = ({}) => {
   ]
   return (
     <>
-      <Head>
-        <title>Company | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-
-        <meta name="og:title" content="Company | Bounce" />
-        <meta name="og:type" content="website" />
-        <meta name="og:url" content={`${process.env.NEXT_PUBLIC_SHARE_BASEURL}/company`} />
-        <meta
-          name="og:description"
-          content="Bounce powers an ecosystem of products for auctions. Build, design, connect, collect and trade all kinds of assets, tokens and NFTs across multiple blockchains."
-        />
-        <meta
-          name="og:image"
-          content="https://images-v3.bounce.finance/791eeee5715a6beba8c922b3d5e0e462-1675684637.png"
-        />
-      </Head>
       <Container maxWidth="lg">
         <Box mt={60}>
           <CompanyBanner list={bannerList} />
@@ -126,7 +107,7 @@ const Company: React.FC = ({}) => {
                 Trending Startup Ideas
               </Typography>
               <Stack direction={'row'} spacing={10}>
-                <Button variant="outlined" LinkComponent={Link} href={'/company/startupIdeas'}>
+                <Button variant="outlined" LinkComponent={Link} href={`${routes.company.startupIdeas}`}>
                   Explore all
                 </Button>
                 <Button
@@ -135,9 +116,9 @@ const Company: React.FC = ({}) => {
                   onClick={() => {
                     if (!token) {
                       toast.error('Please login')
-                      router.push('/login?path=/idea/create')
+                      navigate(`${routes.login}?path=${routes.idea.create}`)
                     } else {
-                      router.push('/idea/create')
+                      navigate(`${routes.idea.create}`)
                     }
                   }}
                 >
@@ -148,11 +129,11 @@ const Company: React.FC = ({}) => {
             <Box sx={{ mt: 16 }}>
               {ideaLoding ? (
                 <Grid rowSpacing={24} columnSpacing={20} container>
-                  {Array.from(new Array(8)).map((lodingItem, index) => (
+                  {Array.from(new Array(8)).map((_, index) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
                       <Box>
                         <Skeleton
-                          variant="rounded"
+                          variant="circular"
                           height={322}
                           sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
                         />
@@ -164,7 +145,7 @@ const Company: React.FC = ({}) => {
                 <Grid rowSpacing={24} columnSpacing={20} container>
                   {ideaListData?.list?.map((ideaListItem, index) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
-                      <Link target="_blank" href={`/idea/detail?id=${ideaListItem?.id}`}>
+                      <Link target="_blank" to={`${routes.idea.detail}?id=${ideaListItem?.id}`}>
                         <InstitutionCard
                           icon={ideaListItem.avatar}
                           status={ideaListItem.marketType}
@@ -202,7 +183,7 @@ const Company: React.FC = ({}) => {
                 variant="contained"
                 sx={{ border: ' 1px solid #FFFFFF;' }}
                 LinkComponent={Link}
-                href={'/company/topCompanies'}
+                href={`${routes.company.topCompanies}`}
               >
                 Explore all
               </Button>
@@ -210,11 +191,11 @@ const Company: React.FC = ({}) => {
             <Box sx={{ mt: 16 }}>
               {topCompaniesLoding ? (
                 <Grid rowSpacing={24} columnSpacing={20} container>
-                  {Array.from(new Array(8)).map((lodingItem, index) => (
+                  {Array.from(new Array(8)).map((_, index) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
                       <Box>
                         <Skeleton
-                          variant="rounded"
+                          variant="circular"
                           height={322}
                           sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
                         />
@@ -224,12 +205,12 @@ const Company: React.FC = ({}) => {
                 </Grid>
               ) : (
                 <Grid rowSpacing={24} columnSpacing={20} container>
-                  {topCompaniesData?.list?.map((ideaListItem, index) => (
+                  {topCompaniesData?.list?.map((ideaListItem: any, index: number) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
                       <Box
                         onClick={() => {
-                          router.push(
-                            `/company/summary?${
+                          navigate(
+                            `${routes.company.summary}?${
                               ideaListItem?.thirdpartId !== 0
                                 ? `thirdpartId=${ideaListItem?.thirdpartId}`
                                 : `id=${ideaListItem?.companyId}`
@@ -276,11 +257,11 @@ const Company: React.FC = ({}) => {
             <Box sx={{ mt: 16 }}>
               {InstitutionInvestorsLoding ? (
                 <Grid rowSpacing={24} columnSpacing={20} container>
-                  {Array.from(new Array(8)).map((lodingItem, index) => (
+                  {Array.from(new Array(8)).map((_, index) => (
                     <Grid item xs={12} sm={6} md={6} lg={3} xl={3} key={index}>
                       <Box>
                         <Skeleton
-                          variant="rounded"
+                          variant="circular"
                           height={282}
                           sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
                         />
@@ -290,12 +271,12 @@ const Company: React.FC = ({}) => {
                 </Grid>
               ) : (
                 <Grid rowSpacing={24} columnSpacing={20} container>
-                  {institutionInvestorsData?.list.map((item, i) => (
+                  {institutionInvestorsData?.list.map((item: any, i: number) => (
                     <Grid key={i} item xs={12} sm={6} md={3} lg={3} xl={3}>
                       <Box
                         onClick={() => {
-                          router.push(
-                            `/company/summary?${
+                          navigate(
+                            `${routes.company.summary}?${
                               item?.thirdpartId !== 0 ? `thirdpartId=${item?.thirdpartId}` : `id=${item?.companyId}`
                             }`
                           )

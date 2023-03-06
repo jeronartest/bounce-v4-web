@@ -1,8 +1,8 @@
 import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import { useLogin } from './useLogin'
 import { register } from 'api/user'
 import { IRegisterParams } from 'api/user/type'
+import { useLogin } from 'state/users/hooks'
 
 export const useRegister = () => {
   const { runAsync: runLogin } = useLogin()
