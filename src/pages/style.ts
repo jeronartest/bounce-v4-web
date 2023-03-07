@@ -1,4 +1,4 @@
-import { Container, styled } from '@mui/material'
+import { Box, styled } from '@mui/material'
 
 const AppWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -17,15 +17,15 @@ const ContentWrapper = styled('div')({
   // alignItems: 'center'
 })
 
-const BodyWrapper = styled(Container)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
+const BodyWrapper = styled(Box)(({ theme }) => ({
+  // display: 'flex',
+  // flexDirection: 'column',
   width: '100%',
   minHeight: `calc(100vh - ${theme.height.header})`,
-  padding: '50px 0 80px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flex: 1,
+  padding: `${theme.height.header} 0 0`,
+  // justifyContent: 'center',
+  // alignItems: 'center',
+  // flex: 1,
   // overflowY: 'auto',
   overflowX: 'hidden',
   position: 'relative',

@@ -16,6 +16,7 @@ import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Companies from 'pages/companies'
 
@@ -89,7 +90,7 @@ export default function App() {
               <ShowOnMobile breakpoint="md">
                 <Mobile />
               </ShowOnMobile>
-              <BodyWrapper id="body" maxWidth="xl">
+              <BodyWrapper id="body">
                 <Popups />
                 <Polling />
                 {/* <WarningModal /> */}
@@ -115,9 +116,8 @@ export default function App() {
 
                     <Route path={routes.login} element={<Login />} />
 
-                    <Route path={routes.market.index} element={<Market />}>
-                      <Route path={routes.market.pools.slice(1)} element={<MarketPools />} />
-                    </Route>
+                    <Route path={routes.market.index} element={<Market />} />
+                    <Route path={routes.market.pools} element={<MarketPools />} />
 
                     <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />
@@ -159,7 +159,7 @@ export default function App() {
                     {/* <Route path={routes.test2} element={<ComingSoon />} />
                       <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
                     </Route> */}
-                    <Route path="*" element={<Navigate to={routes.login} replace />} />
+                    <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>
                 </Web3ReactManager>
               </BodyWrapper>

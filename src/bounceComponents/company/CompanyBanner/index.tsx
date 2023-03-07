@@ -55,7 +55,7 @@ const CompanyBanner: React.FC<ICompanyBanneListrProps> = ({ list }) => {
               cursor: 'pointer'
             }}
           >
-            <Image src={item.img.src} alt="" height={420} />
+            <Image src={item.img} alt="" height={420} />
             <Box sx={{ p: '60px 40px 32px', background: '#FFFFFF', width: 465 }}>
               <Typography variant="h1" sx={{ fontSize: 34 }}>
                 {item.title}

@@ -150,13 +150,8 @@ const Market: React.FC = ({}) => {
               <Typography variant="h2" fontSize={24} color={'#FFFFFF'}>
                 Trending Token Auction Pools
               </Typography>
-              <Button
-                variant="contained"
-                sx={{ border: ' 1px solid #FFFFFF;' }}
-                LinkComponent={Link}
-                href={routes.market.pools}
-              >
-                Explore all
+              <Button variant="contained" sx={{ border: ' 1px solid #FFFFFF;' }}>
+                <Link to={routes.market.pools}>Explore all</Link>
               </Button>
             </Box>
             <Box mt={18}>
@@ -213,7 +208,7 @@ const Market: React.FC = ({}) => {
                               />
                             ) : (
                               <AuctionHolder
-                                href={`/company/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                href={`${routes.company.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                                 avatar={fixedSwaptem.creatorUserInfo?.companyAvatar}
                                 name={fixedSwaptem.creatorUserInfo?.companyName}
                                 description={fixedSwaptem.creatorUserInfo?.companyIntroduction || 'No description yet'}
@@ -294,36 +289,6 @@ const Market: React.FC = ({}) => {
               )}
             </Box>
           </Box>
-          {/* <Box sx={styles.nftBox}>
-          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h2" fontSize={24} color={'var(--ps-gray-900)'}>
-              NFT Launchpad
-            </Typography>
-            <Button variant="outlined" sx={{ border: ' 1px solid var(--ps-gray-900)' }}>
-              Explore all
-            </Button>
-          </Box>
-          {!datas.length ? (
-            <NoData />
-          ) : (
-            <Grid rowSpacing={24} columnSpacing={20} container pt={18}>
-              {datas.map((v, i) => (
-                <Grid key={i} xs={4} item>
-                  <NFTLaunchpadCard
-                    poolId={`000${101 + i}`}
-                    title="Top Studio PRO Collection and LaASDAS"
-                    status={['Live', 'Upcoming', 'Closed'][i % 3] as any}
-                    dateStr={i % 3 === 2 ? '' : ' 12:12:00'}
-                    holder={<AuctionHolder avatar={''} name="Cameron Williamson" description="Individual Investor" />}
-                    tag={'3000'}
-                    chain={'Ethereum'}
-                    price={'0.25'}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </Box> */}
         </Box>
       </Container>
     </>

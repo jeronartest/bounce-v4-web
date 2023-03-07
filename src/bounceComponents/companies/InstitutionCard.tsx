@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, IconButton, Paper, Stack, Typography } from '@mui/material'
 import React, { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import moment from 'moment'
 import ProjectCardSvg from '../common/ProjectCardSvg'
 import LikeUnlike from '../common/LikeUnlike'
@@ -10,10 +9,10 @@ import { ReactComponent as EditSVG } from 'assets/imgs/components/edit.svg'
 import { ILikeUnlikeRes } from 'api/idea/type'
 import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar_ideas.svg'
 import { getLabel } from 'utils'
-import { RootState } from '@/store'
 import { VerifyStatus } from 'api/profile/type'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IInstitutionCardProps = {
   icon: string
@@ -52,7 +51,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   acitve,
   commentCount
 }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
   const navigate = useNavigate()
   const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes | undefined>(likeAmount)
   const getPublicPoleLable = (publicRoleId: number) => {

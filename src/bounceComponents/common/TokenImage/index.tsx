@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Avatar, AvatarProps } from '@mui/material'
 import BlockSVG from 'assets/imgs/icon/block.svg'
 
