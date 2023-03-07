@@ -1,12 +1,12 @@
-import { Button, Pagination, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 import React from 'react'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { RootState } from '@/store'
+import { routes } from 'constants/routes'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
 
 export type ITotalPaginationBoxProps = {
   total: number
@@ -16,15 +16,15 @@ export type ITotalPaginationBoxProps = {
 }
 
 const TotalPaginationBox: React.FC<ITotalPaginationBoxProps> = ({ total, idea, children, create }) => {
-  const router = useRouter()
-  const { token } = useSelector((state: RootState) => state.user)
+  const { token } = useUserInfo()
+  const navigate = useNavigate()
 
   const handleCreateBtnClick = () => {
     if (!token) {
       toast.error('Please login')
-      router.push(`/login?path=/auction/create-auction-pool?redirect=/market/pools`)
+      navigate(`${routes.login}?path=${routes.auction.createAuctionPool}?redirect=${routes.market.pools}`)
     } else {
-      router.push('/auction/create-auction-pool?redirect=/market/pools')
+      navigate(`${routes.auction.createAuctionPool}?redirect=${routes.market.pools}`)
     }
   }
   return (
@@ -51,9 +51,9 @@ const TotalPaginationBox: React.FC<ITotalPaginationBoxProps> = ({ total, idea, c
             onClick={() => {
               if (!token) {
                 toast.error('Please login')
-                router.push('/login?path=/idea/create')
+                navigate(`${routes.login}?path=${routes.idea.create}`)
               } else {
-                router.push('/idea/create')
+                navigate(routes.idea.create)
               }
             }}
           >

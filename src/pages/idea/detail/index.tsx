@@ -1,16 +1,12 @@
 import { Avatar, Box, Container, IconButton, Paper, Skeleton, Stack, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import countries from 'i18n-iso-countries'
 import english from 'i18n-iso-countries/langs/en.json'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
 import styles from './styles'
-import { RootState } from '@/store'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { getLabel, getPrimaryRoleLabel } from '@/utils'
+import { getLabel, getPrimaryRoleLabel } from 'utils'
 import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
 import { ReactComponent as TwitterIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/twitter.svg'
 import { ReactComponent as InstagramIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/instagram.svg'
@@ -29,6 +25,11 @@ import { getCompanyInfo } from 'api/company'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import ProjectCardSvg from 'bounceComponents/common/ProjectCardSvg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useUserInfo } from 'state/users/hooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 countries.registerLocale(english)
 
@@ -95,15 +96,15 @@ const IdeaSkeleton: React.FC = () => {
 }
 
 const IdeaDetail: React.FC = () => {
-  const { token, userId } = useSelector((state: RootState) => state.user)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
-  const [userInfo, setUserInfo] = useState(null)
+  const { token, userId } = useUserInfo()
+  const optionDatas = useOptionDatas()
+  const [userInfo, setUserInfo] = useState<any>(null)
   const [userLoading, setUserLoading] = useState<boolean>(false)
   const [ideaLoading, setIdeaLoading] = useState<boolean>(false)
 
-  const { id: ideaId } = router.query
+  const { id: ideaId } = useQueryParams()
   const [ideaDetail, setIdeaDetail] = useState<IIdeaDetail | null>(null)
+  const navigate = useNavigate()
 
   const getDetail = useCallback(async () => {
     const res = await getIdeaDetail({ ideaId: Number(ideaId) })
@@ -123,7 +124,7 @@ const IdeaDetail: React.FC = () => {
     const getInfo = async () => {
       const res =
         ideaDetail?.userType === USER_TYPE.USER
-          ? await getUserInfo({ userId: ideaDetail?.userId })
+          ? await getUserInfo({ userId: ideaDetail?.userId || 0 })
           : await getCompanyInfo({ thirdpartId: 0, userId: ideaDetail?.userId })
       setUserInfo(res.data)
       setUserLoading(false)
@@ -172,21 +173,15 @@ const IdeaDetail: React.FC = () => {
   const goToProfile = () => {
     if (ideaDetail?.userId) {
       if (ideaDetail?.userType === USER_TYPE.USER) {
-        return router.push(`/profile/summary?id=${ideaDetail?.userId}`)
+        return navigate(`${routes.profile.summary}?id=${ideaDetail?.userId}`)
       } else {
-        return router.push(`/company/summary?id=${ideaDetail?.userId}`)
+        return navigate(`${routes.company.summary}?id=${ideaDetail?.userId}`)
       }
     }
   }
 
   return (
     <section>
-      <Head>
-        <title>Idea Detail | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <Container maxWidth="lg">
         {ideaLoading ? (
           <IdeaSkeleton />
@@ -203,9 +198,7 @@ const IdeaDetail: React.FC = () => {
                   <Typography variant="h1" sx={styles.startUp}>
                     Startup Idea
                   </Typography>
-                  <Box>
-                    <ProjectCardSvg status={ideaDetail?.marketType} />
-                  </Box>
+                  <Box>{ideaDetail?.marketType && <ProjectCardSvg status={ideaDetail?.marketType} />}</Box>
                 </Stack>
                 <Typography variant="h1" sx={styles.ideaTitle}>
                   {ideaDetail?.title}
@@ -215,10 +208,7 @@ const IdeaDetail: React.FC = () => {
                 </Typography>
               </Box>
               {ideaDetail?.id && (
-                <ReactCopyToClipboard
-                  text={`${process.env.NEXT_PUBLIC_SHARE_BASEURL}${router?.asPath}`}
-                  onCopy={() => toast.success('copy success')}
-                >
+                <ReactCopyToClipboard text={window.location.href} onCopy={() => toast.success('copy success')}>
                   <IconButton sx={{ border: '1px solid rgba(0, 0, 0, 0.27)', height: 60, width: 60 }}>
                     <ShareSVG />
                   </IconButton>
@@ -232,30 +222,32 @@ const IdeaDetail: React.FC = () => {
                   color="#383838"
                   sx={{ whiteSpace: 'pre-wrap' }}
                   dangerouslySetInnerHTML={{
-                    __html: ideaDetail?.detail
+                    __html: ideaDetail?.detail || ''
                   }}
                 ></Typography>
-                <LikeUnlike
-                  likeObj={LIKE_OBJ.idea}
-                  objId={ideaDetail?.id}
-                  likeAmount={{
-                    dislikeCount: ideaDetail?.dislikeCount,
-                    likeCount: ideaDetail?.likeCount,
-                    myDislike: ideaDetail?.myDislike,
-                    myLike: ideaDetail?.myLike
-                  }}
-                  onSuccess={getDetail}
-                  likeSx={{
-                    ...styles.like,
-                    ...(ideaDetail?.myLike === LIKE_STATUS.yes ? styles.activeLike : '')
-                  }}
-                  unlikeSx={{
-                    ...styles.like,
-                    ...(ideaDetail?.myDislike === UNLIKE_STATUS.yes ? styles.activeLike : '')
-                  }}
-                />
+                {ideaDetail && (
+                  <LikeUnlike
+                    likeObj={LIKE_OBJ.idea}
+                    objId={ideaDetail?.id}
+                    likeAmount={{
+                      dislikeCount: ideaDetail?.dislikeCount,
+                      likeCount: ideaDetail?.likeCount,
+                      myDislike: ideaDetail?.myDislike,
+                      myLike: ideaDetail?.myLike
+                    }}
+                    onSuccess={getDetail}
+                    likeSx={{
+                      ...styles.like,
+                      ...(ideaDetail?.myLike === LIKE_STATUS.yes ? styles.activeLike : '')
+                    }}
+                    unlikeSx={{
+                      ...styles.like,
+                      ...(ideaDetail?.myDislike === UNLIKE_STATUS.yes ? styles.activeLike : '')
+                    }}
+                  />
+                )}
               </Stack>
-              {ideaDetail?.posts?.length > 0 && (
+              {ideaDetail && ideaDetail?.posts?.length > 0 && (
                 <Box sx={styles.files}>
                   <Typography variant="h2" sx={{ fontSize: 24, lineHeight: '32px' }}>
                     Downloads

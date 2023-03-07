@@ -5,7 +5,7 @@ export default {
   root: {},
   head: {
     height: 400,
-    background: `url(${BannerPNG.src})`
+    background: `url(${BannerPNG})`
   },
   search: {
     pr: 0,

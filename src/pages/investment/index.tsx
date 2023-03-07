@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import React from 'react'
 
 // export type IInvestmentProps = {}
@@ -6,11 +5,6 @@ import React from 'react'
 const Investment: React.FC = ({}) => {
   return (
     <>
-      <Head>
-        <title>Bounce - investment</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-      </Head>
       <div>Investment</div>
     </>
   )

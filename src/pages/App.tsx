@@ -23,7 +23,20 @@ import Company from 'pages/company'
 import CompanyActivities from 'pages/company/activities'
 import CompanyComments from 'pages/company/comments'
 
+import IdeaCreate from 'pages/idea/create'
+import IdeaDetail from 'pages/idea/detail'
+
+import Investment from 'pages/investment'
+import InvestmentPlatform from 'pages/investment/platform'
+
+import Jobs from 'pages/jobs'
+
+import Linkedin from 'pages/linkedin'
+
 import Login from 'pages/login'
+
+import Market from 'pages/market'
+import MarketPools from 'pages/market/pools'
 
 import AccountSettings from 'pages/profile/account/settings'
 import ProfileActivities from 'pages/profile/activities'
@@ -89,7 +102,22 @@ export default function App() {
                       <Route path={routes.company.comments.slice(1)} element={<CompanyComments />} />
                     </Route>
 
+                    <Route path={routes.idea.create} element={<IdeaCreate />} />
+                    <Route path={routes.idea.detail} element={<IdeaDetail />} />
+
+                    <Route path={routes.investment.index} element={<Investment />}>
+                      <Route path={routes.investment.platform.slice(1)} element={<InvestmentPlatform />} />
+                    </Route>
+
+                    <Route path={routes.jobs.index} element={<Jobs />} />
+
+                    <Route path={routes.linkedin} element={<Linkedin />} />
+
                     <Route path={routes.login} element={<Login />} />
+
+                    <Route path={routes.market.index} element={<Market />}>
+                      <Route path={routes.market.pools.slice(1)} element={<MarketPools />} />
+                    </Route>
 
                     <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />

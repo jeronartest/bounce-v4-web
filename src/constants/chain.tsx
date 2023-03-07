@@ -14,7 +14,8 @@ export enum ChainId {
   GÖRLI = 5,
   SEPOLIA = 11155111,
   BSC = 56,
-  BSCTEST = 97
+  BSCTEST = 97,
+  ARBITRUM = 42161
 }
 
 export const NETWORK_CHAIN_ID: ChainId = process.env.REACT_APP_CHAIN_ID

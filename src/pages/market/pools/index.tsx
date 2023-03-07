@@ -15,27 +15,22 @@ import {
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { useRouter } from 'next/router'
-import Image from 'next/image'
+import Image from 'components/Image'
 // import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import BigNumber from 'bignumber.js'
-import Head from 'next/head'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import FormItem from 'bounceComponents/common/FormItem'
-import { RootState } from '@/store'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { shortenAddress } from '@/utils/web3/address'
 import { PoolType } from 'api/pool/type'
-import { getLabel } from '@/utils'
+import { getLabel, shortenAddress } from 'utils'
 // import { formatNumber } from '@/utils/web3/number'
 import NoData from 'bounceComponents/common/NoData'
 import { Token } from 'bounceComponents/create-auction-pool/types'
@@ -44,6 +39,7 @@ import { getPools } from 'api/market'
 import TotalPaginationBox from 'bounceComponents/market/components/TotalPaginationBox'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
 import { UserType } from 'api/market/type'
+import { useOptionDatas } from 'state/configOptions/hooks'
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
@@ -102,8 +98,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 }
 
 const Pools: React.FC = ({}) => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(3)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabel(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
@@ -199,16 +194,11 @@ const Pools: React.FC = ({}) => {
     })
   }
 
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
   }
   return (
     <section>
-      <Head>
-        <title>Auction Pools | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ values, setFieldValue }) => {
           return (
@@ -347,7 +337,7 @@ const Pools: React.FC = ({}) => {
                     <Box mt={16}>
                       {poolsData?.total > 0 ? (
                         <Grid container spacing={18}>
-                          {poolsData?.list?.map((fixedSwaptem, index) => (
+                          {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                               <Box
                                 component={'a'}
@@ -373,15 +363,17 @@ const Pools: React.FC = ({}) => {
                                         name={fixedSwaptem.creatorUserInfo?.name}
                                         description={
                                           fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                            ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item, index) => {
-                                                return (
-                                                  getLabel(item, 'role', optionDatas?.publicRoleOpt) +
-                                                  `${
-                                                    index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
-                                                    ', '
-                                                  }`
-                                                )
-                                              })
+                                            ? fixedSwaptem.creatorUserInfo?.publicRole?.map(
+                                                (item: any, index: number) => {
+                                                  return (
+                                                    getLabel(item, 'role', optionDatas?.publicRoleOpt) +
+                                                    `${
+                                                      index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
+                                                      ', '
+                                                    }`
+                                                  )
+                                                }
+                                              )
                                             : 'Individual account'
                                         }
                                         isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
@@ -462,7 +454,7 @@ const Pools: React.FC = ({}) => {
                                       />
                                     </>
                                   }
-                                  categoryName={poolType[fixedSwaptem.category]}
+                                  categoryName={poolType[fixedSwaptem.category as PoolType]}
                                   whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                                   chainId={fixedSwaptem.chainId}
                                 />

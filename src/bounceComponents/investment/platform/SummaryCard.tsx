@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Chip, Stack, SxProps, Typography } from '@mui/material'
 import React from 'react'
-import { ReactComponent as RightJTSVG } from 'assets/imgs/components/rightJT.svg'
+// import { ReactComponent as RightJTSVG } from 'assets/imgs/components/rightJT.svg'
 const styles = {
   card: {
     borderRadius: 20,
@@ -16,7 +16,7 @@ export type ISummaryCardProps = {
   rightSVG?: boolean
 }
 
-const SummaryCard: React.FC<ISummaryCardProps> = ({ imageUrl, title, description, active, rightSVG }) => {
+const SummaryCard: React.FC<ISummaryCardProps> = ({ imageUrl, title, description, active }) => {
   return (
     <Card
       elevation={0}

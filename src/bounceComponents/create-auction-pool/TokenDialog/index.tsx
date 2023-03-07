@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useModal, create, muiDialogV5 } from '@ebay/nice-modal-react'
 import { useDebounce } from 'ahooks'
 import { Box, CircularProgress, OutlinedInput, Stack, Typography } from '@mui/material'
@@ -34,7 +34,7 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ onClose, enableEth, chainId }: TokenDialogProps) => {
+const TokenDialog = create(({ enableEth, chainId }: TokenDialogProps) => {
   const modal = useModal()
 
   const handleResolve = (token: Token) => {

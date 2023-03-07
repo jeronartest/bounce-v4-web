@@ -2,22 +2,23 @@ import { Box, Button, Container, MenuItem, OutlinedInput, Paper, Select, Stack, 
 import { Form, Formik } from 'formik'
 import React, { useEffect, useMemo, useState } from 'react'
 import * as yup from 'yup'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
 import { show } from '@ebay/nice-modal-react'
-import Head from 'next/head'
 import styles from './styles'
 import FormItem from 'bounceComponents/common/FormItem'
 import ResumeUpload from 'bounceComponents/profile/ResumeFiles/ResumeUpload'
-import { RootState } from '@/store'
 import { createUpdateIdea, deleteIdea, getIdeaDetail } from 'api/idea'
-import { IIdeaDetail } from 'api/idea/type'
+import { IIdeaDetail, IUpdateIdeaParams } from 'api/idea/type'
 import { ReactComponent as DeleteSVG } from 'bounceComponents/profile/ResumeFiles/assets/delete.svg'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 const SUMMARY_INFO_LENGTH = 140
 const DETAILS_INFO_LENGTH = 3000
@@ -53,12 +54,13 @@ const validationSchema = yup.object({
 })
 
 const IdeaCreate: React.FC = () => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const { id: ideaId } = router.query
+  const optionDatas = useOptionDatas()
+  const { id } = useQueryParams()
+  const ideaId = useMemo(() => Number(id), [id])
   const [loading, setLoading] = useState<boolean>(false)
   const [ideaDetail, setIdeaDetail] = useState<IIdeaDetail | null>(null)
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getDetail = async () => {
@@ -74,14 +76,14 @@ const IdeaCreate: React.FC = () => {
     return {
       title: ideaDetail?.title || '',
       summary: ideaDetail?.summary || '',
-      marketType: ideaDetail?.marketType || '',
+      marketType: ideaDetail?.marketType || 0,
       detail: ideaDetail?.detail || '',
       posts: ideaDetail?.posts || [],
       id: ideaDetail?.id || ideaId || 0
     }
   }, [ideaDetail, ideaId])
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: IUpdateIdeaParams) => {
     setLoading(true)
     createUpdateIdea({
       ...values,
@@ -91,7 +93,7 @@ const IdeaCreate: React.FC = () => {
     })
       .then(res => {
         toast.success(`${ideaId ? 'Save' : 'Propose'} idea succeed`)
-        router.push(`/idea/detail?id=${res.data?.ideaId}`)
+        navigate(`${routes.idea.detail}?id=${res.data?.ideaId}`)
       })
       .finally(() => {
         setLoading(false)
@@ -103,7 +105,7 @@ const IdeaCreate: React.FC = () => {
       if (res.code === 200) {
         toast.success('Delete succeed')
         setTimeout(() => {
-          router.back()
+          window.history.go(-1)
         }, 300)
       } else {
         toast.error('Delete failed')
@@ -124,12 +126,6 @@ const IdeaCreate: React.FC = () => {
 
   return (
     <section>
-      <Head>
-        <title>Idea | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <Container maxWidth="md">
         <Paper elevation={0} sx={styles.rootPaper}>
           <Typography variant="h2">{!!ideaId ? 'Edit the idea' : 'Propose an idea'}</Typography>
@@ -165,7 +161,7 @@ const IdeaCreate: React.FC = () => {
                         ?.filter(item => item?.id !== 1)
                         ?.map(item => {
                           return (
-                            <MenuItem key={item.id} value={item.id}>
+                            <MenuItem key={item.id} value={Number(item.id)}>
                               {item.marketType}
                             </MenuItem>
                           )
@@ -221,7 +217,7 @@ const IdeaCreate: React.FC = () => {
                       <Box></Box>
                     )}
                     <Stack direction={'row'} justifyContent="flex-end" spacing={10}>
-                      <Button variant="outlined" sx={{ width: 120 }} onClick={() => router.back()}>
+                      <Button variant="outlined" sx={{ width: 120 }} onClick={() => window.history.go(-1)}>
                         Cancel
                       </Button>
                       <LoadingButton loading={loading} variant="contained" sx={{ width: 120 }} type="submit">

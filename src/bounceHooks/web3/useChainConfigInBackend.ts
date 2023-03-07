@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { ChainInfoOpt } from 'api/user/type'
 import { useOptionDatas } from 'state/configOptions/hooks'
 
-const useChainConfigInBackend = (searchKey: keyof ChainInfoOpt, searchValue: any) => {
+const useChainConfigInBackend = (searchKey: keyof ChainInfoOpt, searchValue: string) => {
   const optionDatas = useOptionDatas()
 
   return useMemo(() => {

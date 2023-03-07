@@ -1,12 +1,7 @@
-import { Box, Button, Container, Grid, Paper, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
 import React from 'react'
-import Link from 'next/link'
 import { useRequest } from 'ahooks'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import BigNumber from 'bignumber.js'
-import Head from 'next/head'
-import Image from 'next/image'
 import styles from './styles'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import SummaryCard from 'bounceComponents/investment/platform/SummaryCard'
@@ -15,10 +10,8 @@ import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 // import NFTLaunchpadCard from 'bounceComponents/common/AuctionCard/NFTLaunchpadCard'
 import { getPools } from 'api/market'
-import { getLabel } from '@/utils'
-import { RootState } from '@/store'
+import { getLabel, shortenAddress } from 'utils'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { shortenAddress } from '@/utils/web3/address'
 import { PoolType } from 'api/pool/type'
 // import { formatNumber } from '@/utils/web3/number'
 import { UserType } from 'api/market/type'
@@ -29,6 +22,10 @@ import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Marketcard from 'bounceComponents/investment/marketcard/Marketcard'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { Link, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import Image from 'components/Image'
 
 // export type IMarketProps = {}
 
@@ -39,8 +36,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.SealedBid]: 'SealedBid'
 }
 const Market: React.FC = ({}) => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const navigate = useNavigate()
+  const optionDatas = useOptionDatas()
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -83,23 +80,6 @@ const Market: React.FC = ({}) => {
   ]
   return (
     <>
-      <Head>
-        <title>Auction | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-
-        <meta name="og:title" content="Auction | Bounce" />
-        <meta name="og:type" content="website" />
-        <meta name="og:url" content={`${process.env.NEXT_PUBLIC_SHARE_BASEURL}/market`} />
-        <meta
-          name="og:description"
-          content="Bounce powers an ecosystem of products for auctions. Build, design, connect, collect and trade all kinds of assets, tokens and NFTs across multiple blockchains."
-        />
-        <meta
-          name="og:image"
-          content="https://images-v3.bounce.finance/313f109585eb241ebadcd75fcb4e5017-1675684227.png"
-        />
-      </Head>
       <Container maxWidth="lg">
         <Box mt={60}>
           <CompanyBanner list={bannerList} />
@@ -111,7 +91,7 @@ const Market: React.FC = ({}) => {
               title={'Token Auction Pool'}
               imageUrl={'/imgs/investment/platform/tokenPool.svg'}
               handleClick={() => {
-                router.push('/market/pools')
+                navigate(routes.market.pools)
               }}
             />
             <Marketcard title={'NFT Auction Pool'} imageUrl={'/imgs/investment/platform/nftPool.svg'} />
@@ -129,7 +109,7 @@ const Market: React.FC = ({}) => {
                 xs={3}
                 item
                 onClick={() => {
-                  router.push('/market/pools')
+                  navigate(routes.market.pools)
                 }}
               >
                 <SummaryCard
@@ -174,7 +154,7 @@ const Market: React.FC = ({}) => {
                 variant="contained"
                 sx={{ border: ' 1px solid #FFFFFF;' }}
                 LinkComponent={Link}
-                href={'/market/pools'}
+                href={routes.market.pools}
               >
                 Explore all
               </Button>
@@ -196,11 +176,11 @@ const Market: React.FC = ({}) => {
                 </Grid>
               ) : (
                 <Grid container spacing={18}>
-                  {data?.list?.map((fixedSwaptem, index) => (
+                  {data?.list?.map((fixedSwaptem: any, index: number) => (
                     <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                       <Link
                         target="_blank"
-                        href={`/auction/fixed-price/${getLabel(
+                        to={`${routes.auction.fixedPrice}/${getLabel(
                           fixedSwaptem.chainId,
                           'shortName',
                           optionDatas?.chainInfoOpt
@@ -216,12 +196,12 @@ const Market: React.FC = ({}) => {
                           holder={
                             fixedSwaptem.creatorUserInfo?.userType === UserType.Profile ? (
                               <AuctionHolder
-                                href={`/profile/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                                 avatar={fixedSwaptem.creatorUserInfo?.avatar}
                                 name={fixedSwaptem.creatorUserInfo?.name}
                                 description={
                                   fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                    ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item, index) => {
+                                    ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
                                         return (
                                           getLabel(item, 'role', optionDatas?.publicRoleOpt) +
                                           `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
@@ -303,7 +283,7 @@ const Market: React.FC = ({}) => {
                               />
                             </>
                           }
-                          categoryName={poolType[fixedSwaptem.category]}
+                          categoryName={poolType[fixedSwaptem.category as PoolType]}
                           whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                           chainId={fixedSwaptem.chainId}
                         />

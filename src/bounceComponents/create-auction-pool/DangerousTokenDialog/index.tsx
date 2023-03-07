@@ -1,22 +1,19 @@
 import { create, muiDialogV5, useModal } from '@ebay/nice-modal-react'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
-import React from 'react'
-import Image from 'next/image'
-import { useNetwork } from 'wagmi'
+import Image from 'components/Image'
 import { Token } from '../types'
 import LogoSVG from 'assets/imgs/components/logo.svg'
-import { shortenAddress } from '@/utils/web3/address'
 import Dialog from 'bounceComponents/common/DialogBase'
-import { ExplorerDataType, getExplorerLink } from '@/utils/web3/getExplorerLink'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import OpenInNewSVG from 'assets/imgs/icon/open_in_new.svg'
+import { getEtherscanLink, shortenAddress } from 'utils'
+import { useActiveWeb3React } from 'hooks'
 
 const DangerousTokenDialog = create<Token>(selectedToken => {
   // console.log('DangerousTokenDialog selectedToken: ', selectedToken)
 
   const modal = useModal()
-
-  const { chain } = useNetwork()
+  const { chainId } = useActiveWeb3React()
 
   const handleResolve = () => {
     modal.resolve()
@@ -55,11 +52,7 @@ const DangerousTokenDialog = create<Token>(selectedToken => {
         <Typography>{shortenAddress(selectedToken.address)}</Typography>
 
         <Stack direction="row" alignItems="center" spacing={4}>
-          <a
-            href={getExplorerLink(chain?.id, selectedToken.address, ExplorerDataType.TOKEN)}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={getEtherscanLink(chainId || 1, selectedToken.address, 'token')} target="_blank" rel="noreferrer">
             <IconButton>
               <Image src={OpenInNewSVG} width={20} height={20} alt="open in new" />
             </IconButton>

@@ -1,5 +1,4 @@
 import { Box, Container, Stack, Typography } from '@mui/material'
-import Head from 'next/head'
 import React from 'react'
 
 // export type IJobsProps = {}
@@ -7,11 +6,6 @@ import React from 'react'
 const Jobs: React.FC = ({}) => {
   return (
     <section>
-      <Head>
-        <title>Jobs | Bounce</title>
-        <meta name="description" content="Jobs | Bounce" />
-        <meta name="keywords" content="Jobs | Bounce" />
-      </Head>
       <Container maxWidth="lg">
         <Box sx={{ mt: 64, width: '100%', height: 775, background: '#FFFFFF', borderRadius: 20 }}>
           <Stack sx={{ alignItems: 'center' }}>

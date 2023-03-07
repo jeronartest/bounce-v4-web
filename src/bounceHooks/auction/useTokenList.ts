@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { isAddress } from '@ethersproject/address'
-
-import { useErc20Contract } from 'bounceHooks/web3/useContractHooks/useContract'
-import { GOERLI_TOKEN_LIST, NATIVE_TOKENS, TOKEN_LIST_API } from '@/constants/auction'
+import { GOERLI_TOKEN_LIST, TOKEN_LIST_API } from 'constants/auction'
 import { Token } from 'bounceComponents/fixed-swap/type'
-import { SupportedChainId } from '@/constants/web3/chains'
+import { ChainId } from 'constants/chain'
+import { useTokenContract } from 'hooks/useContract'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -17,15 +16,15 @@ const filterToken = (list: Token[], filterValue: string) => {
   )
 }
 
-const getGetApiTokenList = async (chainId: SupportedChainId) => {
+const getGetApiTokenList = async (chainId: ChainId) => {
   if (!TOKEN_LIST_API?.[chainId]) return null
 
-  const response = await fetch(TOKEN_LIST_API[chainId])
+  const response = await fetch(TOKEN_LIST_API?.[chainId] || '')
   const jsonResponse: { tokens: Token[] } = await response?.json()
   return jsonResponse.tokens
 }
 
-const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth = false) => {
+const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false) => {
   const isChainHasTokenApi = typeof TOKEN_LIST_API[chainId] === 'string'
 
   const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(() => getGetApiTokenList(chainId), {
@@ -35,7 +34,7 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
   })
 
   const baseTokenList = useMemo(
-    () => (chainId === SupportedChainId.GOERLI ? GOERLI_TOKEN_LIST : apiTokenList ?? []),
+    () => (chainId === ChainId.GÖRLI ? GOERLI_TOKEN_LIST : apiTokenList ?? []),
     [apiTokenList, chainId]
   )
 
@@ -44,10 +43,10 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
       return []
     }
 
-    return filterToken(baseTokenList, filterValue)
+    return filterToken(baseTokenList, filterValue || '')
   }, [baseTokenList, filterValue])
 
-  const contract = useErc20Contract(filterValue)
+  const contract = useTokenContract(filterValue)
 
   const [singleToken, setSingleToken] = useState<Token>()
 
@@ -69,21 +68,21 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
     },
     {
       cacheKey: `ERC20_${filterValue}`,
-      ready: !!contract && !!isAddress(filterValue) && filterToken(baseTokenList, filterValue).length <= 0,
+      ready: !!contract && !!isAddress(filterValue || '') && filterToken(baseTokenList, filterValue || '').length <= 0,
       refreshDeps: [filterValue],
       debounceWait: 300,
       onSuccess: data => {
         // console.log('>>>>> single token: ', data)
         setSingleToken(data)
       },
-      onError: error => {
+      onError: () => {
         // console.log('query token info error: ', error)
       }
     }
   )
 
   useEffect(() => {
-    setSingleToken(null)
+    setSingleToken(undefined)
   }, [filterValue])
 
   console.log('>>>>> singleToken: ', singleToken)
@@ -94,16 +93,17 @@ const useTokenList = (chainId: SupportedChainId, filterValue?: string, enableEth
     const isFilterValueNotFoundInApiTokenList = filteredApiTokenList.length <= 0
     const isSingleTokenValid = singleToken && !isGettingSingleToken
 
-    if (isAddress(filterValue) && isFilterValueNotFoundInApiTokenList && isSingleTokenValid) {
+    if (isAddress(filterValue || '') && isFilterValueNotFoundInApiTokenList && isSingleTokenValid) {
       return [singleToken]
     } else {
-      return enableEth ? [NATIVE_TOKENS[chainId], ...filteredApiTokenList] : filteredApiTokenList
+      // TOTD NATIVE_TOKENS
+      return enableEth ? [...filteredApiTokenList] : filteredApiTokenList
     }
-  }, [chainId, enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
+  }, [enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
 
   return {
     tokenList,
-    isGettingTokenList: chainId === SupportedChainId.GOERLI ? false : isGettingApiTokenList,
+    isGettingTokenList: chainId === ChainId.GÖRLI ? false : isGettingApiTokenList,
     isGettingSingleToken
   }
 }
