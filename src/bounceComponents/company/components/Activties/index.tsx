@@ -232,7 +232,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                           />
                         ) : (
                           <AuctionHolder
-                            href={`/company/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                            href={`${routes.company.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                             avatar={fixedSwaptem.creatorUserInfo?.companyAvatar}
                             name={fixedSwaptem.creatorUserInfo?.companyName}
                             description={fixedSwaptem.creatorUserInfo?.companyIntroduction || 'No description yet'}

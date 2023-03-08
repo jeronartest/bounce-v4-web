@@ -174,12 +174,12 @@ const Market: React.FC = ({}) => {
                   {data?.list?.map((fixedSwaptem: any, index: number) => (
                     <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                       <Link
-                        target="_blank"
-                        to={`${routes.auction.fixedPrice}/${getLabel(
-                          fixedSwaptem.chainId,
-                          'shortName',
-                          optionDatas?.chainInfoOpt
-                        )}/${Number(fixedSwaptem.poolId)}`}
+                        to={routes.auction.fixedPrice
+                          .replace(
+                            ':chainShortName',
+                            getLabel(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                          )
+                          .replace(':poolId', fixedSwaptem.poolId)}
                       >
                         <AuctionCard
                           poolId={fixedSwaptem.poolId}

@@ -172,12 +172,12 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                   <Box
                     component={'a'}
-                    target="_blank"
-                    href={`${routes.auction.fixedPrice}/${getLabel(
-                      auctionPoolItem.chainId,
-                      'shortName',
-                      optionDatas?.chainInfoOpt
-                    )}/${Number(auctionPoolItem.poolId)}`}
+                    href={routes.auction.fixedPrice
+                      .replace(
+                        ':chainShortName',
+                        getLabel(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                      )
+                      .replace(':poolId', auctionPoolItem.poolId)}
                   >
                     <AuctionCard
                       poolId={auctionPoolItem.poolId}

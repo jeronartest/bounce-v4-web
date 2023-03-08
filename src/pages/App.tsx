@@ -111,31 +111,28 @@ export default function App() {
                   <Routes>
                     <Route path={routes.companies} element={<Companies />} />
 
-                    <Route path={routes.company.index} element={<Company />}>
-                      <Route path={routes.company.activities.slice(1)} element={<CompanyActivities />} />
-                      <Route path={routes.company.comments.slice(1)} element={<CompanyComments />} />
-                      <Route path={routes.company.edit.index.slice(1)} element={<CompanyEdit />}>
-                        <Route path={routes.company.edit.investments.slice(1)} element={<CompanyEditInvestments />} />
-                        <Route path={routes.company.edit.investors.slice(1)} element={<CompanyEditInvestors />} />
-                        <Route path={routes.company.edit.overview.slice(1)} element={<CompanyEditOverview />} />
-                        <Route path={routes.company.edit.team.slice(1)} element={<CompanyEditTeam />} />
-                        <Route path={routes.company.edit.tokens.slice(1)} element={<CompanyEditTokens />} />
-                      </Route>
-                      <Route path={routes.company.funding} element={<CompanyFunding />} />
-                      <Route path={routes.company.institutionInvestors} element={<CompanyInvestors />} />
-                      <Route path={routes.company.jobs} element={<CompanyJobs />} />
-                      <Route path={routes.company.startupIdeas} element={<CompanyStartupIdeas />} />
-                      <Route path={routes.company.summary} element={<CompanySummary />} />
-                      <Route path={routes.company.team} element={<CompanyTeam />} />
-                      <Route path={routes.company.topCompanies} element={<CompanyTopCompanies />} />
-                    </Route>
+                    <Route path={routes.company.index} element={<Company />} />
+                    <Route path={routes.company.activities} element={<CompanyActivities />} />
+                    <Route path={routes.company.comments} element={<CompanyComments />} />
+                    <Route path={routes.company.edit.index} element={<CompanyEdit />} />
+                    <Route path={routes.company.edit.investments} element={<CompanyEditInvestments />} />
+                    <Route path={routes.company.edit.investors} element={<CompanyEditInvestors />} />
+                    <Route path={routes.company.edit.overview} element={<CompanyEditOverview />} />
+                    <Route path={routes.company.edit.team} element={<CompanyEditTeam />} />
+                    <Route path={routes.company.edit.tokens} element={<CompanyEditTokens />} />
+                    <Route path={routes.company.funding} element={<CompanyFunding />} />
+                    <Route path={routes.company.institutionInvestors} element={<CompanyInvestors />} />
+                    <Route path={routes.company.jobs} element={<CompanyJobs />} />
+                    <Route path={routes.company.startupIdeas} element={<CompanyStartupIdeas />} />
+                    <Route path={routes.company.summary} element={<CompanySummary />} />
+                    <Route path={routes.company.team} element={<CompanyTeam />} />
+                    <Route path={routes.company.topCompanies} element={<CompanyTopCompanies />} />
 
                     <Route path={routes.idea.create} element={<IdeaCreate />} />
                     <Route path={routes.idea.detail} element={<IdeaDetail />} />
 
-                    <Route path={routes.investment.index} element={<Investment />}>
-                      <Route path={routes.investment.platform.slice(1)} element={<InvestmentPlatform />} />
-                    </Route>
+                    <Route path={routes.investment.index} element={<Investment />} />
+                    <Route path={routes.investment.platform} element={<InvestmentPlatform />} />
 
                     <Route path={routes.jobs.index} element={<Jobs />} />
 
@@ -153,32 +150,21 @@ export default function App() {
                     <Route path={routes.profile.edit.overview} element={<ProfileEditOverview />} />
                     <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} />
                     <Route path={routes.profile.portfolio} element={<ProfilePortfolio />} />
-                    <Route path={routes.profile.resume.index} element={<ProfileResume />}>
-                      <Route path={routes.profile.resume.education.slice(1)} element={<ProfileResumeEducation />} />
-                      <Route path={routes.profile.resume.experience.slice(1)} element={<ProfileResumeExperience />} />
-                      <Route path={routes.profile.resume.job.slice(1)} element={<ProfileResumeJob />} />
-                      <Route path={routes.profile.resume.preference.slice(1)} element={<ProfileResumePreference />} />
-                      <Route path={routes.profile.resume.resume.slice(1)} element={<ProfileResumeResume />} />
-                    </Route>
+                    <Route path={routes.profile.resume.index} element={<ProfileResume />} />
+                    <Route path={routes.profile.resume.education} element={<ProfileResumeEducation />} />
+                    <Route path={routes.profile.resume.experience} element={<ProfileResumeExperience />} />
+                    <Route path={routes.profile.resume.job} element={<ProfileResumeJob />} />
+                    <Route path={routes.profile.resume.preference} element={<ProfileResumePreference />} />
+                    <Route path={routes.profile.resume.resume} element={<ProfileResumeResume />} />
                     <Route path={routes.profile.summary} element={<ProfileSummary />} />
 
-                    <Route path={routes.signup.index} element={<Signup />}>
-                      <Route path={routes.signup.company.slice(1)} element={<SignupCompany />} />
-                      <Route path={routes.signup.institutions.slice(1)} element={<SignupInstitutions />} />
-                      <Route
-                        path={routes.signup.thirdPartiesAccount.slice(1)}
-                        element={<SignupThirdPartiesAccount />}
-                      />
-                      <Route
-                        path={routes.signup.thirdPartiesCompany.slice(1)}
-                        element={<SignupThirdPartiesCompany />}
-                      />
-                      <Route
-                        path={routes.signup.thirdPartiesInstitutions.slice(1)}
-                        element={<SignupThirdPartiesInstitutions />}
-                      />
-                      <Route path={routes.signup.account.slice(1)} element={<SignupAccount />} />
-                    </Route>
+                    <Route path={routes.signup.index} element={<Signup />} />
+                    <Route path={routes.signup.account} element={<SignupAccount />} />
+                    <Route path={routes.signup.company} element={<SignupCompany />} />
+                    <Route path={routes.signup.institutions} element={<SignupInstitutions />} />
+                    <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} />
+                    <Route path={routes.signup.thirdPartiesCompany} element={<SignupThirdPartiesCompany />} />
+                    <Route path={routes.signup.thirdPartiesInstitutions} element={<SignupThirdPartiesInstitutions />} />
 
                     <Route path={routes.token} element={<Token />} />
                     <Route path={routes.verify} element={<Verify />} />
