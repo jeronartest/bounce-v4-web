@@ -24,7 +24,7 @@ const usePoolHistory = () => {
         poolId,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend?.id,
-        address: account,
+        address: account
       })
 
       return response.data
@@ -33,8 +33,8 @@ const usePoolHistory = () => {
       cacheKey: `POOL_HISTORY_${account}`,
       ready: !!poolId && !!chainConfigInBackend?.id,
       // pollingInterval: 10000,
-      refreshDeps: [account, isConnected],
-    },
+      refreshDeps: [account, isConnected]
+    }
   )
 }
 

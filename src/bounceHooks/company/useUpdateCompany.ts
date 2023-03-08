@@ -1,20 +1,19 @@
 import { useRequest } from 'ahooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
 import { useGetCompanyInvestors } from './useGetCompanyInvestors'
 import { useGetCompanyTeam } from './useGetCompanyTeam'
 import { useGetCompanyTokens } from './useGetCompanyTokens'
 import { useGetCompanyInvestments } from './useGetCompanyInvestments'
 import { updateCompanyProfile } from 'api/company'
 import { ICompanyProfileParams } from 'api/company/type'
-import { RootState } from '@/store'
-import { fetchCompanyInfo } from '@/store/user'
 import { timezone } from 'bounceComponents/common/LocationTimeZone'
+import { useUserInfo } from 'state/users/hooks'
+import { fetchCompanyInfo } from 'state/users/reducer'
 
 export const useUpdateCompany = (firstEdit = false) => {
   const dispatch = useDispatch()
-  const { userId, companyInfo } = useSelector((state: RootState) => state.user)
+  const { userId, companyInfo } = useUserInfo()
   const { data: companyTeamData, runAsync: runGetCompanyTeam } = useGetCompanyTeam()
   const { data: companyInvestorsData, runAsync: runGetCompanyInvestors } = useGetCompanyInvestors()
   const { data: companyTokensData, runAsync: runGetCompanyTokens } = useGetCompanyTokens()
@@ -35,7 +34,7 @@ export const useUpdateCompany = (firstEdit = false) => {
             fileThumbnailUrl: '',
             fileType: '',
             fileUrl: '',
-            id: 0,
+            id: 0
           },
           companyName: companyInfo?.companyName || '',
           location: companyInfo?.location || '',
@@ -53,20 +52,20 @@ export const useUpdateCompany = (firstEdit = false) => {
           github: companyInfo?.github || '',
           twitter: companyInfo?.twitter || '',
           instagram: companyInfo?.instagram || '',
-          medium: companyInfo?.medium || '',
+          medium: companyInfo?.medium || ''
         },
         companyInvestments: companyInvestmentsData?.data?.list || [],
         companyInvestors: companyInvestorsData?.data?.list || [],
         companyTokens: companyTokensData?.data?.list || [],
         teamMembers: companyTeamData?.data?.list || [],
-        ...params,
+        ...params
       }
       return updateCompanyProfile(_params)
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        const { code, data } = res
+      onSuccess: res => {
+        const { code } = res
         if (code !== 200) {
           return toast.error('submit fail')
         }
@@ -80,7 +79,9 @@ export const useUpdateCompany = (firstEdit = false) => {
         !firstEdit && runGetCompanyInvestors({ limit: 100, offset: 0, companyId: Number(userId) })
 
         !firstEdit && runGetCompanyInvestments({ limit: 100, offset: 0, companyId: Number(userId) })
-      },
-    },
+
+        return
+      }
+    }
   )
 }

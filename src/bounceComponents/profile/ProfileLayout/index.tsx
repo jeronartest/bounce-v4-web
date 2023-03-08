@@ -9,7 +9,7 @@ interface TabPanelProps {
   tabValue: number | string
 }
 
-export const TabPanel: React.FC<TabPanelProps> = (props) => {
+export const TabPanel: React.FC<TabPanelProps> = props => {
   const { children, panelValue, tabValue } = props
 
   return <div hidden={panelValue !== tabValue}>{panelValue === tabValue && <Box>{children}</Box>}</div>
@@ -38,14 +38,14 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ title, tabsList, tabValu
       <Box sx={{ display: 'grid', gridTemplateColumns: '320px auto', gridColumnGap: '20px', mt: 34 }}>
         <Box sx={styles.tabsBox}>
           <Tabs sx={styles.tabsRoot} value={tabValue} onChange={handleChange} orientation="vertical">
-            {tabsList.map((item) => {
+            {tabsList.map(item => {
               return <Tab key={item.labelKey} value={item.labelKey} label={item.label} />
             })}
           </Tabs>
         </Box>
 
         <Box sx={{ background: '#FFFFFF', borderRadius: 20 }}>
-          {tabsList.map((item) => {
+          {tabsList.map(item => {
             return (
               <TabPanel key={item.labelKey} tabValue={tabValue} panelValue={item.labelKey}>
                 <Box sx={{ padding: '52px 100px 48px' }}>{item.content}</Box>

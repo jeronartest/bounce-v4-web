@@ -11,7 +11,7 @@ export type IUploadCardProps = {
   onChange?: (value: IFile[]) => void
 }
 
-const UploadList: React.FC<IUploadCardProps> = ({ value, accept, maxNum = Infinity, limitSize, onChange }) => {
+const UploadList: React.FC<IUploadCardProps> = ({ accept, maxNum = Infinity, limitSize, onChange }) => {
   const [files, setFiles] = useState<IFile[]>([])
 
   const handleChange = (file: IFile, index: number) => {
@@ -31,7 +31,7 @@ const UploadList: React.FC<IUploadCardProps> = ({ value, accept, maxNum = Infini
 
   useEffect(() => {
     onChange?.(files)
-  }, [files])
+  }, [files, onChange])
 
   return (
     <Stack direction="row" spacing={16}>

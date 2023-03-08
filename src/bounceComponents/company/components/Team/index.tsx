@@ -1,15 +1,16 @@
 import { Avatar, Grid, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import { RootState } from '@/store'
 import { useGetCompanyTeam } from 'bounceHooks/company/useGetCompanyTeam'
-import { getPrimaryRoleLabel } from '@/utils'
-import { ICompanyOverviewInfo } from 'api/company/type'
+import { getPrimaryRoleLabel } from 'utils'
+// import { ICompanyOverviewInfo } from 'api/company/type'
 import NoData from 'bounceComponents/common/NoData'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useNavigate } from 'react-router-dom'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { routes } from 'constants/routes'
 
 export type ITeamProps = {
   targetCompanyId: number
@@ -17,12 +18,12 @@ export type ITeamProps = {
 
 const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
   const { data, runAsync: runGetCompanyTeam } = useGetCompanyTeam()
-  const router = useRouter()
-  const { thirdpartId } = router.query
+  const navigate = useNavigate()
+  const { thirdpartId } = useQueryParams()
   useEffect(() => {
     !!targetCompanyId && runGetCompanyTeam({ limit: 1000, offset: 0, companyId: targetCompanyId })
   }, [runGetCompanyTeam, targetCompanyId])
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const getrolesName = item => {
     const temp = item?.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
@@ -37,7 +38,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
             <NoData color="var(--ps-gray-900)" svgColor="#F1F1F1" />
           ) : (
             <>
-              {data?.data?.list?.map((item, index) => (
+              {data?.data?.list?.map((item: any, index: number) => (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                   <Box
                     sx={{
@@ -60,7 +61,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
                         alignSelf: 'center',
                         cursor: 'pointer'
                       }}
-                      onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
+                      onClick={() => navigate(`${routes.profile.summary}?id=${item.userId}`)}
                     />
                     <Stack spacing={4} ml={12}>
                       <Stack direction={'row'} alignItems="center" spacing={8}>
@@ -70,7 +71,7 @@ const Team: React.FC<ITeamProps> = ({ targetCompanyId }) => {
                           fontWeight={500}
                           color={'var(--ps-blue)'}
                           sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
-                          onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
+                          onClick={() => navigate(`${routes.profile.summary}?id=${item.userId}`)}
                         >
                           {item.userName}
                         </Typography>

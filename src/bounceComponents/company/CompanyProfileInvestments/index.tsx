@@ -2,17 +2,18 @@ import { Stack, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { useRouter } from 'next/router'
 import CompanyInvestmentsList from '../CompanyInvestmentsList'
 import { ICompanyInvestmentsListItems } from 'api/company/type'
 import { IPager } from 'api/type'
 import { getCompanyInvestments } from 'api/company'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import NoData from 'bounceComponents/common/NoData'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export const InvestmentList: React.FC<{ list: ICompanyInvestmentsListItems[] }> = ({ list }) => {
-  const router = useRouter()
-  const { thirdpartId } = router.query
+  const { thirdpartId } = useQueryParams()
   return (
     <>
       {list?.length === 0 || thirdpartId ? (
@@ -43,8 +44,7 @@ export type ICompanyProfileInvestmentsProps = {
 }
 
 const CompanyProfileInvestments: React.FC<ICompanyProfileInvestmentsProps> = ({ type, targetCompanyId }) => {
-  const router = useRouter()
-
+  const navigate = useNavigate()
   const [list, setList] = useState<ICompanyInvestmentsListItems[]>([])
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const CompanyProfileInvestments: React.FC<ICompanyProfileInvestmentsProps> = ({ 
       const res = await getCompanyInvestments({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId
+        companyId: targetCompanyId || 0
       })
       return {
         total: res?.data?.total,
@@ -64,7 +64,7 @@ const CompanyProfileInvestments: React.FC<ICompanyProfileInvestmentsProps> = ({ 
       }
     },
     {
-      defaultPageSize: ['ALL'].includes(type) ? 100 : 4,
+      defaultPageSize: type && ['ALL'].includes(type) ? 100 : 4,
       refreshDeps: [targetCompanyId],
       ready: !!targetCompanyId
     }
@@ -75,20 +75,20 @@ const CompanyProfileInvestments: React.FC<ICompanyProfileInvestmentsProps> = ({ 
   }, [data?.list])
 
   const handleClick = useCallback(() => {
-    router.push('/company/funding?tab=investments')
-  }, [router])
+    navigate(`${routes.company.funding}?tab=investments`)
+  }, [navigate])
 
-  if (['ALL'].includes(type)) {
+  if (type && ['ALL'].includes(type)) {
     return <InvestmentList list={list} />
   }
 
   return (
     <ViewMoreListBox
-      show={!['ALL'].includes(type) && list?.length < data?.total}
+      show={(!type || !['ALL'].includes(type)) && list?.length < (data?.total || 0)}
       title={'Investments'}
       loading={loading}
       handleClick={handleClick}
-      showDivider={!['ALL'].includes(type)}
+      showDivider={!type || !['ALL'].includes(type)}
     >
       <InvestmentList list={list} />
     </ViewMoreListBox>

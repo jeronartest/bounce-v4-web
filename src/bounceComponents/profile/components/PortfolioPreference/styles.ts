@@ -3,7 +3,7 @@ import { SxProps } from '@mui/material'
 export default {
   tabsBox: {
     marginTop: 40,
-    display: 'flex',
+    display: 'flex'
   },
   tabsRoot: {
     '.MuiTab-root': {
@@ -17,11 +17,11 @@ export default {
 
       '&.Mui-selected': {
         color: '#FFFFFF',
-        background: '#000000',
-      },
+        background: '#000000'
+      }
     },
     '.MuiTabs-indicator': {
-      display: 'none',
-    },
-  },
+      display: 'none'
+    }
+  }
 } as Record<string, SxProps>

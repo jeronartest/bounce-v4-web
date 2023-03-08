@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 import { Stack } from '@mui/system'
-import StartupIdeas from 'bounceComponents/market/components/StartupIdeas'
+// import StartupIdeas from 'bounceComponents/market/components/StartupIdeas'
 
 export type ITopSearchLayoutProps = {
   title: string

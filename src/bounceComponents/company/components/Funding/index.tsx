@@ -1,24 +1,27 @@
 import { Button } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import CompanyProfileInvestments from '../../CompanyProfileInvestments'
 import InvestorsList from './components/InvestorsList'
-import { RootState } from '@/store'
 import { useGetCompanyInvestors } from 'bounceHooks/company/useGetCompanyInvestors'
-import { ICompanyOverviewInfo } from 'api/company/type'
+// import { ICompanyOverviewInfo } from 'api/company/type'
 import { useGetCompanyInvestments } from 'bounceHooks/company/useGetCompanyInvestments'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { stringify } from 'querystring'
 
 export type IFundingProps = {
   targetCompanyId: number
 }
 
 const Funding: React.FC<IFundingProps> = ({ targetCompanyId }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
-  const router = useRouter()
-  const { tab, thirdpartId } = router.query
+  const params = useQueryParams()
+  const { tab, thirdpartId } = params
 
   const { data, runAsync: runGetCompanyInvestors } = useGetCompanyInvestors()
   useEffect(() => {
@@ -37,13 +40,14 @@ const Funding: React.FC<IFundingProps> = ({ targetCompanyId }) => {
           <Button
             variant={['investors'].includes(tab as string) || !tab ? 'contained' : 'outlined'}
             onClick={() => {
-              router.push({
-                pathname: '/company/funding',
-                query: {
-                  ...router.query,
-                  tab: 'investors'
-                }
-              })
+              navigate(
+                routes.company.funding +
+                  '?' +
+                  stringify({
+                    ...params,
+                    tab: 'investors'
+                  })
+              )
             }}
           >
             Investors ({data?.data.total || 0})
@@ -52,13 +56,14 @@ const Funding: React.FC<IFundingProps> = ({ targetCompanyId }) => {
             variant={['investments'].includes(tab as string) ? 'contained' : 'outlined'}
             sx={{ ml: 10 }}
             onClick={() => {
-              router.push({
-                pathname: '/company/funding',
-                query: {
-                  ...router.query,
-                  tab: 'investments'
-                }
-              })
+              navigate(
+                routes.company.funding +
+                  '?' +
+                  stringify({
+                    ...params,
+                    tab: 'investments'
+                  })
+              )
             }}
           >
             Investments ({investmentsData?.data?.total || 0})

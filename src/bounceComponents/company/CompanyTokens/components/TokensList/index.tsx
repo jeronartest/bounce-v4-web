@@ -1,16 +1,14 @@
 import { Avatar, Box, IconButton, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import TokensForm from '../TokensForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
-import { getLabel } from '@/utils'
-import { RootState } from '@/store'
-import { shortenAddress } from '@/utils/web3/address'
+import { getLabel, shortenAddress } from 'utils'
 import { ICompanyTokensListItems } from 'api/company/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type ITokensListProps = {
   list: ICompanyTokensListItems[]
@@ -19,9 +17,9 @@ export type ITokensListProps = {
 }
 
 const TokensList: React.FC<ITokensListProps> = ({ list, onEdit, onDelete }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
-  const handleEdit = v => {
+  const handleEdit = (v: any) => {
     show(MuiDialog, {
       title: 'Edit the team member',
       fullWidth: true,

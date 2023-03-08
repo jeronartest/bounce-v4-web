@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
 
-import Head from 'next/head'
 import { CompanyOverviewEdit } from './overview'
 import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
 import Stepper from 'bounceComponents/create-auction-pool/Stepper'
@@ -124,11 +123,6 @@ const CompanyEdit: React.FC = () => {
 const CompanyEditPage: React.FC = () => {
   return (
     <section>
-      <Head>
-        <title>Edit Summary | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
       <CompanyContextProvider>
         <CompanyEdit />
       </CompanyContextProvider>

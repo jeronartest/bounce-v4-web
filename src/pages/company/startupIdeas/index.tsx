@@ -4,7 +4,6 @@ import { Stack } from '@mui/system'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
-import Head from 'next/head'
 import StartupIdeas from 'bounceComponents/market/components/StartupIdeas'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import TopSearchLayout from 'bounceComponents/market/TopSearchLayout/idnex'
@@ -58,12 +57,6 @@ const StartupIdeasPage: React.FC = ({}) => {
   }
   return (
     <section>
-      <Head>
-        <title>Startup Ideas | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <TopSearchLayout title={'Startup Ideas'} centerBox={<StartupIdeas userId={userId} />}>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           {({ setFieldValue, values }) => (
@@ -89,7 +82,7 @@ const StartupIdeasPage: React.FC = ({}) => {
                     icon: values?.user?.avatar,
                     value: values?.user
                   }}
-                  filterOptions={list => list}
+                  filterOptions={(list: any) => list}
                   loadingText={'No result'}
                   renderOption={option => {
                     return (

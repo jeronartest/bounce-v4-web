@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
 import Activitie from 'bounceComponents/company/components/CompanyProfileActivities'
-import { RootState } from '@/store'
 import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
 import { ICompanyOverviewInfo } from 'api/company/type'
 import { getCompanyInfo } from 'api/company'
@@ -12,11 +9,15 @@ import CompanyProfileOverview from 'bounceComponents/company/components/CompanyP
 import CompanyProfileTeam from 'bounceComponents/company/components/CompanyProfileTeam'
 import CompanyProfileInvestors from 'bounceComponents/company/components/CompanyProfileInvestors'
 import CompanyProfileInvestments from 'bounceComponents/company/CompanyProfileInvestments'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const CompanySummary: React.FC = () => {
-  const { companyInfo: initCompanyInfo, userId } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
-  const { id, thirdpartId } = router.query
+  const { companyInfo: initCompanyInfo, userId } = useUserInfo()
+  const { id, thirdpartId } = useQueryParams()
+  const navigate = useNavigate()
 
   const [companyInfo, setCompanyInfo] = useState<ICompanyOverviewInfo>()
 
@@ -45,9 +46,9 @@ const CompanySummary: React.FC = () => {
         <Button
           onClick={() => {
             if (companyInfo?.avatar?.fileUrl) {
-              router.push('/company/edit/overview')
+              navigate(routes.company.edit.overview)
             } else {
-              router.push('/company/edit')
+              navigate(routes.company.edit.index)
             }
           }}
           size="small"
@@ -69,11 +70,15 @@ const CompanySummary: React.FC = () => {
 
   return (
     <CompanyOverviewLayout extraLink={extraLinkBtn()}>
-      <CompanyProfileOverview companyInfo={companyInfo} />
-      {!thirdpartId && <Activitie personalInfoId={companyInfo?.companyId} />}
-      {!thirdpartId && <CompanyProfileTeam targetCompanyId={companyInfo?.companyId} />}
-      {!thirdpartId && <CompanyProfileInvestors targetCompanyId={companyInfo?.companyId} />}
-      <CompanyProfileInvestments targetCompanyId={companyInfo?.companyId} />
+      {companyInfo && (
+        <>
+          <CompanyProfileOverview companyInfo={companyInfo} />
+          {!thirdpartId && <Activitie personalInfoId={companyInfo?.companyId} />}
+          {!thirdpartId && <CompanyProfileTeam targetCompanyId={companyInfo?.companyId} />}
+          {!thirdpartId && <CompanyProfileInvestors targetCompanyId={companyInfo?.companyId} />}
+          <CompanyProfileInvestments targetCompanyId={companyInfo?.companyId} />
+        </>
+      )}
     </CompanyOverviewLayout>
   )
 }

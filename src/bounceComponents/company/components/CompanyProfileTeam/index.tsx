@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Button, Grid, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { useSelector } from 'react-redux'
-import { show } from '@ebay/nice-modal-react'
-import { useRouter } from 'next/router'
+// import { show } from '@ebay/nice-modal-react'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
-import { ICompanyMembersListData, ICompanyListItems, ICompanyOverviewInfo } from 'api/company/type'
+import { ICompanyMembersListData, ICompanyListItems } from 'api/company/type'
 import { getCompanyMembersList } from 'api/company'
-import { RootState } from '@/store'
-import { getPrimaryRoleLabel } from '@/utils'
+import { getPrimaryRoleLabel } from 'utils'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 export type ICompanyProfileTeamProps = {
   targetCompanyId?: number
@@ -20,11 +20,11 @@ export type ICompanyProfileTeamProps = {
 const DefaultPageSize = 3
 
 const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyId }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
   const [showBtn, setShowBtn] = useState<boolean>(false)
   const [dataList, setDataList] = useState<ICompanyMembersListData[]>([])
-  const router = useRouter()
-  const getrolesName = item => {
+  const getrolesName = (item: any[]) => {
     const temp = item?.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
     return temp?.length === 1 ? temp : temp?.join(' & ')
   }
@@ -38,7 +38,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
       const resp = await getCompanyMembersList({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId
+        companyId: targetCompanyId || 0
       })
 
       return {
@@ -57,7 +57,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
   )
 
   useEffect(() => {
-    if (dataList.length < data?.total) {
+    if (data?.total && dataList.length < data?.total) {
       setShowBtn(true)
     } else {
       setShowBtn(false)
@@ -100,7 +100,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
                     height: 100,
                     cursor: 'pointer'
                   }}
-                  onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
+                  onClick={() => navigate(`${routes.profile.summary}?id=${item.userId}`)}
                 />
                 <Stack spacing={4} ml={14}>
                   <Stack direction={'row'} alignItems={'center'} spacing={8}>
@@ -110,7 +110,7 @@ const CompanyProfileTeam: React.FC<ICompanyProfileTeamProps> = ({ targetCompanyI
                       fontWeight={500}
                       color={'var(--ps-blue)'}
                       sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
-                      onClick={() => router.push(`/profile/summary?id=${item.userId}`)}
+                      onClick={() => navigate(`${routes.profile.summary}?id=${item.userId}`)}
                     >
                       {item.userName}
                     </Typography>

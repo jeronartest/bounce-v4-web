@@ -47,7 +47,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   listItems,
   claimAt
 }) => {
-  const chainConfigInBackend = useChainConfigInBackend('id', chainId)
+  const chainConfigInBackend = useChainConfigInBackend('id', chainId.toString())
   const [, { days, hours, minutes, seconds }] = useCountDown({ targetDate: claimAt * 1000 })
 
   const showClaim = () => {

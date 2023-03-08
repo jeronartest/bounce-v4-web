@@ -11,7 +11,7 @@ interface DatePickerProps extends FieldProps, Omit<MuiDatePickerProps<Moment, Mo
 function createErrorHandler(
   fieldError: unknown,
   fieldName: string,
-  setFieldError: (field: string, message?: string) => void,
+  setFieldError: (field: string, message?: string) => void
 ) {
   return (error?: ReactNode) => {
     if (error !== fieldError && error !== '') {
@@ -39,7 +39,7 @@ function fieldToDatePicker({
     inputFormat: 'MMM D, Y  HH:mm', //Jan 1, 2021  00:00
     renderInput:
       renderInput ??
-      ((params) => (
+      (params => (
         <TextField
           {...params}
           error={showError}
@@ -73,7 +73,7 @@ function fieldToDatePicker({
       },
     onError: onError ?? createErrorHandler(fieldError, field.name, setFieldError),
     ...field,
-    ...props,
+    ...props
   }
 }
 

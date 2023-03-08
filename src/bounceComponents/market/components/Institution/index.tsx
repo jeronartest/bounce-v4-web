@@ -16,23 +16,24 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
-import { Form, Formik } from 'formik'
+// import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
 import moment from 'moment'
 import { usePagination } from 'ahooks'
-import { useRouter } from 'next/router'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from 'bounceComponents/common/NoData'
+// import NoData from 'bounceComponents/common/NoData'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as CheckCardSVG } from 'assets/imgs/companies/checkCard.svg'
 import { ReactComponent as CheckTableSVG } from 'assets/imgs/companies/checkTable.svg'
 import { ReactComponent as CheckNoCardSVG } from 'assets/imgs/companies/checkNoCard.svg'
 import { ReactComponent as CheckNoTableSVG } from 'assets/imgs/companies/checkNoTable.svg'
-import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
+// import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { getInstitutionInvestors } from 'api/market'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IInstitutionProps = {
   userName: string
@@ -41,7 +42,7 @@ const listHeart = ['Institution Investor', 'Location', 'Start time']
 
 const defaultPageSize = 12
 const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [checkTime, setCheckTime] = useState<number>(0)
   const {
     pagination,
@@ -65,7 +66,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
       refreshDeps: [userName, checkTime]
     }
   )
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
   }
   const [checkCard, setCheckCard] = useState<boolean>(true)
@@ -115,7 +116,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
         {checkCard ? (
           institutionInvestorsLoading ? (
             <Grid rowSpacing={24} columnSpacing={20} container>
-              {Array.from(new Array(12)).map((lodingItem, index) => (
+              {Array.from(new Array(12)).map((_, index) => (
                 <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                   <Box>
                     <Skeleton variant="rounded" height={282} sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }} />
@@ -125,12 +126,12 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
             </Grid>
           ) : (
             <Grid rowSpacing={24} columnSpacing={20} container>
-              {institutionInvestorsData?.list.map((item, i) => (
+              {institutionInvestorsData?.list.map((item: any, i: number) => (
                 <Grid key={i} item xs={12} sm={6} md={3} lg={3} xl={3}>
                   <Box
                     onClick={() => {
-                      router.push(
-                        `/company/summary?${
+                      navigate(
+                        `${routes.company.summary}?${
                           item?.thirdpartId !== 0 ? `thirdpartId=${item?.thirdpartId}` : `id=${item?.companyId}`
                         }`
                       )
@@ -170,7 +171,7 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
               <TableBody>
                 <Box height={12} />
                 {institutionInvestorsLoading
-                  ? Array.from(new Array(12)).map((lodingItem, index) => (
+                  ? Array.from(new Array(12)).map((_, index) => (
                       <TableRow key={index} sx={{ borderRadius: 20 }}>
                         {Array.from(new Array(3)).map((item, index) => (
                           <TableCell key={index}>
@@ -183,13 +184,13 @@ const Institution: React.FC<IInstitutionProps> = ({ userName }) => {
                         ))}
                       </TableRow>
                     ))
-                  : institutionInvestorsData?.list.map((row, index) => (
+                  : institutionInvestorsData?.list.map((row: any, index: number) => (
                       <TableRow key={index} component={ListItemButton} sx={{ borderRadius: 20 }}>
                         <TableCell
                           sx={{ borderRadius: '20px 0 0 20px' }}
                           onClick={() => {
-                            router.push(
-                              `/company/summary?${
+                            navigate(
+                              `${routes.company.summary}?${
                                 row?.thirdpartId !== 0 ? `thirdpartId=${row?.thirdpartId}` : `id=${row?.companyId}`
                               }`
                             )

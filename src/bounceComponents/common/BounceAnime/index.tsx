@@ -8,8 +8,8 @@ const defaultOptions = {
   autoplay: true,
   animationData: bounce_loading,
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
+    preserveAspectRatio: 'xMidYMid slice'
+  }
 }
 
 export const BounceAnime: React.FC = () => {
@@ -20,7 +20,7 @@ export const BounceAnime: React.FC = () => {
         placeContent: 'center',
         width: 220,
         height: 220,
-        margin: '0 auto',
+        margin: '0 auto'
       }}
     >
       <Lottie classwidth={200} height={200} options={defaultOptions} />

@@ -15,9 +15,9 @@ const useUserSwappedAmount1Units = () => {
       poolWithParticipantInfo?.participant.swappedAmount0,
       poolInfo.token0.decimals,
       poolInfo.token1.decimals,
-      poolInfo.ratio,
+      poolInfo.ratio
     ),
-    poolInfo.token1.decimals,
+    poolInfo.token1.decimals
   )
 }
 
@@ -45,7 +45,7 @@ const useIsLimitExceeded = (bidAmount: string) => {
 
   return useMemo(
     () => isBidAmountGtLeftAllocationToken1 || isUserSwappedAmount1GteToken1Allocation,
-    [isBidAmountGtLeftAllocationToken1, isUserSwappedAmount1GteToken1Allocation],
+    [isBidAmountGtLeftAllocationToken1, isUserSwappedAmount1GteToken1Allocation]
   )
 }
 

@@ -18,14 +18,16 @@ const Marketcard: React.FC<IMarketcardProps> = ({ title, imageUrl, hover, handle
       display={'flex'}
       alignItems={'center'}
       onClick={() => {
-        handleClick()
+        handleClick && handleClick()
       }}
       sx={{
-        cursor: hover && 'pointer',
-        ':hover': hover && {
-          boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-          'div:nth-child(3)': { visibility: 'visible' }
-        }
+        cursor: hover ? 'pointer' : 'inherit',
+        ':hover': hover
+          ? {
+              boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
+              'div:nth-child(3)': { visibility: 'visible' }
+            }
+          : {}
       }}
     >
       <picture style={{ width: 40, height: 40, marginLeft: 20, marginRight: 10 }}>

@@ -4,6 +4,6 @@ export default {
   iconBtn: {
     background: '#EBECEF',
     width: 40,
-    height: 40,
-  },
+    height: 40
+  }
 } as Record<string, SxProps>

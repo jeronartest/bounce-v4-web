@@ -11,18 +11,18 @@ const useIsBalanceInsufficient = (bidAmount: string) => {
 
   const { token1Balance } = useToken1Balance()
   const isBidAmountGtToken1Balance = new BigNumber(
-    bidAmount ? parseUnits(bidAmount, poolInfo.token1.decimals).toString() : '0',
+    bidAmount ? parseUnits(bidAmount, poolInfo.token1.decimals).toString() : '0'
   ).gt(token1Balance)
 
   const isBidAmountGtAmount1AvailableToPurchase = new BigNumber(
-    bidAmount ? parseUnits(bidAmount, poolInfo.token1.decimals).toString() : '0',
+    bidAmount ? parseUnits(bidAmount, poolInfo.token1.decimals).toString() : '0'
   ).gt(amount1AvailableToPurchase)
 
   const isToken1BalanceLte0 = token1Balance.lte(0)
 
   return useMemo(
     () => isBidAmountGtToken1Balance || isBidAmountGtAmount1AvailableToPurchase || isToken1BalanceLte0,
-    [isBidAmountGtAmount1AvailableToPurchase, isBidAmountGtToken1Balance, isToken1BalanceLte0],
+    [isBidAmountGtAmount1AvailableToPurchase, isBidAmountGtToken1Balance, isToken1BalanceLte0]
   )
 }
 

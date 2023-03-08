@@ -5,16 +5,15 @@ import * as yup from 'yup'
 import { toast } from 'react-toastify'
 import { Button, Grid, ListSubheader, MenuItem, Select } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
 import { searchUser } from 'api/optionsData'
-import { RootState } from '@/store'
 import { ICompanyTeamListItems } from 'api/company/type'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type ITeamFormProps = {
   onAdd?: (data: ICompanyTeamListItems) => void
@@ -42,7 +41,7 @@ const validationSchema = yup.object({
 
 const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -69,7 +68,7 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -94,7 +93,7 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
       if (code !== 200) {
         toast.error('search error')
       }
-      const temp = data?.list?.map(v => {
+      const temp = data?.list?.map((v: any) => {
         return {
           label: v?.name,
           icon: v?.avatar || DefaultAvaSVG,
@@ -133,10 +132,10 @@ const TeamForm: React.FC<ITeamFormProps> = ({ onAdd, editData, onEdit, onDelete 
               <Grid item xs={6}>
                 <FormItem name="roleIds" label="Primary Role (Max 2)" required>
                   <Select multiple>
-                    {optionDatas?.primaryRoleOpt?.map((item, index) => [
+                    {optionDatas?.primaryRoleOpt?.map((item: any, index: number) => [
                       <ListSubheader key={index}>{item.level1Name}</ListSubheader>,
-                      item.child.map((child, index) => [
-                        <MenuItem key={index} value={child.id}>
+                      item.child.map((child: any, idx: number) => [
+                        <MenuItem key={idx} value={child.id}>
                           {child.level2Name}
                         </MenuItem>
                       ])

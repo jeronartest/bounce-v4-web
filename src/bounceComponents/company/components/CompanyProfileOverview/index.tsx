@@ -1,9 +1,7 @@
-import { Box, Button, Grid, IconButton, Link, Stack, Typography } from '@mui/material'
+import { Box, Grid, IconButton, Stack, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import countries from 'i18n-iso-countries'
 import english from 'i18n-iso-countries/langs/en.json'
-import { useRouter } from 'next/router'
 import moment from 'moment'
 import styles from './styles'
 import { ReactComponent as TwitterIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/twitter.svg'
@@ -13,9 +11,11 @@ import { ReactComponent as LinkedinSVG } from 'bounceComponents/profile/componen
 import { ReactComponent as GithubSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/github.svg'
 import ClockSVG from 'bounceComponents/profile/components/PersonalOverview/assets/clock.svg'
 import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
-import { RootState } from '@/store'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { ICompanyOverviewInfo } from 'api/company/type'
+import { routes } from 'constants/routes'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
 
 countries.registerLocale(english)
 
@@ -26,8 +26,8 @@ interface IPersonalOverview {
 }
 
 const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
   const linkIcon = useMemo(
     () => [
@@ -69,7 +69,7 @@ const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) =>
     if (!companyInfo?.founders) {
       return
     }
-    return router.push(`/profile/summary?id=${userId}`)
+    return navigate(`${routes.profile.summary}?id=${userId}`)
   }
 
   return (

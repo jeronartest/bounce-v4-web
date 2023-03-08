@@ -1,14 +1,14 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
 import { ICompanyInvestmentsListItems } from 'api/company/type'
-import { RootState } from '@/store'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type ICompanyInvestmentsListProps = {
   list: ICompanyInvestmentsListItems[]
@@ -21,15 +21,15 @@ const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
   showOperation = false,
   handleEdit
 }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
   const handleLink = (item: ICompanyInvestmentsListItems) => {
     if (item?.companyId) {
-      return router.push(`/company/summary?id=${item?.companyId}`)
+      return navigate(`${routes.company.summary}?id=${item?.companyId}`)
     }
     if (item?.thirdpartId) {
-      return router.push(`/company/summary?thirdpartId=${item?.thirdpartId}`)
+      return navigate(`${routes.company.summary}?thirdpartId=${item?.thirdpartId}`)
     }
     return
   }
@@ -91,7 +91,11 @@ const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
             {dayjs(v?.investmentDate * 1000).format('MMM YYYY')}
           </Typography>
           {showOperation && (
-            <IconButton edge="end" onClick={() => handleEdit({ data: v, index: i })} sx={{ marginRight: 10 }}>
+            <IconButton
+              edge="end"
+              onClick={() => handleEdit && handleEdit({ data: v, index: i })}
+              sx={{ marginRight: 10 }}
+            >
               <EditBtnSVG />
             </IconButton>
           )}

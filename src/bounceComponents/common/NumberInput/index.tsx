@@ -1,4 +1,3 @@
-import React from 'react'
 import { OutlinedInput, OutlinedInputProps } from '@mui/material'
 
 export type NumberInputProps = OutlinedInputProps & {
@@ -32,7 +31,7 @@ const NumberInput = ({ value, onUserInput, ...rest }: NumberInputProps) => {
       spellCheck="false"
       type="text"
       value={value}
-      onChange={(event) => {
+      onChange={event => {
         // replace commas with periods, because we exclusively uses period as the decimal separator
         enforcer(event.target.value.replace(/,/g, '.'))
         console.log('enforcer result: ', enforcer(event.target.value.replace(/,/g, '.')))

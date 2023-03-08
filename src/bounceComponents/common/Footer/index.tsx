@@ -1,10 +1,9 @@
 import React from 'react'
-import { Container, Stack, Typography } from '@mui/material'
-import Link from 'next/link'
+import { Container, Link, Stack, Typography } from '@mui/material'
 
-export type IFooterProps = {}
+// export type IFooterProps = {}
 
-const Footer: React.FC<IFooterProps> = ({}) => {
+const Footer: React.FC = ({}) => {
   return (
     <Container maxWidth="xl">
       <Stack sx={{ py: 24 }} spacing={34}>

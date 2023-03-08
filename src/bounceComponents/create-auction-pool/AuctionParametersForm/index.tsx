@@ -1,16 +1,6 @@
-import {
-  Button,
-  Stack,
-  OutlinedInput,
-  Box,
-  Typography,
-  FormControlLabel,
-  Avatar,
-  Alert,
-  AlertTitle
-} from '@mui/material'
+import { Button, Stack, OutlinedInput, Box, Typography, FormControlLabel, Alert } from '@mui/material'
 import { Field, Form, Formik } from 'formik'
-import React, { SetStateAction } from 'react'
+import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 
@@ -26,7 +16,7 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 
-import LogoSVG from 'assets/imgs/components/logo.svg'
+// import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
 import { formatNumber } from '@/utils/web3/number'

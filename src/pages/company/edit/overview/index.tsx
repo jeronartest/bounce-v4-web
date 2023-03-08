@@ -2,11 +2,8 @@ import { Box, Button, MenuItem, OutlinedInput, Select, Stack, Typography } from 
 import { Form, Formik } from 'formik'
 import React from 'react'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
-import Head from 'next/head'
 import styles from './styles'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -18,18 +15,19 @@ import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
 import { ReactComponent as MediumSVG } from 'assets/imgs/profile/links/medium.svg'
 import LocationTimeZone, { timezone } from 'bounceComponents/common/LocationTimeZone'
-import { RootState } from '@/store'
 import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
 import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
-import EditLayout, { companyTabsList } from 'bounceComponents/company/EditLayout'
+// import EditLayout, { companyTabsList } from 'bounceComponents/company/EditLayout'
 import { ILinksItem } from 'pages/profile/edit/social'
 import { SocialLinks } from 'bounceComponents/profile/SocialList'
 import { ICompanyProfileParams } from 'api/company/type'
 import { LeavePageWarn } from 'bounceComponents/common/LeavePageWarn'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { CompanyActionType } from 'bounceComponents/company/components/CompanyContextProvider'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
+import { useUserInfo } from 'state/users/hooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const links: ILinksItem[] = [
   {
@@ -148,7 +146,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
   firstEdit,
   companyProfileDispatch
 }) => {
-  const { companyInfo } = useSelector((state: RootState) => state.user)
+  const { companyInfo } = useUserInfo()
   const { loading, runAsync: runUpdateCompany } = useUpdateCompany(firstEdit)
 
   const initialValues = {
@@ -182,7 +180,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
     }
   }
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: any) => {
     const tempVal = {
       companyBasicInfo: {
         ...values.companyBasicInfo,
@@ -213,7 +211,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
     runUpdateCompany(tempVal)
   }
 
-  const optionDatas = useSelector((state: RootState) => state.configOptions.optionDatas)
+  const optionDatas = useOptionDatas()
 
   return (
     <Formik
@@ -225,7 +223,7 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
       {({ values, setFieldValue, dirty, resetForm }) => {
         return (
           <Stack component={Form} spacing={20} noValidate>
-            <LeavePageWarn dirty={dirty || (firstEdit && companyProfileValues?.activeStep !== 5)} />
+            <LeavePageWarn dirty={dirty || !!(firstEdit && companyProfileValues?.activeStep !== 5)} />
             {firstEdit && <Typography variant="h2">Introduction</Typography>}
             {!firstEdit && (
               <FormItem
@@ -361,24 +359,4 @@ export const CompanyOverviewEdit: React.FC<ICompanyOverviewEditProps> = ({
   )
 }
 
-const CompanyOverviewEditPage: React.FC = () => {
-  const router = useRouter()
-  const { userId } = useSelector((state: RootState) => state.user)
-  const goBack = () => {
-    router.push(`/company/summary?id=${userId}`)
-  }
-  return (
-    <section>
-      <Head>
-        <title>Edit Summary | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-      <EditLayout tabsList={companyTabsList} title="Edit summary" goBack={goBack}>
-        <CompanyOverviewEdit />
-      </EditLayout>
-    </section>
-  )
-}
-
-export default CompanyOverviewEditPage
+export default CompanyOverviewEdit

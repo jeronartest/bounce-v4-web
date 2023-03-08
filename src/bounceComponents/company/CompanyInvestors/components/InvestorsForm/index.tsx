@@ -5,17 +5,16 @@ import * as yup from 'yup'
 import { Button, Grid, MenuItem, Select } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
 import { searchUser } from 'api/optionsData'
-import { RootState } from '@/store'
 import { ICompanyInvestorsListItems } from 'api/company/type'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IInvestorsFormProps = {
   onAdd?: (data: ICompanyInvestorsListItems) => void
@@ -40,7 +39,7 @@ const validationSchema = yup.object({
 
 const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -70,7 +69,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -96,7 +95,7 @@ const InvestorsForm: React.FC<IInvestorsFormProps> = ({ onAdd, editData, onEdit,
       if (code !== 200) {
         toast.error('System failed. Please try again')
       }
-      const temp = data?.list?.map(v => {
+      const temp = data?.list?.map((v: any) => {
         return {
           label: v?.name,
           icon: v?.avatar || (searchType === 2 ? CompanyDefaultSVG : DefaultAvatarSVG),

@@ -4,19 +4,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { Button, OutlinedInput, Grid, MenuItem, Select, FormControlLabel, Checkbox } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
-import { RootState } from '@/store'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
-import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+// import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { searchToken } from 'api/optionsData'
 import { ICompanyTokensListItems } from 'api/company/type'
-import { isAddress } from '@/utils/web3/address'
-import { formCheckValid } from '@/utils'
+import { formCheckValid, isAddress } from 'utils'
 import { FormType } from 'api/profile/type'
 import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type ITokensFormProps = {
   onAdd?: (data: ICompanyTokensListItems) => void
@@ -43,19 +41,19 @@ const validationSchema = yup.object({
     }),
   tokenName: yup
     .string()
-    .test('CHECK_TOKENNAME', formCheckValid('Token name', FormType.Input), (val, ctx) => {
+    .test('CHECK_TOKENNAME', formCheckValid('Token name', FormType.Input) || '', (val, ctx) => {
       if (!val && ctx.parent.isIssued) {
         return false
       }
       return true
     })
     .test('CHECK_CHINESE', '', (val, ctx) => {
-      if (!/^[^\u4e00-\u9fa5]{0,}$/.test(val)) {
+      if (!/^[^\u4e00-\u9fa5]{0,}$/.test(val || '')) {
         return ctx.createError({ message: `Incorrect Token name` })
       }
       return true
     }),
-  tokenType: yup.number().test('CHECK_TOKENTYPE', formCheckValid('Token Type', FormType.Select), (val, ctx) => {
+  tokenType: yup.number().test('CHECK_TOKENTYPE', formCheckValid('Token Type', FormType.Select) || '', (val, ctx) => {
     if (!val && ctx.parent.isIssued) {
       return false
     }
@@ -79,7 +77,7 @@ const CheckboxItems: React.FC<ICheckboxItemsProps> = ({ value, onChange }) => {
 
 const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -108,7 +106,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -132,7 +130,7 @@ const TokensForm: React.FC<ITokensFormProps> = ({ onAdd, editData, onEdit, onDel
       if (code !== 200) {
         toast.error('search error')
       }
-      const temp = data?.list?.map(v => {
+      const temp = data?.list?.map((v: any) => {
         return {
           label: v?.contract,
           icon: v?.smallUrl || TokenDefaultSVG,

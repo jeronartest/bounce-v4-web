@@ -5,18 +5,17 @@ import * as yup from 'yup'
 import { Button, OutlinedInput, Grid, MenuItem, Select, InputAdornment } from '@mui/material'
 import { useModal } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
 import moment from 'moment'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as DeleteIcon } from 'assets/imgs/components/delete.svg'
 import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
 import { searchCompanyInfo } from 'api/optionsData'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
-import { RootState } from '@/store'
 import { ICompanyInvestmentsListItems } from 'api/company/type'
 import DateMonthPicker from 'bounceComponents/common/DateMonthPicker'
-import { formCheckValid } from '@/utils'
+import { formCheckValid } from 'utils'
 import { FormType } from 'api/profile/type'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IInvestmentsFormProps = {
   onAdd?: (data: ICompanyInvestmentsListItems) => void
@@ -49,7 +48,7 @@ const validationSchema = yup.object({
       return schema.test({
         name: 'amount',
         skipAbsent: true,
-        test(value, ctx) {
+        test(value: any, ctx: any) {
           if (!value) {
             return ctx.createError({ message: formCheckValid('Amount', FormType.Input) })
           }
@@ -74,7 +73,7 @@ const validationSchema = yup.object({
 
 const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onEdit, onDelete }) => {
   const modal = useModal()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const initialValues = editData
     ? editData.data
@@ -110,7 +109,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
   )
 
   const handleDelete = useCallback(
-    handleReset => {
+    (handleReset: () => void) => {
       if (!editData) {
         handleReset()
       } else {
@@ -135,7 +134,7 @@ const InvestmentsForm: React.FC<IInvestmentsFormProps> = ({ onAdd, editData, onE
         toast.error('search error')
       }
       setCompanyData(
-        data.list.map(v => {
+        data.list.map((v: any) => {
           return {
             label: v.name,
             icon: v.avatar || DefaultAvaSVG,

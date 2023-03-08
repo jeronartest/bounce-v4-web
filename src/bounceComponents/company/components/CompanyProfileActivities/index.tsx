@@ -1,22 +1,18 @@
 import { Avatar, Box, Button, Grid, Link, Pagination, PaginationItem, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined'
-import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { useRouter } from 'next/router'
-import Image from 'next/image'
+import Image from 'components/Image'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { useGetCompanyTokens } from 'bounceHooks/company/useGetCompanyTokens'
-import { RootState } from '@/store'
-import { getLabel } from '@/utils'
-import { shortenAddress } from '@/utils/web3/address'
-import DefaultAvatarSVG from 'assets/imgs/company/tokens/default-avatar.svg'
+import { getLabel, shortenAddress } from 'utils'
+// import DefaultAvatarSVG from 'assets/imgs/company/tokens/default-avatar.svg'
 import { PoolType } from 'api/pool/type'
 import { IAuctionPoolsData, IAuctionPoolsItems } from 'api/profile/type'
 import { getUserActivitiesPool } from 'api/profile'
@@ -26,6 +22,8 @@ import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 export type IActivitieProps = {
   personalInfoId: number
@@ -39,11 +37,10 @@ const poolType: Record<PoolType, string> = {
   [PoolType.SealedBid]: 'SealedBid'
 }
 const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
   const [btnSta, setBtnSta] = useState<string>('Auction')
   const { data: tokensData, runAsync: runGetCompanyTokens } = useGetCompanyTokens()
-  const { thirdpartId } = router.query
+  const { thirdpartId } = useQueryParams()
   useEffect(() => {
     personalInfoId && runGetCompanyTokens({ limit: 100, offset: 0, companyId: Number(personalInfoId) })
   }, [runGetCompanyTokens, personalInfoId])

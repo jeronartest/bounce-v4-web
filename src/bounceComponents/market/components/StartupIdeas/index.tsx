@@ -2,17 +2,16 @@ import { Box, Grid, MenuItem, Pagination, Select, Skeleton, Stack } from '@mui/m
 import React, { useState } from 'react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from 'bounceComponents/common/NoData'
+// import NoData from 'bounceComponents/common/NoData'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
-import { RootState } from '@/store'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { Link } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IStartupIdeasProps = {
   userId: number
@@ -21,8 +20,7 @@ export type IStartupIdeasProps = {
 const defaultIdeaPageSize = 12
 
 const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
-  const router = useRouter()
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
   const [marketType, setMarketType] = useState<number>(0)
   const {
     pagination: ideaPagination,
@@ -47,11 +45,11 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
       refreshDeps: [userId, marketType]
     }
   )
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (e: any, p: number) => {
     ideaPagination.changeCurrent(p)
   }
   return (
-    <TotalPaginationBox total={ideaListData?.total} idea>
+    <TotalPaginationBox total={ideaListData?.total || 0} idea>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={10}>
           <FormItem name="marketCategory" label="Market Category" fieldType="custom" sx={{ width: 190 }}>
@@ -64,7 +62,7 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
                 }
               }}
             >
-              {optionDatas?.marketTypeOpt?.map((item, index) => (
+              {optionDatas?.marketTypeOpt?.map((item: any, index: number) => (
                 <MenuItem key={index} value={item.id}>
                   {item.marketType}
                 </MenuItem>
@@ -88,7 +86,7 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
           <Grid rowSpacing={24} columnSpacing={20} container>
             {ideaListData?.list?.map((ideaListItem, index) => (
               <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
-                <Link target="_blank" href={`/idea/detail?id=${ideaListItem?.id}`}>
+                <Link to={`${routes.idea.detail}?id=${ideaListItem?.id}`}>
                   <InstitutionCard
                     icon={ideaListItem.avatar || DefaultAvaSVG}
                     status={ideaListItem.marketType}
@@ -116,16 +114,17 @@ const StartupIdeas: React.FC<IStartupIdeasProps> = ({ userId }) => {
           </Grid>
         )}
       </Box>
-      {ideaListData?.total >= defaultIdeaPageSize && (
-        <Box mt={58} display={'flex'} justifyContent={'center'}>
-          <Pagination
-            onChange={handlePageChange}
-            count={Math.ceil(ideaListData?.total / defaultIdeaPageSize) || 0}
-            variant="outlined"
-            siblingCount={0}
-          />
-        </Box>
-      )}
+      {ideaListData?.total ||
+        (0 >= defaultIdeaPageSize && (
+          <Box mt={58} display={'flex'} justifyContent={'center'}>
+            <Pagination
+              onChange={handlePageChange}
+              count={Math.ceil(ideaListData?.total || 0 / defaultIdeaPageSize) || 0}
+              variant="outlined"
+              siblingCount={0}
+            />
+          </Box>
+        ))}
     </TotalPaginationBox>
   )
 }

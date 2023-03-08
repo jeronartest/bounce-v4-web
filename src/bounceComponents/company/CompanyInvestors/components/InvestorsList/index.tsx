@@ -10,18 +10,16 @@ import {
   Typography
 } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
-import { useRouter } from 'next/router'
 import InvestorsForm from '../InvestorsForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
-import { getLabel } from '@/utils'
-import { RootState } from '@/store'
+import { getLabel } from 'utils'
 import { ICompanyInvestorsListItems } from 'api/company/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IInvestorsListProps = {
   list: ICompanyInvestorsListItems[]
@@ -30,10 +28,9 @@ export type IInvestorsListProps = {
 }
 
 const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
 
-  const handleEdit = v => {
+  const handleEdit = (v: any) => {
     const temp = {
       data: {
         userInfo: v.data.userInfo,

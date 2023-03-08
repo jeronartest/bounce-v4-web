@@ -8,7 +8,7 @@ export interface UpcomingPoolCountdownButtonProps {
 
 const UpcomingPoolCountdownButton = ({ openAt }: UpcomingPoolCountdownButtonProps) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: openAt * 1000,
+    targetDate: openAt * 1000
   })
 
   return (
@@ -17,7 +17,7 @@ const UpcomingPoolCountdownButton = ({ openAt }: UpcomingPoolCountdownButtonProp
         sx={{
           width: '100%',
           display: 'flex',
-          justifyContent: countdown > 0 ? 'space-between' : 'center',
+          justifyContent: countdown > 0 ? 'space-between' : 'center'
         }}
       >
         <Typography component="span" sx={{ width: 'fit-content' }}>

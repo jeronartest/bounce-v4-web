@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import { usePagination } from 'ahooks'
-import { useSelector } from 'react-redux'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { useRouter } from 'next/router'
-import { RootState } from '@/store'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import { getCompanyInvestors } from 'api/company'
-import {
-  ICompanyInvestorsListData,
-  ICompanyInvestorsListItems,
-  ICompanyListItems,
-  ICompanyOverviewInfo
-} from 'api/company/type'
-import { getLabel } from '@/utils'
+import { ICompanyInvestorsListItems, ICompanyListItems } from 'api/company/type'
+import { getLabel } from 'utils'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 export type ICompanyProfileInvestorsProps = {
   targetCompanyId?: number
@@ -25,9 +20,9 @@ export type ICompanyProfileInvestorsProps = {
 const DefaultPageSize = 6
 
 const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targetCompanyId }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
   const [showBtn, setShowBtn] = useState<boolean>(false)
-  const router = useRouter()
   const [dataList, setDataList] = useState<ICompanyInvestorsListItems[]>([])
 
   useEffect(() => {
@@ -39,7 +34,7 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
       const resp = await getCompanyInvestors({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        companyId: targetCompanyId
+        companyId: targetCompanyId || 0
       })
       return {
         total: resp.data.total,
@@ -58,7 +53,7 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
   )
 
   useEffect(() => {
-    if (dataList.length < data?.total) {
+    if (data?.total && dataList.length < data?.total) {
       setShowBtn(true)
     } else {
       setShowBtn(false)
@@ -76,9 +71,9 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
 
   const handleLink = (item: ICompanyInvestorsListItems) => {
     if (item.investorType === 1) {
-      return router.push(`/profile/summary?id=${item.userId}`)
+      return navigate(`${routes.profile.summary}?id=${item.userId}`)
     }
-    return router.push(`/company/summary?thirdpartId=${item.thirdpartId}`)
+    return navigate(`${routes.company.summary}?thirdpartId=${item.thirdpartId}`)
   }
   return (
     <ViewMoreListBox

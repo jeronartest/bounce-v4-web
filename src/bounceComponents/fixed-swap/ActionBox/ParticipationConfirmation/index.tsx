@@ -9,13 +9,13 @@ const ParticipationConfirmation = ({ onConfirm }: ParticipationConfirmationProps
   const [confirmationState, setConfirmationState] = useState({
     notice1: false,
     notice2: false,
-    notice3: false,
+    notice3: false
   })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmationState({
       ...confirmationState,
-      [event.target.name]: event.target.checked,
+      [event.target.name]: event.target.checked
     })
   }
 
@@ -52,7 +52,7 @@ const ParticipationConfirmation = ({ onConfirm }: ParticipationConfirmationProps
       <Button
         variant="contained"
         fullWidth
-        disabled={!Object.values(confirmationState).every((item) => item === true)}
+        disabled={!Object.values(confirmationState).every(item => item === true)}
         sx={{ mt: 24 }}
         onClick={onConfirm}
       >

@@ -1,21 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { LoadingButton } from '@mui/lab'
-import { useRouter } from 'next/router'
 import Add from './components/Add'
 import InvestmentsForm from './components/InvestmentsForm'
 import InvestmentsList from './components/InvestmentsList'
 import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { useGetCompanyInvestments } from 'bounceHooks/company/useGetCompanyInvestments'
-import { RootState } from '@/store'
 import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
 import { ICompanyInvestmentsListItems, ICompanyProfileParams } from 'api/company/type'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type ICompanyInvestmentsProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -30,17 +30,17 @@ const add_text = {
 
 const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   companyProfileValues,
-  firstEdit,
-  companyProfileDispatch
+  firstEdit
+  // companyProfileDispatch
 }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
 
   const { data, runAsync: runGetCompanyInvestments } = useGetCompanyInvestments()
   const { loading, runAsync: runUpdateCompany } = useUpdateCompany(firstEdit)
 
   const [list, setlist] = useState<ICompanyInvestmentsListItems[]>([])
   const [formDirty, setFormDirty] = useState<boolean>(false)
-  const router = useRouter()
 
   useWarnIfUnsavedChanges(formDirty)
 
@@ -50,7 +50,7 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
 
   useEffect(() => {
     if (firstEdit) {
-      setlist(companyProfileValues?.companyInvestments)
+      setlist(companyProfileValues?.companyInvestments || [])
     } else {
       setlist(data?.data?.list)
     }
@@ -63,7 +63,7 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   }, [firstEdit])
 
   const addList = useCallback(
-    data => {
+    (data: any) => {
       setlist([...list, data])
       setFormDirty(true)
     },
@@ -71,7 +71,7 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   )
 
   const editList = useCallback(
-    (v, i) => {
+    (v: any, i: number) => {
       const temp = [...list]
       temp.splice(i, 1, v)
       setlist(temp)
@@ -89,7 +89,7 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
   }, [addList])
 
   const handleSubmit = useCallback(
-    flag => {
+    (flag: string) => {
       if (firstEdit) {
         setFormDirty(false)
         return runUpdateCompany({
@@ -102,18 +102,19 @@ const CompanyInvestments: React.FC<ICompanyInvestmentsProps> = ({
             iconType: 'success',
             cancelBtn: 'Browse Now',
             againBtn: 'My Homepage',
-            onCancel: () => router.push('/company/institutionInvestors'),
-            onAgain: () => router.push('/company/summary')
+            onCancel: () => navigate(routes.company.institutionInvestors),
+            onAgain: () => navigate(routes.company.summary)
           })
         })
       }
       runUpdateCompany({ companyInvestments: ['DIRECTLY'].includes(flag) ? [] : list }).then(() => setFormDirty(false))
+      return
     },
-    [list, runUpdateCompany, firstEdit, companyProfileValues, router]
+    [firstEdit, runUpdateCompany, list, companyProfileValues, navigate]
   )
 
   const deleteList = useCallback(
-    i => {
+    (i: number) => {
       const temp = [...list]
       temp.splice(i, 1)
       setlist(temp)

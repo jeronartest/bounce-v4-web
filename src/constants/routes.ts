@@ -10,6 +10,7 @@ export const routes = {
     activities: '/company/activities',
     comments: '/company/comments',
     edit: {
+      index: '/company/edit',
       investments: '/company/edit/investments',
       investors: '/company/edit/investors',
       overview: '/company/edit/overview',

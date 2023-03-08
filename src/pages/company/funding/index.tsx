@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
-import { RootState } from '@/store'
 import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
 import { ICompanyOverviewInfo } from 'api/company/type'
 import { getCompanyInfo } from 'api/company'
 import CompanyOverviewLayout from 'bounceComponents/company/CompanyOverviewLayout'
 import Funding from 'bounceComponents/company/components/Funding'
+import { useUserInfo } from 'state/users/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const CompanyFunding: React.FC = () => {
-  const { companyInfo: initCompanyInfo, userId } = useSelector((state: RootState) => state.user)
-  const router = useRouter()
-  const { id, thirdpartId } = router.query
+  const { companyInfo: initCompanyInfo, userId } = useUserInfo()
+  const navigate = useNavigate()
+  const { id, thirdpartId } = useQueryParams()
   const [companyInfo, setCompanyInfo] = useState<ICompanyOverviewInfo>()
 
   useEffect(() => {
@@ -36,9 +37,9 @@ const CompanyFunding: React.FC = () => {
         <Button
           onClick={() => {
             if (companyInfo?.avatar?.fileUrl) {
-              router.push('/company/edit/investors')
+              navigate(routes.company.edit.investors)
             } else {
-              router.push('/company/edit')
+              navigate(routes.company.edit.index)
             }
           }}
           size="small"
@@ -60,7 +61,7 @@ const CompanyFunding: React.FC = () => {
 
   return (
     <CompanyOverviewLayout extraLink={extraLinkBtn()}>
-      <Funding targetCompanyId={companyInfo?.companyId} />
+      {companyInfo?.companyId && <Funding targetCompanyId={companyInfo?.companyId} />}
     </CompanyOverviewLayout>
   )
 }

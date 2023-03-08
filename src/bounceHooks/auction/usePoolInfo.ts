@@ -23,7 +23,7 @@ const usePoolInfo = () => {
       const response = await getPoolInfo({
         poolId,
         category: PoolType.FixedSwap,
-        chainId: chainConfigInBackend?.id,
+        chainId: chainConfigInBackend?.id
       })
 
       const rawPoolInfo = response.data.fixedSwapPool
@@ -32,12 +32,12 @@ const usePoolInfo = () => {
         ...rawPoolInfo,
         token0: {
           ...rawPoolInfo.token0,
-          symbol: rawPoolInfo.token0.symbol.toUpperCase(),
+          symbol: rawPoolInfo.token0.symbol.toUpperCase()
         },
         token1: {
           ...rawPoolInfo.token1,
-          symbol: rawPoolInfo.token1.symbol.toUpperCase(),
-        },
+          symbol: rawPoolInfo.token1.symbol.toUpperCase()
+        }
       }
     },
     {
@@ -46,8 +46,8 @@ const usePoolInfo = () => {
       pollingInterval: 30000,
       onSuccess: () => {
         getPoolHistory()
-      },
-    },
+      }
+    }
   )
 }
 

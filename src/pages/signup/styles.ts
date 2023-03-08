@@ -1,5 +1,5 @@
 import { SxProps } from '@mui/material'
 
 export default {
-  root: {},
+  root: {}
 } as Record<string, SxProps>

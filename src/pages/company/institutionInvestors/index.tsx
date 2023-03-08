@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Stack } from '@mui/system'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
-import Head from 'next/head'
 import TopSearchLayout from 'bounceComponents/market/TopSearchLayout/idnex'
 import FormItem from 'bounceComponents/common/FormItem'
 // import SearchInput, { ISearchOption } from 'bounceComponents/common/SearchInput'
@@ -26,12 +25,6 @@ const InstitutionInvestors: React.FC = ({}) => {
 
   return (
     <section>
-      <Head>
-        <title>Institution Investors | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <TopSearchLayout title={'Institution Investors'} centerBox={<Institution userName={userName} />}>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           {() => (

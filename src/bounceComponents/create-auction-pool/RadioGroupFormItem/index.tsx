@@ -17,7 +17,7 @@ export function fieldToRadioGroup({
         fieldOnBlur(e ?? field.name)
       },
     ...field,
-    ...props,
+    ...props
   }
 }
 

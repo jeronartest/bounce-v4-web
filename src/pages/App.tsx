@@ -23,6 +23,19 @@ import Companies from 'pages/companies'
 import Company from 'pages/company'
 import CompanyActivities from 'pages/company/activities'
 import CompanyComments from 'pages/company/comments'
+import CompanyEdit from 'pages/company/edit/index'
+import CompanyEditInvestments from 'pages/company/edit/investments'
+import CompanyEditInvestors from 'pages/company/edit/investors'
+import CompanyEditOverview from 'pages/company/edit/overview'
+import CompanyEditTeam from 'pages/company/edit/team'
+import CompanyEditTokens from 'pages/company/edit/tokens'
+import CompanyFunding from 'pages/company/funding'
+import CompanyInvestors from 'pages/company/institutionInvestors'
+import CompanyJobs from 'pages/company/jobs'
+import CompanyStartupIdeas from 'pages/company/startupIdeas'
+import CompanySummary from 'pages/company/summary'
+import CompanyTeam from 'pages/company/team'
+import CompanyTopCompanies from 'pages/company/topCompanies'
 
 import IdeaCreate from 'pages/idea/create'
 import IdeaDetail from 'pages/idea/detail'
@@ -101,6 +114,20 @@ export default function App() {
                     <Route path={routes.company.index} element={<Company />}>
                       <Route path={routes.company.activities.slice(1)} element={<CompanyActivities />} />
                       <Route path={routes.company.comments.slice(1)} element={<CompanyComments />} />
+                      <Route path={routes.company.edit.index.slice(1)} element={<CompanyEdit />}>
+                        <Route path={routes.company.edit.investments.slice(1)} element={<CompanyEditInvestments />} />
+                        <Route path={routes.company.edit.investors.slice(1)} element={<CompanyEditInvestors />} />
+                        <Route path={routes.company.edit.overview.slice(1)} element={<CompanyEditOverview />} />
+                        <Route path={routes.company.edit.team.slice(1)} element={<CompanyEditTeam />} />
+                        <Route path={routes.company.edit.tokens.slice(1)} element={<CompanyEditTokens />} />
+                      </Route>
+                      <Route path={routes.company.funding} element={<CompanyFunding />} />
+                      <Route path={routes.company.institutionInvestors} element={<CompanyInvestors />} />
+                      <Route path={routes.company.jobs} element={<CompanyJobs />} />
+                      <Route path={routes.company.startupIdeas} element={<CompanyStartupIdeas />} />
+                      <Route path={routes.company.summary} element={<CompanySummary />} />
+                      <Route path={routes.company.team} element={<CompanyTeam />} />
+                      <Route path={routes.company.topCompanies} element={<CompanyTopCompanies />} />
                     </Route>
 
                     <Route path={routes.idea.create} element={<IdeaCreate />} />

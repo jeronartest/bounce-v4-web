@@ -1,5 +1,5 @@
 export const ICodeMaps = {
-  200: 'Success',
+  200: 'Success'
 }
 
 export type IResponse<TData> = {

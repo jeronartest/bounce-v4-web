@@ -1,17 +1,17 @@
-import {
-  Avatar,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText
-} from '@mui/material'
+// import {
+//   Avatar,
+//   IconButton,
+//   List,
+//   ListItem,
+//   ListItemAvatar,
+//   ListItemSecondaryAction,
+//   ListItemText
+// } from '@mui/material'
+// import dayjs from 'dayjs'
 import React from 'react'
-import dayjs from 'dayjs'
 import { show } from '@ebay/nice-modal-react'
 import InvestmentsForm from '../InvestmentsForm'
-import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
+// import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { ICompanyInvestmentsListItems } from 'api/company/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import CompanyInvestmentsList from 'bounceComponents/company/CompanyInvestmentsList'

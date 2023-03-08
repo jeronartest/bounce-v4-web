@@ -8,7 +8,7 @@ import {
   DialogProps as MuiDialogProps,
   Button,
   Box,
-  IconButton,
+  IconButton
 } from '@mui/material'
 import { create, useModal } from '@ebay/nice-modal-react'
 import Lottie from 'react-lottie'
@@ -20,8 +20,8 @@ const defaultOptions = {
   autoplay: true,
   animationData: bounce_loading,
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
+    preserveAspectRatio: 'xMidYMid slice'
+  }
 }
 
 export interface DialogProps extends MuiDialogProps {
@@ -29,7 +29,7 @@ export interface DialogProps extends MuiDialogProps {
   subTitle?: string
 }
 
-const DialogConfirmation: React.FC<DialogProps> = create((props) => {
+const DialogConfirmation: React.FC = create((props: DialogProps) => {
   const { title, subTitle, ...rest } = props
   const modal = useModal()
 
@@ -42,8 +42,8 @@ const DialogConfirmation: React.FC<DialogProps> = create((props) => {
           width: 480,
           borderRadius: 20,
           pl: 30,
-          pr: 40,
-        },
+          pr: 40
+        }
       }}
       {...rest}
     >
@@ -75,7 +75,7 @@ const DialogConfirmation: React.FC<DialogProps> = create((props) => {
               placeContent: 'center',
               width: 220,
               height: 220,
-              margin: '0 auto',
+              margin: '0 auto'
             }}
           >
             <Lottie classwidth={200} height={200} options={defaultOptions} />

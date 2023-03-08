@@ -5,7 +5,7 @@ export default {
     background: 'var(--ps-primary)',
     borderRadius: 24,
     padding: '2px 12px 10px',
-    height: 'fit-content',
+    height: 'fit-content'
   },
   tabsRoot: {
     '.MuiTab-root': {
@@ -23,11 +23,11 @@ export default {
       textTransform: 'none',
       '&.Mui-selected': {
         color: 'var(--ps-primary)',
-        background: 'var(--ps-gray-900)',
-      },
+        background: 'var(--ps-gray-900)'
+      }
     },
     '.MuiTabs-indicator': {
-      display: 'none',
-    },
-  },
+      display: 'none'
+    }
+  }
 } as Record<string, SxProps>

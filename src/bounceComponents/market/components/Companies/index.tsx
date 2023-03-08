@@ -17,26 +17,26 @@ import {
   Typography
 } from '@mui/material'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { usePagination } from 'ahooks'
 import moment from 'moment'
-import { useRouter } from 'next/router'
 import TotalPaginationBox from '../TotalPaginationBox'
-import NoData from 'bounceComponents/common/NoData'
+// import NoData from 'bounceComponents/common/NoData'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as CheckCardSVG } from 'assets/imgs/companies/checkCard.svg'
 import { ReactComponent as CheckTableSVG } from 'assets/imgs/companies/checkTable.svg'
 import { ReactComponent as CheckNoCardSVG } from 'assets/imgs/companies/checkNoCard.svg'
 import { ReactComponent as CheckNoTableSVG } from 'assets/imgs/companies/checkNoTable.svg'
-import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
-import ProjectCard from 'bounceComponents/companies/ProjectCard'
-import { RootState } from '@/store'
+// import { ReactComponent as GameSVG } from 'assets/imgs/companies/game.svg'
+// import ProjectCard from 'bounceComponents/companies/ProjectCard'
 import { getCompanyInformation } from 'api/market'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import ProjectCardSvg from 'bounceComponents/common/ProjectCardSvg'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type ICompaniesProps = {
   userName: string
@@ -46,12 +46,12 @@ const listHeart = ['Company', 'Category', 'Stage', 'Location', 'Start time']
 const defaultPageSize = 12
 
 const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const [marketType, setMarketType] = useState<number>(0)
   const [checkTime, setCheckTime] = useState<number>(0)
   const [stageType, setStageType] = useState<number>(0)
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
+  const optionDatas = useOptionDatas()
 
   const {
     pagination,
@@ -78,7 +78,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
       refreshDeps: [userName, checkTime, marketType, stageType]
     }
   )
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (e: any, p: number) => {
     pagination.changeCurrent(p)
   }
 
@@ -173,12 +173,12 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
             </Grid>
           ) : (
             <Grid rowSpacing={24} columnSpacing={20} container>
-              {topCompaniesData?.list?.map((ideaListItem, index) => (
+              {topCompaniesData?.list?.map((ideaListItem: any, index: number) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={3} key={index}>
                   <Box
                     onClick={() => {
-                      router.push(
-                        `/company/summary?${
+                      navigate(
+                        `${routes.company.summary}?${
                           ideaListItem?.thirdpartId !== 0
                             ? `thirdpartId=${ideaListItem?.thirdpartId}`
                             : `id=${ideaListItem?.companyId}`
@@ -244,13 +244,13 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                         ))}
                       </TableRow>
                     ))
-                  : topCompaniesData?.list.map((row, index) => (
+                  : topCompaniesData?.list.map((row: any, index: number) => (
                       <TableRow key={index} component={ListItemButton} sx={{ borderRadius: 20 }}>
                         <TableCell
                           sx={{ borderRadius: '20px 0 0 20px' }}
                           onClick={() => {
-                            router.push(
-                              `/company/summary?${
+                            navigate(
+                              `${routes.company.summary}?${
                                 row?.thirdpartId !== 0 ? `thirdpartId=${row?.thirdpartId}` : `id=${row?.companyId}`
                               }`
                             )
@@ -269,7 +269,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                             sx={{
                               height: 24,
                               borderRadius: 20,
-                              background: !!row.companyState && 'var(--ps-gray-50)',
+                              backgroundColor: !!row.companyState ? 'var(--ps-gray-50)' : 'inherit',
                               display: 'inline-flex',
                               alignItems: 'center',
                               flexDirection: 'row'

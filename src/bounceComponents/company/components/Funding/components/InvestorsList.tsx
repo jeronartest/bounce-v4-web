@@ -1,13 +1,15 @@
 import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useRouter } from 'next/router'
-import { getLabel } from '@/utils'
+import { getLabel } from 'utils'
 import NoData from 'bounceComponents/common/NoData'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { ICompanyInvestorsListItems } from 'api/company/type'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type IInvestorsListProps = {
   dataList: any
@@ -15,23 +17,23 @@ export type IInvestorsListProps = {
 }
 
 const InvestorsList: React.FC<IInvestorsListProps> = ({ dataList, optionDatas }) => {
-  const router = useRouter()
-  const { thirdpartId } = router.query
+  const navigate = useNavigate()
+  const { thirdpartId } = useQueryParams()
   if (!dataList?.data?.list?.length || thirdpartId) {
     return <NoData color="var(--ps-gray-900)" svgColor="#F1F1F1" />
   }
 
   const handleLink = (item: ICompanyInvestorsListItems) => {
     if (item.investorType === 1) {
-      return router.push(`/profile/summary?id=${item.userId}`)
+      return navigate(`${routes.profile.summary}?id=${item.userId}`)
     }
-    return router.push(`/company/summary?thirdpartId=${item.thirdpartId}`)
+    return navigate(`${routes.company.summary}?thirdpartId=${item.thirdpartId}`)
   }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={19}>
-        {dataList?.data?.list?.map((item, index) => (
+        {dataList?.data?.list?.map((item: any, index: number) => (
           <Grid item xs={12} sm={6} md={3} lg={2} xl={2} key={index}>
             <Stack
               sx={{

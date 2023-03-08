@@ -3,7 +3,7 @@ import { FieldProps, getIn } from 'formik'
 import { Moment } from 'moment'
 import {
   DateRangePicker as MuiDateRangePicker,
-  DateRangePickerProps as MuiDateRangePickerProps,
+  DateRangePickerProps as MuiDateRangePickerProps
 } from '@mui/x-date-pickers-pro/DateRangePicker'
 import { TextField, TextFieldProps } from '@mui/material'
 
@@ -16,7 +16,7 @@ interface DateRangePickerFormItemProps
 function createErrorHandler(
   fieldError: unknown,
   fieldName: string,
-  setFieldError: (field: string, message?: string) => void,
+  setFieldError: (field: string, message?: string) => void
 ) {
   return (error?: ReactNode) => {
     if (error !== fieldError && error !== '') {
@@ -84,7 +84,7 @@ function fieldToDateRangePicker({
       },
     onError: onError ?? createErrorHandler(fieldError, field.name, setFieldError),
     ...field,
-    ...props,
+    ...props
   }
 }
 

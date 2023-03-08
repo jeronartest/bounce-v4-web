@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { FieldProps, getIn } from 'formik'
 import {
   DateTimePicker as MuiDateTimePicker,
-  DateTimePickerProps as MuiDateTimePickerProps,
+  DateTimePickerProps as MuiDateTimePickerProps
 } from '@mui/x-date-pickers/DateTimePicker'
 import { OutlinedInput, TextField, TextFieldProps } from '@mui/material'
 import moment, { Moment } from 'moment'
@@ -14,7 +14,7 @@ interface DatePickerProps extends FieldProps, Omit<MuiDateTimePickerProps<Moment
 function createErrorHandler(
   fieldError: unknown,
   fieldName: string,
-  setFieldError: (field: string, message?: string) => void,
+  setFieldError: (field: string, message?: string) => void
 ) {
   return (error?: ReactNode) => {
     if (error !== fieldError && error !== '') {
@@ -43,7 +43,7 @@ function fieldToDatePicker({
     disableMaskedInput: true,
     renderInput:
       renderInput ??
-      ((params) => (
+      (params => (
         <TextField
           {...params}
           error={showError}
@@ -77,7 +77,7 @@ function fieldToDatePicker({
       },
     onError: onError ?? createErrorHandler(fieldError, field.name, setFieldError),
     ...field,
-    ...props,
+    ...props
   }
 }
 
@@ -99,7 +99,7 @@ function DateTimePickerFormItem({ children, ...props }: DatePickerProps) {
               left: 24,
               fontSize: 16,
               fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-              fontWeight: 400,
+              fontWeight: 400
             },
             '& .MuiClock-root': {
               '& .MuiClock-clock': {
@@ -107,20 +107,20 @@ function DateTimePickerFormItem({ children, ...props }: DatePickerProps) {
                 mb: 36,
                 bgcolor: '#F7F8FB',
                 '& .MuiClock-pin': {
-                  bgcolor: '#171717',
+                  bgcolor: '#171717'
                 },
                 '& .MuiClockPointer-root': {
                   bgcolor: '#171717',
                   '& .MuiClockPointer-thumb': {
-                    bgcolor: '#171717',
-                  },
+                    bgcolor: '#171717'
+                  }
                 },
                 '& .MuiClock-wrapper': {
                   '& .Mui-selected': {
                     color: '#FFFFFF',
-                    bgcolor: '#171717',
-                  },
-                },
+                    bgcolor: '#171717'
+                  }
+                }
               },
               '& .MuiClock-amButton': {
                 bottom: 24,
@@ -130,8 +130,8 @@ function DateTimePickerFormItem({ children, ...props }: DatePickerProps) {
                 bgcolor: props.field.value?.hour() < 12 ? '#171717' : '#F7F8FB',
                 '& .MuiTypography-root': {
                   fontSize: 14,
-                  color: props.field.value?.hour() < 12 ? '#FFFFFF' : undefined,
-                },
+                  color: props.field.value?.hour() < 12 ? '#FFFFFF' : undefined
+                }
               },
               '& .MuiClock-pmButton': {
                 bottom: 24,
@@ -141,14 +141,14 @@ function DateTimePickerFormItem({ children, ...props }: DatePickerProps) {
                 bgcolor: props.field.value?.hour() >= 12 ? '#171717' : '#F7F8FB',
                 '& .MuiTypography-root': {
                   fontSize: 14,
-                  color: props.field.value?.hour() >= 12 ? '#FFFFFF' : undefined,
-                },
-              },
-            },
-          },
-        },
+                  color: props.field.value?.hour() >= 12 ? '#FFFFFF' : undefined
+                }
+              }
+            }
+          }
+        }
       }}
-      dayOfWeekFormatter={(day) => day.slice(0, 2)}
+      dayOfWeekFormatter={day => day.slice(0, 2)}
     >
       {children}
     </MuiDateTimePicker>

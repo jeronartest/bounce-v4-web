@@ -19,7 +19,7 @@ const InputRegretAmount = ({
   slicedRegretAmount,
   setRegretAmount,
   onCancel,
-  onConfirm,
+  onConfirm
 }: InputRegretAmountProps) => {
   return (
     <Box>

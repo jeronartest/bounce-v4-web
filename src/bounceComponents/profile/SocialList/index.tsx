@@ -2,7 +2,6 @@ import { Box, Button, IconButton, OutlinedInput, Stack } from '@mui/material'
 import { Form, Formik } from 'formik'
 import React, { ReactNode } from 'react'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux'
 import styles from './styles'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email.svg'
@@ -11,8 +10,8 @@ import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedI
 import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
 import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
-import { RootState } from '@/store'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
+import { useUserInfo } from 'state/users/hooks'
 
 export interface ILinksItem {
   name: string
@@ -98,8 +97,8 @@ const validationSchema = yup.object({
 })
 
 const SocialList: React.FC = () => {
-  const { userInfo } = useSelector((state: RootState) => state.user)
-  const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
+  const { userInfo } = useUserInfo()
+  const { runAsync: runUpdateBasic } = useUpdateBasic()
 
   const initialValues = {
     contactEmail: userInfo?.contactEmail || '',
@@ -110,7 +109,7 @@ const SocialList: React.FC = () => {
     instagram: userInfo?.instagram || ''
   }
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: any) => {
     runUpdateBasic(values)
   }
 

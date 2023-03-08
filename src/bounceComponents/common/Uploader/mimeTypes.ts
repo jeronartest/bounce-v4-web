@@ -4,7 +4,7 @@ export const IMAGE_FILES_MIMES: string[] = [
   'image/jp2', // .jpeg200
   'image/jpm', // .jpeg200
   'image/gif',
-  'image/webp',
+  'image/webp'
 ]
 
 export const VIDEO_FILES_MIMES: string[] = [
@@ -13,7 +13,7 @@ export const VIDEO_FILES_MIMES: string[] = [
   'video/mp4',
   'video/ogg', // .ogv
   'video/mp2t', // .ts
-  'video/webm', // .webm
+  'video/webm' // .webm
 ]
 
 export const AUDIO_FILES_MIMES: string[] = [
@@ -22,7 +22,7 @@ export const AUDIO_FILES_MIMES: string[] = [
   'audio/mpeg', // .mp3
   'audio/ogg',
   'audio/wav',
-  'audio/webm', // .weba
+  'audio/webm' // .weba
 ]
 
 export enum FileAcceptType {
@@ -39,5 +39,5 @@ export enum FileAcceptType {
 
   'mp3' = 'audio/mpeg',
   'wav' = 'audio/wav',
-  'weba' = 'audio/webm',
+  'weba' = 'audio/webm'
 }

@@ -9,18 +9,18 @@ import {
   Stack
 } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { show } from '@ebay/nice-modal-react'
 import Typography from '@mui/material/Typography'
-import { useRouter } from 'next/router'
 import TeamForm from '../TeamForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
-import { RootState } from '@/store'
-import { getPrimaryRoleLabel } from '@/utils'
+import { getPrimaryRoleLabel } from 'utils'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { ICompanyTeamListItems } from 'api/company/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 export type ITeamListProps = {
   list: ICompanyTeamListItems[]
@@ -29,15 +29,15 @@ export type ITeamListProps = {
 }
 
 const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
-  const { optionDatas } = useSelector((state: RootState) => state.configOptions)
-  const router = useRouter()
+  const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
 
-  const getrolesName = item => {
+  const getrolesName = (item: number[]) => {
     const temp = item.map((v: number) => getPrimaryRoleLabel(v, optionDatas?.primaryRoleOpt))
     return temp.length === 1 ? temp : temp.join(', ')
   }
 
-  const handleEdit = v => {
+  const handleEdit = (v: any) => {
     const temp = {
       data: {
         user: {
@@ -73,7 +73,7 @@ const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
               alt=""
               src={v.userAvatar || DefaultAvatarSVG}
               sx={{ width: 32, height: 32, cursor: 'pointer' }}
-              onClick={() => router.push(`/profile/summary?id=${v?.userId}`)}
+              onClick={() => navigate(`${routes.profile.summary}?id=${v?.userId}`)}
             />
           </ListItemAvatar>
           <ListItemText sx={{ flex: '1 1' }}>
@@ -86,11 +86,11 @@ const TeamList: React.FC<ITeamListProps> = ({ list, onEdit, onDelete }) => {
                     textDecoration: 'underline'
                   }
                 }}
-                onClick={() => router.push(`/profile/summary?id=${v?.userId}`)}
+                onClick={() => navigate(`${routes.profile.summary}?id=${v?.userId}`)}
               >
                 {v.userName}
               </Typography>
-              <VerifiedIcon isVerify={v?.isVerify} />
+              {v?.isVerify && <VerifiedIcon isVerify={v?.isVerify} />}
             </Stack>
           </ListItemText>
           <ListItemText

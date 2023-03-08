@@ -49,7 +49,7 @@ const useRegretBid = (options?: {
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: `You have successfully refunded.`,
+          content: `You have successfully refunded.`
         })
 
         const token0UnitsToRegret = parseUnits(params[0], poolInfo.token0.decimals)
@@ -69,14 +69,14 @@ const useRegretBid = (options?: {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: request.refresh,
+          onAgain: request.refresh
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return request
