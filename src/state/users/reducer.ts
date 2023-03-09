@@ -10,12 +10,12 @@ export interface ICacheLoginInfo {
   userType: USER_TYPE | string
 }
 
-export const fetchUserInfo: any = createAsyncThunk('user/fetchUserInfo', async (params: IUserInfoParams) => {
+export const fetchUserInfo: any = createAsyncThunk('users/fetchUserInfo', async (params: IUserInfoParams) => {
   const res = await getUserInfo(params)
   return res.data
 })
 
-export const fetchCompanyInfo: any = createAsyncThunk('user/fetchCompanyInfo', async (params: ICompanyInfoParams) => {
+export const fetchCompanyInfo: any = createAsyncThunk('users/fetchCompanyInfo', async (params: ICompanyInfoParams) => {
   const res = await getCompanyInfo(params)
   return res.data
 })

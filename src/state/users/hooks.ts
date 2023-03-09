@@ -39,13 +39,14 @@ export const useLogin = (path?: string) => {
         return toast.error('Login fail')
       }
       toast.success('Welcome to Bounce')
-      dispatch(
-        saveLoginInfo({
+      dispatch({
+        type: 'users/saveLoginInfo',
+        payload: {
           token: data?.token,
           userId: data?.userId,
           userType: data?.userType
-        })
-      )
+        }
+      })
       if (data?.userType === USER_TYPE.USER) {
         const res = await dispatch(
           fetchUserInfo({
@@ -74,7 +75,7 @@ export const useLogin = (path?: string) => {
         if (res.payload?.avatar?.fileUrl) {
           navigate(routes.company.edit.overview)
         } else {
-          navigate(routes.company.basic)
+          navigate(routes.company.index)
         }
       }
     }
