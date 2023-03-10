@@ -1,14 +1,5 @@
+import { Token } from 'bounceComponents/fixed-swap/type'
 import { Moment } from 'moment'
-
-export interface Token {
-  address: string
-  chainId?: number
-  decimals?: number | string
-  logoURI?: string
-  name?: string
-  symbol: string
-  dangerous?: boolean
-}
 
 // type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 

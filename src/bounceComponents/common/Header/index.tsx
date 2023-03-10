@@ -9,16 +9,16 @@ import { ReactComponent as LogoSVG } from './logo.svg'
 
 import Search from './Search'
 import CreateBtn from './CreateBtn'
-import { RootState } from '@/store'
 import { useLogout } from 'bounceHooks/user/useLogin'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { useUserInfo } from 'state/users/hooks'
 
 const Header: React.FC = () => {
   const router = useRouter()
   const token = useSelector((state: RootState) => state.user.token)
 
-  const { userId, userType, userInfo, companyInfo } = useSelector((state: RootState) => state.user)
+  const { userId, userType, userInfo, companyInfo } = useUserInfo()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const userOpen = Boolean(anchorEl)
   const handleUserMenuClose = () => {

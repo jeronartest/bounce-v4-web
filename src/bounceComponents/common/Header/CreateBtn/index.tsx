@@ -1,15 +1,15 @@
 import { Box, Button, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
 import { ReactComponent as ArrowDownSVG } from 'assets/imgs/user/arrow_down.svg'
 import { ReactComponent as ArrowUpSVG } from 'assets/imgs/user/arrow_up.svg'
 import { useNavigate } from 'react-router-dom'
+import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
 
 const CreateBtn: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
-  const { token } = useSelector((state: RootState) => state.user)
+  const { token } = useUserInfo()
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -51,7 +51,7 @@ const CreateBtn: React.FC = () => {
     >
       <MenuItem
         onClick={() => {
-          navigate(`/auction/create-auction-pool?redirect=${location.pathname}${location.search}`)
+          navigate(`${routes.auction.createAuctionPool}?redirect=${location.pathname}${location.search}`)
           setAnchorEl(null)
         }}
       >
@@ -59,7 +59,7 @@ const CreateBtn: React.FC = () => {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          navigate('/idea/create')
+          navigate(routes.idea.create)
           setAnchorEl(null)
         }}
       >

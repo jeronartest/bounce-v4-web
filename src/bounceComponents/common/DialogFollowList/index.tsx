@@ -128,6 +128,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
   const { id } = useQueryParams()
   const navigate = useNavigate()
   const { token } = useUserInfo()
+
   const [loading, setLoading] = useState<boolean>(false)
   const isLoginUser = useMemo(() => {
     return Number(userId) === Number(id)

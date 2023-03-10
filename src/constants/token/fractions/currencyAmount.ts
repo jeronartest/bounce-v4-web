@@ -84,7 +84,7 @@ export class CurrencyAmount extends Fraction {
    * @param amount the raw token or ether amount
    * @param currency the currency in the amount
    */
-  public static fromAmount(currency: Currency, amount: string): CurrencyAmount | undefined {
-    return tryParseAmount(amount, currency)
+  public static fromAmount(currency: Currency, amount: string | number): CurrencyAmount | undefined {
+    return tryParseAmount(amount.toString(), currency)
   }
 }

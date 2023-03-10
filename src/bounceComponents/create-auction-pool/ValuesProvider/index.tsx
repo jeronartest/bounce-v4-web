@@ -1,5 +1,10 @@
+import { Token } from 'bounceComponents/fixed-swap/type'
+import { ChainId, NETWORK_CHAIN_ID } from 'constants/chain'
+import { Currency } from 'constants/token'
+import { useQueryParams } from 'hooks/useQueryParams'
 import { Moment } from 'moment'
-import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react'
+import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react'
+import { isAddress } from 'utils'
 import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
@@ -13,6 +18,43 @@ export const useValuesState = () => {
   return context
 }
 
+export const useAuctionERC20Currency = () => {
+  const { tokenFrom, tokenTo } = useValuesState()
+
+  const makeCurrency = (_token: Token) => {
+    if (isAddress(_token.address) && _token.chainId && _token.decimals) {
+      return new Currency(
+        _token.chainId,
+        _token.address,
+        _token.decimals,
+        _token.symbol,
+        _token.name,
+        _token.logoURI,
+        _token.dangerous
+      )
+    }
+    return undefined
+  }
+
+  return useMemo(
+    () => ({
+      currencyFrom: makeCurrency(tokenFrom),
+      currencyTo: makeCurrency(tokenTo)
+    }),
+    [tokenFrom, tokenTo]
+  )
+}
+
+export const useAuctionInChain = () => {
+  const { chainIdOrName } = useQueryParams()
+  return useMemo(() => {
+    if (!chainIdOrName || Number.isNaN(Number(chainIdOrName))) {
+      throw new Error('Route error')
+    }
+    return Number(chainIdOrName) as ChainId
+  }, [chainIdOrName])
+}
+
 export const useValuesDispatch = () => {
   const context = useContext(ValuesDispatchContext)
   if (!context) {
@@ -23,16 +65,18 @@ export const useValuesDispatch = () => {
 
 const initialValues: AuctionPool = {
   tokenFrom: {
+    chainId: NETWORK_CHAIN_ID,
     address: '',
     logoURI: '',
     symbol: '',
-    decimals: ''
+    decimals: 18
   },
   tokenTo: {
+    chainId: NETWORK_CHAIN_ID,
     address: '',
     logoURI: '',
     symbol: '',
-    decimals: ''
+    decimals: 18
   },
   swapRatio: '',
   poolSize: '',
@@ -65,30 +109,15 @@ type Payload = {
     completed: CompletedSteps
   }
   [ActionType.SetTokenFrom]: {
-    tokenFrom: {
-      address: string
-      logoURI: string
-      symbol: string
-      decimals: string | number
-    }
+    tokenFrom: Token
   }
   [ActionType.CommitTokenImformation]: {
-    tokenFrom: {
-      address: string
-      logoURI: string
-      symbol: string
-      decimals: string | number
-    }
+    tokenFrom: Token
     activeStep: number
     completed: CompletedSteps
   }
   [ActionType.CommitAuctionParameters]: {
-    tokenTo: {
-      address: string
-      logoURI: string
-      symbol: string
-      decimals: string | number
-    }
+    tokenTo: Token
     swapRatio: string
     poolSize: string
     allocationStatus: AllocationStatus

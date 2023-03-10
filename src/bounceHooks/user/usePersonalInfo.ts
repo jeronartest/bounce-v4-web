@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { getUserInfo } from 'api/user'
-import { RootState } from 'store'
 import { UserType } from 'api/market/type'
 import { getCompanyInfo } from 'api/company'
 import { useQueryParams } from 'hooks/useQueryParams'
+import { useUserInfo } from 'state/users/hooks'
 
 export const usePersonalInfo = (type: UserType) => {
   const [personalId, setPersonalId] = useState<number>()
   const [isMe, setIsMe] = useState<boolean>(false)
-  const { userInfo, userId } = useSelector((state: RootState) => state.user)
+  const { userInfo, userId } = useUserInfo()
   const params = useQueryParams()
   const { id, thirdpartId } = params
 

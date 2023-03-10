@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
@@ -12,12 +11,14 @@ const Header = () => {
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <JoinStatus />
 
-      <PoolStatusBox
-        status={poolInfo.status}
-        openTime={poolInfo.openAt}
-        closeTime={poolInfo.closeAt}
-        onEnd={getPoolInfo}
-      />
+      {poolInfo && (
+        <PoolStatusBox
+          status={poolInfo.status}
+          openTime={poolInfo.openAt}
+          closeTime={poolInfo.closeAt}
+          onEnd={getPoolInfo}
+        />
+      )}
     </Box>
   )
 }

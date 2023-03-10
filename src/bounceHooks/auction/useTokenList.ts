@@ -17,11 +17,11 @@ const filterToken = (list: Token[], filterValue: string) => {
 }
 
 const getGetApiTokenList = async (chainId: ChainId) => {
-  if (!TOKEN_LIST_API?.[chainId]) return null
+  if (!TOKEN_LIST_API?.[chainId]) return []
 
   const response = await fetch(TOKEN_LIST_API?.[chainId] || '')
-  const jsonResponse: { tokens: Token[] } = await response?.json()
-  return jsonResponse.tokens
+  const jsonResponse: { tokens: any[] } = await response?.json()
+  return jsonResponse.tokens.map(item => ({ ...item, chainId })) as Token[]
 }
 
 const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false) => {
@@ -46,12 +46,14 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
     return filterToken(baseTokenList, filterValue || '')
   }, [baseTokenList, filterValue])
 
-  const contract = useTokenContract(filterValue)
+  const contract = useTokenContract(
+    isAddress(filterValue || '') && filteredApiTokenList.length === 0 ? filterValue : undefined
+  )
 
   const [singleToken, setSingleToken] = useState<Token>()
 
   const { loading: isGettingSingleToken } = useRequest(
-    async () => {
+    async (): Promise<Token> => {
       if (!contract) {
         return Promise.reject('no contract')
       }
@@ -59,7 +61,8 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
       const [symbol, name, decimals] = await Promise.all([contract.symbol(), contract.name(), contract.decimals()])
 
       return {
-        address: filterValue,
+        chainId,
+        address: filterValue || '',
         symbol,
         name,
         decimals,

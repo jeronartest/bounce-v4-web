@@ -1,4 +1,3 @@
-import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import moment, { Moment } from 'moment'
 import {
@@ -13,7 +12,6 @@ import {
 } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-import { useRouter } from 'next/router'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 import * as Yup from 'yup'
@@ -25,8 +23,8 @@ import { ParticipantStatus } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import SwitchFormItem from '../SwitchFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
-import { isAddress } from '@/utils/web3/address'
 import Tooltip from 'bounceComponents/common/Tooltip'
+import { isAddress } from 'utils'
 
 interface MyFormValues {
   poolName: string
@@ -39,8 +37,6 @@ interface MyFormValues {
 }
 
 export const DateRangePickerDemo = () => {
-  const router = useRouter()
-
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
 
@@ -60,13 +56,13 @@ export const DateRangePickerDemo = () => {
       .min(moment(), 'Please select a time earlier than current time')
       .typeError('Please select a valid time')
       .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value, context) => {
-        return !context.parent.endTime.valueOf() || value.valueOf() < context.parent.endTime.valueOf()
+        return !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
       }),
     endTime: Yup.date()
       .min(moment(), 'Please select a time earlier than current time')
       .typeError('Please select a valid time')
       .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
-        return !context.parent.startTime.valueOf() || value.valueOf() > context.parent.startTime.valueOf()
+        return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
       }),
     delayUnlockingTime: Yup.date()
       .nullable(true)
@@ -111,7 +107,7 @@ export const DateRangePickerDemo = () => {
     setValues: (values: any, shouldValidate?: boolean) => void
   ) => {
     show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
-      .then((whitelist: string[]) => {
+      .then(whitelist => {
         console.log('ImportWhitelistDialog Resolved: ', whitelist)
         valuesDispatch({
           type: ActionType.SetWhitelist,
@@ -275,7 +271,7 @@ export const DateRangePickerDemo = () => {
                     variant="outlined"
                     sx={{ width: 140 }}
                     onClick={() => {
-                      router.back()
+                      history.back()
                     }}
                   >
                     Cancel

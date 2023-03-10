@@ -1,27 +1,25 @@
-import React from 'react'
-import { Button, Stack, Box, Typography, ButtonBase, Avatar } from '@mui/material'
+import { Button, Stack, Box, Typography, ButtonBase } from '@mui/material'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
 import { show } from '@ebay/nice-modal-react'
-import { useRouter } from 'next/router'
-import { useAccount, useNetwork } from 'wagmi'
-import type { Token } from '../types'
 import TokenDialog from '../TokenDialog'
 import FakeOutlinedInput from '../FakeOutlinedInput'
-import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import FormItem from 'bounceComponents/common/FormItem'
-import { ExplorerDataType, getExplorerLink } from '@/utils/web3/getExplorerLink'
-import { SupportedChainId } from '@/constants/web3/chains'
 
-import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
+// import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenImage from 'bounceComponents/common/TokenImage'
+import { useActiveWeb3React } from 'hooks'
+import { ChainId } from 'constants/chain'
+import { getEtherscanLink } from 'utils'
+import { Token } from 'bounceComponents/fixed-swap/type'
 
 interface FormValues {
   tokenFromAddress: string
   tokenFromSymbol: string
   tokenFromLogoURI?: string
-  tokenFromDecimals: string
+  tokenFromDecimals: string | number
 }
 
 const TokenInformationForm = (): JSX.Element => {
@@ -36,15 +34,13 @@ const TokenInformationForm = (): JSX.Element => {
     tokenFromAddress: values.tokenFrom.address || '',
     tokenFromSymbol: values.tokenFrom.symbol || '',
     tokenFromLogoURI: values.tokenFrom.logoURI || '',
-    tokenFromDecimals: String(values.tokenFrom.decimals || '')
+    tokenFromDecimals: values.tokenFrom.decimals || ''
   }
 
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
+  const { account } = useActiveWeb3React()
+  const auctionInChainId = useAuctionInChain()
 
-  const router = useRouter()
-
-  const showTokenDialog = (chainId: SupportedChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
+  const showTokenDialog = (chainId: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
     show<Token>(TokenDialog, { chainId })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
@@ -72,6 +68,7 @@ const TokenInformationForm = (): JSX.Element => {
             type: ActionType.CommitTokenImformation,
             payload: {
               tokenFrom: {
+                chainId: auctionInChainId,
                 address: values.tokenFromAddress,
                 logoURI: values.tokenFromLogoURI,
                 symbol: values.tokenFromSymbol,
@@ -92,10 +89,9 @@ const TokenInformationForm = (): JSX.Element => {
                 startAdornment={<TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={32} />}
               >
                 <FakeOutlinedInput
-                  disabled
                   onClick={() => {
-                    if (isConnected) {
-                      showTokenDialog(chain?.id, setValues)
+                    if (account && auctionInChainId) {
+                      showTokenDialog(auctionInChainId, setValues)
                     }
                   }}
                 />
@@ -114,7 +110,9 @@ const TokenInformationForm = (): JSX.Element => {
                 disabled={!values.tokenFromAddress}
               >
                 <a
-                  href={getExplorerLink(chain?.id, values.tokenFromAddress, ExplorerDataType.TOKEN)}
+                  href={
+                    auctionInChainId ? getEtherscanLink(auctionInChainId, values.tokenFromAddress, 'token') : undefined
+                  }
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -127,7 +125,7 @@ const TokenInformationForm = (): JSX.Element => {
                   variant="outlined"
                   sx={{ width: 140 }}
                   onClick={() => {
-                    router.back()
+                    window.history.go(-1)
                   }}
                 >
                   Cancel

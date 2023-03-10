@@ -1,13 +1,11 @@
-import React from 'react'
-
 import { muiDialogV5, useModal, create } from '@ebay/nice-modal-react'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
-import { Button, OutlinedInput, TextField, Typography } from '@mui/material'
+import { Button, OutlinedInput, Typography } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
-import { isAddress } from '@/utils/web3/address'
 import Dialog from 'bounceComponents/common/DialogBase'
+import { isAddress } from 'utils'
 
 interface FormValues {
   whitelist: string
@@ -62,7 +60,7 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
         }}
       >
         {({ errors }) => {
-          // console.log('errors: ', errors)
+          console.log('errors: ', errors)
           return (
             <Form>
               <FormItem name="whitelist">

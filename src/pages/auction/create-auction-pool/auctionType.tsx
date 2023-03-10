@@ -1,20 +1,20 @@
 import { Box, Stack } from '@mui/material'
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { useRouter } from 'next/router'
-import { useAccount, useNetwork } from 'wagmi'
 import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
 import TokenInformationForm from 'bounceComponents/create-auction-pool/TokenInforationForm'
 import AuctionParametersForm from 'bounceComponents/create-auction-pool/AuctionParametersForm'
 import { CreationStep } from 'bounceComponents/create-auction-pool/types'
-import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
-import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
+// import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
+// import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
 import ValuesProvider, { useValuesDispatch, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import Stepper from 'bounceComponents/create-auction-pool/Stepper'
-import { isSupportedChain } from '@/constants/web3/chains'
-import { isSupportedAuctionType } from '@/constants/auction'
-import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
+import { isSupportedAuctionType } from 'constants/auction'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useActiveWeb3React } from 'hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -42,10 +42,11 @@ const CreateAuctionPool = () => {
 
               {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <AuctionParametersForm />}
 
-              {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
+              {/* {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />} */}
             </Box>
           ) : (
-            <CreationConfirmation />
+            <></>
+            // <CreationConfirmation />
           )}
         </Stack>
       </RoundedContainer>
@@ -57,25 +58,18 @@ const CreateAuctionPool = () => {
 // TODO: notice user that start time is earlier current moment
 
 const CreateAuctionPoolPage = () => {
-  useEagerConnect()
-  const router = useRouter()
-  const { redirect } = router.query
+  const { redirect } = useQueryParams()
+  const navigate = useNavigate()
 
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
+  const { account } = useActiveWeb3React()
 
-  const { auctionType } = router.query
+  const { auctionType } = useQueryParams()
 
   useEffect(() => {
-    if (
-      !isSupportedChain(chain?.id) ||
-      !isConnected ||
-      typeof auctionType !== 'string' ||
-      !isSupportedAuctionType(auctionType)
-    ) {
-      router.push(`/auction/create-auction-pool?redirect=${redirect}`)
+    if (!account || typeof auctionType !== 'string' || !isSupportedAuctionType(auctionType)) {
+      navigate(`${routes.auction.createAuctionPool}?redirect=${redirect}`)
     }
-  }, [auctionType, chain?.id, isConnected, redirect, router])
+  }, [account, auctionType, navigate, redirect])
 
   return (
     <ValuesProvider>

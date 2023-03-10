@@ -8,7 +8,7 @@ import { Token } from '../types'
 import VirtualizedList from './TokenList'
 import Dialog from 'bounceComponents/common/DialogBase'
 import useTokenList from 'bounceHooks/auction/useTokenList'
-import { SupportedChainId } from '@/constants/web3/chains'
+import { ChainId } from 'constants/chain'
 
 export interface BasicToken {
   address: string
@@ -20,7 +20,7 @@ export interface BasicToken {
 export interface TokenDialogProps {
   enableEth?: boolean
   onClose?: () => void
-  chainId: SupportedChainId
+  chainId: ChainId
 }
 
 const Loading = () => {

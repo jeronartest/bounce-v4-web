@@ -17,6 +17,7 @@ export class Currency {
   public readonly symbol?: string
   public readonly name?: string
   public readonly logo?: string
+  public readonly dangerous?: boolean
 
   private static readonly defaultETHER: Currency = new Currency(ChainId.MAINNET, ZERO_ADDRESS, 18)
   /**
@@ -25,7 +26,15 @@ export class Currency {
    * @param symbol symbol of the currency
    * @param name of the currency
    */
-  constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string, logo?: string) {
+  constructor(
+    chainId: ChainId,
+    address: string,
+    decimals: number,
+    symbol?: string,
+    name?: string,
+    logo?: string,
+    dangerous?: boolean
+  ) {
     validateSolidityTypeInstance(JSBI.BigInt(decimals), SolidityType.uint8)
 
     this.chainId = chainId
@@ -34,6 +43,7 @@ export class Currency {
     this.symbol = symbol
     this.name = name
     this.logo = logo
+    this.dangerous = dangerous
   }
 
   public equals(other: Currency): boolean {

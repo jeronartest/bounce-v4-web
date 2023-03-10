@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { LoadingButton } from '@mui/lab'
 import { toast } from 'react-toastify'
 import { ResumeActionType } from '../components/ResumeContextProvider'
@@ -11,11 +10,11 @@ import EducationForm from './components/EducationForm'
 import EducationList from './components/EducationList'
 import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
-import { RootState } from '@/store'
 import { useGetResumeEducation } from 'bounceHooks/profile/useGetResumeEducation'
 import { educationItems, IUpdatePersonalParams } from 'api/profile/type'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import { useUserInfo } from 'state/users/hooks'
 
 export type IResumeEducationProps = {
   resumeProfileValues?: IUpdatePersonalParams
@@ -33,7 +32,7 @@ const ResumeEducation: React.FC<IResumeEducationProps> = ({
   firstEdit,
   resumeProfileDispatch
 }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
 
   const { data, runAsync: runGetResumeEducation } = useGetResumeEducation()
   const { loading, runAsync: runPersonalResume } = usePersonalResume()

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { LoadingButton } from '@mui/lab'
 import { toast } from 'react-toastify'
 import { CompanyActionType } from '../components/CompanyContextProvider'
@@ -13,9 +12,9 @@ import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
 import { ICompanyProfileParams, ICompanyTeamListItems } from 'api/company/type'
-import { RootState } from '@/store'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import { useUserInfo } from 'state/users/hooks'
 
 export type ICompanyTeamProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -29,7 +28,7 @@ const add_text = {
 }
 
 const CompanyTeam: React.FC<ICompanyTeamProps> = ({ companyProfileValues, firstEdit, companyProfileDispatch }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
 
   const { data, runAsync: runGetCompanyTeam } = useGetCompanyTeam()
   const { runAsync: runUpdateCompany } = useUpdateCompany(firstEdit)

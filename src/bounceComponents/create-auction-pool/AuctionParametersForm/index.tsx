@@ -5,24 +5,31 @@ import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 
 import { show } from '@ebay/nice-modal-react'
-import { parseUnits } from 'ethers/lib/utils.js'
 
-import { useContractRead, erc20ABI, useAccount, useNetwork } from 'wagmi'
-import { useRouter } from 'next/router'
-import { AllocationStatus, Token } from '../types'
+import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
-import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import {
+  ActionType,
+  useAuctionERC20Currency,
+  useAuctionInChain,
+  useValuesDispatch,
+  useValuesState
+} from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
-import { formatNumber } from '@/utils/web3/number'
 import Tooltip from 'bounceComponents/common/Tooltip'
-import { SupportedChainId } from '@/constants/web3/chains'
 import TokenImage from 'bounceComponents/common/TokenImage'
+import { ChainId } from 'constants/chain'
+import { useActiveWeb3React } from 'hooks'
+import { CurrencyAmount } from 'constants/token'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { ZERO } from 'constants/token/constants'
+import { Token } from 'bounceComponents/fixed-swap/type'
 
 interface FormValues {
   tokenFromAddress: string
@@ -40,6 +47,12 @@ interface FormValues {
 }
 
 const AuctionParametersForm = (): JSX.Element => {
+  const { account } = useActiveWeb3React()
+  const auctionInChainId = useAuctionInChain()
+
+  const { currencyFrom } = useAuctionERC20Currency()
+  const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
+
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
       .required('Token is required')
@@ -59,7 +72,8 @@ const AuctionParametersForm = (): JSX.Element => {
       .test(
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
-        value => !value || (balance && balance.gte(parseUnits(String(value), valuesState.tokenFrom.decimals)))
+        value =>
+          !value || (balance ? balance.greaterThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
@@ -77,7 +91,7 @@ const AuctionParametersForm = (): JSX.Element => {
             (value, context) =>
               !context.parent.poolSize ||
               !context.parent.swapRatio ||
-              value <= context.parent.poolSize * context.parent.swapRatio
+              (value || 0) <= context.parent.poolSize * context.parent.swapRatio
           )
       })
   })
@@ -100,12 +114,8 @@ const AuctionParametersForm = (): JSX.Element => {
     allocationPerWallet: valuesState.allocationPerWallet || ''
   }
 
-  const router = useRouter()
-
-  const { chain } = useNetwork()
-
   const showTokenDialog = (
-    chainId: SupportedChainId,
+    chainId: ChainId,
     values: FormValues,
     setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
@@ -115,7 +125,7 @@ const AuctionParametersForm = (): JSX.Element => {
         setValues({
           ...values,
           tokenToAddress: res.address,
-          tokenToSymbol: res.symbol,
+          tokenToSymbol: res.symbol || '',
           tokenToLogoURI: res.logoURI,
           tokenToDecimals: res.decimals
         })
@@ -124,16 +134,6 @@ const AuctionParametersForm = (): JSX.Element => {
         console.log('TokenDialog Rejected: ', err)
       })
   }
-
-  const { address, isConnected } = useAccount()
-
-  const { data: balance } = useContractRead({
-    address: valuesState.tokenFrom.address as `0x${string}`,
-    abi: erc20ABI,
-    functionName: 'balanceOf',
-    args: [address],
-    enabled: !!valuesState.tokenFrom.address && isConnected
-  })
 
   return (
     <Box sx={{ mt: 52 }}>
@@ -148,6 +148,7 @@ const AuctionParametersForm = (): JSX.Element => {
             type: ActionType.CommitAuctionParameters,
             payload: {
               tokenTo: {
+                chainId: auctionInChainId,
                 address: values.tokenToAddress,
                 logoURI: values.tokenToLogoURI,
                 symbol: values.tokenToSymbol,
@@ -194,8 +195,8 @@ const AuctionParametersForm = (): JSX.Element => {
                     <FakeOutlinedInput
                       disabled
                       onClick={() => {
-                        if (isConnected) {
-                          showTokenDialog(chain?.id, values, setValues)
+                        if (account && auctionInChainId) {
+                          showTokenDialog(auctionInChainId, values, setValues)
                         }
                       }}
                     />
@@ -238,18 +239,7 @@ const AuctionParametersForm = (): JSX.Element => {
                     </Tooltip>
                   </Stack>
 
-                  {values.tokenFromSymbol && (
-                    <Typography>
-                      Balance:{' '}
-                      {balance
-                        ? `${formatNumber(balance.toString(), {
-                            unit: values.tokenFromDecimals,
-                            decimalPlaces: 2
-                          })}
-                      ${values.tokenFromSymbol}`
-                        : '-'}
-                    </Typography>
-                  )}
+                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toSignificant() || '-'}</Typography>}
                 </Stack>
 
                 <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
@@ -262,14 +252,7 @@ const AuctionParametersForm = (): JSX.Element => {
                           sx={{ mr: 20, minWidth: 60 }}
                           disabled={!balance}
                           onClick={() => {
-                            setFieldValue(
-                              'poolSize',
-                              formatNumber(balance.toString(), {
-                                unit: values.tokenFromDecimals,
-                                shouldSplitByComma: false,
-                                decimalPlaces: 2
-                              })
-                            )
+                            setFieldValue('poolSize', balance?.toSignificant(60))
                           }}
                         >
                           Max
@@ -326,7 +309,7 @@ const AuctionParametersForm = (): JSX.Element => {
                   variant="outlined"
                   sx={{ width: 140 }}
                   onClick={() => {
-                    router.back()
+                    window.history.back()
                   }}
                 >
                   Cancel

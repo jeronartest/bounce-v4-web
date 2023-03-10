@@ -1,8 +1,11 @@
+import { ChainId } from 'constants/chain'
+
 export interface Token {
+  chainId: ChainId
   address: string
-  symbol: string
-  logoURI?: string
   decimals: number
-  name: string
+  symbol?: string
+  logoURI?: string
+  name?: string
   dangerous?: boolean
 }

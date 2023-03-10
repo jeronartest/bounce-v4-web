@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -12,21 +12,20 @@ import {
 } from '@mui/material'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useRequest } from 'ahooks'
-import { show } from '@ebay/nice-modal-react'
 import { toast } from 'react-toastify'
 
-import Head from 'next/head'
 import FormItem from 'bounceComponents/common/FormItem'
 import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
-import { CHAIN_NAMES, SupportedChainId } from '@/constants/web3/chains'
-import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
 import { userGetBindAddress } from 'api/user'
 import { ReactComponent as RepeatSVG } from 'assets/imgs/icon/repeat.svg'
-import useEagerConnect from 'bounceHooks/web3/useEagerConnect'
+import { Link, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { ChainId, ChainListMap } from 'constants/chain'
+import { useActiveWeb3React } from 'hooks'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLessThan3?: boolean }) => (
   <>
@@ -36,7 +35,7 @@ const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLe
         : `Please use the wallet address that already bound to your account, or bind a new address.`}
     </Typography>
     &nbsp;
-    <Link href="/profile/account/settings">
+    <Link to={routes.profile.account.settings}>
       <Typography component="span" sx={{ color: '#2663FF', textDecorationLine: 'underline' }}>
         Go to account setting
       </Typography>
@@ -53,21 +52,19 @@ const initialValues = {
 }
 
 const CreateAuctionPoolIntroPage = () => {
-  const router = useRouter()
-  const { redirect } = router.query
+  const navigate = useNavigate()
+  const { redirect } = useQueryParams()
 
-  useEagerConnect()
-
-  const { isConnected, address: account } = useAccount()
-  const { chain } = useNetwork()
-  const { switchNetwork } = useSwitchNetwork()
+  const { account, active, chainId } = useActiveWeb3React()
+  const walletModalToggle = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
 
   const handleCancel = () => {
-    router.back()
+    window.history.go(-1)
   }
 
   const handleSubmit = (values: any) => {
-    router.push(`/auction/create-auction-pool/${values.auctionType}?redirect=${redirect}`)
+    navigate(`${routes.auction.createAuctionPool}/${values.auctionType}/${chainId}?redirect=${redirect}`)
   }
 
   const [addressFieldValue, setAddressFieldValue] = useState('')
@@ -79,7 +76,7 @@ const CreateAuctionPoolIntroPage = () => {
         offset: 0
       })
     },
-    { ready: isConnected }
+    { ready: !!account }
   )
 
   const isAddressReadyToCreatePool = !!userBindAddressData?.data.list.find(item => item.address === account)
@@ -95,19 +92,13 @@ const CreateAuctionPoolIntroPage = () => {
   }, [account])
 
   useEffect(() => {
-    if (isConnected && !isAddressReadyToCreatePool && typeof isBoundAddressLessThan3 !== 'undefined') {
+    if (active && !isAddressReadyToCreatePool && typeof isBoundAddressLessThan3 !== 'undefined') {
       toast.error(<WrongWalletToastContent isBoundAddressLessThan3={isBoundAddressLessThan3} />)
     }
-  }, [isAddressReadyToCreatePool, isBoundAddressLessThan3, isConnected])
+  }, [active, isAddressReadyToCreatePool, isBoundAddressLessThan3])
 
   return (
     <section>
-      <Head>
-        <title>Auction Pool | Bounce</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content="Bounce" />
-      </Head>
-
       <RoundedContainer maxWidth="md">
         <Stack alignItems="center">
           <Box sx={{ py: 60, maxWidth: 540 }}>
@@ -125,32 +116,32 @@ const CreateAuctionPoolIntroPage = () => {
                   </Select>
                 </FormItem>
 
-                <FormItem error={!isConnected}>
-                  <Select<SupportedChainId | string>
-                    value={chain?.id || ''}
+                <FormItem error={!active}>
+                  <Select<ChainId>
+                    value={chainId}
                     displayEmpty
                     onChange={event => {
                       // switchChain(Number(event.target.value))
                       // connect({ connector: metaMaskConnector })
-                      if (isConnected) {
+                      if (account) {
                         switchNetwork(Number(event.target.value))
                       } else {
-                        show(ConnectWalletDialog)
+                        walletModalToggle()
                       }
                     }}
                     renderValue={value => {
                       if (!value) {
                         return <em>Not Connected</em>
                       }
-                      return CHAIN_NAMES[value]
+                      return chainId ? ChainListMap[chainId]?.name : ''
                     }}
                   >
-                    <MenuItem value={SupportedChainId.MAINNET}>Ethereum</MenuItem>
-                    {/* <MenuItem value={SupportedChainId.GOERLI}>Goerli</MenuItem> */}
-                    <MenuItem value={SupportedChainId.BSC}>BSC</MenuItem>
-                    <MenuItem value={SupportedChainId.ARBITRUM}>Arbitrum</MenuItem>
+                    <MenuItem value={ChainId.MAINNET}>Ethereum</MenuItem>
+                    <MenuItem value={ChainId.GÖRLI}>Goerli</MenuItem>
+                    <MenuItem value={ChainId.BSC}>BSC</MenuItem>
+                    <MenuItem value={ChainId.ARBITRUM}>Arbitrum</MenuItem>
                   </Select>
-                  {!isConnected && <FormHelperText error={!isConnected}>Please connect to your wallet</FormHelperText>}
+                  {!account && <FormHelperText error={!account}>Please connect to your wallet</FormHelperText>}
                 </FormItem>
 
                 <TextField
@@ -164,7 +155,7 @@ const CreateAuctionPoolIntroPage = () => {
                         <Box
                           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', columnGap: 10 }}
                         >
-                          {isConnected ? (
+                          {account ? (
                             isAddressReadyToCreatePool ? (
                               <Box
                                 sx={{
@@ -203,7 +194,7 @@ const CreateAuctionPoolIntroPage = () => {
                               background: '#D6DFF6'
                             }}
                             onClick={() => {
-                              show(ConnectWalletDialog)
+                              walletModalToggle()
                             }}
                           >
                             <RepeatSVG width="20px" />
@@ -221,7 +212,7 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {isConnected ? (
+                  {account ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -240,7 +231,7 @@ const CreateAuctionPoolIntroPage = () => {
                       variant="contained"
                       sx={{ width: 140 }}
                       onClick={() => {
-                        show(ConnectWalletDialog)
+                        walletModalToggle()
                       }}
                     >
                       Connect

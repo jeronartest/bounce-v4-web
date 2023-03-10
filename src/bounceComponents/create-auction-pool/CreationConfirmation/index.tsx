@@ -1,22 +1,23 @@
 import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
-import Image from 'next/image'
-import React, { ReactNode } from 'react'
-import { useRouter } from 'next/router'
+import Image from 'components/Image'
+import { ReactNode } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
 import { BigNumber } from 'bignumber.js'
-import { useAccount, useNetwork } from 'wagmi'
 import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
 import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import { shortenAddress } from '@/utils/web3/address'
-import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import useCreateFixedSwapPool from 'bounceHooks/web3/useCreateFixedSwapPool'
-import { CHAIN_ICONS, CHAIN_NAMES } from '@/constants/web3/chains'
 import TokenImage from 'bounceComponents/common/TokenImage'
 
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
-import { formatNumber } from '@/utils/web3/number'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useActiveWeb3React } from 'hooks'
+import { shortenAddress } from 'utils'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { ChainListMap } from 'constants/chain'
 
 const NO_LIMIT_ALLOCATION = '0'
 
@@ -30,13 +31,13 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
 )
 
 const CreatePoolButton = () => {
-  const router = useRouter()
-  const { redirect } = router.query
+  const { redirect } = useQueryParams()
+  const navigate = useNavigate()
 
   const values = useValuesState()
 
   const { run, loading, refresh } = useCreateFixedSwapPool(values.tokenFrom.address, {
-    onSuccess: (receipt, chainShortName) => {
+    onSuccess: (receipt: any, chainShortName: any) => {
       console.log('receipt: ', receipt)
       const goToPoolInfoPage = () => {
         const createdEvent = receipt.events.find(e => e.event === 'Created')
@@ -44,18 +45,18 @@ const CreatePoolButton = () => {
         // console.log('chainShortName: ', chainShortName)
 
         if (!createdEvent) {
-          router.push('/market/pools')
+          navigate(routes.market.pools)
           return
         }
 
         const poolId = createdEvent.args.index.toString()
 
-        router.push(`/auction/fixed-price/${chainShortName}/${poolId}`)
+        navigate(`${routes.auction.fixedPrice}/${chainShortName}/${poolId}`)
       }
 
       const handleCloseDialog = () => {
         if (redirect && typeof redirect === 'string') {
-          router.push(redirect)
+          navigate(redirect)
         }
       }
 
@@ -70,7 +71,7 @@ const CreatePoolButton = () => {
         onClose: handleCloseDialog
       })
     },
-    onError: error => {
+    onError: (error: any) => {
       console.log('>>>> create error: ', error)
       show(DialogTips, {
         iconType: 'error',
@@ -97,9 +98,9 @@ const CreatePoolButton = () => {
             values.allocationStatus === AllocationStatus.Limited
               ? new BigNumber(values.allocationPerWallet).toString()
               : NO_LIMIT_ALLOCATION,
-          startTime: values.startTime.unix(),
-          endTime: values.endTime.unix(),
-          delayUnlockingTime: values.shouldDelayUnlocking ? values.delayUnlockingTime.unix() : values.endTime.unix(),
+          startTime: values.startTime?.unix(),
+          endTime: values.endTime?.unix(),
+          delayUnlockingTime: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() : values.endTime?.unix(),
           poolName: values.poolName,
           tokenFromAddress: values.tokenFrom.address,
           tokenFormDecimal: values.tokenFrom.decimals,
@@ -114,18 +115,11 @@ const CreatePoolButton = () => {
 }
 
 const CreationConfirmation = () => {
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
-
+  const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
-
-  const router = useRouter()
-  const { auctionType } = router.query
-
-  const showConnectWalletDialog = () => {
-    show(ConnectWalletDialog)
-  }
+  const { auctionType } = useQueryParams()
+  const walletModalToggle = useWalletModalToggle()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
@@ -159,8 +153,13 @@ const CreationConfirmation = () => {
           <Stack spacing={24}>
             <ConfirmationInfoItem title="Chain">
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Image src={CHAIN_ICONS[chain?.id]} alt={CHAIN_NAMES[chain?.id]} width={20} height={20} />
-                <Typography sx={{ ml: 4 }}>{CHAIN_NAMES[chain?.id]}</Typography>
+                <Image
+                  src={chainId ? ChainListMap[chainId]?.logo || '' : ''}
+                  alt={chainId ? ChainListMap[chainId]?.name : ''}
+                  width={20}
+                  height={20}
+                />
+                <Typography sx={{ ml: 4 }}>{chainId ? ChainListMap[chainId]?.name : ''}</Typography>
               </Box>
             </ConfirmationInfoItem>
 
@@ -233,7 +232,7 @@ const CreationConfirmation = () => {
               <Stack spacing={15}>
                 <ConfirmationInfoItem title="Pool duration">
                   <Typography>
-                    From {values.startTime.format('MM.DD.Y HH:mm')} - To {values.endTime.format('MM.DD.Y HH:mm')}
+                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
                   </Typography>
                 </ConfirmationInfoItem>
 
@@ -254,10 +253,10 @@ const CreationConfirmation = () => {
         </Box>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
-          {isConnected ? (
+          {account ? (
             <CreatePoolButton />
           ) : (
-            <LoadingButton fullWidth variant="contained" onClick={showConnectWalletDialog}>
+            <LoadingButton fullWidth variant="contained" onClick={walletModalToggle}>
               Connect Wallet
             </LoadingButton>
           )}

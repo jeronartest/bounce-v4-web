@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { LoadingButton } from '@mui/lab'
 import { CompanyActionType } from '../components/CompanyContextProvider'
 import Add from './components/Add'
@@ -10,11 +9,11 @@ import TokensList from './components/TokensList'
 import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { useGetCompanyTokens } from 'bounceHooks/company/useGetCompanyTokens'
-import { RootState } from '@/store'
 import { useUpdateCompany } from 'bounceHooks/company/useUpdateCompany'
 import { ICompanyProfileParams, ICompanyTokensListItems } from 'api/company/type'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
 import EditCancelConfirmation from 'bounceComponents/profile/components/EditCancelConfirmation'
+import { useUserInfo } from 'state/users/hooks'
 
 export type ICompanyTokensProps = {
   companyProfileValues?: ICompanyProfileParams
@@ -28,7 +27,7 @@ const add_text = {
 }
 
 const CompanyTokens: React.FC<ICompanyTokensProps> = ({ companyProfileValues, firstEdit, companyProfileDispatch }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
   const { data, runAsync: runGetCompanyTokens } = useGetCompanyTokens()
   const { runAsync: runUpdateCompany } = useUpdateCompany(firstEdit)
 

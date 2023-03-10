@@ -8,7 +8,7 @@ const request = (url: string, options?: any) => {
   return fetch(url, options).then(async response => {
     if (response.status === 401) {
       toast.error('Login has expired, please login again.')
-      removeLoginInfo()
+      store.dispatch(removeLoginInfo())
       location.href = '/login'
       setTimeout(() => {
         window.location.reload()

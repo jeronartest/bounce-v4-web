@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { useSelector } from 'react-redux'
 import { LoadingButton } from '@mui/lab'
 import { toast } from 'react-toastify'
 import EditCancelConfirmation from '../components/EditCancelConfirmation'
@@ -12,10 +11,10 @@ import ExperienceList from './components/ExperienceList'
 import { ReactComponent as AddIcon } from 'assets/imgs/home/add.svg'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import { useGetResumeExperience } from 'bounceHooks/profile/useGetResumeExperience'
-import { RootState } from '@/store'
 import { experienceItems, IUpdatePersonalParams } from 'api/profile/type'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
 import { useWarnIfUnsavedChanges } from 'bounceHooks/profile/useWarnIfUnsavedChanges'
+import { useUserInfo } from 'state/users/hooks'
 
 const add_text = {
   label: 'Add new experience',
@@ -33,7 +32,7 @@ const ResumeExperience: React.FC<IResumeExperienceProps> = ({
   firstEdit,
   resumeProfileDispatch
 }) => {
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { userId } = useUserInfo()
 
   const { data, runAsync: runGetResumeExperience } = useGetResumeExperience()
   const { loading, runAsync: runPersonalResume } = usePersonalResume()

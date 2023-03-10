@@ -1,6 +1,5 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { getCompanyInfo } from 'api/company'
 import { getUserInfo } from 'api/user'
@@ -14,8 +13,8 @@ import { ReactComponent as LinkedinSVG } from 'assets/imgs/auction/linkedin.svg'
 import { ReactComponent as GithubSVG } from 'assets/imgs/auction/github.svg'
 import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
-import { RootState } from '@/store'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
+import { useUserInfo } from 'state/users/hooks'
 
 interface ICreatorInfoCardProps {
   creatorUserInfo: CreatorUserInfo
@@ -30,7 +29,7 @@ const SocialMediaButton = ({ children, href }: { children?: ReactNode; href: str
 }
 
 const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) => {
-  const { token } = useSelector((state: RootState) => state.user)
+  const { token } = useUserInfo()
 
   const [userInfo, setUserInfo] = useState(null)
   const router = useRouter()

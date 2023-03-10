@@ -3,13 +3,12 @@ import { Form, Formik } from 'formik'
 import React from 'react'
 import * as yup from 'yup'
 import { LoadingButton } from '@mui/lab'
-import { useSelector } from 'react-redux'
 import ResumeUpload from './ResumeUpload'
-import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+// import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import FormItem from 'bounceComponents/common/FormItem'
-import UploadList from 'bounceComponents/common/UploadCard'
+// import UploadList from 'bounceComponents/common/UploadCard'
 import { usePersonalResume } from 'bounceHooks/profile/useUpdateBasic'
-import { RootState } from '@/store'
+import { useUserInfo } from 'state/users/hooks'
 
 const validationSchema = yup.object({
   resumes: yup.array().of(
@@ -25,7 +24,7 @@ const validationSchema = yup.object({
 })
 
 const ResumeFiles: React.FC = () => {
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const { userInfo } = useUserInfo()
 
   const initialValues = {
     resumes: userInfo?.resumes || []

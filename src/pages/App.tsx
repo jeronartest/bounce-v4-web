@@ -18,6 +18,9 @@ import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
 import 'react-toastify/dist/ReactToastify.css'
 
+import CreateAuctionPool from 'pages/auction/create-auction-pool/index'
+import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType'
+
 import Companies from 'pages/companies'
 
 import Company from 'pages/company'
@@ -109,6 +112,11 @@ export default function App() {
                 {/* <WarningModal /> */}
                 <Web3ReactManager>
                   <Routes>
+                    <Route path={routes.auction.createAuctionPool} element={<CreateAuctionPool />} />
+                    <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
+
+                    <Route path={routes.companies} element={<Companies />} />
+
                     <Route path={routes.companies} element={<Companies />} />
 
                     <Route path={routes.company.index} element={<Company />} />
