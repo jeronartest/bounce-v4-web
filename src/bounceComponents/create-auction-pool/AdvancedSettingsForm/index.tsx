@@ -53,6 +53,7 @@ export const DateRangePickerDemo = () => {
   const validationSchema = Yup.object({
     poolName: Yup.string().max(30, 'Pool name should be less than 30 characters').required('Pool name is required'),
     startTime: Yup.date()
+      // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
       .min(moment(), 'Please select a time earlier than current time')
       .typeError('Please select a valid time')
       .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value, context) => {
@@ -78,8 +79,8 @@ export const DateRangePickerDemo = () => {
               return (
                 !context.parent.endTime.valueOf() ||
                 !context.parent.startTime.valueOf() ||
-                (value.valueOf() > context.parent.startTime.valueOf() &&
-                  value.valueOf() > context.parent.endTime.valueOf())
+                ((value?.valueOf() || 0) > context.parent.startTime.valueOf() &&
+                  (value?.valueOf() || 0) > context.parent.endTime.valueOf())
               )
             }
           )

@@ -89,6 +89,7 @@ const TokenInformationForm = (): JSX.Element => {
                 startAdornment={<TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={32} />}
               >
                 <FakeOutlinedInput
+                  readOnly
                   onClick={() => {
                     if (account && auctionInChainId) {
                       showTokenDialog(auctionInChainId, setValues)
@@ -116,7 +117,7 @@ const TokenInformationForm = (): JSX.Element => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Typography sx={{ color: 'var(--ps-gray-700)' }}>View on etherscan</Typography>
+                  <Typography sx={{ color: 'var(--ps-gray-700)' }}>View on explorer</Typography>
                 </a>
               </ButtonBase>
 

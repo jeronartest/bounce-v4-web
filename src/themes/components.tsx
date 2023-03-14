@@ -4,7 +4,7 @@ import CheckedSVG from 'assets/imgs/components/checked.svg'
 import { CommonColors } from '@mui/material/styles/createPalette'
 import React, { HTMLProps, useCallback } from 'react'
 import MuiCloseIcon from '@mui/icons-material/Close'
-import { Link, IconButton, keyframes, styled, Theme } from '@mui/material'
+import { Link, IconButton, keyframes, styled, Theme, useTheme } from '@mui/material'
 import { SxProps } from '@mui/system'
 
 export function CloseIcon({ onClick }: { onClick?: () => void }) {
@@ -43,6 +43,7 @@ export function ExternalLink({
   underline?: 'always' | 'hover' | 'none'
   className?: string
 }) {
+  const theme = useTheme()
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
       if (target === '_blank' || event.ctrlKey || event.metaKey) {
@@ -61,6 +62,7 @@ export function ExternalLink({
       href={href}
       onClick={handleClick}
       style={style}
+      color={theme.palette.common.black}
       sx={sx}
       underline={underline ?? 'none'}
     >

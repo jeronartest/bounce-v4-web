@@ -12,6 +12,8 @@ import { useActiveWeb3React } from './index'
 import { ChainId } from '../constants/chain'
 import { getOtherNetworkLibrary } from 'connectors/MultiNetworkConnector'
 import ERC721_ABI from '../constants/abis/erc721.json'
+import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
+import { FIXED_SWAP_ERC20_ADDRESSES } from '../constants'
 
 // returns null on errors
 function useContract(
@@ -114,4 +116,10 @@ export function useSocksController(queryChainId?: ChainId): Contract | null {
 
 export function useERC721Contract(address: string | undefined, queryChainId?: ChainId): Contract | null {
   return useContract(address, ERC721_ABI, true, queryChainId)
+}
+
+export function useFixedSwapERC20Contract(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined, FIXED_SWAP_ABI, true, queryChainId)
 }

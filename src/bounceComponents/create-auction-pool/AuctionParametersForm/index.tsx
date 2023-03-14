@@ -73,7 +73,7 @@ const AuctionParametersForm = (): JSX.Element => {
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
         value =>
-          !value || (balance ? balance.greaterThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
@@ -87,7 +87,7 @@ const AuctionParametersForm = (): JSX.Element => {
           .typeError('Please input valid number')
           .test(
             'GREATER_THAN_POOL_SIZE',
-            'Allocation per wallet cannnot be greater than pool size times swap ratio',
+            'Allocation per wallet cannot be greater than pool size times swap ratio',
             (value, context) =>
               !context.parent.poolSize ||
               !context.parent.swapRatio ||
@@ -193,7 +193,8 @@ const AuctionParametersForm = (): JSX.Element => {
                     startAdornment={<TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={32} />}
                   >
                     <FakeOutlinedInput
-                      disabled
+                      // disabled
+                      readOnly
                       onClick={() => {
                         if (account && auctionInChainId) {
                           showTokenDialog(auctionInChainId, values, setValues)

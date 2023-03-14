@@ -1,15 +1,19 @@
 import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
 import Image from 'components/Image'
-import { ReactNode } from 'react'
-import { show } from '@ebay/nice-modal-react'
+import { ReactNode, useCallback, useMemo } from 'react'
+import { show, hide } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { BigNumber } from 'bignumber.js'
 import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
-import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import {
+  ActionType,
+  useAuctionERC20Currency,
+  useAuctionInChain,
+  useValuesDispatch,
+  useValuesState
+} from '../ValuesProvider'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import useCreateFixedSwapPool from 'bounceHooks/web3/useCreateFixedSwapPool'
 import TokenImage from 'bounceComponents/common/TokenImage'
-
+import { useCreateFixedSwapPool } from 'hooks/useCreateFixedSwapPool'
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
@@ -18,8 +22,13 @@ import { useActiveWeb3React } from 'hooks'
 import { shortenAddress } from 'utils'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainListMap } from 'constants/chain'
-
-const NO_LIMIT_ALLOCATION = '0'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { CurrencyAmount } from 'constants/token'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { TransactionReceipt } from '@ethersproject/providers'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -34,92 +43,188 @@ const CreatePoolButton = () => {
   const { redirect } = useQueryParams()
   const navigate = useNavigate()
 
+  const { account, chainId } = useActiveWeb3React()
+  const walletModalToggle = useWalletModalToggle()
+  const auctionInChainId = useAuctionInChain()
+  const switchNetwork = useSwitchNetwork()
+  const { currencyFrom } = useAuctionERC20Currency()
+  const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
   const values = useValuesState()
+  const createFixedSwapPool = useCreateFixedSwapPool()
 
-  const { run, loading, refresh } = useCreateFixedSwapPool(values.tokenFrom.address, {
-    onSuccess: (receipt: any, chainShortName: any) => {
-      console.log('receipt: ', receipt)
-      const goToPoolInfoPage = () => {
-        const createdEvent = receipt.events.find(e => e.event === 'Created')
+  const auctionPoolSizeAmount = useMemo(
+    () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
+    [currencyFrom, values.poolSize]
+  )
+  const [approvalState, approveCallback] = useApproveCallback(
+    auctionPoolSizeAmount,
+    chainId === auctionInChainId ? FIXED_SWAP_ERC20_ADDRESSES[auctionInChainId] : undefined,
+    true
+  )
 
-        // console.log('chainShortName: ', chainShortName)
-
-        if (!createdEvent) {
-          navigate(routes.market.pools)
-          return
-        }
-
-        const poolId = createdEvent.args.index.toString()
-
-        navigate(`${routes.auction.fixedPrice}/${chainShortName}/${poolId}`)
-      }
+  const toCreate = useCallback(async () => {
+    show(DialogConfirmation, {
+      title: 'Bounce requests wallet interaction',
+      subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
+    })
+    try {
+      const { getPoolId, transactionReceipt } = await createFixedSwapPool()
 
       const handleCloseDialog = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
+        } else {
+          navigate(routes.market.pools)
         }
       }
 
-      show(DialogTips, {
-        iconType: 'success',
-        againBtn: 'To the pool',
-        cancelBtn: 'Not now',
-        title: 'Congratulations!',
-        content: `You have successfully created the auction.`,
-        onAgain: goToPoolInfoPage,
-        onCancel: handleCloseDialog,
-        onClose: handleCloseDialog
+      const ret: Promise<TransactionReceipt> = new Promise((resolve, rpt) => {
+        show(DialogConfirmation, {
+          title: 'Bounce waiting for transaction settlement',
+          subTitle:
+            'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+          onClose: () => {
+            hide(DialogConfirmation)
+            rpt()
+            handleCloseDialog()
+          }
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
       })
-    },
-    onError: (error: any) => {
-      console.log('>>>> create error: ', error)
+      ret
+        .then(curReceipt => {
+          const goToPoolInfoPage = () => {
+            const poolId = getPoolId(curReceipt.logs)
+
+            if (!poolId) {
+              navigate(routes.market.pools)
+              return
+            }
+            navigate(
+              routes.auction.fixedPrice
+                .replace(':chainIdOrName', auctionInChainId.toString())
+                .replace(':poolId', poolId.toString())
+            )
+          }
+
+          hide(DialogConfirmation)
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'To the pool',
+            cancelBtn: 'Not now',
+            title: 'Congratulations!',
+            content: `You have successfully created the auction.`,
+            onAgain: goToPoolInfoPage,
+            onCancel: handleCloseDialog,
+            onClose: handleCloseDialog
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hide(DialogConfirmation)
       show(DialogTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: 'Something went wrong',
-        onAgain: refresh
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toCreate
       })
     }
-  })
+  }, [auctionInChainId, createFixedSwapPool, navigate, redirect])
+
+  const confirmBtn: {
+    disabled?: boolean
+    text?: string
+    run?: () => void
+  } = useMemo(() => {
+    if (!account) {
+      return {
+        text: 'Connect wallet',
+        run: walletModalToggle
+      }
+    }
+    if (chainId !== auctionInChainId) {
+      return {
+        text: 'Switch network',
+        run: () => switchNetwork(auctionInChainId)
+      }
+    }
+    if (!auctionAccountBalance || !auctionPoolSizeAmount || !auctionAccountBalance.greaterThan(auctionPoolSizeAmount)) {
+      return {
+        text: 'Insufficient Balance',
+        disabled: true
+      }
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return {
+          text: `Approving use of ${currencyFrom?.symbol} ...`,
+          disabled: true
+        }
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return {
+          text: 'Loading...',
+          disabled: true
+        }
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return {
+          text: `Approve use of ${currencyFrom?.symbol}`,
+          run: () => {
+            show(DialogConfirmation, {
+              title: 'Bounce requests wallet approval',
+              subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.'
+            })
+            approveCallback()
+              .then(() => {
+                hide(DialogConfirmation)
+                show(DialogTips, {
+                  iconType: 'success',
+                  cancelBtn: 'Close',
+                  title: 'Transaction Submitted!',
+                  content: `Approving use of ${currencyFrom?.symbol} ...`,
+                  handleCancel: () => hide(DialogTips)
+                })
+              })
+              .catch(() => hide(DialogConfirmation))
+          }
+        }
+      }
+    }
+    return {
+      run: toCreate
+    }
+  }, [
+    account,
+    approvalState,
+    approveCallback,
+    auctionAccountBalance,
+    auctionInChainId,
+    auctionPoolSizeAmount,
+    chainId,
+    currencyFrom?.symbol,
+    switchNetwork,
+    toCreate,
+    walletModalToggle
+  ])
 
   return (
-    <LoadingButton
-      fullWidth
-      variant="contained"
-      loading={loading}
-      onClick={() => {
-        run({
-          whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-          poolSize: values.poolSize,
-          swapRatio: values.swapRatio,
-          allocationPerWallet:
-            values.allocationStatus === AllocationStatus.Limited
-              ? new BigNumber(values.allocationPerWallet).toString()
-              : NO_LIMIT_ALLOCATION,
-          startTime: values.startTime?.unix(),
-          endTime: values.endTime?.unix(),
-          delayUnlockingTime: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() : values.endTime?.unix(),
-          poolName: values.poolName,
-          tokenFromAddress: values.tokenFrom.address,
-          tokenFormDecimal: values.tokenFrom.decimals,
-          tokenToAddress: values.tokenTo.address,
-          tokenToDecimal: values.tokenTo.decimals
-        })
-      }}
-    >
-      Confirm
+    <LoadingButton fullWidth variant="contained" disabled={confirmBtn.disabled} onClick={confirmBtn.run}>
+      {confirmBtn.text || 'Confirm'}
     </LoadingButton>
   )
 }
 
 const CreationConfirmation = () => {
-  const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { auctionType } = useQueryParams()
-  const walletModalToggle = useWalletModalToggle()
+  const auctionInChainId = useAuctionInChain()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
@@ -154,12 +259,12 @@ const CreationConfirmation = () => {
             <ConfirmationInfoItem title="Chain">
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Image
-                  src={chainId ? ChainListMap[chainId]?.logo || '' : ''}
-                  alt={chainId ? ChainListMap[chainId]?.name : ''}
+                  src={auctionInChainId ? ChainListMap[auctionInChainId]?.logo || '' : ''}
+                  alt={auctionInChainId ? ChainListMap[auctionInChainId]?.name : ''}
                   width={20}
                   height={20}
                 />
-                <Typography sx={{ ml: 4 }}>{chainId ? ChainListMap[chainId]?.name : ''}</Typography>
+                <Typography sx={{ ml: 4 }}>{auctionInChainId ? ChainListMap[auctionInChainId]?.name : ''}</Typography>
               </Box>
             </ConfirmationInfoItem>
 
@@ -205,8 +310,7 @@ const CreationConfirmation = () => {
 
                 <ConfirmationInfoItem title="Swap Ratio">
                   <Typography>
-                    1 {values.tokenFrom.symbol} = {formatNumber(values.swapRatio, { unit: 0, decimalPlaces: 10 })}{' '}
-                    {values.tokenTo.symbol}
+                    1 {values.tokenFrom.symbol} = {values.swapRatio} {values.tokenTo.symbol}
                   </Typography>
                 </ConfirmationInfoItem>
 
@@ -253,13 +357,7 @@ const CreationConfirmation = () => {
         </Box>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
-          {account ? (
-            <CreatePoolButton />
-          ) : (
-            <LoadingButton fullWidth variant="contained" onClick={walletModalToggle}>
-              Connect Wallet
-            </LoadingButton>
-          )}
+          <CreatePoolButton />
 
           <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
         </Box>

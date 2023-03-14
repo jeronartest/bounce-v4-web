@@ -10,7 +10,7 @@ import {
   Box,
   IconButton
 } from '@mui/material'
-import { create, useModal } from '@ebay/nice-modal-react'
+import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
 import Lottie from 'react-lottie'
 import bounce_loading from './assets/bounce-loading.json'
 import { ReactComponent as CloseSVG } from './assets/close.svg'
@@ -27,16 +27,16 @@ const defaultOptions = {
 export interface DialogProps extends MuiDialogProps {
   title: string
   subTitle?: string
+  onClose?: () => void
 }
 
-const DialogConfirmation: React.FC = create((props: DialogProps) => {
-  const { title, subTitle, ...rest } = props
+const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((props: DialogProps) => {
+  const { title, subTitle, onClose, ...rest } = props
   const modal = useModal()
 
   return (
     <MuiDialog
-      open={modal.visible}
-      onClose={() => modal.hide()}
+      onClose={() => (onClose ? onClose() : modal.hide())}
       sx={{
         '& .MuiDialog-paper': {
           width: 480,
@@ -45,13 +45,13 @@ const DialogConfirmation: React.FC = create((props: DialogProps) => {
           pr: 40
         }
       }}
-      {...rest}
+      {...Object.assign(rest, { open: modal.visible })}
     >
       <IconButton
         color="primary"
         aria-label="dialog-close"
         sx={{ position: 'absolute', right: 12, top: 12 }}
-        onClick={() => modal.hide()}
+        onClick={() => (onClose ? onClose() : modal.hide())}
       >
         <CloseSVG />
       </IconButton>

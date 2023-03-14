@@ -6,8 +6,8 @@ import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContai
 import TokenInformationForm from 'bounceComponents/create-auction-pool/TokenInforationForm'
 import AuctionParametersForm from 'bounceComponents/create-auction-pool/AuctionParametersForm'
 import { CreationStep } from 'bounceComponents/create-auction-pool/types'
-// import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
-// import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
+import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
+import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
 import ValuesProvider, { useValuesDispatch, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import Stepper from 'bounceComponents/create-auction-pool/Stepper'
 import { isSupportedAuctionType } from 'constants/auction'
@@ -42,11 +42,10 @@ const CreateAuctionPool = () => {
 
               {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <AuctionParametersForm />}
 
-              {/* {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />} */}
+              {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
             </Box>
           ) : (
-            <></>
-            // <CreationConfirmation />
+            <CreationConfirmation />
           )}
         </Stack>
       </RoundedContainer>
