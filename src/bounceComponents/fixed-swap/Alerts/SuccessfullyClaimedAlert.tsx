@@ -1,4 +1,3 @@
-import React from 'react'
 import { Alert, SxProps, Typography } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 

@@ -1,74 +1,53 @@
-import { useRequest } from 'ahooks'
-import { hide, show } from '@ebay/nice-modal-react'
+import { useCallback } from 'react'
+import { calculateGasMargin } from 'utils'
+import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
+import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
+import { useActiveWeb3React } from 'hooks'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
 
-import { creatorClaimCall } from '@/utils/web3/contractCalls/fixedSwap'
-import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
-import DialogTips from 'bounceComponents/common/DialogTips'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
-import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
+export function useCreatorClaim(poolId: number | string, name: string) {
+  const { account } = useActiveWeb3React()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const addTransaction = useTransactionAdder()
 
-const useCreatorClaim = () => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'creatorClaimCall', poolId)
 
-  const contract = useFixedSwapContract()
-
-  const hasToken0ToClaim = poolWithParticipantInfo?.currentTotal0 && poolWithParticipantInfo.currentTotal0 !== '0'
-  const token0ToClaim = formatNumber(poolWithParticipantInfo?.currentTotal0, {
-    unit: poolInfo.token0.decimals
-  })
-  const token1ToClaim = formatNumber(poolWithParticipantInfo?.currentTotal1, {
-    unit: poolInfo.token1.decimals
-  })
-  const token1ToClaimText = `${token1ToClaim} ${poolInfo.token1.symbol}`
-  const token0ToClaimText = hasToken0ToClaim ? ` and ${token0ToClaim} ${poolInfo.token0.symbol}` : ''
-  const successDialogContent = `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
-
-  const request = useRequest(
-    async () => {
-      const tx = await creatorClaimCall(contract, poolInfo?.poolId)
-
-      showWaitingTxDialog()
-
-      return tx.wait(1)
-    },
-    {
-      manual: true,
-      ready: !!contract && !!poolInfo,
-      onBefore: () => {
-        showRequestConfirmDialog()
-      },
-      onSuccess: () => {
-        show(DialogTips, {
-          iconType: 'success',
-          againBtn: 'Close',
-          title: 'Congratulations!',
-          content: successDialogContent
-        })
-      },
-      onError: (error: Error & { reason: string }) => {
-        console.log('creator claim error: ', error)
-
-        show(DialogTips, {
-          iconType: 'error',
-          againBtn: 'Try Again',
-          cancelBtn: 'Cancel',
-          title: 'Oops..',
-          content: 'Something went wrong',
-          onAgain: request.refresh
-        })
-      },
-      onFinally: () => {
-        hide(DialogConfirmation)
-        getPoolInfo()
-      }
+  const run = useCallback(async (): Promise<{
+    hash: string
+    transactionReceipt: Promise<TransactionReceipt>
+  }> => {
+    if (!account) {
+      return Promise.reject('no account')
     }
-  )
+    if (!fixedSwapERC20Contract) {
+      return Promise.reject('no contract')
+    }
 
-  return request
+    const args = [poolId]
+
+    const estimatedGas = await fixedSwapERC20Contract.estimateGas.creatorClaimCall(...args).catch((error: Error) => {
+      console.debug('Failed to claim for creator', error)
+      throw error
+    })
+    return fixedSwapERC20Contract
+      .creatorClaimCall(...args, {
+        gasLimit: calculateGasMargin(estimatedGas)
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: `Creator claim assets for ${name}`,
+          userSubmitted: {
+            account,
+            action: `creatorClaimCall`,
+            key: poolId
+          }
+        })
+        return {
+          hash: response.hash,
+          transactionReceipt: response.wait(1)
+        }
+      })
+  }, [account, addTransaction, fixedSwapERC20Contract, name, poolId])
+
+  return { submitted, run }
 }
-
-export default useCreatorClaim

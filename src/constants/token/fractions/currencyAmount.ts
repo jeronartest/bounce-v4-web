@@ -50,7 +50,7 @@ export class CurrencyAmount extends Fraction {
 
   public toSignificant(
     significantDigits = 6,
-    format?: Record<string, unknown>,
+    format: Record<string, unknown> = { groupSeparator: ',' },
     rounding: Rounding = Rounding.ROUND_DOWN
   ): string {
     return super.toSignificant(significantDigits, format, rounding)

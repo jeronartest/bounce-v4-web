@@ -19,7 +19,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useActiveWeb3React } from 'hooks'
-import { shortenAddress } from 'utils'
+import { getLabel, shortenAddress } from 'utils'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainListMap } from 'constants/chain'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
@@ -29,6 +29,7 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import { TransactionReceipt } from '@ethersproject/providers'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -51,6 +52,7 @@ const CreatePoolButton = () => {
   const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
   const values = useValuesState()
   const createFixedSwapPool = useCreateFixedSwapPool()
+  const optionDatas = useOptionDatas()
 
   const auctionPoolSizeAmount = useMemo(
     () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
@@ -104,8 +106,8 @@ const CreatePoolButton = () => {
             }
             navigate(
               routes.auction.fixedPrice
-                .replace(':chainIdOrName', auctionInChainId.toString())
-                .replace(':poolId', poolId.toString())
+                .replace(':chainShortName', getLabel(auctionInChainId, 'ethChainId', optionDatas?.chainInfoOpt))
+                .replace(':poolId', poolId)
             )
           }
 
@@ -134,7 +136,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [auctionInChainId, createFixedSwapPool, navigate, redirect])
+  }, [auctionInChainId, createFixedSwapPool, navigate, optionDatas?.chainInfoOpt, redirect])
 
   const confirmBtn: {
     disabled?: boolean

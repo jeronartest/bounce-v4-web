@@ -24,6 +24,7 @@ import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
+import { routes } from 'constants/routes'
 
 export type IActivitieProps = {
   personalInfoId: number
@@ -172,18 +173,19 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
       </Box>
       {btnSta === 'Auction' ? (
         <Box>
-          {auctionPoolData?.total > 0 ? (
+          {auctionPoolData && auctionPoolData?.total > 0 ? (
             <Grid container spacing={18}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
                   <Box
                     component={'a'}
                     target="_blank"
-                    href={`/auction/fixed-price/${getLabel(
-                      auctionPoolItem.chainId,
-                      'shortName',
-                      optionDatas?.chainInfoOpt
-                    )}/${Number(auctionPoolItem.poolId)}`}
+                    href={routes.auction.fixedPrice
+                      .replace(
+                        ':chainShortName',
+                        getLabel(auctionPoolItem?.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                      )
+                      .replace(':poolId', auctionPoolItem.poolId)}
                   >
                     <AuctionCard
                       poolId={auctionPoolItem.poolId}

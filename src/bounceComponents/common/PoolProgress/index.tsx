@@ -1,7 +1,6 @@
-import React from 'react'
 import { LinearProgress, SxProps } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
-import { AuctionProgressPrimaryColor } from '@/constants/auction/color'
+import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 
 export interface PoolProgressProps {
   value?: number
@@ -47,7 +46,7 @@ const PoolProgress = ({ value, sx, poolStatus }: PoolProgressProps) => {
         ...sx,
         borderRadius: 4,
         height: 6,
-        ...(ProgressColorStyles?.[poolStatus] || ProgressColorStyles[PoolStatus.Upcoming])
+        ...(poolStatus ? ProgressColorStyles?.[poolStatus] || ProgressColorStyles[PoolStatus.Upcoming] : '')
       }}
       value={value}
     />

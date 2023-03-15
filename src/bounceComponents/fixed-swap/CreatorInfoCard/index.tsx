@@ -1,6 +1,5 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { getCompanyInfo } from 'api/company'
 import { getUserInfo } from 'api/user'
 import { USER_TYPE } from 'api/user/type'
@@ -15,6 +14,8 @@ import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 interface ICreatorInfoCardProps {
   creatorUserInfo: CreatorUserInfo
@@ -30,9 +31,10 @@ const SocialMediaButton = ({ children, href }: { children?: ReactNode; href: str
 
 const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) => {
   const { token } = useUserInfo()
+  const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useState(null)
-  const router = useRouter()
+  const [userInfo, setUserInfo] = useState<any>(null)
+
   useEffect(() => {
     const getInfo = async () => {
       const res =
@@ -48,9 +50,9 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
 
   const handleUser = () => {
     if (userInfo?.userType === USER_TYPE.USER) {
-      return router.push(`/profile/summary?id=${userInfo?.id}`)
+      return navigate(`${routes.profile.summary}?id=${userInfo?.id}`)
     }
-    return router.push(`/company/summary?id=${userInfo?.companyId}`)
+    return navigate(`${routes.profile.summary}?id=${userInfo?.companyId}`)
   }
 
   return (

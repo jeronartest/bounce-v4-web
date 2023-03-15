@@ -1,19 +1,17 @@
-import { Box, LinearProgress, Stack, Typography } from '@mui/material'
-import React, { ReactNode } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
+import { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
-import Image from 'next/image'
+import Image from 'components/Image'
 import PoolInfoItem from '../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
-import { shortenAddress } from '@/utils/web3/address'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
-import { AuctionProgressPrimaryColor } from '@/constants/auction/color'
+import { AuctionProgressPrimaryColor } from 'constants/auction/color'
+import { shortenAddress } from 'utils'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -21,30 +19,7 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   </Typography>
 )
 
-const LeftBox = (): JSX.Element => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const formatedAmountTotal0 = poolInfo?.token0
-    ? formatNumber(poolInfo?.amountTotal0, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: 6
-      })
-    : '-'
-  const formatedSwappedAmount0 = poolInfo?.swappedAmount0
-    ? formatNumber(poolInfo.swappedAmount0, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: 6
-      })
-    : '-'
-  const formatedMaxAmount1PerWallet =
-    poolInfo?.maxAmount1PerWallet &&
-    poolInfo.maxAmount1PerWallet !== '0' &&
-    poolInfo.maxAmount1PerWallet !== poolInfo.amountTotal0
-      ? `${formatNumber(poolInfo.maxAmount1PerWallet, {
-          unit: poolInfo.token1.decimals,
-          decimalPlaces: 6
-        })} ${poolInfo.token1.symbol}`
-      : 'No'
+const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
   const swapedPercent = poolInfo?.swappedAmount0
     ? new BigNumber(poolInfo.swappedAmount0).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
@@ -82,9 +57,11 @@ const LeftBox = (): JSX.Element => {
 
           <PoolInfoItem title="Auction type">Fixed-Price</PoolInfoItem>
           <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
-          <PoolInfoItem title="Allocation per Wallet">{formatedMaxAmount1PerWallet}</PoolInfoItem>
+          <PoolInfoItem title="Allocation per Wallet">
+            {poolInfo.currencyMaxAmount1PerWallet.toSignificant()}
+          </PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
-            {formatedAmountTotal0} {poolInfo.token0.symbol}
+            {poolInfo.currencyAmount0.toSignificant()} {poolInfo.token0.symbol}
           </PoolInfoItem>
           <PoolInfoItem title="Price per unit, $">
             {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
@@ -95,10 +72,10 @@ const LeftBox = (): JSX.Element => {
           <PoolInfoItem title="Progress">
             <Box>
               <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[poolInfo.status] }}>
-                {formatedSwappedAmount0} {poolInfo.token0.symbol}
+                {poolInfo.currencySwappedAmount0.toSignificant()} {poolInfo.token0.symbol}
               </Typography>
               <Typography component="span">
-                &nbsp;/ {formatedAmountTotal0} {poolInfo.token0.symbol}
+                &nbsp;/ {poolInfo.currencyAmount0.toSignificant()} {poolInfo.token0.symbol}
               </Typography>
             </Box>
           </PoolInfoItem>

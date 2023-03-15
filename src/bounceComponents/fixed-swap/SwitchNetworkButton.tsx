@@ -1,10 +1,8 @@
 import { Button } from '@mui/material'
-import React from 'react'
-import { useSwitchNetwork } from 'wagmi'
-import { getDefaultChainId } from '@/utils/web3/chain'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const SwitchNetworkButton = ({ targetChain }: { targetChain: number }) => {
-  const { switchNetwork } = useSwitchNetwork()
+  const switchNetwork = useSwitchNetwork()
 
   return (
     <Button
@@ -12,7 +10,7 @@ const SwitchNetworkButton = ({ targetChain }: { targetChain: number }) => {
       fullWidth
       sx={{ mt: 24, mb: 12 }}
       onClick={() => {
-        switchNetwork(targetChain || getDefaultChainId())
+        switchNetwork(targetChain)
       }}
     >
       Switch network

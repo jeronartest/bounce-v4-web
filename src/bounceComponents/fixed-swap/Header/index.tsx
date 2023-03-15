@@ -1,12 +1,10 @@
-import React from 'react'
 import { Box, Stack, Typography } from '@mui/material'
-import Image from 'next/image'
-import { CHAIN_ICONS, CHAIN_NAMES } from '@/constants/web3/chains'
+import Image from 'components/Image'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import TokenImage from 'bounceComponents/common/TokenImage'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
+import { ChainId, ChainListMap } from 'constants/chain'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
 const styles = {
   p: '7px 16px',
@@ -17,10 +15,10 @@ const styles = {
   }
 }
 
-const Header = (): JSX.Element => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)
+const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }): JSX.Element => {
+  const ethChainId = useChainConfigInBackend('id', poolInfo?.chainId || '')?.ethChainId as ChainId
 
+  if (!poolInfo || !ethChainId) return <></>
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Stack direction="row" spacing={20} sx={{ alignItems: 'center' }}>
@@ -71,11 +69,9 @@ const Header = (): JSX.Element => {
             py: 6
           }}
         >
-          {!!chainConfig?.ethChainId && (
-            <Image src={CHAIN_ICONS[chainConfig?.ethChainId]} alt={chainConfig?.shortName} width={20} height={20} />
-          )}
+          <Image src={ChainListMap[ethChainId]?.logo || ''} width={20} height={20} />
           <Typography variant="body1" sx={{ fontSize: 16, lineHeight: '20px' }}>
-            {CHAIN_NAMES[chainConfig?.ethChainId]}
+            {ChainListMap[ethChainId]?.name}
           </Typography>
         </Box>
       </Box>

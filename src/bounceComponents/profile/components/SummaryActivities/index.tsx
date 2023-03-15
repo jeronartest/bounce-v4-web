@@ -19,9 +19,9 @@ import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { getLabel, shortenAddress } from 'utils'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
-import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
 import { Link } from 'react-router-dom'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IActivitieProps = {
   personalInfoId: number
@@ -36,8 +36,8 @@ const poolType: Record<PoolType, string> = {
 }
 
 const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
-  const optionDatas = useOptionDatas()
   const [btnSta, setBtnSta] = useState<string>('Auction')
+  const optionDatas = useOptionDatas()
   const { pagination, data: auctionPoolData } = usePagination<IAuctionPoolsItems<IAuctionPoolsData>, Params>(
     async ({ current, pageSize }) => {
       if (personalInfoId) {

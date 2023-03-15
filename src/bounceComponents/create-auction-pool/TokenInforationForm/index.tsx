@@ -41,7 +41,7 @@ const TokenInformationForm = (): JSX.Element => {
   const auctionInChainId = useAuctionInChain()
 
   const showTokenDialog = (chainId: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
-    show<Token>(TokenDialog, { chainId })
+    show<Token>(TokenDialog, { chainId, enableEth: false })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({

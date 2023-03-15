@@ -1,20 +1,10 @@
-import React from 'react'
-
 import { Button } from '@mui/material'
-import { show } from '@ebay/nice-modal-react'
-
-import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 const ConnectWalletButton = () => {
+  const walletModalToggle = useWalletModalToggle()
   return (
-    <Button
-      variant="contained"
-      fullWidth
-      sx={{ my: 12 }}
-      onClick={() => {
-        show(ConnectWalletDialog)
-      }}
-    >
+    <Button variant="contained" fullWidth sx={{ my: 12 }} onClick={walletModalToggle}>
       Connect Wallet
     </Button>
   )

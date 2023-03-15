@@ -6,12 +6,15 @@ import LivePoolCreatorAlert from '../../Alerts/LivePoolCreatorAlert'
 import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import FundInfoList from './FundInfoList'
 import ButtonBlock from './ButtonBlock'
-import { PoolStatus } from 'api/pool/type'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 
-const CreatorActionBox = (): JSX.Element => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-
+const CreatorActionBox = ({
+  poolInfo,
+  getPoolInfo
+}: {
+  poolInfo: FixedSwapPoolProp
+  getPoolInfo: () => void
+}): JSX.Element => {
   return (
     <Box sx={{ flex: 1, pt: 28 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -24,9 +27,9 @@ const CreatorActionBox = (): JSX.Element => {
         />
       </Box>
 
-      <FundInfoList />
+      <FundInfoList poolInfo={poolInfo} />
 
-      <ButtonBlock />
+      <ButtonBlock poolInfo={poolInfo} />
 
       {poolInfo.status === PoolStatus.Upcoming && <UpcomingPoolCreatorAlert />}
       {poolInfo.status === PoolStatus.Live && <LivePoolCreatorAlert />}

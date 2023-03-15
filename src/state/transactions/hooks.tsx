@@ -118,7 +118,7 @@ export function useUserHasSubmittedClaim(account?: string): {
 export function useUserHasSubmittedRecords(
   account?: string,
   action?: string,
-  key?: string
+  key?: string | number
 ): {
   submitted: boolean
   txn: TransactionDetails | undefined

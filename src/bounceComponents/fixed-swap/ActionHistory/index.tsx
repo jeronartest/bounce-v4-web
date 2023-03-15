@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   styled,
@@ -15,10 +14,10 @@ import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
-import { shortenAddress } from '@/utils/web3/address'
 import { PoolEvent } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { formatNumber, removeRedundantZeroOfFloat } from '@/utils/web3/number'
+import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
+import { shortenAddress } from 'utils'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,7 +66,7 @@ const ActionHistory = () => {
         Action History
       </Typography>
 
-      {data?.list.length > 0 && !isGettingPoolHistory ? (
+      {data && data?.list.length > 0 && !isGettingPoolHistory ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

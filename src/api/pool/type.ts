@@ -1,3 +1,5 @@
+import { CurrencyAmount } from 'constants/token'
+
 export enum PoolType {
   'FixedSwap' = 1,
   'Duch' = 2,
@@ -112,6 +114,15 @@ export interface FixedSwapPool {
   swappedAmount0: string
   token0: TokenFromApi
   token1: TokenFromApi
+}
+
+export interface FixedSwapPoolProp extends FixedSwapPool {
+  currencyAmount0: CurrencyAmount
+  currencyAmount1: CurrencyAmount
+  currencySwappedAmount0: CurrencyAmount
+  currencyMaxAmount1PerWallet: CurrencyAmount
+  currencyCurrentTotal0: CurrencyAmount
+  currencyCurrentTotal1: CurrencyAmount
 }
 
 export interface GetPoolInfoResponse {

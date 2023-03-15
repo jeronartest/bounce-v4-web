@@ -15,7 +15,7 @@ export interface SerializableTransactionReceipt {
 export interface UserSubmittedProp {
   account: string
   action: string
-  key?: string
+  key?: string | number
 }
 
 export const addTransaction = createAction<{

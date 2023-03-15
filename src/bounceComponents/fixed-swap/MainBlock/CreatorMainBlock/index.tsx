@@ -1,20 +1,21 @@
 import { Box } from '@mui/material'
-import React from 'react'
-import { BigNumber } from 'bignumber.js'
 import CreatorActionBox from '../../ActionBox/CreatorActionBox'
 import LeftBox from '../../LeftBox'
 import NotStartedAlert from '../../Alerts/NotStartedAlert'
 import ClaimBackAlert from '../../Alerts/ClaimBackAlert'
 import AllTokenAuctionedAlert from '../../Alerts/AllTokenAuctionedAlert'
 import AuctionLiveAlert from '../../Alerts/AuctionLiveAlert'
-import { PoolStatus } from 'api/pool/type'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
 
-const CreatorMainBlock = (): JSX.Element => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const isAllTokenSwapped = useIsAllTokenSwapped()
+const CreatorMainBlock = ({
+  poolInfo,
+  getPoolInfo
+}: {
+  poolInfo: FixedSwapPoolProp
+  getPoolInfo: () => void
+}): JSX.Element => {
+  const isAllTokenSwapped = useIsAllTokenSwapped(poolInfo)
 
   return (
     <Box
@@ -28,8 +29,8 @@ const CreatorMainBlock = (): JSX.Element => {
       )}
 
       <Box sx={{ display: 'flex', columnGap: 12 }}>
-        <LeftBox />
-        <CreatorActionBox />
+        <LeftBox poolInfo={poolInfo} />
+        <CreatorActionBox getPoolInfo={getPoolInfo} poolInfo={poolInfo} />
       </Box>
     </Box>
   )

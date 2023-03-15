@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import CreateAuctionPool from 'pages/auction/create-auction-pool/index'
 import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType'
+import AuctionPoolId from 'pages/auction/fixed-price/poolId'
 
 import Companies from 'pages/companies'
 
@@ -114,6 +115,7 @@ export default function App() {
                   <Routes>
                     <Route path={routes.auction.createAuctionPool} element={<CreateAuctionPool />} />
                     <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
+                    <Route path={routes.auction.fixedPrice} element={<AuctionPoolId />} />
 
                     <Route path={routes.companies} element={<Companies />} />
 

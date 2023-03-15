@@ -224,9 +224,9 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                     <Box
                       component={'a'}
                       target="_blank"
-                      href={`/auction/fixed-price/${getLabel(chain, 'shortName', optionDatas?.chainInfoOpt)}/${Number(
-                        fixedSwaptem.poolId
-                      )}`}
+                      href={routes.auction.fixedPrice
+                        .replace(':chainShortName', getLabel(chain, 'shortName', optionDatas?.chainInfoOpt))
+                        .replace(':poolId', fixedSwaptem.poolId)}
                     >
                       <AuctionCard
                         poolId={fixedSwaptem.poolId}
@@ -353,9 +353,9 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                   <Box
                     component={'a'}
                     target="_blank"
-                    href={`/auction/fixed-price/${getLabel(chain, 'shortName', optionDatas?.chainInfoOpt)}/${Number(
-                      fixedSwaptem.poolId
-                    )}`}
+                    href={routes.auction.fixedPrice
+                      .replace(':chainShortName', getLabel(chain, 'shortName', optionDatas?.chainInfoOpt))
+                      .replace(':poolId', fixedSwaptem.poolId)}
                   >
                     <AuctionCard
                       poolId={fixedSwaptem.poolId}

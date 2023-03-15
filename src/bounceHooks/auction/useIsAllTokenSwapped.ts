@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 
-import usePoolInfo from './usePoolInfo'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
-const useIsAllTokenSwapped = () => {
-  const { data: poolInfo } = usePoolInfo()
-
+const useIsAllTokenSwapped = (poolInfo: FixedSwapPoolProp) => {
   return useMemo(() => {
-    return !!poolInfo ? new BigNumber(poolInfo.swappedAmount0).isGreaterThanOrEqualTo(poolInfo.amountTotal0) : undefined
+    return new BigNumber(poolInfo.swappedAmount0).isGreaterThanOrEqualTo(poolInfo.amountTotal0)
   }, [poolInfo])
 }
 export default useIsAllTokenSwapped

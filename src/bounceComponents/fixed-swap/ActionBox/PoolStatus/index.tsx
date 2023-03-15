@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 
@@ -50,7 +49,7 @@ const PoolStatusBox = ({ status, openTime, closeTime, onEnd }: PoolStatusBoxProp
       )
 
     default:
-      return null
+      return <></>
   }
 }
 
