@@ -25,7 +25,7 @@ const Marketcard: React.FC<IMarketcardProps> = ({ title, imageUrl, hover, handle
         ':hover': hover
           ? {
               boxShadow: '0px 2px 14px rgba(0, 0, 0, 0.1)',
-              'div:nth-child(3)': { visibility: 'visible' }
+              'div:nth-of-type(3)': { visibility: 'visible' }
             }
           : {}
       }}

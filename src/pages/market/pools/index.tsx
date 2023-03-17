@@ -357,7 +357,7 @@ const Pools: React.FC = ({}) => {
                                   holder={
                                     fixedSwaptem.creatorUserInfo?.userType === UserType.Profile ? (
                                       <AuctionHolder
-                                        href={`/profile/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                        href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                                         avatar={fixedSwaptem.creatorUserInfo?.avatar}
                                         name={fixedSwaptem.creatorUserInfo?.name}
                                         description={
@@ -379,7 +379,7 @@ const Pools: React.FC = ({}) => {
                                       />
                                     ) : (
                                       <AuctionHolder
-                                        href={`/company/summary?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                        href={`${routes.company.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
                                         avatar={fixedSwaptem.creatorUserInfo?.companyAvatar}
                                         name={fixedSwaptem.creatorUserInfo?.companyName}
                                         description={

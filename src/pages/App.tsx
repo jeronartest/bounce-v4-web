@@ -183,6 +183,7 @@ export default function App() {
                       <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
                     </Route> */}
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
+                    <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>
                 </Web3ReactManager>
               </BodyWrapper>

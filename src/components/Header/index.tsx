@@ -40,14 +40,10 @@ interface Tab extends TabContent {
 
 export const Tabs: Tab[] = [
   {
-    title: 'Test',
-    subTab: [
-      { title: 'Test1', route: routes.test1 },
-      { title: 'Test2', route: routes.test2 }
-    ]
+    title: 'Auction',
+    route: routes.market.index
   },
 
-  { title: 'Test3', route: routes.test3 },
   { title: 'DAO', link: 'https://google.com' },
   { title: 'Docs', link: 'https://google.com' }
 ]
