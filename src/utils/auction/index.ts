@@ -42,7 +42,7 @@ export const getUserSwappedAmount1 = (
   const userSwappedAmount1 = new BigNumber(formatUnits(userSwappedAmount0, token0Decimals).toString())
     .times(apiRatio)
     // Avoid underflow issue
-    .decimalPlaces(token1Decimals, BigNumber.ROUND_DOWN)
+    .decimalPlaces(token1Decimals, BigNumber.ROUND_CEIL)
 
   return userSwappedAmount1
 }

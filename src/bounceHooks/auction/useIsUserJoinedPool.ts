@@ -1,17 +1,11 @@
+import { FixedSwapPoolProp } from 'api/pool/type'
 import { useMemo } from 'react'
-import usePoolWithParticipantInfo from './usePoolWithParticipantInfo'
 
-const useIsUserJoinedPool = () => {
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-
+const useIsUserJoinedPool = (poolInfo: FixedSwapPoolProp) => {
   return useMemo(() => {
-    if (!poolWithParticipantInfo) return undefined
-    return (
-      poolWithParticipantInfo?.participant &&
-      poolWithParticipantInfo?.participant.swappedAmount0 !== '' &&
-      poolWithParticipantInfo?.participant.swappedAmount0 !== '0'
-    )
-  }, [poolWithParticipantInfo])
+    if (!poolInfo) return undefined
+    return poolInfo.participant && poolInfo.participant.currencySwappedAmount0?.greaterThan('0')
+  }, [poolInfo])
 }
 
 export default useIsUserJoinedPool

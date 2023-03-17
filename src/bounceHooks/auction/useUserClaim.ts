@@ -1,71 +1,57 @@
-import { useRequest } from 'ahooks'
-import { useAccount } from 'wagmi'
-import { hide, show } from '@ebay/nice-modal-react'
+import { FixedSwapPoolProp } from 'api/pool/type'
+import { useActiveWeb3React } from 'hooks'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useCallback } from 'react'
+import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
+import { calculateGasMargin } from 'utils'
+import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 
-import { ContractReceipt } from 'ethers'
-import useIsUserJoinedPool from './useIsUserJoinedPool'
-import { userClaimCall } from '@/utils/web3/contractCalls/fixedSwap'
-import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
-import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
+const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
+  const { account } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
 
-const useUserClaim = (options?: { onSuccess?: (data: ContractReceipt) => void }) => {
-  const { isConnected } = useAccount()
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_user_claim', poolInfo.poolId)
 
-  const fixedSwapContract = useFixedSwapContract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-
-  const isJoined = useIsUserJoinedPool()
-
-  const request = useRequest(
-    async () => {
-      const tx = await userClaimCall(fixedSwapContract, poolInfo?.poolId)
-
-      showWaitingTxDialog()
-
-      return tx.wait(1)
-    },
-    {
-      manual: true,
-      ready: !!fixedSwapContract && isConnected && !!poolInfo?.poolId && isJoined,
-      onBefore: () => {
-        showRequestConfirmDialog()
-      },
-      onSuccess: data => {
-        show<any, DialogTipsProps>(id, {
-          iconType: 'success',
-          againBtn: 'Close',
-          title: 'Congratulations!',
-          content: `You have successfully claimed ${formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-            unit: poolInfo.token0.decimals
-          })} ${poolInfo.token0.symbol}`
-        })
-        options?.onSuccess?.(data)
-      },
-      onError: error => {
-        show<any, DialogTipsProps>(id, {
-          iconType: 'error',
-          againBtn: 'Try Again',
-          cancelBtn: 'Cancel',
-          title: 'Oops..',
-          content: 'Something went wrong',
-          onAgain: request.refresh
-        })
-      },
-      onFinally: () => {
-        hide(DialogConfirmation)
-        getPoolInfo()
-      }
+  const run = useCallback(async (): Promise<{
+    hash: string
+    transactionReceipt: Promise<TransactionReceipt>
+  }> => {
+    if (!account) {
+      return Promise.reject('no account')
     }
-  )
+    if (!fixedSwapERC20Contract) {
+      return Promise.reject('no contract')
+    }
 
-  return request
+    const args = [poolInfo.poolId]
+
+    const estimatedGas = await fixedSwapERC20Contract.estimateGas.userClaim(...args).catch((error: Error) => {
+      console.debug('Failed to claim', error)
+      throw error
+    })
+    return fixedSwapERC20Contract
+      .userClaim(...args, {
+        gasLimit: calculateGasMargin(estimatedGas)
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: `Claim token ${poolInfo.currencyCurrentTotal0.currency.symbol}`,
+          userSubmitted: {
+            account,
+            action: `fixed_price_user_claim`,
+            key: poolInfo.poolId
+          }
+        })
+        return {
+          hash: response.hash,
+          transactionReceipt: response.wait(1)
+        }
+      })
+  }, [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyCurrentTotal0.currency.symbol, poolInfo.poolId])
+
+  return { run, submitted }
 }
 
 export default useUserClaim

@@ -1,3 +1,4 @@
+import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 
 export enum PoolType {
@@ -123,6 +124,14 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   currencyMaxAmount1PerWallet: CurrencyAmount
   currencyCurrentTotal0: CurrencyAmount
   currencyCurrentTotal1: CurrencyAmount
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined
+  }
 }
 
 export interface GetPoolInfoResponse {

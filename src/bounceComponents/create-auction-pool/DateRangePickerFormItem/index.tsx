@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode } from 'react'
 import { FieldProps, getIn } from 'formik'
 import { Moment } from 'moment'
 import {
@@ -26,6 +26,7 @@ function createErrorHandler(
 }
 
 function fieldToDateRangePicker({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   field: { onChange: _onChange, ...field },
   form: { isSubmitting, touched, errors, setFieldValue, setFieldError, setFieldTouched },
   textField: { helperText, onBlur, ...textField } = {},

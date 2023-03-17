@@ -30,6 +30,12 @@ import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import { TransactionReceipt } from '@ethersproject/providers'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -65,10 +71,7 @@ const CreatePoolButton = () => {
   )
 
   const toCreate = useCallback(async () => {
-    show(DialogConfirmation, {
-      title: 'Bounce requests wallet interaction',
-      subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
-    })
+    showRequestConfirmDialog()
     try {
       const { getPoolId, transactionReceipt } = await createFixedSwapPool()
 
@@ -81,15 +84,10 @@ const CreatePoolButton = () => {
       }
 
       const ret: Promise<TransactionReceipt> = new Promise((resolve, rpt) => {
-        show(DialogConfirmation, {
-          title: 'Bounce waiting for transaction settlement',
-          subTitle:
-            'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
-          onClose: () => {
-            hide(DialogConfirmation)
-            rpt()
-            handleCloseDialog()
-          }
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+          handleCloseDialog()
         })
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
@@ -111,7 +109,7 @@ const CreatePoolButton = () => {
             )
           }
 
-          hide(DialogConfirmation)
+          hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'To the pool',
@@ -137,6 +135,46 @@ const CreatePoolButton = () => {
       })
     }
   }, [auctionInChainId, createFixedSwapPool, navigate, optionDatas?.chainInfoOpt, redirect])
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      // show(DialogTips, {
+      //   iconType: 'success',
+      //   cancelBtn: 'Close',
+      //   title: 'Transaction Submitted!',
+      //   content: `Approving use of ${currencyFrom?.symbol} ...`,
+      //   handleCancel: () => hide(DialogTips)
+      // })
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          toCreate()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, toCreate])
 
   const confirmBtn: {
     disabled?: boolean
@@ -177,24 +215,7 @@ const CreatePoolButton = () => {
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
           text: `Approve use of ${currencyFrom?.symbol}`,
-          run: () => {
-            show(DialogConfirmation, {
-              title: 'Bounce requests wallet approval',
-              subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.'
-            })
-            approveCallback()
-              .then(() => {
-                hide(DialogConfirmation)
-                show(DialogTips, {
-                  iconType: 'success',
-                  cancelBtn: 'Close',
-                  title: 'Transaction Submitted!',
-                  content: `Approving use of ${currencyFrom?.symbol} ...`,
-                  handleCancel: () => hide(DialogTips)
-                })
-              })
-              .catch(() => hide(DialogConfirmation))
-          }
+          run: toApprove
         }
       }
     }
@@ -204,13 +225,13 @@ const CreatePoolButton = () => {
   }, [
     account,
     approvalState,
-    approveCallback,
     auctionAccountBalance,
     auctionInChainId,
     auctionPoolSizeAmount,
     chainId,
     currencyFrom?.symbol,
     switchNetwork,
+    toApprove,
     toCreate,
     walletModalToggle
   ])

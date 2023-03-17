@@ -1,30 +1,19 @@
-import React from 'react'
 import { Divider, Stack, Typography } from '@mui/material'
 import moment from 'moment'
 import { useCountDown } from 'ahooks'
 
 import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
+import { formatNumber } from 'utils/number'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
-const InfoList = () => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo, loading: isPoolWithParticipantInfoLoading } = usePoolWithParticipantInfo()
+const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
+  const formatedSwappedAmount0 = poolInfo.participant.currencySwappedAmount0?.greaterThan('0')
+    ? poolInfo.participant.currencySwappedAmount0.toSignificant()
+    : '0'
 
-  const formatedSwappedAmount0 =
-    !isPoolWithParticipantInfoLoading && !poolWithParticipantInfo
-      ? '-'
-      : // participant.swappedAmount0 from API could be empty string
-      poolWithParticipantInfo?.participant.swappedAmount0
-      ? formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-          unit: poolWithParticipantInfo.token0.decimals
-        })
-      : '0'
-
-  const isJoined = useIsUserJoinedPool()
+  const isJoined = useIsUserJoinedPool(poolInfo)
   const isClaimmingDelayed = poolInfo.claimAt > poolInfo.closeAt
   const formattedClaimTime = moment(poolInfo.claimAt * 1000).format('MMM D, YYYY hh:mm A')
 

@@ -1,14 +1,15 @@
 import { Button } from '@mui/material'
-import React from 'react'
+import { FixedSwapPoolProp } from 'api/pool/type'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 
 export interface GoToCheckButtonProps {
   onClick: () => void
   bidAmount: string
+  poolInfo: FixedSwapPoolProp
 }
 
-const GoToCheckButton = ({ onClick, bidAmount }: GoToCheckButtonProps) => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist()
+const GoToCheckButton = ({ onClick, bidAmount, poolInfo }: GoToCheckButtonProps) => {
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
 
   return (
     <Button

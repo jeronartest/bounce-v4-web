@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react'
-import { Field, FieldProps, getIn } from 'formik'
+import { ReactNode } from 'react'
+import { FieldProps, getIn } from 'formik'
 import { DatePicker as MuiDatePicker, DatePickerProps as MuiDatePickerProps } from '@mui/x-date-pickers/DatePicker'
 import { TextField, TextFieldProps } from '@mui/material'
 import { Moment } from 'moment'
@@ -21,6 +21,7 @@ function createErrorHandler(
 }
 
 function fieldToDatePicker({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   field: { onChange: _onChange, ...field },
   form: { isSubmitting, touched, errors, setFieldValue, setFieldError, setFieldTouched },
   textField: { helperText, onBlur, ...textField } = {},

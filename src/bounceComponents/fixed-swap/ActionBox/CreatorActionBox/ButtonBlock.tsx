@@ -37,8 +37,6 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       try {
         const { transactionReceipt } = await claim()
 
-        showWaitingTxDialog()
-
         const ret = new Promise((resolve, rpt) => {
           showWaitingTxDialog(() => {
             hideDialogConfirmation()

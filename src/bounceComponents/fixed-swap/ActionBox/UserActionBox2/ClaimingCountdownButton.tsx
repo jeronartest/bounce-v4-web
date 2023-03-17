@@ -1,11 +1,14 @@
-import React from 'react'
 import { useCountDown } from 'ahooks'
 import { Box, Button, Typography } from '@mui/material'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
-const ClaimingCountdownButton = () => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-
+const ClaimingCountdownButton = ({
+  poolInfo,
+  getPoolInfo
+}: {
+  poolInfo: FixedSwapPoolProp
+  getPoolInfo: () => void
+}) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: poolInfo.claimAt * 1000,
     onEnd: getPoolInfo

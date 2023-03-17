@@ -1,4 +1,3 @@
-import React from 'react'
 import { LoadingButton } from '@mui/lab'
 
 export interface ClaimButtonProps {

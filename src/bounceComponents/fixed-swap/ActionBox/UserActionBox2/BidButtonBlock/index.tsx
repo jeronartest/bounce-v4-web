@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button } from '@mui/material'
 import { UserBidAction } from '../ActionBlock'
 import PlaceBidButton from '../PlaceBidButton'
@@ -7,22 +6,24 @@ import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
 import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import { PoolStatus } from 'api/pool/type'
+import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsLimitExceeded'
-import useIsBalanceInsufficient from 'bounceHooks/auction/useIsBalanceInsufficient'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
-import { fixToDecimals } from '@/utils/web3/number'
+import { fixToDecimals } from 'utils/number'
+import { useMemo } from 'react'
+import { useActiveWeb3React } from 'hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { CurrencyAmount } from 'constants/token'
 
 interface BidButtonBlockProps {
   action: UserBidAction
   handleGoToCheck: () => void
-  handlePlaceBid: (bidAmount: string) => void
+  handlePlaceBid: () => void
   isBidding?: boolean
   handleCancelButtonClick: () => void
   bidAmount: string
+  poolInfo: FixedSwapPoolProp
 }
 
 const BidButtonBlock = ({
@@ -31,21 +32,38 @@ const BidButtonBlock = ({
   handleGoToCheck,
   handlePlaceBid,
   isBidding,
+  poolInfo,
   handleCancelButtonClick
 }: BidButtonBlockProps) => {
-  const { data: poolInfo } = usePoolInfo()
-  const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)
-  const isCurrentChainEqualChainOfPool = useIsCurrentChainEqualChainOfPool()
+  const chainConfig = useChainConfigInBackend('id', poolInfo.chainId)
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(
+    () => chainConfig?.ethChainId === chainId,
+    [chainConfig?.ethChainId, chainId]
+  )
 
-  const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
+  const slicedBidAmount = useMemo(
+    () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
+    [bidAmount, poolInfo.token1.decimals]
+  )
 
-  const isBalanceInsufficient = useIsBalanceInsufficient(slicedBidAmount)
-  const isLimitExceeded = useIsLimitExceeded(slicedBidAmount)
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyAmount1.currency)
+  const currencySlicedBidAmount = useMemo(
+    () => CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedBidAmount),
+    [poolInfo.currencyAmount1.currency, slicedBidAmount]
+  )
+
+  const isBalanceInsufficient = useMemo(() => {
+    if (!userBalance || !currencySlicedBidAmount) return true
+    return userBalance.lessThan(currencySlicedBidAmount)
+  }, [currencySlicedBidAmount, userBalance])
+
+  const isLimitExceeded = useIsLimitExceeded(slicedBidAmount, poolInfo)
 
   if (!isCurrentChainEqualChainOfPool) {
     return (
       <>
-        <SwitchNetworkButton targetChain={chainConfig.ethChainId} />
+        <SwitchNetworkButton targetChain={chainConfig?.ethChainId || 1} />
         <WrongNetworkAlert />
       </>
     )
@@ -53,23 +71,6 @@ const BidButtonBlock = ({
 
   if (poolInfo.status === PoolStatus.Upcoming) {
     return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
-  }
-
-  if (isBalanceInsufficient) {
-    return (
-      <>
-        <BidButtonGroup
-          withCancelButton={action === 'MORE_BID'}
-          stackSx={{ mt: 24 }}
-          onCancel={handleCancelButtonClick}
-        >
-          <Button variant="contained" fullWidth disabled>
-            Insufficient balance
-          </Button>
-        </BidButtonGroup>
-        <GetFundBackAlert />
-      </>
-    )
   }
 
   if (isLimitExceeded) {
@@ -89,10 +90,27 @@ const BidButtonBlock = ({
     )
   }
 
+  if (isBalanceInsufficient) {
+    return (
+      <>
+        <BidButtonGroup
+          withCancelButton={action === 'MORE_BID'}
+          stackSx={{ mt: 24 }}
+          onCancel={handleCancelButtonClick}
+        >
+          <Button variant="contained" fullWidth disabled>
+            {!currencySlicedBidAmount ? 'Input Amount' : !userBalance ? 'Loading' : 'Insufficient balance'}
+          </Button>
+        </BidButtonGroup>
+        <GetFundBackAlert />
+      </>
+    )
+  }
+
   if (action === 'GO_TO_CHECK') {
     return (
       <>
-        <GoToCheckButton bidAmount={bidAmount} onClick={handleGoToCheck} />
+        <GoToCheckButton poolInfo={poolInfo} bidAmount={bidAmount} onClick={handleGoToCheck} />
         <GetFundBackAlert />
       </>
     )
@@ -105,9 +123,10 @@ const BidButtonBlock = ({
           sx={{ mt: 24 }}
           bidAmount={bidAmount}
           onClick={() => {
-            handlePlaceBid(bidAmount)
+            handlePlaceBid()
           }}
           loading={isBidding}
+          poolInfo={poolInfo}
         />
         <GetFundBackAlert />
       </>
@@ -123,9 +142,10 @@ const BidButtonBlock = ({
           onCancel={handleCancelButtonClick}
         >
           <PlaceBidButton
+            poolInfo={poolInfo}
             bidAmount={bidAmount}
             onClick={() => {
-              handlePlaceBid(bidAmount)
+              handlePlaceBid()
             }}
             loading={isBidding}
           />

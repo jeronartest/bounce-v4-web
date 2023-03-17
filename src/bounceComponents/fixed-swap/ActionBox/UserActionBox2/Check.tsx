@@ -12,7 +12,7 @@ const Check = ({ onConfirm }: CheckProps) => {
     notice3: false
   })
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<any>) => {
     setConfirmationState({
       ...confirmationState,
       [event.target.name]: event.target.checked

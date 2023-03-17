@@ -1,54 +1,38 @@
-import { useCountDown, useRequest } from 'ahooks'
-import React from 'react'
-import { useAccount } from 'wagmi'
-import { Box, SxProps, Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
-import { useRouter } from 'next/router'
-import { hide, show } from '@ebay/nice-modal-react'
-import { parseUnits } from '@ethersproject/units'
-
-import { BigNumber } from 'bignumber.js'
-import { ContractReceipt, ContractTransaction } from 'ethers'
-import { useErc20Contract, useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
-import { getFixedSwapContractAddress } from '@/utils/web3/contract'
-import { swapCall } from '@/utils/web3/contractCalls/fixedSwap'
-import { allowanceCall, approveCall } from '@/utils/web3/contractCalls/erc20'
-import { PoolStatus, PoolType } from 'api/pool/type'
+import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import { NATIVE_TOEN_ADDRESS } from '@/constants/auction'
-import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
-import { showRequestApprovalDialog, showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
-import { formatNumber } from '@/utils/web3/number'
+import { useActiveWeb3React } from 'hooks'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useCallback } from 'react'
+import { CurrencyAmount } from 'constants/token'
+import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
+import { calculateGasMargin } from 'utils'
+import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 
-const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) => {
-  const { address: account, isConnected } = useAccount()
+const usePlaceBid = (poolInfo: FixedSwapPoolProp) => {
+  const { account } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
 
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_swap', poolInfo.poolId)
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const isToken1Native = poolInfo.token1.address === NATIVE_TOEN_ADDRESS
+  const isToken1Native = poolInfo.currencyCurrentTotal1.currency.isNative
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
-  const fixedSwapContract = useFixedSwapContract()
-  const erc20Contract = useErc20Contract(poolInfo.token1.address)
-
-  // TODO: collect poolId, chainId into a context
-  const router = useRouter()
-  const { poolId, chainShortName } = router.query
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName)
-  const fixedSwapContractAddress = getFixedSwapContractAddress(chainConfigInBackend.ethChainId)
-
-  const request = useRequest(
-    async (bidAmount: string) => {
-      // TODO: set decimal places of bid amount to token decimals
-      const parsedBidAmount = bidAmount ? parseUnits(bidAmount, poolInfo.token1.decimals) : undefined
-
-      // Generate proof
-      let proofArr = []
+  const run = useCallback(
+    async (
+      bidAmount: CurrencyAmount
+    ): Promise<{
+      hash: string
+      transactionReceipt: Promise<TransactionReceipt>
+    }> => {
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!fixedSwapERC20Contract) {
+        return Promise.reject('no contract')
+      }
+      let proofArr: string[] = []
 
       if (poolInfo.enableWhiteList) {
         const {
@@ -56,8 +40,8 @@ const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) 
         } = await getUserWhitelistProof({
           address: account,
           category: PoolType.FixedSwap,
-          chainId: chainConfigInBackend?.id,
-          poolId: String(poolId)
+          chainId: poolInfo.chainId,
+          poolId: String(poolInfo.poolId)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
@@ -67,69 +51,48 @@ const usePlaceBid = (options?: { onSuccess?: (data: ContractReceipt) => void }) 
         }
       }
 
-      // Check allowance
-      // If token1 is not native and allowance is lower than amount to swap, then approve token.
-      if (!isToken1Native) {
-        const allowance = await allowanceCall(erc20Contract, account, fixedSwapContractAddress)
+      const args = [poolInfo.poolId, bidAmount.raw.toString(), proofArr]
 
-        if (allowance.lt(parsedBidAmount)) {
-          showRequestApprovalDialog()
-          const approvalReceipt = await approveCall(erc20Contract, fixedSwapContractAddress, parsedBidAmount)
-
-          if (!approvalReceipt) {
-            return Promise.reject(new Error('Failed to approve'))
+      const estimatedGas = await fixedSwapERC20Contract.estimateGas
+        .swap(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
+        .catch((error: Error) => {
+          console.debug('Failed to swap', error)
+          throw error
+        })
+      return fixedSwapERC20Contract
+        .swap(...args, {
+          gasLimit: calculateGasMargin(estimatedGas),
+          value: isToken1Native ? bidAmount.raw.toString() : undefined
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} swap to {${poolInfo.token0.symbol}}`,
+            userSubmitted: {
+              account,
+              action: `fixed_price_swap`,
+              key: poolInfo.poolId
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionReceipt: response.wait(1)
           }
-        }
-      }
-
-      // Swap
-      showRequestConfirmDialog()
-
-      let tx: ContractTransaction
-
-      if (poolInfo.token1.address === NATIVE_TOEN_ADDRESS) {
-        tx = await swapCall(fixedSwapContract, Number(poolId), parsedBidAmount, proofArr, parsedBidAmount)
-      } else {
-        tx = await swapCall(fixedSwapContract, Number(poolId), parsedBidAmount, proofArr)
-      }
-
-      showWaitingTxDialog()
-
-      return tx.wait(1)
+        })
     },
-    {
-      manual: true,
-      ready: !!fixedSwapContract && (isToken1Native || !!erc20Contract) && !!chainConfigInBackend?.id && isConnected,
-      onSuccess: (data, params) => {
-        show<any, DialogTipsProps>(id, {
-          iconType: 'success',
-          againBtn: 'Close',
-          title: 'Congratulations!',
-          content: `You have successfully bid ${formatNumber(new BigNumber(params[0]).div(poolInfo.ratio), {
-            unit: 0
-          })} ${poolInfo.token0.symbol}`
-        })
-        options?.onSuccess?.(data)
-      },
-      onError: (error: Error & { reason: string }) => {
-        console.log('swap error: ', error)
-        show<any, DialogTipsProps>(id, {
-          iconType: 'error',
-          againBtn: 'Try Again',
-          cancelBtn: 'Cancel',
-          title: 'Oops..',
-          content: 'Something went wrong',
-          onAgain: request.refresh
-        })
-      },
-      onFinally: () => {
-        hide(DialogConfirmation)
-        getPoolInfo()
-      }
-    }
+    [
+      account,
+      addTransaction,
+      fixedSwapERC20Contract,
+      isToken1Native,
+      poolInfo.chainId,
+      poolInfo.enableWhiteList,
+      poolInfo.poolId,
+      poolInfo.token0.symbol,
+      poolInfo.token1.symbol
+    ]
   )
 
-  return request
+  return { run, submitted }
 }
 
 export default usePlaceBid

@@ -1,24 +1,25 @@
-import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import { ContractReceipt } from 'ethers'
-
-import { parseUnits } from 'ethers/lib/utils.js'
 import RegretButton from './RegretButton'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import { formatNumber } from '@/utils/web3/number'
+import { formatNumber } from 'utils/number'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
 export interface ConfirmRegretProps {
   regretAmount: string
   onCancel: () => void
   handleRegret: () => void
   isRegretting?: boolean
+  poolInfo: FixedSwapPoolProp
 }
 
-const ConfirmRegret = ({ regretAmount, onCancel, handleRegret, isRegretting }: ConfirmRegretProps): JSX.Element => {
-  const { data: poolInfo } = usePoolInfo()
-
+const ConfirmRegret = ({
+  regretAmount,
+  onCancel,
+  handleRegret,
+  isRegretting,
+  poolInfo
+}: ConfirmRegretProps): JSX.Element => {
   const formattedToken0RegretAmount = regretAmount
     ? formatNumber(new BigNumber(regretAmount).toString(), {
         unit: 0,

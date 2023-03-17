@@ -1,12 +1,12 @@
-import React from 'react'
 import { Box, Typography } from '@mui/material'
-import Balance from './Balance'
 import BidAmountInput from './BidAmountInput'
 import BidButtonBlock from './BidButtonBlock'
 import BidAmountLimit from './BidAmountLimit'
 import { UserBidAction } from './ActionBlock'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import { checkIfAllocationLimitExist } from '@/utils/auction'
+import { checkIfAllocationLimitExist } from 'utils/auction'
+import { FixedSwapPoolProp } from 'api/pool/type'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
 
 interface BidProps {
   action: UserBidAction
@@ -14,8 +14,9 @@ interface BidProps {
   setBidAmount: (value: string) => void
   handleGoToCheck: () => void
   handleCancelButtonClick: () => void
-  handlePlaceBid: (bidAmount: string) => void
+  handlePlaceBid: () => void
   isBidding?: boolean
+  poolInfo: FixedSwapPoolProp
 }
 
 const Bid = ({
@@ -25,21 +26,25 @@ const Bid = ({
   handleGoToCheck,
   handleCancelButtonClick,
   handlePlaceBid,
-  isBidding
+  isBidding,
+  poolInfo
 }: BidProps) => {
-  const { data: poolInfo } = usePoolInfo()
   const isAllocationLimitExist = checkIfAllocationLimitExist(poolInfo.maxAmount1PerWallet)
+  const { account } = useActiveWeb3React()
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmount0.currency)
 
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h5">Your Bid Amount</Typography>
-        <Balance />
+        <Typography>
+          Balance: {userToken1Balance?.toSignificant()} {poolInfo.token1.symbol}
+        </Typography>
       </Box>
 
-      <BidAmountInput bidAmount={bidAmount} setBidAmount={setBidAmount} />
+      <BidAmountInput poolInfo={poolInfo} bidAmount={bidAmount} setBidAmount={setBidAmount} />
 
-      {isAllocationLimitExist && <BidAmountLimit />}
+      {isAllocationLimitExist && <BidAmountLimit poolInfo={poolInfo} />}
 
       <BidButtonBlock
         action={action}
@@ -48,6 +53,7 @@ const Bid = ({
         isBidding={isBidding}
         handleGoToCheck={handleGoToCheck}
         handleCancelButtonClick={handleCancelButtonClick}
+        poolInfo={poolInfo}
       />
     </>
   )

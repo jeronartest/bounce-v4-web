@@ -1,22 +1,18 @@
 import { Button, Stack } from '@mui/material'
+import { FixedSwapPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
 import { parseUnits } from 'ethers/lib/utils.js'
-import React from 'react'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 export interface ButtonBlockProps {
   regretAmount: string
   onCancel: () => void
   onConfirm: () => void
+  poolInfo: FixedSwapPoolProp
 }
 
-const ButtonBlock = ({ regretAmount, onCancel, onConfirm }: ButtonBlockProps) => {
-  const { data: poolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-
+const ButtonBlock = ({ regretAmount, onCancel, onConfirm, poolInfo }: ButtonBlockProps) => {
   const regretUnits = new BigNumber(regretAmount ? parseUnits(regretAmount, poolInfo.token0.decimals).toString() : '0')
-  const isRegretBalanceSufficient = regretUnits.lte(poolWithParticipantInfo?.participant.swappedAmount0)
+  const isRegretBalanceSufficient = regretUnits.lte(poolInfo?.participant.swappedAmount0 || 0)
 
   return (
     <Stack direction="row" spacing={8} sx={{ mt: 24 }}>

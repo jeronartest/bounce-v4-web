@@ -1,19 +1,85 @@
-import React from 'react'
 import { SxProps } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { FixedSwapPoolProp } from 'api/pool/type'
+import { Dots } from 'themes'
+import { CurrencyAmount } from 'constants/token'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useCallback } from 'react'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
 
 export interface PlaceBidButtonProps {
   bidAmount: string
   sx?: SxProps
   onClick: () => void
   loading?: boolean
+  poolInfo: FixedSwapPoolProp
 }
 
-const PlaceBidButton = ({ bidAmount, sx, onClick, loading }: PlaceBidButtonProps): JSX.Element => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist()
+const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidButtonProps): JSX.Element => {
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
   // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, bidAmount)
+  const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address)
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+          hideDialogConfirmation()
+          onClick()
+        })
+      })
+      ret.catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, onClick])
+
+  if (approvalState !== ApprovalState.APPROVED) {
+    if (approvalState === ApprovalState.PENDING) {
+      return (
+        <LoadingButton variant="contained" fullWidth disabled sx={{ ...sx }}>
+          Approving use of {poolInfo.token1?.symbol} <Dots />
+        </LoadingButton>
+      )
+    }
+    if (approvalState === ApprovalState.UNKNOWN) {
+      return (
+        <LoadingButton variant="contained" fullWidth disabled sx={{ ...sx }}>
+          Loading <Dots />
+        </LoadingButton>
+      )
+    }
+    if (approvalState === ApprovalState.NOT_APPROVED) {
+      return (
+        <LoadingButton variant="contained" onClick={toApprove} fullWidth disabled sx={{ ...sx }}>
+          Approve use of {poolInfo.token1?.symbol}
+        </LoadingButton>
+      )
+    }
+  }
 
   return (
     <LoadingButton
@@ -24,7 +90,14 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading }: PlaceBidButtonProps
       disabled={!bidAmount || (!isUserInWhitelist && !isCheckingWhitelist)}
       onClick={onClick}
     >
-      Place a Bid
+      {loading ? (
+        <>
+          Place a Bid
+          <Dots />
+        </>
+      ) : (
+        'Place a Bid'
+      )}
     </LoadingButton>
   )
 }

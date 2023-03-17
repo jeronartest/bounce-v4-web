@@ -1,85 +1,65 @@
-import { useRequest } from 'ahooks'
-import { ContractReceipt } from 'ethers'
-import { useAccount } from 'wagmi'
-import { useRouter } from 'next/router'
-import { hide, show } from '@ebay/nice-modal-react'
-import { parseUnits } from 'ethers/lib/utils.js'
+import { FixedSwapPoolProp } from 'api/pool/type'
+import { useActiveWeb3React } from 'hooks'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useCallback } from 'react'
+import { CurrencyAmount } from 'constants/token'
+import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
+import { calculateGasMargin } from 'utils'
+import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 
-import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
-import { reverseCall } from '@/utils/web3/contractCalls/fixedSwap'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
-import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
+const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
+  const { account } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
 
-const useRegretBid = (options?: {
-  onRegretPart?: (data: ContractReceipt) => void
-  onRegretAll?: (data: ContractReceipt) => void
-}) => {
-  const { isConnected } = useAccount()
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_reverse', poolInfo.poolId)
 
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
+  // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const fixedSwapContract = useFixedSwapContract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
-  // TODO: collect poolId, chainId into a context
-  const router = useRouter()
-  const { poolId } = router.query
-
-  const request = useRequest(
-    async (token0AmountToRegret: string) => {
-      const token0UnitsToRegret = parseUnits(token0AmountToRegret, poolInfo.token0.decimals)
-      const tx = await reverseCall(fixedSwapContract, Number(poolId), token0UnitsToRegret)
-
-      showWaitingTxDialog()
-
-      return tx.wait(1)
-    },
-    {
-      manual: true,
-      debounceWait: 500,
-      ready: !!fixedSwapContract && isConnected,
-      onBefore: () => {
-        showRequestConfirmDialog()
-      },
-      onSuccess: (data, params) => {
-        show<any, DialogTipsProps>(id, {
-          iconType: 'success',
-          againBtn: 'Close',
-          title: 'Congratulations!',
-          content: `You have successfully refunded.`
-        })
-
-        const token0UnitsToRegret = parseUnits(params[0], poolInfo.token0.decimals)
-
-        if (token0UnitsToRegret.lt(poolWithParticipantInfo?.participant.swappedAmount0)) {
-          options?.onRegretPart?.(data)
-        } else {
-          options?.onRegretAll?.(data)
-        }
-      },
-      onError: (error: Error & { reason: string }) => {
-        console.log('regret error: ', error)
-
-        show<any, DialogTipsProps>(id, {
-          iconType: 'error',
-          againBtn: 'Try Again',
-          cancelBtn: 'Cancel',
-          title: 'Oops..',
-          content: 'Something went wrong',
-          onAgain: request.refresh
-        })
-      },
-      onFinally: () => {
-        hide(DialogConfirmation)
-        getPoolInfo()
+  const run = useCallback(
+    async (
+      token0AmountToRegret: CurrencyAmount | undefined
+    ): Promise<{
+      hash: string
+      transactionReceipt: Promise<TransactionReceipt>
+    }> => {
+      if (!account) {
+        return Promise.reject('no account')
       }
-    }
+      if (!fixedSwapERC20Contract) {
+        return Promise.reject('no contract')
+      }
+
+      const args = [poolInfo.poolId, token0AmountToRegret.raw.toString()]
+
+      const estimatedGas = await fixedSwapERC20Contract.estimateGas.reverse(...args).catch((error: Error) => {
+        console.debug('Failed to regret', error)
+        throw error
+      })
+      return fixedSwapERC20Contract
+        .reverse(...args, {
+          gasLimit: calculateGasMargin(estimatedGas)
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Regret & reverse ${poolInfo.currencyAmount1.currency.symbol}`,
+            userSubmitted: {
+              account,
+              action: `fixed_price_reverse`,
+              key: poolInfo.poolId
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionReceipt: response.wait(1)
+          }
+        })
+    },
+    [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyAmount1.currency.symbol, poolInfo.poolId]
   )
 
-  return request
+  return { run, submitted }
 }
 
 export default useRegretBid

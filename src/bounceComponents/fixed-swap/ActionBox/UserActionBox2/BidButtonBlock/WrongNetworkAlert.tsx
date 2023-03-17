@@ -1,6 +1,5 @@
-import React from 'react'
 import { Box, Typography } from '@mui/material'
-import Image from 'next/image'
+import Image from 'components/Image'
 import ErrorSVG from 'assets/imgs/auction/error.svg'
 
 const WrongNetworkAlert = () => {

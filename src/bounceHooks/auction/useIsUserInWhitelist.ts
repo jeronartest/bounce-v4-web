@@ -1,21 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
 
-import { PoolType } from 'api/pool/type'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useActiveWeb3React } from 'hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
 
-const useIsUserInWhitelist = () => {
-  const { data: poolInfo } = usePoolInfo()
+const useIsUserInWhitelist = (poolInfo: FixedSwapPoolProp) => {
+  const { account } = useActiveWeb3React()
 
-  const { address: account } = useAccount()
+  const { poolId, chainShortName } = useQueryParams()
 
-  const router = useRouter()
-  const { poolId, chainShortName } = router.query
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName)
+  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
 
   const [isUserInWhitelist, setIsUserInWhitelist] = useState<boolean>()
   const [isCheckingWhitelist, setisCheckingWhitelist] = useState(true)

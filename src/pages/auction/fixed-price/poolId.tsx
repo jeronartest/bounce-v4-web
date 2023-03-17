@@ -30,8 +30,12 @@ const FixedSwapPoolPageContent = () => {
           <CreatorInfoCard creatorUserInfo={poolInfo.creatorUserInfo} />
 
           <Stack sx={{ flex: 1 }} spacing={20}>
-            {/* {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />} */}
-            <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+            {account === poolInfo.creator ? (
+              <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+            ) : (
+              <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+            )}
+
             <ActionHistory />
           </Stack>
         </Box>

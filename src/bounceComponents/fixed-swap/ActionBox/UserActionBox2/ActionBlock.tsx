@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Box } from '@mui/material'
 import moment from 'moment'
 import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
@@ -12,12 +12,16 @@ import ClaimButton from './ClaimButton'
 import usePlaceBid from 'bounceHooks/auction/usePlaceBid'
 import useRegretBid from 'bounceHooks/auction/useRegretBid'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
-import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
-import { PoolStatus } from 'api/pool/type'
-import useIsUserClaimedPool from 'bounceHooks/auction/useIsUserClaimedPool'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useUserClaim from 'bounceHooks/auction/useUserClaim'
-import { fixToDecimals } from '@/utils/web3/number'
+import { fixToDecimals, formatNumber } from 'utils/number'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useActiveWeb3React } from 'hooks'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { CurrencyAmount } from 'constants/token'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { BigNumber } from 'bignumber.js'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -55,7 +59,7 @@ const getInitialAction = (
       if (isClaimed) {
         return 'CLAIMED'
       } else {
-        if (moment().unix() > claimAt) {
+        if (moment().unix() > (claimAt || 0)) {
           return 'NEED_TO_CLAIM'
         } else {
           return 'WAIT_FOR_DELAY'
@@ -70,12 +74,15 @@ const getInitialAction = (
 
 export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
-const ActionBlock = () => {
-  const { data: poolInfo } = usePoolInfo()
+const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
+  const { chainId } = useActiveWeb3React()
+  const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)
+  const chainOfPool = chainConfig?.ethChainId
 
-  const isCurrentChainEqualChainOfPool = useIsCurrentChainEqualChainOfPool()
-  const isJoined = useIsUserJoinedPool()
-  const isUserClaimed = useIsUserClaimedPool()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === chainOfPool, [chainId, chainOfPool])
+
+  const isJoined = useIsUserJoinedPool(poolInfo)
+  const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
 
   const [action, setAction] = useState<UserAction>()
   const [bidAmount, setBidAmount] = useState('')
@@ -84,30 +91,143 @@ const ActionBlock = () => {
   const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
   const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token0.decimals).toString() : ''
 
-  const { run: bid, loading: isBidding } = usePlaceBid({
-    onSuccess: () => {
-      setAction('BID_OR_REGRET')
-    }
-  })
-  const { run: regret, loading: isRegretting } = useRegretBid({
-    onRegretAll: () => {
-      console.log('onRegretAll')
-      setAction('FIRST_BID')
-    },
-    onRegretPart: () => {
-      console.log('onRegretPart')
-      setAction('BID_OR_REGRET')
-    }
-  })
-  const { run: claim, loading: isClaiming } = useUserClaim({
-    onSuccess: () => {
-      setAction('CLAIMED')
-    }
-  })
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedBidAmount)
+  const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedRegretAmount)
 
-  // console.log('action: ', action)
-  // console.log('isJoined: ', isJoined)
-  // console.log('isUserClaimed: ', isUserClaimed)
+  const { run: bid, submitted: placeBidSubmitted } = usePlaceBid(poolInfo)
+
+  const toBid = useCallback(async () => {
+    if (!currencyBidAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await bid(currencyBidAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          // TOTD ?
+          setAction('BID_OR_REGRET')
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid ${formatNumber(
+              new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(poolInfo.ratio),
+              {
+                unit: 0
+              }
+            )} ${poolInfo.token0.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [bid, currencyBidAmount, poolInfo.ratio, poolInfo.token0.symbol])
+
+  const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
+
+  const toRegret = useCallback(async () => {
+    if (!currencyRegretAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await regret(currencyRegretAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          setAction('BID_OR_REGRET')
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully refunded.`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toRegret
+      })
+    }
+  }, [currencyRegretAmount, regret])
+
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+
+  const toClaim = useCallback(async () => {
+    if (!currencyRegretAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await claim()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          setAction('CLAIMED')
+
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully claimed ${poolInfo.participant.currencySwappedAmount0?.toSignificant()} ${
+              poolInfo.token0.symbol
+            }`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toClaim
+      })
+    }
+  }, [claim, currencyRegretAmount, poolInfo.participant.currencySwappedAmount0, poolInfo.token0.symbol])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
@@ -146,10 +266,9 @@ const ActionBlock = () => {
           handleCancelButtonClick={() => {
             setAction('BID_OR_REGRET')
           }}
-          handlePlaceBid={() => {
-            bid(slicedBidAmount)
-          }}
-          isBidding={isBidding}
+          handlePlaceBid={toBid}
+          poolInfo={poolInfo}
+          isBidding={placeBidSubmitted.submitted}
         />
       )}
 
@@ -177,6 +296,7 @@ const ActionBlock = () => {
           regretAmount={regretAmount}
           slicedRegretAmount={slicedRegretAmount}
           setRegretAmount={setRegretAmount}
+          poolInfo={poolInfo}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}
@@ -188,14 +308,15 @@ const ActionBlock = () => {
 
       {action === 'CONFIRM_REGRET' && (
         <ConfirmRegret
+          poolInfo={poolInfo}
           regretAmount={regretAmount}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}
           handleRegret={() => {
-            regret(slicedRegretAmount)
+            toRegret()
           }}
-          isRegretting={isRegretting}
+          isRegretting={regretBidSubmitted.submitted}
         />
       )}
 
@@ -203,16 +324,9 @@ const ActionBlock = () => {
 
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
 
-      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton />}
+      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton poolInfo={poolInfo} getPoolInfo={getPoolInfo} />}
 
-      {action === 'NEED_TO_CLAIM' && (
-        <ClaimButton
-          onClick={() => {
-            claim()
-          }}
-          loading={isClaiming}
-        />
-      )}
+      {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />}
     </Box>
   )
 }

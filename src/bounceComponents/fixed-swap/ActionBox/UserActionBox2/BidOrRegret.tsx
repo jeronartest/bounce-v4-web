@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Button, Stack } from '@mui/material'
 
 export interface BidOrRegretBlockProps {

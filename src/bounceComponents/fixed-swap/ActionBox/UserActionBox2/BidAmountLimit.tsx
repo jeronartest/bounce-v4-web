@@ -1,14 +1,9 @@
-import React from 'react'
 import PoolInfoItem from '../../PoolInfoItem'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
-import { formatNumber } from '@/utils/web3/number'
-import { getUserSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
+import { formatNumber } from 'utils/number'
+import { getUserSwappedAmount1, getUserSwappedUnits1 } from 'utils/auction'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
-const BidAmountLimit = () => {
-  const { data: poolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-
+const BidAmountLimit = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const formatedMMaxAmount1PerWallet = poolInfo.maxAmount1PerWallet
     ? formatNumber(poolInfo.maxAmount1PerWallet, {
         unit: poolInfo.token1.decimals,
@@ -17,7 +12,7 @@ const BidAmountLimit = () => {
     : '-'
 
   const userSwappedAmount1 = getUserSwappedAmount1(
-    poolWithParticipantInfo?.participant.swappedAmount0,
+    poolInfo?.participant?.swappedAmount0 || 0,
     poolInfo.token0.decimals,
     poolInfo.token1.decimals,
     poolInfo.ratio

@@ -1,18 +1,16 @@
-import React from 'react'
 import { Typography } from '@mui/material'
+import { FixedSwapPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
 
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import { formatNumber } from '@/utils/web3/number'
+import { formatNumber } from 'utils/number'
 
 interface Token1ToRegretProps {
   regretAmount: string
+  poolInfo: FixedSwapPoolProp
 }
 
-const Token1ToRegret = ({ regretAmount }: Token1ToRegretProps) => {
-  const { data: poolInfo } = usePoolInfo()
-
+const Token1ToRegret = ({ regretAmount, poolInfo }: Token1ToRegretProps) => {
   const token1RegretAmount = regretAmount
     ? formatNumber(new BigNumber(regretAmount).times(poolInfo.ratio).toString(), {
         unit: 0,

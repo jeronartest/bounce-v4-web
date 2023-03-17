@@ -1,31 +1,17 @@
-import React from 'react'
-import { Box, Button, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Tooltip, Typography } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import { BigNumber } from 'bignumber.js'
 
-import { commify, parseUnits } from 'ethers/lib/utils.js'
-import Image from 'next/image'
-import TokenImage from 'bounceComponents/common/TokenImage'
-import { formatNumber } from '@/utils/web3/number'
-import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
-import NumberInput from 'bounceComponents/common/NumberInput'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/usePoolWithParticipantInfo'
+import { formatNumber } from 'utils/number'
 
-import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
+// import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
+import { FixedSwapPoolProp } from 'api/pool/type'
 
-const RegretBalance = () => {
-  const { data: poolInfo, loading: isPoolInfoLoading } = usePoolInfo()
-  const { data: poolWithParticipantInfo, loading: isPoolWithParticipantInfoLoading } = usePoolWithParticipantInfo()
-
-  const formattedRegretBalance =
-    !isPoolInfoLoading && !isPoolWithParticipantInfoLoading
-      ? poolWithParticipantInfo?.participant.swappedAmount0
-        ? formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-            unit: poolInfo.token0.decimals
-          })
-        : '0'
-      : '-'
+const RegretBalance = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+  const formattedRegretBalance = poolInfo?.participant.swappedAmount0
+    ? formatNumber(poolInfo?.participant.swappedAmount0, {
+        unit: poolInfo.token0.decimals
+      })
+    : '0'
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
