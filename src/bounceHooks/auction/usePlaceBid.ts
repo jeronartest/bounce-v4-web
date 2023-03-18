@@ -16,7 +16,7 @@ const usePlaceBid = (poolInfo: FixedSwapPoolProp) => {
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const isToken1Native = poolInfo.currencyCurrentTotal1.currency.isNative
+  const isToken1Native = poolInfo.currencySwappedTotal1.currency.isNative
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
   const run = useCallback(

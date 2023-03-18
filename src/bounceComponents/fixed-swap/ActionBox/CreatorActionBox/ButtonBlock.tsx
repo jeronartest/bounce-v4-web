@@ -23,13 +23,13 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
 
   const successDialogContent = useMemo(() => {
-    const hasToken0ToClaim = poolInfo.currencyCurrentTotal0.greaterThan('0')
-    const token1ToClaimText = `${poolInfo.currencyCurrentTotal1.toSignificant()} ${poolInfo.token1.symbol}`
+    const hasToken0ToClaim = poolInfo.currencySurplusTotal0.greaterThan('0')
+    const token1ToClaimText = `${poolInfo.currencySwappedTotal1.toSignificant()} ${poolInfo.token1.symbol}`
     const token0ToClaimText = hasToken0ToClaim
-      ? ` and ${poolInfo.currencyCurrentTotal0.toSignificant()} ${poolInfo.token0.symbol}`
+      ? ` and ${poolInfo.currencySurplusTotal0.toSignificant()} ${poolInfo.token0.symbol}`
       : ''
     return `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
-  }, [poolInfo.currencyCurrentTotal0, poolInfo.currencyCurrentTotal1, poolInfo.token0.symbol, poolInfo.token1.symbol])
+  }, [poolInfo.currencySurplusTotal0, poolInfo.currencySwappedTotal1, poolInfo.token0.symbol, poolInfo.token1.symbol])
 
   const toClaim = useCallback(
     async (isCancel: boolean) => {

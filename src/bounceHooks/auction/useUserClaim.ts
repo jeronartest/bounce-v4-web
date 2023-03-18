@@ -37,7 +37,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
       })
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: `Claim token ${poolInfo.currencyCurrentTotal0.currency.symbol}`,
+          summary: `Claim token ${poolInfo.currencySurplusTotal0.currency.symbol}`,
           userSubmitted: {
             account,
             action: `fixed_price_user_claim`,
@@ -49,7 +49,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
           transactionReceipt: response.wait(1)
         }
       })
-  }, [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyCurrentTotal0.currency.symbol, poolInfo.poolId])
+  }, [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencySurplusTotal0.currency.symbol, poolInfo.poolId])
 
   return { run, submitted }
 }

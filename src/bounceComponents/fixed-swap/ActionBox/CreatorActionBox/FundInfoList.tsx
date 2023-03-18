@@ -26,7 +26,7 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       <PoolInfoItem title="Successful sold amount" tip="The amount of tokens sold to participants.">
         <Stack direction="row" spacing={6} alignItems="center">
           <Typography>{poolInfo.currencySwappedAmount0.toSignificant()}</Typography>
-          <CurrencyLogo currency={poolInfo.currencyAmount0.currency} />
+          <CurrencyLogo currency={poolInfo.currencyAmountTotal0.currency} />
           <Typography>{poolInfo.token0.symbol}</Typography>
         </Stack>
       </PoolInfoItem>

@@ -118,12 +118,12 @@ export interface FixedSwapPool {
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {
-  currencyAmount0: CurrencyAmount
-  currencyAmount1: CurrencyAmount
+  currencyAmountTotal0: CurrencyAmount
+  currencyAmountTotal1: CurrencyAmount
   currencySwappedAmount0: CurrencyAmount
   currencyMaxAmount1PerWallet: CurrencyAmount
-  currencyCurrentTotal0: CurrencyAmount
-  currencyCurrentTotal1: CurrencyAmount
+  currencySurplusTotal0: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount
   ethChainId: ChainId
   participant: {
     address?: string

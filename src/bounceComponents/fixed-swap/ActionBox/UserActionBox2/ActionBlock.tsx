@@ -91,8 +91,8 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
   const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token0.decimals).toString() : ''
 
-  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedBidAmount)
-  const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedRegretAmount)
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount)
+  const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedRegretAmount)
 
   const { run: bid, submitted: placeBidSubmitted } = usePlaceBid(poolInfo)
 

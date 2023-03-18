@@ -49,12 +49,12 @@ const usePoolInfo = () => {
             ? CurrencyAmount.fromRawAmount(t0, rawPoolInfo.participant.swappedAmount0)
             : undefined
         },
-        currencyAmount0: CurrencyAmount.fromRawAmount(t0, rawPoolInfo.amountTotal0),
-        currencyAmount1: CurrencyAmount.fromRawAmount(t1, rawPoolInfo.amountTotal1),
+        currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, rawPoolInfo.amountTotal0),
+        currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, rawPoolInfo.amountTotal1),
         currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, rawPoolInfo.swappedAmount0),
         currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, rawPoolInfo.maxAmount1PerWallet),
-        currencyCurrentTotal0: CurrencyAmount.fromRawAmount(t0, rawPoolInfo.currentTotal0),
-        currencyCurrentTotal1: CurrencyAmount.fromRawAmount(t1, rawPoolInfo.amountTotal1),
+        currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, rawPoolInfo.currentTotal0),
+        currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, rawPoolInfo.currentTotal1),
         ethChainId: chainConfigInBackend.ethChainId
       }
     },

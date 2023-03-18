@@ -47,10 +47,10 @@ const BidButtonBlock = ({
     [bidAmount, poolInfo.token1.decimals]
   )
 
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyAmount1.currency)
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
   const currencySlicedBidAmount = useMemo(
-    () => CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, slicedBidAmount),
-    [poolInfo.currencyAmount1.currency, slicedBidAmount]
+    () => CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount),
+    [poolInfo.currencyAmountTotal1.currency, slicedBidAmount]
   )
 
   const isBalanceInsufficient = useMemo(() => {

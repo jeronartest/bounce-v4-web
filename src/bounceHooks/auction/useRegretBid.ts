@@ -43,7 +43,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Regret & reverse ${poolInfo.currencyAmount1.currency.symbol}`,
+            summary: `Regret & reverse ${poolInfo.currencyAmountTotal1.currency.symbol}`,
             userSubmitted: {
               account,
               action: `fixed_price_reverse`,
@@ -56,7 +56,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
           }
         })
     },
-    [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyAmount1.currency.symbol, poolInfo.poolId]
+    [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyAmountTotal1.currency.symbol, poolInfo.poolId]
   )
 
   return { run, submitted }

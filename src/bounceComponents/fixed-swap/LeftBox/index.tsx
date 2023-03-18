@@ -61,7 +61,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
             {poolInfo.currencyMaxAmount1PerWallet.toSignificant()}
           </PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
-            {poolInfo.currencyAmount0.toSignificant()} {poolInfo.token0.symbol}
+            {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}
           </PoolInfoItem>
           <PoolInfoItem title="Price per unit, $">
             {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
@@ -75,7 +75,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
                 {poolInfo.currencySwappedAmount0.toSignificant()} {poolInfo.token0.symbol}
               </Typography>
               <Typography component="span">
-                &nbsp;/ {poolInfo.currencyAmount0.toSignificant()} {poolInfo.token0.symbol}
+                &nbsp;/ {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}
               </Typography>
             </Box>
           </PoolInfoItem>

@@ -24,7 +24,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
   // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
-  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmount1.currency, bidAmount)
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, bidAmount)
   const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address)
 
   const toApprove = useCallback(async () => {

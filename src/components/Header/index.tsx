@@ -138,7 +138,7 @@ export default function Header() {
   const { pathname } = useLocation()
   const walletModalToggle = useWalletModalToggle()
 
-  const handleMobileMenueDismiss = useCallback(() => {
+  const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
 
@@ -225,7 +225,7 @@ export default function Header() {
 
   return (
     <>
-      <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenueDismiss} />
+      <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       <StyledAppBar>
         <Box display="flex" alignItems="center">

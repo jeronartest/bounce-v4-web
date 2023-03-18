@@ -19,11 +19,11 @@ interface BidAmountInputProps {
 
 const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputProps) => {
   const { account } = useActiveWeb3React()
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmount0.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal0.currency)
 
   const availableAmount1 = useMemo(
-    () => poolInfo.currencyAmount1.subtract(poolInfo.currencyCurrentTotal1),
-    [poolInfo.currencyAmount1, poolInfo.currencyCurrentTotal1]
+    () => poolInfo.currencyAmountTotal1.subtract(poolInfo.currencySwappedTotal1),
+    [poolInfo.currencyAmountTotal1, poolInfo.currencySwappedTotal1]
   )
 
   const hasBidLimit = useMemo(() => new BigNumber(poolInfo.maxAmount1PerWallet).gt(0), [poolInfo.maxAmount1PerWallet])
@@ -53,8 +53,14 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
               userSwappedAmount1Units.toString()
             )
           )
-        : poolInfo.currencyCurrentTotal1,
-    [hasBidLimit, poolInfo.currencyCurrentTotal1, poolInfo.currencyMaxAmount1PerWallet, userSwappedAmount1Units]
+        : poolInfo.currencyAmountTotal1.subtract(poolInfo.currencySwappedTotal1),
+    [
+      hasBidLimit,
+      poolInfo.currencyMaxAmount1PerWallet,
+      poolInfo.currencyAmountTotal1,
+      poolInfo.currencySwappedTotal1,
+      userSwappedAmount1Units
+    ]
   )
 
   const handleMaxButtonClick = useCallback(() => {
