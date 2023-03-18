@@ -21,11 +21,12 @@ import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkSelect from './NetworkSelect'
-import Search from 'bounceComponents/common/Header/Search'
+// import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { useLogout, useUserInfo } from 'state/users/hooks'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 interface TabContent {
   title: string
@@ -135,6 +136,7 @@ const LinksWrapper = muiStyled('div')(({ theme }) => ({
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { pathname } = useLocation()
+  const walletModalToggle = useWalletModalToggle()
 
   const handleMobileMenueDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -190,6 +192,14 @@ export default function Header() {
         }}
       >
         My Homepage
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
+          walletModalToggle()
+          setAnchorEl(null)
+        }}
+      >
+        My Connected Wallet
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -309,31 +319,35 @@ export default function Header() {
           </HideOnMobile>
         </Box>
 
-        <Stack direction={'row'} alignItems="center" spacing={24}>
-          <Search />
+        <Stack direction={'row'} alignItems="center" spacing={20}>
+          <NetworkSelect />
           <CreateBtn />
+          <Web3Status />
 
           <Stack direction="row" alignItems="center" spacing={20}>
             {token ? (
-              <div>
-                <Avatar
-                  component={'button'}
-                  id="userAvatar"
-                  src={
-                    (Number(userType) === USER_TYPE.USER ? userInfo?.avatar?.fileUrl : companyInfo?.avatar?.fileUrl) ||
-                    DefaultAvatarSVG
-                  }
-                  sx={{
-                    width: 52,
-                    height: 52,
-                    padding: 0,
-                    cursor: 'pointer',
-                    border: 0
-                  }}
-                  onClick={handleUserClick}
-                />
-                <UserDialog />
-              </div>
+              <>
+                <div>
+                  <Avatar
+                    component={'button'}
+                    id="userAvatar"
+                    src={
+                      (Number(userType) === USER_TYPE.USER
+                        ? userInfo?.avatar?.fileUrl
+                        : companyInfo?.avatar?.fileUrl) || DefaultAvatarSVG
+                    }
+                    sx={{
+                      width: 52,
+                      height: 52,
+                      padding: 0,
+                      cursor: 'pointer',
+                      border: 0
+                    }}
+                    onClick={handleUserClick}
+                  />
+                  <UserDialog />
+                </div>
+              </>
             ) : (
               <Button
                 variant="outlined"
@@ -354,8 +368,8 @@ export default function Header() {
         </Stack>
 
         <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
-          <NetworkSelect />
-          <Web3Status />
+          {/* <NetworkSelect />
+          <Web3Status /> */}
           <ShowOnMobile breakpoint="md">
             <IconButton
               sx={{

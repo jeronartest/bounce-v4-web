@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { useTheme, Box, styled, Button } from '@mui/material'
+import { styled, Button } from '@mui/material'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
@@ -9,7 +9,7 @@ import { TransactionDetails } from '../../state/transactions/reducer'
 // import { shortenAddress } from '../../utils'
 import WalletModal from 'components/Modal/WalletModal/index'
 // import Spinner from 'components/Spinner'
-import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
+// import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 const ActionButton = styled(Button)(({ theme }) => ({
@@ -23,12 +23,12 @@ const ActionButton = styled(Button)(({ theme }) => ({
   }
 }))
 
-const Web3StatusIcon = styled(Web3StatusIconSvg)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    height: '24px',
-    width: '24px'
-  }
-}))
+// const Web3StatusIcon = styled(Web3StatusIconSvg)(({ theme }) => ({
+//   [theme.breakpoints.down('sm')]: {
+//     height: '24px',
+//     width: '24px'
+//   }
+// }))
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -44,29 +44,29 @@ function Web3StatusInner() {
   // }, [allTransactions])
   // const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const toggleWalletModal = useWalletModalToggle()
-  const theme = useTheme()
   const isDownSm = useBreakpoint()
 
   if (account) {
     return (
-      <Box
-        sx={{ cursor: 'pointer', marginBottom: { xs: 0, sm: 15 }, mt: { xs: 0, sm: 8 } }}
-        onClick={toggleWalletModal}
-      >
-        <Box
-          sx={{
-            // height: { xs: 24, sm: 36 },
-            // width: { xs: 100, sm: 180 },
-            borderRadius: '46px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: theme.palette.background.default
-          }}
-        >
-          <Web3StatusIcon />
-        </Box>
-      </Box>
+      <></>
+      // <Box
+      //   sx={{ cursor: 'pointer', marginBottom: { xs: 0, sm: 15 }, mt: { xs: 0, sm: 8 } }}
+      //   onClick={toggleWalletModal}
+      // >
+      //   <Box
+      //     sx={{
+      //       // height: { xs: 24, sm: 36 },
+      //       // width: { xs: 100, sm: 180 },
+      //       borderRadius: '46px',
+      //       display: 'flex',
+      //       justifyContent: 'space-between',
+      //       alignItems: 'center',
+      //       backgroundColor: theme.palette.background.default
+      //     }}
+      //   >
+      //     <Web3StatusIcon />
+      //   </Box>
+      // </Box>
     )
   } else if (error) {
     return (

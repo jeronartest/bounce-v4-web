@@ -13,7 +13,7 @@ export default function NetworkSelect() {
   if (!chainId || !account) return null
 
   return (
-    <Box sx={{ width: '130', margin: { xs: '0', sm: '8px 0 15px' } }}>
+    <Box sx={{ width: '130' }}>
       <Select
         defaultValue={chainId ?? 3}
         value={chainId ?? 3}
@@ -21,11 +21,14 @@ export default function NetworkSelect() {
         height={isDownSm ? '24px' : '36px'}
         style={{
           background: 'transparent',
-          border: '1px solid rgba(0, 0, 0, 0.1)',
+          border: '1px solid var(--ps-gray-900)',
           '& .Mui-disabled.MuiSelect-select.MuiInputBase-input': {
             paddingRight: isDownSm ? 0 : 10,
             color: theme => theme.palette.text.primary,
             WebkitTextFillColor: theme => theme.palette.text.primary
+          },
+          '&.Mui-focused': {
+            borderColor: 'inherit'
           }
         }}
       >
