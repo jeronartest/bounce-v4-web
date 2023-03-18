@@ -76,7 +76,7 @@ const BidButtonBlock = ({
           stackSx={{ mt: 24 }}
           onCancel={handleCancelButtonClick}
         >
-          <Button variant="contained" fullWidth sx={{ mt: 24 }} disabled>
+          <Button variant="contained" fullWidth disabled>
             Limit Exceeded
           </Button>
         </BidButtonGroup>

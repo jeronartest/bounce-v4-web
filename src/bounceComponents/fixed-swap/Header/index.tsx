@@ -66,9 +66,9 @@ const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoo
             py: 6
           }}
         >
-          <Image src={ChainListMap[ethChainId]?.logo || ''} width={20} height={20} />
+          <Image src={ChainListMap[poolInfo.ethChainId]?.logo || ''} width={20} height={20} />
           <Typography variant="body1" sx={{ fontSize: 16, lineHeight: '20px' }}>
-            {ChainListMap[ethChainId]?.name}
+            {ChainListMap[poolInfo.ethChainId]?.name}
           </Typography>
         </Box>
       </Box>

@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
 import Image from 'components/Image'
@@ -12,6 +12,8 @@ import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import { shortenAddress } from 'utils'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import { addTokenToWallet } from 'utils/addTokenToWallet'
+import { useActiveWeb3React } from 'hooks'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -20,6 +22,7 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
 )
 
 const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
+  const { chainId } = useActiveWeb3React()
   const swapedPercent = poolInfo?.swappedAmount0
     ? new BigNumber(poolInfo.swappedAmount0).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
@@ -50,6 +53,20 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
               <Typography>{poolInfo.token0.symbol}</Typography>
             </Stack>
           </PoolInfoItem>
+          {chainId === poolInfo.ethChainId && (
+            <Button
+              variant="outlined"
+              onClick={() =>
+                addTokenToWallet(poolInfo.token0.address, poolInfo.token0.symbol, poolInfo.token0.decimals)
+              }
+              sx={{
+                width: 140,
+                height: 20
+              }}
+            >
+              Add To Wallet
+            </Button>
+          )}
         </Stack>
 
         <Stack spacing={10}>
@@ -58,7 +75,9 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
           <PoolInfoItem title="Auction type">Fixed-Price</PoolInfoItem>
           <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
           <PoolInfoItem title="Allocation per Wallet">
-            {poolInfo.currencyMaxAmount1PerWallet.toSignificant()}
+            {poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')
+              ? poolInfo.currencyMaxAmount1PerWallet.toSignificant()
+              : '-'}
           </PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
             {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}

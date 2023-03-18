@@ -31,7 +31,7 @@ const Bid = ({
 }: BidProps) => {
   const isAllocationLimitExist = checkIfAllocationLimitExist(poolInfo.maxAmount1PerWallet)
   const { account } = useActiveWeb3React()
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal0.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
 
   return (
     <>
