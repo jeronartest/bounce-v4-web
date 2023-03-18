@@ -1,9 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material'
 import Image from 'components/Image'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
-import { ChainId, ChainListMap } from 'constants/chain'
+import { ChainListMap } from 'constants/chain'
 import { FixedSwapPoolProp } from 'api/pool/type'
 
 const styles = {
@@ -16,9 +15,7 @@ const styles = {
 }
 
 const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }): JSX.Element => {
-  const ethChainId = useChainConfigInBackend('id', poolInfo?.chainId || '')?.ethChainId as ChainId
-
-  if (!poolInfo || !ethChainId) return <></>
+  if (!poolInfo.ethChainId) return <></>
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Stack direction="row" spacing={20} sx={{ alignItems: 'center' }}>

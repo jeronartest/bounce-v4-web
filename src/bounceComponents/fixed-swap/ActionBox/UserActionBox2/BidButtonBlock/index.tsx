@@ -6,7 +6,6 @@ import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
 import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsLimitExceeded'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
@@ -35,12 +34,8 @@ const BidButtonBlock = ({
   poolInfo,
   handleCancelButtonClick
 }: BidButtonBlockProps) => {
-  const chainConfig = useChainConfigInBackend('id', poolInfo.chainId)
   const { account, chainId } = useActiveWeb3React()
-  const isCurrentChainEqualChainOfPool = useMemo(
-    () => chainConfig?.ethChainId === chainId,
-    [chainConfig?.ethChainId, chainId]
-  )
+  const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
 
   const slicedBidAmount = useMemo(
     () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
@@ -63,7 +58,7 @@ const BidButtonBlock = ({
   if (!isCurrentChainEqualChainOfPool) {
     return (
       <>
-        <SwitchNetworkButton targetChain={chainConfig?.ethChainId || 1} />
+        <SwitchNetworkButton targetChain={poolInfo.ethChainId || 1} />
         <WrongNetworkAlert />
       </>
     )

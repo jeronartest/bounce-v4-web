@@ -131,6 +131,7 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     regreted?: boolean
     swappedAmount0?: string
     currencySwappedAmount0: CurrencyAmount | undefined
+    currencySwappedAmount1: CurrencyAmount | undefined
   }
 }
 

@@ -1,10 +1,8 @@
 import SwitchNetworkButton from '../../SwitchNetworkButton'
 import ConnectWalletButton from './ConnectWalletButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useCreatorClaim } from 'bounceHooks/auction/useCreatorClaim'
 import { useActiveWeb3React } from 'hooks'
-import { ChainId } from 'constants/chain'
 import { useCallback, useMemo } from 'react'
 import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
 import { LoadingButton } from '@mui/lab'
@@ -14,9 +12,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
-  const chainConfig = useChainConfigInBackend('id', poolInfo.chainId)
-  const chainOfPool = chainConfig?.ethChainId as ChainId
-  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === chainOfPool, [chainId, chainOfPool])
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
   const isAllTokenSwapped = useIsAllTokenSwapped(poolInfo)
 

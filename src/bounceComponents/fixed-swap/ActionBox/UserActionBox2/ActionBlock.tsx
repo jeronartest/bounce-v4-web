@@ -15,7 +15,6 @@ import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useUserClaim from 'bounceHooks/auction/useUserClaim'
 import { fixToDecimals, formatNumber } from 'utils/number'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { CurrencyAmount } from 'constants/token'
@@ -76,10 +75,8 @@ export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
 const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
   const { chainId } = useActiveWeb3React()
-  const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)
-  const chainOfPool = chainConfig?.ethChainId
 
-  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === chainOfPool, [chainId, chainOfPool])
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
   const isJoined = useIsUserJoinedPool(poolInfo)
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
