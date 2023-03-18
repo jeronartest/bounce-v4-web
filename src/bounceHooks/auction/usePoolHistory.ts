@@ -31,7 +31,7 @@ const usePoolHistory = () => {
     {
       // cacheKey: `POOL_HISTORY_${account}`,
       ready: !!poolId && !!chainConfigInBackend?.id,
-      // pollingInterval: 10000,
+      pollingInterval: 30000,
       refreshDeps: [account]
     }
   )

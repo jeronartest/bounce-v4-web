@@ -85,7 +85,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
         sx={{ mt: 12 }}
         fullWidth
         value={bidAmount}
-        placeholder={`Enter ${poolInfo.token0.symbol} amount`}
+        placeholder={`Enter ${poolInfo.token1.symbol} amount`}
         onUserInput={value => {
           setBidAmount(value)
         }}
