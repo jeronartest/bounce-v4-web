@@ -7,7 +7,7 @@ export interface ClaimButtonProps {
 
 const ClaimButton = ({ onClick, loading }: ClaimButtonProps) => {
   return (
-    <LoadingButton variant="contained" fullWidth onClick={onClick} loading={loading}>
+    <LoadingButton loadingPosition="start" variant="contained" fullWidth onClick={onClick} loading={loading}>
       Claim Token
     </LoadingButton>
   )

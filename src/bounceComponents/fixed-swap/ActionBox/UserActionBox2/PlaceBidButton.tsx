@@ -25,7 +25,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
 
   // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, bidAmount)
-  const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address)
+  const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address, true)
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -38,11 +38,14 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
         })
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
           hideDialogConfirmation()
           onClick()
         })
-      })
-      ret.catch()
+        .catch()
     } catch (error) {
       const err: any = error
       hideDialogConfirmation()
@@ -60,21 +63,21 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
   if (approvalState !== ApprovalState.APPROVED) {
     if (approvalState === ApprovalState.PENDING) {
       return (
-        <LoadingButton variant="contained" fullWidth disabled sx={{ ...sx }}>
+        <LoadingButton loadingPosition="start" variant="contained" fullWidth loading sx={{ ...sx }}>
           Approving use of {poolInfo.token1?.symbol} <Dots />
         </LoadingButton>
       )
     }
     if (approvalState === ApprovalState.UNKNOWN) {
       return (
-        <LoadingButton variant="contained" fullWidth disabled sx={{ ...sx }}>
+        <LoadingButton loadingPosition="start" variant="contained" fullWidth loading sx={{ ...sx }}>
           Loading <Dots />
         </LoadingButton>
       )
     }
     if (approvalState === ApprovalState.NOT_APPROVED) {
       return (
-        <LoadingButton variant="contained" onClick={toApprove} fullWidth disabled sx={{ ...sx }}>
+        <LoadingButton variant="contained" onClick={toApprove} fullWidth sx={{ ...sx }}>
           Approve use of {poolInfo.token1?.symbol}
         </LoadingButton>
       )
@@ -86,6 +89,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
       variant="contained"
       fullWidth
       sx={{ ...sx }}
+      loadingPosition="start"
       loading={loading}
       disabled={!bidAmount || (!isUserInWhitelist && !isCheckingWhitelist)}
       onClick={onClick}

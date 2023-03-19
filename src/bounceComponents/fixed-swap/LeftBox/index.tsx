@@ -76,8 +76,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
           <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
           <PoolInfoItem title="Allocation per Wallet">
             {poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')
-              ? poolInfo.currencyMaxAmount1PerWallet.toSignificant()
-              : '-'}
+              ? poolInfo.currencyMaxAmount1PerWallet.toSignificant() + ' ' + poolInfo.token1.symbol
+              : 'No Limit'}
           </PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
             {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}

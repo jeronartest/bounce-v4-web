@@ -76,7 +76,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   }
 
   if (!isCurrentChainEqualChainOfPool) {
-    return <SwitchNetworkButton targetChain={chainOfPool} />
+    return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
 
   if (poolInfo.status === PoolStatus.Closed && !poolInfo.creatorClaimed) {
@@ -84,10 +84,11 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       <LoadingButton
         variant="contained"
         fullWidth
+        loadingPosition="start"
         loading={submitted.complete || submitted.submitted}
         onClick={() => toClaim(false)}
       >
-        {!isAllTokenSwapped ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'}
+        <span>{!isAllTokenSwapped ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'}</span>
       </LoadingButton>
     )
   }
@@ -97,6 +98,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       <LoadingButton
         variant="outlined"
         fullWidth
+        loadingPosition="start"
         sx={{ mt: 24, mb: 12 }}
         loading={submitted.complete || submitted.submitted}
         onClick={() => toClaim(true)}

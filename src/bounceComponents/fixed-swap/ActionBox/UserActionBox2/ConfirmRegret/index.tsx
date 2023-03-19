@@ -35,7 +35,7 @@ const ConfirmRegret = ({
     : '0'
 
   return (
-    <Box sx={{ mt: 62 }}>
+    <Box sx={{ mt: 24 }}>
       <Box sx={{ border: '1px solid #D1D4D8', borderRadius: 20, px: 16, py: 16 }}>
         <Typography variant="h5">Confirmation</Typography>
         <PoolInfoItem title="Regret amount" sx={{ mt: 8 }}>

@@ -237,7 +237,13 @@ const CreatePoolButton = () => {
   ])
 
   return (
-    <LoadingButton fullWidth variant="contained" disabled={confirmBtn.disabled} onClick={confirmBtn.run}>
+    <LoadingButton
+      fullWidth
+      variant="contained"
+      loadingPosition="start"
+      disabled={confirmBtn.disabled}
+      onClick={confirmBtn.run}
+    >
       {confirmBtn.text || 'Confirm'}
     </LoadingButton>
   )

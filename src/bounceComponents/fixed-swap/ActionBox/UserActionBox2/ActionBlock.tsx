@@ -184,7 +184,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
 
   const toClaim = useCallback(async () => {
-    if (!currencyRegretAmount) return
     showRequestConfirmDialog()
     try {
       const { transactionReceipt } = await claim()
@@ -224,7 +223,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         onAgain: toClaim
       })
     }
-  }, [claim, currencyRegretAmount, poolInfo.participant.currencySwappedAmount0, poolInfo.token0.symbol])
+  }, [claim, poolInfo.participant.currencySwappedAmount0, poolInfo.token0.symbol])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
