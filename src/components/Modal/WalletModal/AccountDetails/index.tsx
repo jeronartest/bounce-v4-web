@@ -71,12 +71,12 @@ export default function AccountDetails({
 
   return (
     <>
-      <Box display="grid" width="100%" padding="16px" gridTemplateRows="50px 20px 20px" gap="12px" marginBottom="20px">
+      <Box display="grid" width="100%" padding="16px" gridTemplateRows="50px 20px 20px" gap="12px">
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
-          marginBottom="20px"
+          marginBottom="10px"
           color={theme.palette.text.secondary}
         >
           {formatConnectorName()}
@@ -118,10 +118,11 @@ export default function AccountDetails({
         </Box>
       </Box>
       <Box display="flex" gap="10px" width="100%" justifyContent="center">
-        <Button variant="outlined" onClick={toggleWalletModal}>
+        <Button size={'small'} variant="outlined" onClick={toggleWalletModal}>
           Close
         </Button>
         <Button
+          size={'small'}
           onClick={() => {
             openOptions()
           }}
@@ -132,13 +133,21 @@ export default function AccountDetails({
       <OutlinedCard width="100%" padding="20px">
         {!!pendingTransactions.length || !!confirmedTransactions.length ? (
           <Box display="grid" gap="16px" width="100%">
-            <Box display="flex" justifyContent="space-between" width="100%" fontWeight={500}>
+            <Box display="flex" justifyContent="space-between" alignItems={'center'} width="100%" fontWeight={500}>
               <Typography variant="inherit">Recent Transactions</Typography>
-              <Button variant="text" onClick={clearAllTransactionsCallback}>
+              <Button size="small" variant="text" onClick={clearAllTransactionsCallback}>
                 (clear all)
               </Button>
             </Box>
-            <Box display="grid">
+            <Box
+              display="grid"
+              sx={{
+                maxHeight: '200px',
+                paddingRight: '15px',
+                marginRight: '-15px',
+                overflowY: 'auto'
+              }}
+            >
               {renderTransactions(pendingTransactions)}
               {renderTransactions(confirmedTransactions)}
             </Box>
