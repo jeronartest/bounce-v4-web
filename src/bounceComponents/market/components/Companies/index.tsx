@@ -31,7 +31,7 @@ import { ReactComponent as CheckNoTableSVG } from 'assets/imgs/companies/checkNo
 import { getCompanyInformation } from 'api/market'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import ProjectCardSvg from 'bounceComponents/common/ProjectCardSvg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -279,7 +279,7 @@ const Companies: React.FC<ICompaniesProps> = ({ userName }) => {
                               <Typography variant="body2">
                                 {row.companyState === 0
                                   ? '-'
-                                  : getLabel(row.companyState, 'state', optionDatas?.companyStateOpt)}
+                                  : getLabelById(row.companyState, 'state', optionDatas?.companyStateOpt)}
                               </Typography>
                             </Typography>
                           </Box>

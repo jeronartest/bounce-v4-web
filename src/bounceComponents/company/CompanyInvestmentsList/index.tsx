@@ -2,7 +2,7 @@ import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React from 'react'
 import dayjs from 'dayjs'
 import { ICompanyInvestmentsListItems } from 'api/company/type'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
@@ -81,7 +81,7 @@ const CompanyInvestmentsList: React.FC<ICompanyInvestmentsListProps> = ({
               variant="body2"
               sx={{ background: ' rgba(23, 23, 23, 0.05)', borderRadius: 10, padding: '6px 8px' }}
             >
-              {getLabel(v?.investmentType, 'investment_type', optionDatas?.investmentTypeOpt)}
+              {getLabelById(v?.investmentType, 'investment_type', optionDatas?.investmentTypeOpt)}
             </Typography>
           </Stack>
           <Typography variant="body1" sx={{ flex: '1 1' }}>

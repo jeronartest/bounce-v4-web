@@ -183,7 +183,7 @@ export function getCurrentTimeStamp(date?: Date | string | number) {
   return Number(((date ? new Date(date) : new Date()).getTime() / 1000).toFixed())
 }
 
-export const getLabel = (id: number | string, key: string, list: any[]) => {
+export const getLabelById = (id: number | string, key: string, list: any[]) => {
   if (!id || !key || !list?.length) return ''
   const item = list.find(v => Number(v.id) === Number(id))
   return item ? item[key] : ''
@@ -209,7 +209,7 @@ export const getPrimaryRoleLabel = (id: number | string, list: any[]) => {
     temp.push(...v?.child)
   })
   if (!temp.length) return ''
-  return getLabel(id, 'level2Name', temp)
+  return getLabelById(id, 'level2Name', temp)
 }
 
 export const getfilesize = (size: number): string => {

@@ -8,7 +8,7 @@ import { ReactComponent as CommentSVG } from 'assets/imgs/comment.svg'
 import { ReactComponent as EditSVG } from 'assets/imgs/components/edit.svg'
 import { ILikeUnlikeRes } from 'api/idea/type'
 import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar_ideas.svg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { VerifyStatus } from 'api/profile/type'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
@@ -55,7 +55,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   const navigate = useNavigate()
   const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes | undefined>(likeAmount)
   const getPublicPoleLable = (publicRoleId: number) => {
-    return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)
+    return getLabelById(publicRoleId, 'role', optionDatas?.publicRoleOpt)
   }
   const hasRole = useMemo(() => {
     return publicRole && publicRole.length > 0
@@ -177,7 +177,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
               }}
             >
               <Typography variant="body2" sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                {getLabel(companyState, 'state', optionDatas?.companyStateOpt)}
+                {getLabelById(companyState, 'state', optionDatas?.companyStateOpt)}
               </Typography>
             </Box>
           )}

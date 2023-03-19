@@ -13,7 +13,7 @@ import React from 'react'
 import { show } from '@ebay/nice-modal-react'
 import InvestorsForm from '../InvestorsForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { ICompanyInvestorsListItems } from 'api/company/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
@@ -93,7 +93,7 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ list, onEdit, onDelete }
             </Stack>
           </ListItemText>
           <ListItemText
-            primary={getLabel(v.investorType, 'investorType', optionDatas?.investorTypeOpt)}
+            primary={getLabelById(v.investorType, 'investorType', optionDatas?.investorTypeOpt)}
             primaryTypographyProps={{ variant: 'body1' }}
             sx={{ flex: '1 1' }}
           />

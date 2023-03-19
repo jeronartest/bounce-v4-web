@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import { educationItems } from 'api/profile/type'
 import { IPager } from 'api/type'
 import { getResumeEducation } from 'api/profile'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -109,7 +109,7 @@ const ProfileEducation: React.FC<IProfileEducationProps> = ({ personalInfoId }) 
                 }
                 spacing={8}
               >
-                <Typography variant="body2">{getLabel(v.degree, 'degree', optionDatas?.degreeOpt)}</Typography>
+                <Typography variant="body2">{getLabelById(v.degree, 'degree', optionDatas?.degreeOpt)}</Typography>
                 <Typography variant="body2">{v.major}</Typography>
                 <Typography variant="body2">
                   {`${dayjs(v.startTime * 1000).format('YYYY')}-${dayjs(v.endTime * 1000).format('YYYY')}(${dayjs(

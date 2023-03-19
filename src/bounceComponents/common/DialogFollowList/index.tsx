@@ -8,7 +8,7 @@ import { VerifyStatus } from 'api/profile/type'
 import { USER_TYPE, FollowListType } from 'api/user/type'
 import { ReactComponent as CloseIcon } from 'assets/imgs/user/close.svg'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { getUserFollowedCount, getUserFollow, getUserFollowUser } from 'api/user'
 // import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
@@ -211,7 +211,7 @@ const DialogFollowList: React.FC<IProfileOverviewLayout> = ({
     return navigate(`/company/summary?id=${item?.userId}`)
   }
   const getPublicRoleLable = publicRoleId => {
-    return getLabel(publicRoleId, 'role', optionDatas?.publicRoleOpt)
+    return getLabelById(publicRoleId, 'role', optionDatas?.publicRoleOpt)
   }
   return (
     <DialogStyle onClose={handleClose} open={openFollow} fullWidth={true} maxWidth={'md'}>

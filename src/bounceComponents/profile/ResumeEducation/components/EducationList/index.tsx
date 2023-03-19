@@ -17,7 +17,7 @@ import { show } from '@ebay/nice-modal-react'
 import EducationForm from '../EducationForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { educationItems } from 'api/profile/type'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import EducationDefaultSVG from 'assets/imgs/defaultAvatar/education.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -105,7 +105,7 @@ const EducationList: React.FC<IEducationListProps> = ({ list, onEdit, onDelete }
                     }
                     spacing={8}
                   >
-                    <Typography variant="body2">{getLabel(v.degree, 'degree', optionDatas?.degreeOpt)}</Typography>
+                    <Typography variant="body2">{getLabelById(v.degree, 'degree', optionDatas?.degreeOpt)}</Typography>
                     {/* <Typography variant="body2">{v.major}</Typography> */}
                     <Typography variant="body2">
                       {`${dayjs(v.startTime * 1000).format('YYYY')}-${dayjs(v.endTime * 1000).format('YYYY')}(${dayjs(

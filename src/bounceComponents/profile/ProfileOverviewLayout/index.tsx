@@ -14,7 +14,7 @@ import { ReactComponent as UploadIcon } from 'assets/imgs/profile/bg-upload.svg'
 import CropImg from 'bounceComponents/common/DialogCropImg'
 import DialogFollowList, { FollowerItem } from 'bounceComponents/common/DialogFollowList'
 
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { getUserInfo, getUserFollowedCount, getUserFollow, getUserFollowUser } from 'api/user'
 // import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
@@ -367,7 +367,7 @@ const ProfileOverviewLayout: React.FC<IProfileOverviewLayout> = ({ children, ext
 
                 <Stack direction={'row'} alignItems="center" spacing={12} mt={16}>
                   {personalInfo?.publicRole?.map(item => {
-                    const label = getLabel(item, 'role', optionDatas?.publicRoleOpt)
+                    const label = getLabelById(item, 'role', optionDatas?.publicRoleOpt)
                     return (
                       <Box key={item} sx={{ padding: '7px 12px', background: 'var(--ps-gray-50)', borderRadius: 16 }}>
                         {label}

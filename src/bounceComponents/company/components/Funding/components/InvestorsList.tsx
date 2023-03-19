@@ -1,6 +1,6 @@
 import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import NoData from 'bounceComponents/common/NoData'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
@@ -82,7 +82,7 @@ const InvestorsList: React.FC<IInvestorsListProps> = ({ dataList, optionDatas })
                 <VerifiedIcon isVerify={item?.isVerify} />
               </Stack>
               <Typography variant="body2" color={'var(--ps-gray-700)'}>
-                {getLabel(item?.investorType, 'investorType', optionDatas?.investorTypeOpt)}
+                {getLabelById(item?.investorType, 'investorType', optionDatas?.investorTypeOpt)}
               </Typography>
             </Stack>
           </Grid>

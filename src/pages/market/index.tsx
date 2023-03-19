@@ -10,7 +10,7 @@ import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 // import NFTLaunchpadCard from 'bounceComponents/common/AuctionCard/NFTLaunchpadCard'
 import { getPools } from 'api/market'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
 // import { formatNumber } from '@/utils/web3/number'
@@ -177,7 +177,7 @@ const Market: React.FC = ({}) => {
                         to={routes.auction.fixedPrice
                           .replace(
                             ':chainShortName',
-                            getLabel(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                            getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
                           )
                           .replace(':poolId', fixedSwaptem.poolId)}
                       >
@@ -198,7 +198,7 @@ const Market: React.FC = ({}) => {
                                   fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
                                     ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
                                         return (
-                                          getLabel(item, 'role', optionDatas?.publicRoleOpt) +
+                                          getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
                                           `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
                                         )
                                       })

@@ -1,7 +1,7 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
 import React from 'react'
 import dayjs from 'dayjs'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
 import { IInvestmentItems } from 'api/profile/type'
 import CompanyDefaultSVG from 'assets/imgs/defaultAvatar/company.svg'
@@ -87,7 +87,7 @@ const ProfileInvestmentsList: React.FC<IProfileInvestmentsListProps> = ({
               variant="body2"
               sx={{ background: ' rgba(23, 23, 23, 0.05)', borderRadius: 10, padding: '6px 8px' }}
             >
-              {getLabel(v.investType, 'investment_type', optionDatas?.investmentTypeOpt)}
+              {getLabelById(v.investType, 'investment_type', optionDatas?.investmentTypeOpt)}
             </Typography>
           </Stack>
           <Typography variant="body1" sx={{ flex: '1 1' }}>

@@ -1,7 +1,7 @@
 import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
 import Image from 'components/Image'
-import { ReactNode, useCallback, useMemo } from 'react'
-import { show, hide } from '@ebay/nice-modal-react'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
 import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
 import {
@@ -19,7 +19,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useActiveWeb3React } from 'hooks'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainListMap } from 'constants/chain'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
@@ -27,7 +27,6 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
-import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import { TransactionReceipt } from '@ethersproject/providers'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import {
@@ -36,6 +35,7 @@ import {
   showRequestConfirmDialog,
   showWaitingTxDialog
 } from 'utils/auction'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -45,6 +45,8 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
     {children}
   </Stack>
 )
+
+type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
   const { redirect } = useQueryParams()
@@ -59,6 +61,8 @@ const CreatePoolButton = () => {
   const values = useValuesState()
   const createFixedSwapPool = useCreateFixedSwapPool()
   const optionDatas = useOptionDatas()
+  const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
 
   const auctionPoolSizeAmount = useMemo(
     () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
@@ -73,7 +77,9 @@ const CreatePoolButton = () => {
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
     try {
+      setButtonCommitted('wait')
       const { getPoolId, transactionReceipt } = await createFixedSwapPool()
+      setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
         if (redirect && typeof redirect === 'string') {
@@ -91,6 +97,7 @@ const CreatePoolButton = () => {
         })
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
+          setButtonCommitted('success')
         })
       })
       ret
@@ -104,7 +111,7 @@ const CreatePoolButton = () => {
             }
             navigate(
               routes.auction.fixedPrice
-                .replace(':chainShortName', getLabel(auctionInChainId, 'ethChainId', optionDatas?.chainInfoOpt))
+                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
                 .replace(':poolId', poolId)
             )
           }
@@ -124,7 +131,8 @@ const CreatePoolButton = () => {
         .catch()
     } catch (error) {
       const err: any = error
-      hide(DialogConfirmation)
+      hideDialogConfirmation()
+      setButtonCommitted(undefined)
       show(DialogTips, {
         iconType: 'error',
         againBtn: 'Try Again',
@@ -134,7 +142,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [auctionInChainId, createFixedSwapPool, navigate, optionDatas?.chainInfoOpt, redirect])
+  }, [chainConfigInBackend?.shortName, createFixedSwapPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -178,6 +186,7 @@ const CreatePoolButton = () => {
 
   const confirmBtn: {
     disabled?: boolean
+    loading?: boolean
     text?: string
     run?: () => void
   } = useMemo(() => {
@@ -193,6 +202,18 @@ const CreatePoolButton = () => {
         run: () => switchNetwork(auctionInChainId)
       }
     }
+    if (buttonCommitted !== undefined) {
+      if (buttonCommitted === 'success') {
+        return {
+          text: 'Success',
+          disabled: true
+        }
+      }
+      return {
+        text: 'Confirm',
+        loading: true
+      }
+    }
     if (!auctionAccountBalance || !auctionPoolSizeAmount || !auctionAccountBalance.greaterThan(auctionPoolSizeAmount)) {
       return {
         text: 'Insufficient Balance',
@@ -203,13 +224,13 @@ const CreatePoolButton = () => {
       if (approvalState === ApprovalState.PENDING) {
         return {
           text: `Approving use of ${currencyFrom?.symbol} ...`,
-          disabled: true
+          loading: true
         }
       }
       if (approvalState === ApprovalState.UNKNOWN) {
         return {
           text: 'Loading...',
-          disabled: true
+          loading: true
         }
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
@@ -228,6 +249,7 @@ const CreatePoolButton = () => {
     auctionAccountBalance,
     auctionInChainId,
     auctionPoolSizeAmount,
+    buttonCommitted,
     chainId,
     currencyFrom?.symbol,
     switchNetwork,
@@ -241,6 +263,7 @@ const CreatePoolButton = () => {
       fullWidth
       variant="contained"
       loadingPosition="start"
+      loading={confirmBtn.loading}
       disabled={confirmBtn.disabled}
       onClick={confirmBtn.run}
     >

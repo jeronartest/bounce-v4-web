@@ -16,7 +16,7 @@ import { IIdeasListData, IIdeasListItems } from 'api/idea/type'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 // import NoData from 'bounceComponents/common/NoData'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import { routes } from 'constants/routes'
@@ -175,7 +175,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                     href={routes.auction.fixedPrice
                       .replace(
                         ':chainShortName',
-                        getLabel(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                        getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt)
                       )
                       .replace(':poolId', auctionPoolItem.poolId)}
                   >

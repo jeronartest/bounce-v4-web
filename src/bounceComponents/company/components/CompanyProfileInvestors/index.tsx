@@ -5,7 +5,7 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import ViewMoreListBox from 'bounceComponents/company/ViewMoreListBox'
 import { getCompanyInvestors } from 'api/company'
 import { ICompanyInvestorsListItems, ICompanyListItems } from 'api/company/type'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
@@ -134,7 +134,7 @@ const CompanyProfileInvestors: React.FC<ICompanyProfileInvestorsProps> = ({ targ
                 </Stack>
 
                 <Typography variant="body1" color={'var(--ps-gray-700)'} fontSize={12}>
-                  {getLabel(item?.investorType, 'investorType', optionDatas?.investorTypeOpt)}
+                  {getLabelById(item?.investorType, 'investorType', optionDatas?.investorTypeOpt)}
                 </Typography>
               </Stack>
             </Grid>

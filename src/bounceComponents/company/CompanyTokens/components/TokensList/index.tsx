@@ -4,7 +4,7 @@ import React from 'react'
 import { show } from '@ebay/nice-modal-react'
 import TokensForm from '../TokensForm'
 import { ReactComponent as EditBtnSVG } from 'assets/imgs/profile/investments/edit-btn.svg'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 import { ICompanyTokensListItems } from 'api/company/type'
 import MuiDialog from 'bounceComponents/common/Dialog'
 import TokenDefaultSVG from 'assets/imgs/defaultAvatar/token.svg'
@@ -66,8 +66,8 @@ const TokensList: React.FC<ITokensListProps> = ({ list, onEdit, onDelete }) => {
               Token Type
             </Typography>
             <Typography variant="body2">
-              {getLabel(v.tokenType, 'name', optionDatas?.tokenTypeOpt)}
-              {` (${getLabel(v.chainIdentifierId, 'shortName', optionDatas?.chainInfoOpt)})`}
+              {getLabelById(v.tokenType, 'name', optionDatas?.tokenTypeOpt)}
+              {` (${getLabelById(v.chainIdentifierId, 'shortName', optionDatas?.chainInfoOpt)})`}
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="space-between" sx={{ lineHeight: '15px' }}>

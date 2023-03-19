@@ -11,7 +11,7 @@ import { ReactComponent as LinkedinSVG } from 'bounceComponents/profile/componen
 import { ReactComponent as GithubSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/github.svg'
 import ClockSVG from 'bounceComponents/profile/components/PersonalOverview/assets/clock.svg'
 import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { ICompanyOverviewInfo } from 'api/company/type'
 import { routes } from 'constants/routes'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -172,7 +172,7 @@ const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) =>
                 Market type
               </Typography>
               <Typography variant="body1">
-                {getLabel(companyInfo?.marketType, 'marketType', optionDatas?.marketTypeOpt) || '-'}
+                {getLabelById(companyInfo?.marketType, 'marketType', optionDatas?.marketTypeOpt) || '-'}
               </Typography>
             </Grid>
             <Grid item xs={4}>
@@ -180,7 +180,7 @@ const CompanyProfileOverview: React.FC<IPersonalOverview> = ({ companyInfo }) =>
                 Company size
               </Typography>
               <Typography variant="body1">
-                {getLabel(companyInfo?.companySize, 'size', optionDatas?.companySizeOpt) || '-'}
+                {getLabelById(companyInfo?.companySize, 'size', optionDatas?.companySizeOpt) || '-'}
               </Typography>
             </Grid>
             <Grid item xs={4}>

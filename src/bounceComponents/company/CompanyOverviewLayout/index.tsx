@@ -7,7 +7,7 @@ import { ITabsListProps } from 'bounceComponents/profile/ProfileLayout'
 import ProfileAvatar from 'bounceComponents/profile/ProfileAvatar'
 import { ReactComponent as QRCodeSVG } from 'assets/imgs/profile/qr-code.svg'
 import { ReactComponent as ShareSVG } from 'assets/imgs/profile/share.svg'
-import { getLabel } from 'utils'
+import { getLabelById } from 'utils'
 import { ICompanyOverviewInfo } from 'api/company/type'
 import { getCompanyInfo } from 'api/company'
 import { USER_TYPE, FollowListType } from 'api/user/type'
@@ -438,7 +438,7 @@ const CompanyOverviewLayout: React.FC<ICompanyOverviewLayout> = ({ children, ext
                         width: 'fit-content'
                       }}
                     >
-                      {getLabel(companyInfo?.companyState, 'state', optionDatas?.companyStateOpt)}
+                      {getLabelById(companyInfo?.companyState, 'state', optionDatas?.companyStateOpt)}
                     </Box>
                   )}
                   {companyInfo?.userType === USER_TYPE.INVESTOR && (

@@ -6,7 +6,7 @@ import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import styles from './styles'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { getLabel, getPrimaryRoleLabel } from 'utils'
+import { getLabelById, getPrimaryRoleLabel } from 'utils'
 import { ReactComponent as EmailSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/email.svg'
 import { ReactComponent as TwitterIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/twitter.svg'
 import { ReactComponent as InstagramIconSVG } from 'bounceComponents/profile/components/PersonalOverview/assets/instagram.svg'
@@ -297,7 +297,7 @@ const IdeaDetail: React.FC = () => {
                     )}
                     {!!userInfo?.companyState && (
                       <Typography variant="body1">
-                        {getLabel(userInfo?.companyState, 'state', optionDatas?.companyStateOpt)}
+                        {getLabelById(userInfo?.companyState, 'state', optionDatas?.companyStateOpt)}
                       </Typography>
                     )}
                     {userInfo?.location && (

@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from '@mui/material'
 // import { ITabsListProps } from '../../ProfileLayout'
 // import styles from './styles'
 import { IProfileUserInfo } from 'api/user/type'
-import { getLabel, getPrimaryRoleLabel } from 'utils'
+import { getLabelById, getPrimaryRoleLabel } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 
 export const ExperienctAndSkill: React.FC<IPortfolioPreferenceProps> = ({ personalInfo }) => {
@@ -18,7 +18,7 @@ export const ExperienctAndSkill: React.FC<IPortfolioPreferenceProps> = ({ person
         <Typography>
           {getPrimaryRoleLabel(personalInfo?.primaryRole, optionDatas?.primaryRoleOpt) || '-'}
           {!!personalInfo?.years && (
-            <span>,&nbsp;&nbsp;{getLabel(personalInfo?.years, 'years', optionDatas?.experienceYearOpt)}</span>
+            <span>,&nbsp;&nbsp;{getLabelById(personalInfo?.years, 'years', optionDatas?.experienceYearOpt)}</span>
           )}
         </Typography>
       </Grid>
@@ -54,7 +54,7 @@ export const PortfolioPreference: React.FC<IPortfolioPreferenceProps> = ({ perso
             {!personalInfo?.careJobs
               ? '-'
               : personalInfo?.careJobs?.map((item, index) => {
-                  return (index !== 0 ? ', ' : '') + getLabel(item, 'jobCare', optionDatas?.jobCareOpt)
+                  return (index !== 0 ? ', ' : '') + getLabelById(item, 'jobCare', optionDatas?.jobCareOpt)
                 })}
           </Typography>
         </Grid>
@@ -74,7 +74,7 @@ export const PortfolioPreference: React.FC<IPortfolioPreferenceProps> = ({ perso
             {!personalInfo?.jobTypes
               ? '-'
               : personalInfo?.jobTypes?.map((item, index) => {
-                  return (index !== 0 ? ', ' : '') + getLabel(item, 'jobType', optionDatas?.jobTypeOpt)
+                  return (index !== 0 ? ', ' : '') + getLabelById(item, 'jobType', optionDatas?.jobTypeOpt)
                 })}
           </Typography>
         </Grid>
@@ -99,7 +99,7 @@ export const PortfolioPreference: React.FC<IPortfolioPreferenceProps> = ({ perso
             Desired Company Size
           </Typography>
           <Typography variant="body1" mt={6}>
-            {getLabel(personalInfo?.desiredCompanySize, 'size', optionDatas?.companySizeOpt) || '-'}
+            {getLabelById(personalInfo?.desiredCompanySize, 'size', optionDatas?.companySizeOpt) || '-'}
           </Typography>
         </Grid>
         <Grid item xs={4}>
@@ -110,7 +110,7 @@ export const PortfolioPreference: React.FC<IPortfolioPreferenceProps> = ({ perso
             {!personalInfo?.desiredMarket
               ? '-'
               : personalInfo?.desiredMarket?.map((item, index) => {
-                  return (index !== 0 ? ', ' : '') + getLabel(item, 'marketType', optionDatas?.marketTypeOpt)
+                  return (index !== 0 ? ', ' : '') + getLabelById(item, 'marketType', optionDatas?.marketTypeOpt)
                 })}
           </Typography>
         </Grid>

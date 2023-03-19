@@ -11,7 +11,7 @@ import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { useGetCompanyTokens } from 'bounceHooks/company/useGetCompanyTokens'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 // import DefaultAvatarSVG from 'assets/imgs/company/tokens/default-avatar.svg'
 import { PoolType } from 'api/pool/type'
 import { IAuctionPoolsData, IAuctionPoolsItems } from 'api/profile/type'
@@ -183,7 +183,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                     href={routes.auction.fixedPrice
                       .replace(
                         ':chainShortName',
-                        getLabel(auctionPoolItem?.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                        getLabelById(auctionPoolItem?.chainId, 'shortName', optionDatas?.chainInfoOpt)
                       )
                       .replace(':poolId', auctionPoolItem.poolId)}
                   >
@@ -283,7 +283,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                           Token Type
                         </Typography>
                         <Typography variant="body2">
-                          {getLabel(v.tokenType, 'name', optionDatas?.tokenTypeOpt)}
+                          {getLabelById(v.tokenType, 'name', optionDatas?.tokenTypeOpt)}
                         </Typography>
                       </Box>
                       <Box display={'flex'} justifyContent="space-between" alignItems="center">
@@ -338,7 +338,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                       objId={ideaListItem.id}
                       refresh={refresh}
                       commentCount={ideaListItem.commentCount}
-                      publicRole={getLabel(ideaListItem.publicRole?.[0], 'role', optionDatas?.publicRoleOpt)}
+                      publicRole={getLabelById(ideaListItem.publicRole?.[0], 'role', optionDatas?.publicRoleOpt)}
                       companyState={ideaListItem?.companyState}
                       startup={ideaListItem?.startup}
                     />

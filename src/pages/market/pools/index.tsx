@@ -30,7 +30,7 @@ import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/co
 import FormItem from 'bounceComponents/common/FormItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 // import { formatNumber } from '@/utils/web3/number'
 import NoData from 'bounceComponents/common/NoData'
 import { Token } from 'bounceComponents/create-auction-pool/types'
@@ -102,7 +102,7 @@ const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(3)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
-    show<Token>(TokenDialog, { chainId: getLabel(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
+    show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
       .then(res => {
         setFieldValue('tokenFromAddress', res.address)
         setFieldValue('tokenFromSymbol', res.symbol)
@@ -344,7 +344,10 @@ const Pools: React.FC = ({}) => {
                                 component={'a'}
                                 target="_blank"
                                 href={routes.auction.fixedPrice
-                                  .replace(':chainShortName', getLabel(chain, 'shortName', optionDatas?.chainInfoOpt))
+                                  .replace(
+                                    ':chainShortName',
+                                    getLabelById(chain, 'shortName', optionDatas?.chainInfoOpt)
+                                  )
                                   .replace(':poolId', fixedSwaptem.poolId)}
                               >
                                 <AuctionCard
@@ -365,7 +368,7 @@ const Pools: React.FC = ({}) => {
                                             ? fixedSwaptem.creatorUserInfo?.publicRole?.map(
                                                 (item: any, index: number) => {
                                                   return (
-                                                    getLabel(item, 'role', optionDatas?.publicRoleOpt) +
+                                                    getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
                                                     `${
                                                       index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
                                                       ', '

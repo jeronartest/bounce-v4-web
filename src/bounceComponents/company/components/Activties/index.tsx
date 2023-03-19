@@ -15,7 +15,7 @@ import { getActivitiesTotal, getUserPoolsFixedSwap } from 'api/profile'
 import { usePersonalInfo } from 'bounceHooks/user/usePersonalInfo'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
-import { getLabel, shortenAddress } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 // import { formatNumber } from '@/utils/web3/number'
 // import NoData from 'bounceComponents/common/NoData'
 import { getIdeasList } from 'api/idea'
@@ -199,7 +199,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                     component={'a'}
                     target="_blank"
                     href={routes.auction.fixedPrice
-                      .replace(':chainShortName', getLabel(chain, 'shortName', optionDatas?.chainInfoOpt))
+                      .replace(':chainShortName', getLabelById(chain, 'shortName', optionDatas?.chainInfoOpt))
                       .replace(':poolId', fixedSwaptem.poolId)}
                   >
                     <AuctionCard
@@ -222,7 +222,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                               fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
                                 ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
                                     return (
-                                      getLabel(item, 'role', optionDatas?.publicRoleOpt) +
+                                      getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
                                       `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
                                     )
                                   })
