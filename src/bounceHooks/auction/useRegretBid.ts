@@ -19,7 +19,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
 
   const run = useCallback(
     async (
-      token0AmountToRegret: CurrencyAmount | undefined
+      token0AmountToRegret: CurrencyAmount
     ): Promise<{
       hash: string
       transactionReceipt: Promise<TransactionReceipt>

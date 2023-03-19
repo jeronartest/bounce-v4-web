@@ -13,6 +13,7 @@ export interface InputRegretAmountProps {
   onCancel: () => void
   onConfirm: () => void
   poolInfo: FixedSwapPoolProp
+  isRegretting: boolean
 }
 
 const InputRegretAmount = ({
@@ -21,6 +22,7 @@ const InputRegretAmount = ({
   slicedRegretAmount,
   setRegretAmount,
   onCancel,
+  isRegretting,
   onConfirm
 }: InputRegretAmountProps) => {
   return (
@@ -31,7 +33,13 @@ const InputRegretAmount = ({
 
       <Token1ToRegret poolInfo={poolInfo} regretAmount={slicedRegretAmount} />
 
-      <ButtonBlock poolInfo={poolInfo} regretAmount={slicedRegretAmount} onCancel={onCancel} onConfirm={onConfirm} />
+      <ButtonBlock
+        isRegretting={isRegretting}
+        poolInfo={poolInfo}
+        regretAmount={slicedRegretAmount}
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+      />
     </Box>
   )
 }

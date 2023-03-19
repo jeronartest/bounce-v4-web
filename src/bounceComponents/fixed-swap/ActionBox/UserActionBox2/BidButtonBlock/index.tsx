@@ -55,6 +55,10 @@ const BidButtonBlock = ({
 
   const isLimitExceeded = useIsLimitExceeded(slicedBidAmount, poolInfo)
 
+  if (poolInfo.status === PoolStatus.Upcoming) {
+    return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
+  }
+
   if (!isCurrentChainEqualChainOfPool) {
     return (
       <>
@@ -62,10 +66,6 @@ const BidButtonBlock = ({
         <WrongNetworkAlert />
       </>
     )
-  }
-
-  if (poolInfo.status === PoolStatus.Upcoming) {
-    return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
   }
 
   if (isLimitExceeded) {

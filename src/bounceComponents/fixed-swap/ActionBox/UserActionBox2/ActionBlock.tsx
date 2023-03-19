@@ -89,7 +89,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token0.decimals).toString() : ''
 
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount)
-  const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedRegretAmount)
+  const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal0.currency, slicedRegretAmount)
 
   const { run: bid, submitted: placeBidSubmitted } = usePlaceBid(poolInfo)
 
@@ -98,6 +98,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     showRequestConfirmDialog()
     try {
       const { transactionReceipt } = await bid(currencyBidAmount)
+      setBidAmount('')
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -150,6 +151,8 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
           rpt()
+          setAction('INPUT_REGRET_AMOUNT')
+          setRegretAmount('')
         })
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
@@ -158,7 +161,8 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       ret
         .then(() => {
           hideDialogConfirmation()
-          setAction('BID_OR_REGRET')
+          setRegretAmount('')
+          setAction('INPUT_REGRET_AMOUNT')
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Close',
@@ -291,6 +295,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
           slicedRegretAmount={slicedRegretAmount}
           setRegretAmount={setRegretAmount}
           poolInfo={poolInfo}
+          isRegretting={regretBidSubmitted.submitted}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}

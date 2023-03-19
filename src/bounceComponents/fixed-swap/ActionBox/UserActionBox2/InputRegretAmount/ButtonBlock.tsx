@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab'
 import { Button, Stack } from '@mui/material'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
@@ -8,9 +9,10 @@ export interface ButtonBlockProps {
   onCancel: () => void
   onConfirm: () => void
   poolInfo: FixedSwapPoolProp
+  isRegretting: boolean
 }
 
-const ButtonBlock = ({ regretAmount, onCancel, onConfirm, poolInfo }: ButtonBlockProps) => {
+const ButtonBlock = ({ regretAmount, isRegretting, onCancel, onConfirm, poolInfo }: ButtonBlockProps) => {
   const regretUnits = new BigNumber(regretAmount ? parseUnits(regretAmount, poolInfo.token0.decimals).toString() : '0')
   const isRegretBalanceSufficient = regretUnits.lte(poolInfo?.participant.swappedAmount0 || 0)
 
@@ -20,7 +22,11 @@ const ButtonBlock = ({ regretAmount, onCancel, onConfirm, poolInfo }: ButtonBloc
         Cancel
       </Button>
 
-      {isRegretBalanceSufficient ? (
+      {isRegretting ? (
+        <LoadingButton loading loadingPosition="start" fullWidth>
+          Regretting
+        </LoadingButton>
+      ) : isRegretBalanceSufficient ? (
         <Button variant="contained" fullWidth disabled={!regretAmount} onClick={onConfirm}>
           Get fund back
         </Button>

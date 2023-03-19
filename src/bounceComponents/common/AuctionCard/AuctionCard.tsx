@@ -47,7 +47,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   listItems,
   claimAt
 }) => {
-  const chainConfigInBackend = useChainConfigInBackend('id', chainId.toString())
+  const chainConfigInBackend = useChainConfigInBackend('id', chainId)
   const [, { days, hours, minutes, seconds }] = useCountDown({ targetDate: claimAt * 1000 })
 
   const showClaim = () => {
@@ -101,7 +101,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
             <Image
               src={
                 chainConfigInBackend?.ethChainId
-                  ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.link || ''
+                  ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.logo || ''
                   : ''
               }
               width={12}

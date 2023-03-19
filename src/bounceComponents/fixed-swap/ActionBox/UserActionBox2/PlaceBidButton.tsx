@@ -64,7 +64,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
     if (approvalState === ApprovalState.PENDING) {
       return (
         <LoadingButton loadingPosition="start" variant="contained" fullWidth loading sx={{ ...sx }}>
-          Approving use of {poolInfo.token1?.symbol} <Dots />
+          Approving {poolInfo.token1?.symbol}
         </LoadingButton>
       )
     }

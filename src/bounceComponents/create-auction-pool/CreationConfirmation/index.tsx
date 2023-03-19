@@ -19,7 +19,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useActiveWeb3React } from 'hooks'
-import { getLabelById, shortenAddress } from 'utils'
+import { shortenAddress } from 'utils'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainListMap } from 'constants/chain'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
@@ -28,7 +28,6 @@ import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
 import { TransactionReceipt } from '@ethersproject/providers'
-import { useOptionDatas } from 'state/configOptions/hooks'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -60,7 +59,6 @@ const CreatePoolButton = () => {
   const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
   const values = useValuesState()
   const createFixedSwapPool = useCreateFixedSwapPool()
-  const optionDatas = useOptionDatas()
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
 
