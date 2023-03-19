@@ -45,7 +45,7 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
             height: 6,
             borderRadius: 4,
             '::before': {
-              opacity: status === 1 ? 1 : 'inherit'
+              opacity: status === 1 ? 1 : 0.3
             }
           }}
         />
