@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { styled, Button } from '@mui/material'
+import { styled, Button, Box, useTheme, Typography } from '@mui/material'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
-// import { shortenAddress } from '../../utils'
+import { shortenAddress } from '../../utils'
 import WalletModal from 'components/Modal/WalletModal/index'
-// import Spinner from 'components/Spinner'
+import Spinner from 'components/Spinner'
 // import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 
@@ -37,36 +37,56 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 function Web3StatusInner() {
   const { account, error } = useWeb3React()
-  // const allTransactions = useAllTransactions()
-  // const sortedRecentTransactions = useMemo(() => {
-  //   const txs = Object.values(allTransactions)
-  //   return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
-  // }, [allTransactions])
-  // const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
+  const allTransactions = useAllTransactions()
+  const sortedRecentTransactions = useMemo(() => {
+    const txs = Object.values(allTransactions)
+    return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+  }, [allTransactions])
+  const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const toggleWalletModal = useWalletModalToggle()
   const isDownSm = useBreakpoint()
+  const theme = useTheme()
+  const { ENSName } = useENSName(account || undefined)
 
   if (account) {
     return (
-      <></>
-      // <Box
-      //   sx={{ cursor: 'pointer', marginBottom: { xs: 0, sm: 15 }, mt: { xs: 0, sm: 8 } }}
-      //   onClick={toggleWalletModal}
-      // >
-      //   <Box
-      //     sx={{
-      //       // height: { xs: 24, sm: 36 },
-      //       // width: { xs: 100, sm: 180 },
-      //       borderRadius: '46px',
-      //       display: 'flex',
-      //       justifyContent: 'space-between',
-      //       alignItems: 'center',
-      //       backgroundColor: theme.palette.background.default
-      //     }}
-      //   >
-      //     <Web3StatusIcon />
-      //   </Box>
-      // </Box>
+      <Box
+        onClick={toggleWalletModal}
+        sx={{
+          cursor: 'pointer',
+          borderRadius: 20,
+          padding: '0 12px',
+          minWidth: 64,
+          border: '1px solid var(--ps-gray-900)',
+          height: 40,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: theme.palette.background.paper
+        }}
+      >
+        {pending?.length ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
+            <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
+            <Box component="span" sx={{ ml: 3 }}>
+              <Typography sx={{ fontSize: { xs: 9, sm: 14 }, ml: 8, color: theme.palette.text.primary }} noWrap>
+                {pending?.length} Pending
+              </Typography>
+            </Box>
+          </Box>
+        ) : (
+          <Typography
+            sx={{
+              fontWeight: '700',
+              lineHeight: '16px',
+              fontSize: { xs: 9, sm: 14 },
+              color: theme.palette.text.primary
+            }}
+          >
+            {ENSName || shortenAddress(account)}
+          </Typography>
+        )}
+      </Box>
     )
   } else if (error) {
     return (
