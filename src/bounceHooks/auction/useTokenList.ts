@@ -5,6 +5,7 @@ import { GOERLI_TOKEN_LIST, TOKEN_LIST_API } from 'constants/auction'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
+import { Currency } from 'constants/token'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -100,9 +101,25 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
       return [singleToken]
     } else {
       // TOTD NATIVE_TOKENS
-      return enableEth ? [...filteredApiTokenList] : filteredApiTokenList
+
+      return enableEth
+        ? (() => {
+            const nativeToken = Currency.getNativeCurrency(chainId)
+            return [
+              {
+                chainId,
+                address: nativeToken.address,
+                decimals: nativeToken.decimals,
+                symbol: nativeToken.symbol,
+                logoURI: nativeToken.logo,
+                name: nativeToken.name
+              },
+              ...filteredApiTokenList
+            ]
+          })()
+        : filteredApiTokenList
     }
-  }, [enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
+  }, [chainId, enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
 
   return {
     tokenList,
