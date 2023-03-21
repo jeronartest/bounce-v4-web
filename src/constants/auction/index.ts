@@ -49,7 +49,5 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.MAINNET]: 'https://tokens.coingecko.com/uniswap/all.json',
   [ChainId.GÖRLI]: null,
   [ChainId.BSC]: 'https://tokens.pancakeswap.finance/cmc.json',
-  [ChainId.ARBITRUM]: null,
-  [ChainId.BSCTEST]: null,
-  [ChainId.SEPOLIA]: null
+  [ChainId.ARBITRUM]: null
 }

@@ -22,35 +22,6 @@ import CreateAuctionPool from 'pages/auction/create-auction-pool/index'
 import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType'
 import AuctionPoolId from 'pages/auction/fixed-price/poolId'
 
-import Companies from 'pages/companies'
-
-import Company from 'pages/company'
-import CompanyActivities from 'pages/company/activities'
-import CompanyComments from 'pages/company/comments'
-import CompanyEdit from 'pages/company/edit/index'
-import CompanyEditInvestments from 'pages/company/edit/investments'
-import CompanyEditInvestors from 'pages/company/edit/investors'
-import CompanyEditOverview from 'pages/company/edit/overview'
-import CompanyEditTeam from 'pages/company/edit/team'
-import CompanyEditTokens from 'pages/company/edit/tokens'
-import CompanyFunding from 'pages/company/funding'
-import CompanyInvestors from 'pages/company/institutionInvestors'
-import CompanyJobs from 'pages/company/jobs'
-import CompanyStartupIdeas from 'pages/company/startupIdeas'
-import CompanySummary from 'pages/company/summary'
-import CompanyTeam from 'pages/company/team'
-import CompanyTopCompanies from 'pages/company/topCompanies'
-
-import IdeaCreate from 'pages/idea/create'
-import IdeaDetail from 'pages/idea/detail'
-
-import Investment from 'pages/investment'
-import InvestmentPlatform from 'pages/investment/platform'
-
-import Jobs from 'pages/jobs'
-
-import Linkedin from 'pages/linkedin'
-
 import Login from 'pages/login'
 
 import Market from 'pages/market'
@@ -78,9 +49,6 @@ import SignupInstitutions from 'pages/signup/institutions'
 import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 import SignupThirdPartiesCompany from 'pages/signup/thirdPartiesCompany'
 import SignupThirdPartiesInstitutions from 'pages/signup/thirdPartiesInstitutions'
-
-import Token from 'pages/token'
-import Verify from 'pages/verify'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -117,37 +85,6 @@ export default function App() {
                     <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
                     <Route path={routes.auction.fixedPrice} element={<AuctionPoolId />} />
 
-                    <Route path={routes.companies} element={<Companies />} />
-
-                    <Route path={routes.companies} element={<Companies />} />
-
-                    <Route path={routes.company.index} element={<Company />} />
-                    <Route path={routes.company.activities} element={<CompanyActivities />} />
-                    <Route path={routes.company.comments} element={<CompanyComments />} />
-                    <Route path={routes.company.edit.index} element={<CompanyEdit />} />
-                    <Route path={routes.company.edit.investments} element={<CompanyEditInvestments />} />
-                    <Route path={routes.company.edit.investors} element={<CompanyEditInvestors />} />
-                    <Route path={routes.company.edit.overview} element={<CompanyEditOverview />} />
-                    <Route path={routes.company.edit.team} element={<CompanyEditTeam />} />
-                    <Route path={routes.company.edit.tokens} element={<CompanyEditTokens />} />
-                    <Route path={routes.company.funding} element={<CompanyFunding />} />
-                    <Route path={routes.company.institutionInvestors} element={<CompanyInvestors />} />
-                    <Route path={routes.company.jobs} element={<CompanyJobs />} />
-                    <Route path={routes.company.startupIdeas} element={<CompanyStartupIdeas />} />
-                    <Route path={routes.company.summary} element={<CompanySummary />} />
-                    <Route path={routes.company.team} element={<CompanyTeam />} />
-                    <Route path={routes.company.topCompanies} element={<CompanyTopCompanies />} />
-
-                    <Route path={routes.idea.create} element={<IdeaCreate />} />
-                    <Route path={routes.idea.detail} element={<IdeaDetail />} />
-
-                    <Route path={routes.investment.index} element={<Investment />} />
-                    <Route path={routes.investment.platform} element={<InvestmentPlatform />} />
-
-                    <Route path={routes.jobs.index} element={<Jobs />} />
-
-                    <Route path={routes.linkedin} element={<Linkedin />} />
-
                     <Route path={routes.login} element={<Login />} />
 
                     <Route path={routes.market.index} element={<Market />} />
@@ -176,12 +113,6 @@ export default function App() {
                     <Route path={routes.signup.thirdPartiesCompany} element={<SignupThirdPartiesCompany />} />
                     <Route path={routes.signup.thirdPartiesInstitutions} element={<SignupThirdPartiesInstitutions />} />
 
-                    <Route path={routes.token} element={<Token />} />
-                    <Route path={routes.verify} element={<Verify />} />
-
-                    {/* <Route path={routes.test2} element={<ComingSoon />} />
-                      <Route path={routes.test3 + routes.test3Desc} element={<ComingSoon />} />
-                    </Route> */}
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

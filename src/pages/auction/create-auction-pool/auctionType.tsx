@@ -1,20 +1,21 @@
-import { Box, Stack } from '@mui/material'
+import { Box } from '@mui/material'
 
 import { useEffect } from 'react'
 
 import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
-import TokenInformationForm from 'bounceComponents/create-auction-pool/TokenInforationForm'
-import AuctionParametersForm from 'bounceComponents/create-auction-pool/AuctionParametersForm'
-import { CreationStep } from 'bounceComponents/create-auction-pool/types'
-import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
-import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
-import ValuesProvider, { useValuesDispatch, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
+import { CreationStep, TokenType } from 'bounceComponents/create-auction-pool/types'
+import ValuesProvider, {
+  ActionType,
+  useValuesDispatch,
+  useValuesState
+} from 'bounceComponents/create-auction-pool/ValuesProvider'
 import Stepper from 'bounceComponents/create-auction-pool/Stepper'
 import { isSupportedAuctionType } from 'constants/auction'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useActiveWeb3React } from 'hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import Erc20Pool from './Erc20Pool'
 
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -22,9 +23,14 @@ const CreateAuctionPool = () => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
 
-  // useEffect(() => {
-  //   console.log('>>>> ValuesState: ', valuesState)
-  // }, [valuesState])
+  const { tokenType } = useQueryParams()
+
+  useEffect(() => {
+    valuesDispatch?.({
+      type: ActionType.SetTokenType,
+      payload: { tokenType: tokenType || TokenType.ERC20 }
+    })
+  }, [tokenType, valuesDispatch])
 
   return (
     <>
@@ -34,20 +40,7 @@ const CreateAuctionPool = () => {
             <Stepper steps={steps} valuesState={valuesState} valuesDispatch={valuesDispatch} />
           </Box>
         )}
-
-        <Stack alignItems="center">
-          {valuesState.activeStep !== CreationStep.CREATION_CONFIRMATION ? (
-            <Box sx={{ pb: 48, maxWidth: 660, width: '100%' }}>
-              {valuesState.activeStep === CreationStep.TOKEN_INFORMATION && <TokenInformationForm />}
-
-              {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <AuctionParametersForm />}
-
-              {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
-            </Box>
-          ) : (
-            <CreationConfirmation />
-          )}
-        </Stack>
+        {valuesState.tokenType === TokenType.ERC20 ? <Erc20Pool /> : null}
       </RoundedContainer>
     </>
   )

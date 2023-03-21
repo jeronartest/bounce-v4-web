@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Button,
@@ -22,10 +22,12 @@ import { ReactComponent as RepeatSVG } from 'assets/imgs/icon/repeat.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useQueryParams } from 'hooks/useQueryParams'
-import { ChainId, ChainListMap } from 'constants/chain'
+import { ChainId, ChainList, ChainListMap } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/types'
+import { useAuctionConfigList } from 'hooks/useAuctionConfig'
 
 const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLessThan3?: boolean }) => (
   <>
@@ -44,11 +46,11 @@ const WrongWalletToastContent = ({ isBoundAddressLessThan3 }: { isBoundAddressLe
 )
 
 const validationSchema = Yup.object({
-  auctionType: Yup.string().required('Auction Type is required')
+  // auctionType: Yup.string().required('Auction Type is required')
 })
 
 const initialValues = {
-  auctionType: 'fixed-price'
+  // auctionType: 'fixed-price'
 }
 
 const CreateAuctionPoolIntroPage = () => {
@@ -58,13 +60,26 @@ const CreateAuctionPoolIntroPage = () => {
   const { account, active, chainId } = useActiveWeb3React()
   const walletModalToggle = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
+  const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
+  const [curAuctionType, setCurAuctionType] = useState<AuctionType | undefined>(AuctionType.FIXED_PRICE)
+  const [enabledTokenType, enabledAuctionType] = useAuctionConfigList(chainId || undefined, curTokenType)
 
   const handleCancel = () => {
     window.history.go(-1)
   }
 
-  const handleSubmit = (values: any) => {
-    navigate(`${routes.auction.createAuctionPool}/${values.auctionType}/${chainId}?redirect=${redirect}`)
+  useEffect(() => {
+    if (curTokenType && !enabledTokenType.includes(curTokenType)) {
+      setCurTokenType(undefined)
+    }
+    if (curAuctionType && !enabledAuctionType.includes(curAuctionType)) {
+      setCurAuctionType(undefined)
+    }
+  }, [curAuctionType, curTokenType, enabledAuctionType, enabledTokenType])
+
+  const handleSubmit = () => {
+    if (!curAuctionType || !curTokenType || !chainId) return
+    navigate(`${routes.auction.createAuctionPool}/${curAuctionType}/${chainId}/${curTokenType}?redirect=${redirect}`)
   }
 
   const [addressFieldValue, setAddressFieldValue] = useState('')
@@ -97,6 +112,14 @@ const CreateAuctionPoolIntroPage = () => {
     }
   }, [active, isAddressReadyToCreatePool, isBoundAddressLessThan3])
 
+  const menuList = useMemo(() => {
+    return ChainList.map(item => (
+      <MenuItem key={item.id} value={item.id}>
+        {item.name}
+      </MenuItem>
+    ))
+  }, [])
+
   return (
     <section>
       <RoundedContainer maxWidth="md">
@@ -109,12 +132,6 @@ const CreateAuctionPoolIntroPage = () => {
             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
               <Stack component={Form} spacing={20}>
                 <Typography variant="h3">Select Creation Type</Typography>
-
-                <FormItem name="auctionType" label="Auction Type" required>
-                  <Select>
-                    <MenuItem value="fixed-price">Fixed Price Auction</MenuItem>
-                  </Select>
-                </FormItem>
 
                 <FormItem error={!active}>
                   <Select<ChainId>
@@ -136,12 +153,40 @@ const CreateAuctionPoolIntroPage = () => {
                       return chainId ? ChainListMap[chainId]?.name : ''
                     }}
                   >
-                    <MenuItem value={ChainId.MAINNET}>Ethereum</MenuItem>
-                    <MenuItem value={ChainId.GÖRLI}>Goerli</MenuItem>
-                    <MenuItem value={ChainId.BSC}>BSC</MenuItem>
-                    <MenuItem value={ChainId.ARBITRUM}>Arbitrum</MenuItem>
+                    {menuList}
                   </Select>
                   {!account && <FormHelperText error={!account}>Please connect to your wallet</FormHelperText>}
+                </FormItem>
+
+                <FormItem label="Token Type" required error={!curTokenType}>
+                  <Select
+                    disabled={!chainId}
+                    value={curTokenType}
+                    onChange={e => {
+                      setCurTokenType(e.target.value as TokenType)
+                    }}
+                  >
+                    {Object.values(TokenType).map(val => (
+                      <MenuItem value={val} key={val} disabled={!enabledTokenType.includes(val)}>
+                        {val}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormItem>
+
+                <FormItem label="Auction Type" required error={!curAuctionType}>
+                  <Select
+                    value={curAuctionType}
+                    onChange={e => {
+                      setCurAuctionType(e.target.value as AuctionType)
+                    }}
+                  >
+                    {Object.values(AuctionType).map(val => (
+                      <MenuItem value={val} key={val} disabled={!enabledAuctionType.includes(val)}>
+                        {val}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormItem>
 
                 <TextField

@@ -1,7 +1,7 @@
 export const routes = {
   auction: {
     createAuctionPool: '/auction/create-auction-pool',
-    createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName',
+    createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName/:tokenType',
     fixedPrice: '/auction/fixed-price/:chainShortName/:poolId'
   },
   companies: '/companies',

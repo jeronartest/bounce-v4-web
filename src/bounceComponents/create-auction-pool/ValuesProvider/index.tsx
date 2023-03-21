@@ -5,7 +5,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { Moment } from 'moment'
 import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react'
 import { isAddress } from 'utils'
-import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus } from '../types'
+import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus, TokenType } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -64,12 +64,23 @@ export const useValuesDispatch = () => {
 }
 
 const initialValues: AuctionPool = {
+  tokenType: TokenType.ERC20,
   tokenFrom: {
     chainId: NETWORK_CHAIN_ID,
     address: '',
     logoURI: '',
     symbol: '',
     decimals: 18
+  },
+  auctionChainId: '',
+  nftTokenFrom: {
+    contractAddr: '',
+    contractName: '',
+    tokenId: '',
+    balance: '',
+    name: '',
+    description: '',
+    image: ''
   },
   tokenTo: {
     chainId: NETWORK_CHAIN_ID,
@@ -96,7 +107,9 @@ const initialValues: AuctionPool = {
 export enum ActionType {
   SetActiveStep = 'SET_ACTIVE_STEP',
   SetTokenFrom = 'SET_TOKEN_FROM',
+  SetTokenType = 'SET_TOKEN_TYPE',
   CommitTokenImformation = 'COMMIT_TOKEN_IMFORMATION',
+  CommitToken1155Information = 'COMMIT_TOKEN_1155_INFORMATION',
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
@@ -108,11 +121,27 @@ type Payload = {
     activeStep: number
     completed: CompletedSteps
   }
+  [ActionType.SetTokenType]: {
+    tokenType: TokenType
+  }
   [ActionType.SetTokenFrom]: {
     tokenFrom: Token
   }
   [ActionType.CommitTokenImformation]: {
     tokenFrom: Token
+    activeStep: number
+    completed: CompletedSteps
+  }
+  [ActionType.CommitToken1155Information]: {
+    nftTokenFrom: {
+      contractAddr: string
+      contractName: string
+      tokenId: string
+      balance: string
+      name: string
+      description: string
+      image: string
+    }
     activeStep: number
     completed: CompletedSteps
   }
@@ -167,12 +196,27 @@ const reducer = (state: AuctionPool, action: Actions) => {
           ...action.payload.tokenFrom
         }
       }
+    case ActionType.SetTokenType:
+      return {
+        ...state,
+        tokenType: action.payload.tokenType
+      }
     case ActionType.CommitTokenImformation:
       return {
         ...state,
         tokenFrom: {
           ...state.tokenFrom,
           ...action.payload.tokenFrom
+        },
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true }
+      }
+    case ActionType.CommitToken1155Information:
+      return {
+        ...state,
+        nftTokenFrom: {
+          ...state.nftTokenFrom,
+          ...action.payload.nftTokenFrom
         },
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }

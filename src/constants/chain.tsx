@@ -12,9 +12,9 @@ export function numberToHex(number: number) {
 export enum ChainId {
   MAINNET = 1,
   GÖRLI = 5,
-  SEPOLIA = 11155111,
+  // SEPOLIA = 11155111,
   BSC = 56,
-  BSCTEST = 97,
+  // BSCTEST = 97,
   ARBITRUM = 42161
 }
 

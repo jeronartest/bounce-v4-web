@@ -9,8 +9,8 @@ import { useTokenContract } from 'hooks/useContract'
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
     token =>
-      token.name.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
-      token.symbol.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
+      token.name?.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
+      token.symbol?.toLowerCase().includes(filterValue.trim().toLowerCase()) ||
       (isAddress(filterValue.trim().toLowerCase()) &&
         token.address.toLowerCase().includes(filterValue.trim().toLowerCase()))
   )
