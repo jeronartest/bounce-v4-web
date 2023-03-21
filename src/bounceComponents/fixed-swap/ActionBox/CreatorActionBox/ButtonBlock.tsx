@@ -57,6 +57,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           .catch()
       } catch (error) {
         const err: any = error
+        console.error(err)
         hideDialogConfirmation()
         show(DialogTips, {
           iconType: 'error',

@@ -129,6 +129,7 @@ const CreatePoolButton = () => {
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       setButtonCommitted(undefined)
       show(DialogTips, {
@@ -170,6 +171,7 @@ const CreatePoolButton = () => {
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',

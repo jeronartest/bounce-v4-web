@@ -173,6 +173,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
@@ -217,6 +218,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',

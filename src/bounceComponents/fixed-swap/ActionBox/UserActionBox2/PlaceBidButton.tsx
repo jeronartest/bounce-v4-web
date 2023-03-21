@@ -48,6 +48,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
