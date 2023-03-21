@@ -64,13 +64,13 @@ export function useCreateFixedSwapPool() {
     }
 
     if (!currencyFrom || !currencyTo) {
-      return Promise.reject()
+      return Promise.reject('currencyFrom or currencyTo error')
     }
     const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
     const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
 
     if (!amountTotal0 || !amountTotal1) {
-      return Promise.reject()
+      return Promise.reject('amountTotal0 or amountTotal1 error')
     }
     if (!chainConfigInBackend?.id) {
       return Promise.reject(new Error('No chain id in backend'))
