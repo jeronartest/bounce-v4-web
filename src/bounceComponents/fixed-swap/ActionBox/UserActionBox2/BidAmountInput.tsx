@@ -23,8 +23,12 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
   const maxSwapAmount1Limit = useMaxSwapAmount1Limit(poolInfo)
 
   const handleMaxButtonClick = useCallback(() => {
+    if (!userToken1Balance) {
+      setBidAmount('0')
+      return
+    }
     const minimum = [userToken1Balance, maxSwapAmount1Limit].reduce((pre, cur) => {
-      return !pre ? cur : cur?.greaterThan(pre) ? pre : cur
+      return !pre ? cur : cur.greaterThan(pre) ? pre : cur
     }, userToken1Balance)
 
     setBidAmount(minimum?.toSignificant(64, { groupSeparator: '' }) || '0')
