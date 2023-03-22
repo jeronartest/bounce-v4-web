@@ -2,24 +2,24 @@ import React from 'react'
 import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import { ReactComponent as GoogleSVG } from './assets/google.svg'
 import { ReactComponent as TwitterSVG } from './assets/twitter.svg'
-import { ReactComponent as LinkedInSVG } from './assets/linkedIn.svg'
+// import { ReactComponent as LinkedInSVG } from './assets/linkedIn.svg'
 import { ACCOUNT_TYPE } from 'api/user/type'
-import { useLinkedInOauth, useOauth } from 'state/users/hooks'
+import { useOauth } from 'state/users/hooks'
 
 export type IThirdPartiesProps = {
   text: string
   onChange: (accessToken: string, oauthType: ACCOUNT_TYPE) => void
 }
 export const ThirdParties: React.FC<IThirdPartiesProps> = ({ text, onChange }) => {
-  const { linkedInLogin } = useLinkedInOauth(onChange)
+  // const { linkedInLogin } = useLinkedInOauth(onChange)
   const { handleOauth } = useOauth()
   const handleThirdOauth = async (oauthName: string, oauthType: ACCOUNT_TYPE) => {
     const accessToken = await handleOauth(oauthName)
     onChange?.(accessToken, oauthType)
   }
-  const handleThirdLinkedinOauth = async () => {
-    linkedInLogin()
-  }
+  // const handleThirdLinkedinOauth = async () => {
+  //   linkedInLogin()
+  // }
   return (
     <Box sx={{ m: '0 auto', width: 428 }}>
       <Divider
@@ -57,7 +57,7 @@ export const ThirdParties: React.FC<IThirdPartiesProps> = ({ text, onChange }) =
             Twitter
           </Typography>
         </Button>
-        <Button
+        {/* <Button
           variant="text"
           startIcon={<LinkedInSVG />}
           sx={{ background: '#F5F5F5', width: '136px' }}
@@ -66,7 +66,7 @@ export const ThirdParties: React.FC<IThirdPartiesProps> = ({ text, onChange }) =
           <Typography variant="body1" color={'#000000'}>
             LinkedIn
           </Typography>
-        </Button>
+        </Button> */}
       </Stack>
     </Box>
   )

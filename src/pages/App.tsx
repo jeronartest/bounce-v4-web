@@ -42,13 +42,7 @@ import ProfileResumePreference from 'pages/profile/resume/preference'
 import ProfileResumeResume from 'pages/profile/resume/resume'
 import ProfileSummary from 'pages/profile/summary'
 
-import Signup from 'pages/signup'
 import SignupAccount from 'pages/signup/account'
-import SignupCompany from 'pages/signup/company'
-import SignupInstitutions from 'pages/signup/institutions'
-import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
-import SignupThirdPartiesCompany from 'pages/signup/thirdPartiesCompany'
-import SignupThirdPartiesInstitutions from 'pages/signup/thirdPartiesInstitutions'
 import ComingSoon from './ComingSoon'
 
 const GlobalHooks = () => {
@@ -109,13 +103,7 @@ export default function App() {
                     <Route path={routes.profile.resume.resume} element={<ProfileResumeResume />} />
                     <Route path={routes.profile.summary} element={<ProfileSummary />} />
 
-                    <Route path={routes.signup.index} element={<Signup />} />
                     <Route path={routes.signup.account} element={<SignupAccount />} />
-                    <Route path={routes.signup.company} element={<SignupCompany />} />
-                    <Route path={routes.signup.institutions} element={<SignupInstitutions />} />
-                    <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} />
-                    <Route path={routes.signup.thirdPartiesCompany} element={<SignupThirdPartiesCompany />} />
-                    <Route path={routes.signup.thirdPartiesInstitutions} element={<SignupThirdPartiesInstitutions />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />

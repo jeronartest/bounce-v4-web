@@ -6,6 +6,7 @@ import { searchUser } from 'api/optionsData'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { USER_TYPE } from 'api/user/type'
 import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const Search: React.FC = () => {
   const [userData, setUserData] = useState<ISearchOption[]>([])
@@ -68,7 +69,7 @@ const Search: React.FC = () => {
             </span>
           )
         }}
-        placeholder={'Search by username or company'}
+        placeholder={'Search by username'}
         startIcon
         loadingText={'No result'}
         value={searchText}
@@ -77,14 +78,15 @@ const Search: React.FC = () => {
         }}
         onSelect={(_, newVal) => {
           setSearchText('')
-          if (newVal?.value?.thirdpartId) {
-            return navigate(`/company/summary?thirdpartId=${newVal?.value?.thirdpartId}`)
-          }
-          if (newVal?.value?.userType === USER_TYPE.USER) {
-            return navigate(`/profile/summary?id=${newVal?.value?.userId}`)
-          }
+          // if (newVal?.value?.thirdpartId) {
+          //   return navigate(`/company/summary?thirdpartId=${newVal?.value?.thirdpartId}`)
+          // }
+          // if (newVal?.value?.userType === USER_TYPE.USER) {
+          //   return navigate(`/profile/summary?id=${newVal?.value?.userId}`)
+          // }
 
-          return navigate(`/company/summary?id=${newVal?.value?.userId}`)
+          // return navigate(`/company/summary?id=${newVal?.value?.userId}`)
+          return navigate(`${routes.profile.summary}?id=${newVal?.value?.userId}`)
         }}
       />
     </Box>

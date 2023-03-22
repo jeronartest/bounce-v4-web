@@ -3,7 +3,7 @@ import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { styled, Button, Box, useTheme, Typography, Popper, Stack, Link, MenuItem } from '@mui/material'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
-import { useSwitchNetworkModalToggle, useWalletModalToggle } from '../../state/application/hooks'
+import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
 import { getEtherscanLink, shortenAddress } from '../../utils'
@@ -12,7 +12,7 @@ import Spinner from 'components/Spinner'
 // import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 import Image from 'components/Image'
-import { ChainListMap } from 'constants/chain'
+import { ChainList, ChainListMap } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, IosShare, SettingsPowerOutlined } from '@mui/icons-material'
 import Copy from 'components/essential/Copy'
@@ -26,7 +26,8 @@ import { clearAllTransactions } from 'state/transactions/actions'
 import { renderTransactions } from 'components/Modal/WalletModal/AccountDetails'
 import { AppDispatch } from 'state'
 import { useDispatch } from 'react-redux'
-import SwitchNetworkModals from 'components/Modal/SwitchNetworkModals'
+import LogoText from 'components/LogoText'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
@@ -61,6 +62,13 @@ const StyledMenuItem = styled(MenuItem)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between'
+})
+const StyleNetworkMenuItem = styled(StyledMenuItem)({
+  padding: '6px',
+  backgroundColor: 'var(--ps-gray-100)',
+  '&:hover': {
+    backgroundColor: 'var(--ps-gray-300)'
+  }
 })
 // const Web3StatusIcon = styled(Web3StatusIconSvg)(({ theme }) => ({
 //   [theme.breakpoints.down('sm')]: {
@@ -150,7 +158,7 @@ function Web3StatusInner() {
       <ActionButton
         sx={{
           width: isDownSm ? '128px' : '140px',
-          height: isDownSm ? '28px' : '36px',
+          height: isDownSm ? '28px' : '40px',
           fontSize: isDownSm ? '12px' : '14px'
         }}
         onClick={toggleWalletModal}
@@ -163,7 +171,7 @@ function Web3StatusInner() {
       <ActionButton
         sx={{
           width: isDownSm ? '128px' : '140px',
-          height: isDownSm ? '28px' : '36px',
+          height: isDownSm ? '28px' : '40px',
           fontSize: isDownSm ? '12px' : '14px'
         }}
         onClick={toggleWalletModal}
@@ -197,7 +205,6 @@ export default function Web3Status() {
   return (
     <>
       <Web3StatusInner />
-      <SwitchNetworkModals />
       <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
     </>
   )
@@ -205,7 +212,8 @@ export default function Web3Status() {
 
 enum WalletView {
   MAIN,
-  TRANSACTIONS
+  TRANSACTIONS,
+  SWITCH_NETWORK
 }
 
 function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close: () => void }) {
@@ -217,7 +225,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
   const myETH = useETHBalance(account || undefined)
   const [curView, setCurView] = useState(WalletView.MAIN)
   const dispatch = useDispatch<AppDispatch>()
-  const toggleNetwork = useSwitchNetworkModalToggle()
+  const switchNetwork = useSwitchNetwork()
 
   const allTransactions = useAllTransactions()
 
@@ -299,8 +307,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
             <Box mt={15}>
               <StyledMenuItem
                 onClick={() => {
-                  close()
-                  toggleNetwork()
+                  setCurView(WalletView.SWITCH_NETWORK)
                 }}
               >
                 <Typography>Switch Network</Typography>
@@ -362,6 +369,42 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                 </Box>
               )}
             </OutlinedCard>
+          </Box>
+        )}
+        {curView === WalletView.SWITCH_NETWORK && (
+          <Box>
+            <Box pb={15} display={'flex'} justifyContent="space-between" alignItems={'center'}>
+              <StyledBtn>
+                <ChevronLeft onClick={() => setCurView(WalletView.MAIN)} />
+              </StyledBtn>
+              <Typography>Switch Network</Typography>
+            </Box>
+            <Divider />
+            <Box>
+              <Box
+                sx={{
+                  mt: 20,
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '10px'
+                }}
+              >
+                {ChainList.map(item => (
+                  <StyleNetworkMenuItem
+                    onClick={() => {
+                      switchNetwork(item.id)
+                      setCurView(WalletView.MAIN)
+                      close()
+                    }}
+                    key={item.id}
+                    sx={{ border: chainId === item.id ? '1px solid' : 'none' }}
+                    disabled={chainId === item.id}
+                  >
+                    <LogoText fontSize={12} logo={item.logo} text={item.name} />
+                  </StyleNetworkMenuItem>
+                ))}
+              </Box>
+            </Box>
           </Box>
         )}
       </Box>
