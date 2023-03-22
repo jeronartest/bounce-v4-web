@@ -56,7 +56,7 @@ export function useETHBalances(
   )
 }
 
-function useETHBalance(uncheckedAddress?: string | undefined, chainId?: ChainId): CurrencyAmount | undefined {
+export function useETHBalance(uncheckedAddress?: string | undefined, chainId?: ChainId): CurrencyAmount | undefined {
   const ETHBalances = useETHBalances([uncheckedAddress], chainId)
 
   return useMemo(() => (uncheckedAddress ? ETHBalances[uncheckedAddress] : undefined), [ETHBalances, uncheckedAddress])

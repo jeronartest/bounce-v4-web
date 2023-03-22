@@ -11,7 +11,8 @@ export type PopupContent = {
 export enum ApplicationModal {
   WALLET,
   SETTINGS,
-  MENU
+  MENU,
+  SWITCH_NETWORK
 }
 
 export const updateBlockNumber = createAction<{ chainId: number; blockNumber: number }>('application/updateBlockNumber')

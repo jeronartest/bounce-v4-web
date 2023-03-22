@@ -1,4 +1,4 @@
-import { styled, useTheme } from '@mui/material'
+import { styled, Typography, useTheme } from '@mui/material'
 import { useActiveWeb3React } from 'hooks/'
 import { getEtherscanLink } from 'utils'
 import { ExternalLink } from 'themes/components'
@@ -7,7 +7,7 @@ import Spinner from 'components/Spinner'
 import { ReactComponent as SuccessIcon } from 'assets/componentsIcon/statusIcon/success_icon.svg'
 import { ReactComponent as Error } from 'assets/componentsIcon/statusIcon/error_icon.svg'
 
-const TransactionStatusText = styled('div')({
+const TransactionStatusText = styled(Typography)({
   marginRight: 8,
   display: 'flex',
   alignItems: 'center',
@@ -42,7 +42,9 @@ export default function Transaction({ hash }: { hash: string }) {
   return (
     <div>
       <TransactionState href={chainId ? getEtherscanLink(chainId, hash, 'transaction') : ''}>
-        <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
+        <TransactionStatusText noWrap maxWidth={'80%'}>
+          {summary ?? hash} ↗
+        </TransactionStatusText>
         {pending ? (
           <Spinner />
         ) : success ? (

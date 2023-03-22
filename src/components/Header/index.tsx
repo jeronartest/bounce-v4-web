@@ -26,7 +26,6 @@ import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { useLogout, useUserInfo } from 'state/users/hooks'
-import { useWalletModalToggle } from 'state/application/hooks'
 
 interface TabContent {
   title: string
@@ -136,7 +135,6 @@ const LinksWrapper = muiStyled('div')(({ theme }) => ({
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { pathname } = useLocation()
-  const walletModalToggle = useWalletModalToggle()
 
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -192,14 +190,6 @@ export default function Header() {
         }}
       >
         My Homepage
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          walletModalToggle()
-          setAnchorEl(null)
-        }}
-      >
-        My Connected Wallet
       </MenuItem>
       <MenuItem
         onClick={() => {

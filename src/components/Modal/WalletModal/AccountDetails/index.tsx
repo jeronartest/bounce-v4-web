@@ -20,7 +20,7 @@ const Dot = styled('span')({
   borderRadius: '50%'
 })
 
-function renderTransactions(transactions: string[]) {
+export function renderTransactions(transactions: string[]) {
   return (
     <>
       {transactions.map((hash, i) => {
