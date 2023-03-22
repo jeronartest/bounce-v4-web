@@ -72,7 +72,7 @@ const Account: React.FC = ({}) => {
     navigate(routes.signup.thirdPartiesAccount + '?' + stringify({ accessToken, oauthType }))
   }
   return (
-    <LoginLayout title={'Create Individual Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
+    <LoginLayout title={'Create Account'} subTitle={<Link to={routes.login}>Sign in</Link>}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {() => (
           <Box component={Form} noValidate>

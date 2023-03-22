@@ -30,6 +30,7 @@ export const routes = {
     summary: '/profile/summary'
   },
   signup: {
-    account: '/signup/account'
+    account: '/signup/account',
+    thirdPartiesAccount: '/signup/thirdPartiesAccount'
   }
 }
