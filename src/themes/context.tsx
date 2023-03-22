@@ -76,7 +76,7 @@ export default MuiThemeProvider
 
 export const HideOnMobile = styled('div', {
   shouldForwardProp: () => true
-})<{ breakpoint?: 'sm' | 'md' }>(({ theme, breakpoint }) => ({
+})<{ breakpoint?: 'sm' | 'md' | 'lg' }>(({ theme, breakpoint }) => ({
   [theme.breakpoints.down(breakpoint ?? 'sm')]: {
     display: 'none'
   }

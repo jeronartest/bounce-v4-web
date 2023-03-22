@@ -77,7 +77,7 @@ const CreateBtn: React.FC = () => {
       <Button
         variant="outlined"
         size="small"
-        sx={{ width: 124, height: 40, borderRadius: 20 }}
+        sx={{ width: 100, height: 40, borderRadius: 20 }}
         onClick={handleMenuOpen}
         endIcon={anchorEl ? <ArrowUpSVG /> : <ArrowDownSVG />}
       >

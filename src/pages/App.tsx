@@ -49,6 +49,7 @@ import SignupInstitutions from 'pages/signup/institutions'
 import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 import SignupThirdPartiesCompany from 'pages/signup/thirdPartiesCompany'
 import SignupThirdPartiesInstitutions from 'pages/signup/thirdPartiesInstitutions'
+import ComingSoon from './ComingSoon'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -89,6 +90,9 @@ export default function App() {
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />
+
+                    <Route path={routes.realAuction.index} element={<ComingSoon />} />
+                    <Route path={routes.adsAuction.index} element={<ComingSoon />} />
 
                     <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />

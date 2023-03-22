@@ -42,6 +42,12 @@ export const routes = {
     index: '/market',
     pools: '/market/pools'
   },
+  realAuction: {
+    index: '/real-auction'
+  },
+  adsAuction: {
+    index: '/ads-auction'
+  },
   profile: {
     account: {
       settings: '/profile/account/settings'

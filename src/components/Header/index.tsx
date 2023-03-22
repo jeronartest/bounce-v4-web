@@ -21,7 +21,7 @@ import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 // import NetworkSelect from './NetworkSelect'
-// import Search from 'bounceComponents/common/Header/Search'
+import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
@@ -40,21 +40,29 @@ interface Tab extends TabContent {
 
 export const Tabs: Tab[] = [
   {
-    title: 'Auction',
+    title: 'Token&NFT Auction',
     route: routes.market.index
   },
+  {
+    title: 'Real World Collectibles Auction',
+    route: routes.realAuction.index
+  },
+  {
+    title: 'Ads Auction',
+    route: routes.adsAuction.index
+  },
 
-  { title: 'DAO', link: 'https://google.com' },
-  { title: 'Docs', link: 'https://google.com' }
+  { title: 'Token', link: 'https://token.bounce.finance/staking' }
 ]
 
 const navLinkSX = ({ theme }: any) => ({
   textDecoration: 'none',
   fontSize: 14,
+  fontWeight: 500,
   color: theme.palette.text.primary,
-  opacity: 0.5,
+  opacity: 1,
   '&:hover': {
-    opacity: 1
+    opacity: 0.5
   }
 })
 
@@ -68,23 +76,22 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
-  padding: '0 25px 0 25px!important',
+  padding: '0 16px 0 16px!important',
   zIndex: theme.zIndex.drawer,
   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
     textDecoration: 'none',
     fontSize: 14,
     color: theme.palette.text.primary,
-    opacity: 0.5,
-    marginRight: 48,
-    paddingBottom: '30px',
-    borderBottom: '2px solid transparent',
+    marginRight: 24,
+    paddingBottom: '3px',
+    borderBottom: '1px solid transparent',
     '&.active': {
       opacity: 1,
       borderColor: theme.palette.text.primary
     },
     '&:hover': {
-      opacity: 1
+      opacity: 0.5
     }
   },
   [theme.breakpoints.down('lg')]: {
@@ -126,9 +133,9 @@ const MainLogo = styled(Link)(({ theme }) => ({
 }))
 
 const LinksWrapper = muiStyled('div')(({ theme }) => ({
-  marginLeft: 60,
+  marginLeft: 24,
   [theme.breakpoints.down('lg')]: {
-    marginLeft: 0
+    marginLeft: 10
   }
 }))
 
@@ -222,15 +229,14 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image src={logo} alt={'logo'} />
           </MainLogo>
-          <HideOnMobile breakpoint="md">
+          <HideOnMobile breakpoint="lg">
             <LinksWrapper>
               {Tabs.map(({ title, route, subTab, link, titleContent }, idx) =>
                 subTab ? (
                   <Box
                     sx={{
                       marginRight: {
-                        xs: 15,
-                        lg: 48
+                        xs: 15
                       },
                       height: 'auto',
                       paddingBottom: '30px',
@@ -309,7 +315,8 @@ export default function Header() {
           </HideOnMobile>
         </Box>
 
-        <Stack direction={'row'} alignItems="center" spacing={20}>
+        <Stack direction={'row'} alignItems="center" spacing={15}>
+          <Search />
           <CreateBtn />
           <Web3Status />
 

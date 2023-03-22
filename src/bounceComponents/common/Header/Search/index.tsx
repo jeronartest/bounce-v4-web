@@ -37,7 +37,7 @@ const Search: React.FC = () => {
   return (
     <Box
       sx={{
-        width: 310,
+        width: 240,
         height: 40,
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {
