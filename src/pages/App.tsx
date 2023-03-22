@@ -33,13 +33,6 @@ import ProfileBasic from 'pages/profile/basic'
 import ProfileEditInvestments from 'pages/profile/edit/investments'
 import ProfileEditOverview from 'pages/profile/edit/overview'
 import ProfileEditSocial from 'pages/profile/edit/social'
-import ProfilePortfolio from 'pages/profile/portfolio'
-import ProfileResume from 'pages/profile/resume'
-import ProfileResumeEducation from 'pages/profile/resume/education'
-import ProfileResumeExperience from 'pages/profile/resume/experience'
-import ProfileResumeJob from 'pages/profile/resume/job'
-import ProfileResumePreference from 'pages/profile/resume/preference'
-import ProfileResumeResume from 'pages/profile/resume/resume'
 import ProfileSummary from 'pages/profile/summary'
 
 import SignupAccount from 'pages/signup/account'
@@ -94,13 +87,6 @@ export default function App() {
                     <Route path={routes.profile.edit.investments} element={<ProfileEditInvestments />} />
                     <Route path={routes.profile.edit.overview} element={<ProfileEditOverview />} />
                     <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} />
-                    <Route path={routes.profile.portfolio} element={<ProfilePortfolio />} />
-                    <Route path={routes.profile.resume.index} element={<ProfileResume />} />
-                    <Route path={routes.profile.resume.education} element={<ProfileResumeEducation />} />
-                    <Route path={routes.profile.resume.experience} element={<ProfileResumeExperience />} />
-                    <Route path={routes.profile.resume.job} element={<ProfileResumeJob />} />
-                    <Route path={routes.profile.resume.preference} element={<ProfileResumePreference />} />
-                    <Route path={routes.profile.resume.resume} element={<ProfileResumeResume />} />
                     <Route path={routes.profile.summary} element={<ProfileSummary />} />
 
                     <Route path={routes.signup.account} element={<SignupAccount />} />

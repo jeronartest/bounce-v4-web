@@ -105,8 +105,7 @@ function Web3StatusInner() {
   if (account && chainId) {
     return (
       <ClickAwayListener
-        onClickAway={e => {
-          console.log(e.currentTarget)
+        onClickAway={() => {
           setAnchorEl(null)
         }}
       >

@@ -5,33 +5,33 @@ import GoBack from 'bounceComponents/common/GoBack'
 import { Link, useLocation } from 'react-router-dom'
 import { routes } from 'constants/routes'
 
-export const companyTabsList: ITabsListProps[] = [
-  {
-    labelKey: 'overview',
-    label: 'Overview',
-    href: routes.company.edit.overview
-  },
-  {
-    labelKey: 'team',
-    label: 'Team',
-    href: routes.company.edit.team
-  },
-  {
-    labelKey: 'tokens',
-    label: 'Tokens',
-    href: routes.company.edit.tokens
-  },
-  {
-    labelKey: 'investors',
-    label: 'Investors',
-    href: routes.company.edit.investors
-  },
-  {
-    labelKey: 'investments',
-    label: 'Investments',
-    href: routes.company.edit.investments
-  }
-]
+// export const companyTabsList: ITabsListProps[] = [
+//   {
+//     labelKey: 'overview',
+//     label: 'Overview',
+//     href: routes.company.edit.overview
+//   },
+//   {
+//     labelKey: 'team',
+//     label: 'Team',
+//     href: routes.company.edit.team
+//   },
+//   {
+//     labelKey: 'tokens',
+//     label: 'Tokens',
+//     href: routes.company.edit.tokens
+//   },
+//   {
+//     labelKey: 'investors',
+//     label: 'Investors',
+//     href: routes.company.edit.investors
+//   },
+//   {
+//     labelKey: 'investments',
+//     label: 'Investments',
+//     href: routes.company.edit.investments
+//   }
+// ]
 
 export const profileTabsList: ITabsListProps[] = [
   {
@@ -51,33 +51,33 @@ export const profileTabsList: ITabsListProps[] = [
   }
 ]
 
-export const resumeTabsList: ITabsListProps[] = [
-  {
-    labelKey: 'job',
-    label: 'Job Overview',
-    href: routes.profile.resume.job
-  },
-  {
-    labelKey: 'experience',
-    label: 'Experience',
-    href: routes.profile.resume.experience
-  },
-  {
-    labelKey: 'education',
-    label: 'Education',
-    href: routes.profile.resume.education
-  },
-  {
-    labelKey: 'preference',
-    label: 'Preference',
-    href: routes.profile.resume.preference
-  },
-  {
-    labelKey: 'resume',
-    label: 'Resume',
-    href: routes.profile.resume.resume
-  }
-]
+// export const resumeTabsList: ITabsListProps[] = [
+//   {
+//     labelKey: 'job',
+//     label: 'Job Overview',
+//     href: routes.profile.resume.job
+//   },
+//   {
+//     labelKey: 'experience',
+//     label: 'Experience',
+//     href: routes.profile.resume.experience
+//   },
+//   {
+//     labelKey: 'education',
+//     label: 'Education',
+//     href: routes.profile.resume.education
+//   },
+//   {
+//     labelKey: 'preference',
+//     label: 'Preference',
+//     href: routes.profile.resume.preference
+//   },
+//   {
+//     labelKey: 'resume',
+//     label: 'Resume',
+//     href: routes.profile.resume.resume
+//   }
+// ]
 
 interface TabPanelProps {
   children?: React.ReactNode

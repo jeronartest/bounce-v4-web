@@ -33,14 +33,14 @@ import { PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
 // import { formatNumber } from '@/utils/web3/number'
 import NoData from 'bounceComponents/common/NoData'
-import { Token } from 'bounceComponents/create-auction-pool/types'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
 import { getPools } from 'api/market'
 import TotalPaginationBox from 'bounceComponents/market/components/TotalPaginationBox'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
-import { UserType } from 'api/market/type'
+// import { UserType } from 'api/market/type'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
+import { Token } from 'bounceComponents/fixed-swap/type'
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
@@ -358,39 +358,27 @@ const Pools: React.FC = ({}) => {
                                   closeAt={fixedSwaptem.closeAt}
                                   dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
                                   holder={
-                                    fixedSwaptem.creatorUserInfo?.userType === UserType.Profile ? (
-                                      <AuctionHolder
-                                        href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                        avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                                        name={fixedSwaptem.creatorUserInfo?.name}
-                                        description={
-                                          fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                            ? fixedSwaptem.creatorUserInfo?.publicRole?.map(
-                                                (item: any, index: number) => {
-                                                  return (
-                                                    getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                                    `${
-                                                      index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
-                                                      ', '
-                                                    }`
-                                                  )
-                                                }
-                                              )
-                                            : 'Individual account'
-                                        }
-                                        isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                                      />
-                                    ) : (
-                                      <AuctionHolder
-                                        href={`${routes.company.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                        avatar={fixedSwaptem.creatorUserInfo?.companyAvatar}
-                                        name={fixedSwaptem.creatorUserInfo?.companyName}
-                                        description={
-                                          fixedSwaptem.creatorUserInfo?.companyIntroduction || 'No description yet'
-                                        }
-                                        isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                                      />
-                                    )
+                                    <AuctionHolder
+                                      href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                      avatar={fixedSwaptem.creatorUserInfo?.avatar}
+                                      name={fixedSwaptem.creatorUserInfo?.name}
+                                      description={
+                                        fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
+                                          ? fixedSwaptem.creatorUserInfo?.publicRole?.map(
+                                              (item: any, index: number) => {
+                                                return (
+                                                  getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
+                                                  `${
+                                                    index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
+                                                    ', '
+                                                  }`
+                                                )
+                                              }
+                                            )
+                                          : 'Individual account'
+                                      }
+                                      isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
+                                    />
                                   }
                                   progress={{
                                     symbol: fixedSwaptem.token0.symbol?.toUpperCase(),

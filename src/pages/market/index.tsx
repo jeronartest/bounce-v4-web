@@ -14,7 +14,7 @@ import { getLabelById, shortenAddress } from 'utils'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
 // import { formatNumber } from '@/utils/web3/number'
-import { UserType } from 'api/market/type'
+// import { UserType } from 'api/market/type'
 import CompanyBanner from 'bounceComponents/company/CompanyBanner'
 import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
 import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
@@ -189,32 +189,22 @@ const Market: React.FC = ({}) => {
                           closeAt={fixedSwaptem.closeAt}
                           dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
                           holder={
-                            fixedSwaptem.creatorUserInfo?.userType === UserType.Profile ? (
-                              <AuctionHolder
-                                href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                                name={fixedSwaptem.creatorUserInfo?.name}
-                                description={
-                                  fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                    ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
-                                        return (
-                                          getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                          `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
-                                        )
-                                      })
-                                    : 'Individual account'
-                                }
-                                isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                              />
-                            ) : (
-                              <AuctionHolder
-                                href={`${routes.company.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                avatar={fixedSwaptem.creatorUserInfo?.companyAvatar}
-                                name={fixedSwaptem.creatorUserInfo?.companyName}
-                                description={fixedSwaptem.creatorUserInfo?.companyIntroduction || 'No description yet'}
-                                isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                              />
-                            )
+                            <AuctionHolder
+                              href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                              avatar={fixedSwaptem.creatorUserInfo?.avatar}
+                              name={fixedSwaptem.creatorUserInfo?.name}
+                              description={
+                                fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
+                                  ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
+                                      return (
+                                        getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
+                                        `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
+                                      )
+                                    })
+                                  : 'Individual account'
+                              }
+                              isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
+                            />
                           }
                           progress={{
                             symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
