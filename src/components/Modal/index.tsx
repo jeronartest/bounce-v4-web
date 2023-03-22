@@ -67,7 +67,7 @@ export default function Modal(props: Props) {
               boxShadow: 'unset',
               padding: 0,
               boxSizing: 'border-box',
-              borderRadius: 2,
+              borderRadius: 20,
               marginBottom: { xs: 0, sm: '10vh' },
               overflowX: 'hidden',
               position: 'absolute',

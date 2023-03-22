@@ -22,7 +22,6 @@ import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
-  OPTIONS_SECONDARY: 'options_secondary',
   ACCOUNT: 'account',
   PENDING: 'pending'
 }
@@ -62,7 +61,7 @@ export default function WalletModal({
   useEffect(() => {
     if (walletModalOpen) {
       setPendingError(false)
-      setWalletView(WALLET_VIEWS.ACCOUNT)
+      setWalletView(WALLET_VIEWS.OPTIONS)
     }
   }, [walletModalOpen])
 
@@ -71,7 +70,7 @@ export default function WalletModal({
   const connectorPrevious = usePrevious(connector)
   useEffect(() => {
     if (walletModalOpen && ((active && !activePrevious) || (connector && connector !== connectorPrevious && !error))) {
-      setWalletView(WALLET_VIEWS.ACCOUNT)
+      setWalletView(WALLET_VIEWS.OPTIONS)
     }
   }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
 
@@ -190,9 +189,7 @@ export default function WalletModal({
           <Option
             id={`connect-${key}`}
             onClick={() => {
-              option.connector === connector
-                ? setWalletView(WALLET_VIEWS.ACCOUNT)
-                : !option.href && tryActivation(option.connector)
+              option.connector === connector ? toggleWalletModal() : !option.href && tryActivation(option.connector)
             }}
             key={key}
             active={option.connector === connector}
@@ -209,7 +206,7 @@ export default function WalletModal({
     if (error) {
       return (
         <>
-          <Typography variant="h6">
+          <Typography variant="h3" fontWeight={500}>
             {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}
           </Typography>
           <Box padding={isUpToMD ? '16px' : '2rem 6rem 52px'}>
@@ -257,7 +254,12 @@ export default function WalletModal({
     }
     return (
       <>
-        {walletView === WALLET_VIEWS.ACCOUNT && <Typography variant="h6">Connect to a wallet</Typography>}
+        {walletView === WALLET_VIEWS.ACCOUNT ||
+          (walletView === WALLET_VIEWS.OPTIONS && (
+            <Typography variant="h3" fontWeight={500} width="100%">
+              Connect to a wallet
+            </Typography>
+          ))}
 
         {walletView === WALLET_VIEWS.PENDING ? (
           <PendingView
@@ -271,7 +273,7 @@ export default function WalletModal({
               color="primary"
               onClick={() => {
                 setPendingError(false)
-                setWalletView(WALLET_VIEWS.ACCOUNT)
+                setWalletView(WALLET_VIEWS.OPTIONS)
               }}
               style={{ whiteSpace: 'nowrap' }}
             >
@@ -279,7 +281,7 @@ export default function WalletModal({
             </Button>
           </PendingView>
         ) : (
-          <Box display="grid" gap="10px" width="100%" justifyContent="center">
+          <Box display="grid" gap="10px" width="100%">
             {getOptions()}
           </Box>
         )}
@@ -288,7 +290,7 @@ export default function WalletModal({
   }
 
   return (
-    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="560px" closeIcon={true}>
+    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="480px" closeIcon={true}>
       <Box width={'100%'} padding="32px" display="flex" flexDirection="column" alignItems="center" gap={20}>
         {getModalContent()}
       </Box>

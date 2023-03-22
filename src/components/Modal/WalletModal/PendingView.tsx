@@ -32,14 +32,14 @@ export default function PendingView({
           <OutlinedCard color={theme.palette.primary.main} style={{ margin: '20px' }} padding="16px" width="80%">
             <Box display="flex" gap="16px" width="100%">
               <Spinner />
-              Initializing...
+              Waiting to connect...
             </Box>
           </OutlinedCard>
         </>
       )}
 
       {error && (
-        <Box display="flex" gap="10px" width="100%">
+        <Box display="grid" gap="15px" gridTemplateColumns={'1fr 1fr'} width="100%">
           {children}
           {error && (
             <Button

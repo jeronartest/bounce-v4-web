@@ -26,7 +26,7 @@ const CreateBtn: React.FC = () => {
       onClose={handleMenuClose}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'left'
+        horizontal: 'center'
       }}
       transformOrigin={{
         vertical: 'top',
@@ -57,14 +57,14 @@ const CreateBtn: React.FC = () => {
       >
         Create a pool
       </MenuItem>
-      <MenuItem
+      {/* <MenuItem
         onClick={() => {
           navigate(routes.idea.create)
           setAnchorEl(null)
         }}
       >
         Create an idea
-      </MenuItem>
+      </MenuItem> */}
     </Menu>
   )
 

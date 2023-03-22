@@ -39,9 +39,10 @@ export default function Option({
       <Button
         variant="outlined"
         key={id}
+        fullWidth
         sx={{
           color: active ? 'transparent' : undefined,
-          width: 320
+          fontWeight: 500
         }}
         onClick={onClick ?? undefined}
         disabled={!clickable || active}

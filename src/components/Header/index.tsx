@@ -20,7 +20,7 @@ import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
-import NetworkSelect from './NetworkSelect'
+// import NetworkSelect from './NetworkSelect'
 // import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { USER_TYPE } from 'api/user/type'
@@ -320,7 +320,6 @@ export default function Header() {
         </Box>
 
         <Stack direction={'row'} alignItems="center" spacing={20}>
-          <NetworkSelect />
           <CreateBtn />
           <Web3Status />
 

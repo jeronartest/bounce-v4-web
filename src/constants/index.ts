@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { injected, walletconnect } from '../connectors'
+import { injected, walletconnect, walletlink } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -53,15 +53,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#4196FC',
     mobile: true
+  },
+  WALLET_LINK: {
+    connector: walletlink,
+    name: 'Coinbase Wallet',
+    iconName: 'coinbaseWalletIcon.svg',
+    description: 'Use Coinbase Wallet app on mobile device',
+    href: null,
+    color: '#315CF5'
   }
-  // WALLET_LINK: {
-  //   connector: walletlink,
-  //   name: 'Coinbase Wallet',
-  //   iconName: 'coinbaseWalletIcon.svg',
-  //   description: 'Use Coinbase Wallet app on mobile device',
-  //   href: null,
-  //   color: '#315CF5'
-  // },
   // COINBASE_LINK: {
   //   name: 'Open in Coinbase Wallet',
   //   iconName: 'coinbaseWalletIcon.svg',
