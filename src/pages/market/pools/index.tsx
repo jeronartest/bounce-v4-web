@@ -100,7 +100,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
-  const [chain, setChain] = useState<number>(3)
+  const [chain, setChain] = useState<number>(0)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
       .then(res => {
@@ -348,7 +348,7 @@ const Pools: React.FC = ({}) => {
                                 href={routes.auction.fixedPrice
                                   .replace(
                                     ':chainShortName',
-                                    getLabelById(chain, 'shortName', optionDatas?.chainInfoOpt)
+                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
                                   )
                                   .replace(':poolId', fixedSwaptem.poolId)}
                               >

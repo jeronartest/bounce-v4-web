@@ -1,3 +1,4 @@
+import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 
@@ -74,6 +75,7 @@ export interface CreatorUserInfo {
   publicRole?: null[] | null
   userId: number
   userType: number
+  isVerify?: VerifyStatus
 }
 
 export interface LikeInfo {
