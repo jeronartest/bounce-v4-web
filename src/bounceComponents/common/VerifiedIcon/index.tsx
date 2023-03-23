@@ -1,4 +1,4 @@
-import { Box, Link, SxProps, Typography } from '@mui/material'
+import { Box, SxProps, Typography } from '@mui/material'
 import React from 'react'
 import Image from 'components/Image'
 import Tooltip from '../Tooltip'
@@ -22,17 +22,17 @@ const VerifiedIcon: React.FC<IVerifiedIconProps> = ({ isVerify, width = 20, heig
           title={
             isVerify === VerifyStatus.NoVerify ? (
               <Typography
-                component={Link}
+                // component={Link}
                 variant="body2"
-                href="/profile/account/settings"
-                sx={{
-                  textDecoration: 'underline',
-                  '&:hover': {
-                    cursor: 'pointer'
-                  }
-                }}
+                // href="/profile/account/settings"
+                // sx={{
+                //   textDecoration: 'underline',
+                //   '&:hover': {
+                //     cursor: 'pointer'
+                //   }
+                // }}
               >
-                Bind LinkedIn to apply for verification
+                No Verified
               </Typography>
             ) : (
               'Verified account'

@@ -60,7 +60,7 @@ const initialValues = {
   tokenFromDecimals: '',
   poolStatus: 0,
   auctionType: 1,
-  chain: 1
+  chain: 0
 }
 const defaultIdeaPageSize = 12
 const searchOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Address']
@@ -133,7 +133,7 @@ const Pools: React.FC = ({}) => {
       poolStatusFrontend,
       token0Address
     }) => {
-      if (!chainId) {
+      if (!chainId && chainId !== 0) {
         return Promise.reject(new Error('No ChainId'))
       }
 
@@ -141,7 +141,7 @@ const Pools: React.FC = ({}) => {
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category: category,
-        chainId: chainId,
+        chainId: chainId || 0,
         creatorAddress: creatorAddress,
         creatorName: creatorName,
         orderBy: orderBy === 0 ? 'openTs' : 'createTs',
@@ -173,7 +173,6 @@ const Pools: React.FC = ({}) => {
       }
     },
     {
-      manual: true,
       defaultPageSize: defaultIdeaPageSize
     }
   )
@@ -259,7 +258,10 @@ const Pools: React.FC = ({}) => {
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                       <Stack direction="row" spacing={10}>
                         <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-                          <Select defaultValue={1}>
+                          <Select defaultValue={0}>
+                            <MenuItem key={0} value={0}>
+                              All Chains
+                            </MenuItem>
                             {optionDatas?.chainInfoOpt?.map((item, index) => (
                               <MenuItem key={index} value={item.id}>
                                 {item.chainName.split(' ')[0]}

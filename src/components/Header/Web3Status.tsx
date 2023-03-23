@@ -28,6 +28,7 @@ import { AppDispatch } from 'state'
 import { useDispatch } from 'react-redux'
 import LogoText from 'components/LogoText'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import Tooltip from 'bounceComponents/common/Tooltip'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
@@ -271,25 +272,31 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                 </Box>
               </Box>
               <Stack direction={'row'} spacing={8}>
-                <StyledBtn>
-                  <Copy toCopy={account || ''} />
-                </StyledBtn>
-                <StyledBtn>
-                  <Link target={'_blank'} href={getEtherscanLink(chainId, account, 'address')}>
-                    <IosShare sx={{ color: '#000', height: 18 }} />
-                  </Link>
-                </StyledBtn>
-                <StyledBtn>
-                  <SettingsPowerOutlined
-                    onClick={() => {
-                      setInjectedConnected()
-                      deactivate()
-                      connector?.deactivate()
-                      close()
-                    }}
-                    sx={{ color: '#000', height: 18 }}
-                  />
-                </StyledBtn>
+                <Tooltip title="Copy address">
+                  <StyledBtn>
+                    <Copy toCopy={account || ''} />
+                  </StyledBtn>
+                </Tooltip>
+                <Tooltip title="Explorer">
+                  <StyledBtn>
+                    <Link target={'_blank'} href={getEtherscanLink(chainId, account, 'address')}>
+                      <IosShare sx={{ color: '#000', height: 18 }} />
+                    </Link>
+                  </StyledBtn>
+                </Tooltip>
+                <Tooltip title="Disconnect">
+                  <StyledBtn>
+                    <SettingsPowerOutlined
+                      onClick={() => {
+                        setInjectedConnected()
+                        deactivate()
+                        connector?.deactivate()
+                        close()
+                      }}
+                      sx={{ color: '#000', height: 18 }}
+                    />
+                  </StyledBtn>
+                </Tooltip>
               </Stack>
             </Box>
             <Box padding="20px 0">

@@ -33,7 +33,7 @@ import ProfileBasic from 'pages/profile/basic'
 import ProfileEditInvestments from 'pages/profile/edit/investments'
 import ProfileEditOverview from 'pages/profile/edit/overview'
 import ProfileEditSocial from 'pages/profile/edit/social'
-import ProfileSummary from 'pages/profile/summary'
+import ProfileHome from 'pages/profile/home'
 
 import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 
@@ -89,7 +89,8 @@ export default function App() {
                     <Route path={routes.profile.edit.investments} element={<ProfileEditInvestments />} />
                     <Route path={routes.profile.edit.overview} element={<ProfileEditOverview />} />
                     <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} />
-                    <Route path={routes.profile.summary} element={<ProfileSummary />} />
+
+                    <Route path={routes.profile.summary} element={<ProfileHome />} />
 
                     <Route path={routes.signup.account} element={<SignupAccount />} />
                     <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} />

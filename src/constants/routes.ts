@@ -27,7 +27,9 @@ export const routes = {
       social: '/profile/edit/social'
     },
     portfolio: '/profile/portfolio',
-    summary: '/profile/summary'
+    summary: '/profile/summary',
+    summaryReal: '/profile/summary/real',
+    summaryAds: '/profile/summary/ads'
   },
   signup: {
     account: '/signup/account',
