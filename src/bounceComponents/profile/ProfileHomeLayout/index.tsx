@@ -193,7 +193,9 @@ const ProfileHomeLayout: React.FC = () => {
                       key={item.labelKey}
                       sx={{ ...styles.menu, ...(hasActive(item?.href) ? styles.menuActive : ({} as any)) }}
                     >
-                      <Link to={`${routes.profile.summary}?id=${id}&type=${item.href}`}>{item.label}</Link>
+                      <Link replace to={`${routes.profile.summary}?id=${id}&type=${item.href}`}>
+                        {item.label}
+                      </Link>
                     </Typography>
                   )
                 })}
