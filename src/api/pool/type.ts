@@ -1,3 +1,4 @@
+import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 
@@ -22,6 +23,8 @@ export interface GetPoolCreationSignatureParams {
   openAt: number
   token0: string
   token1: string
+  message: string
+  signature: string
 }
 
 export interface GetPoolCreationSignatureResponse {
@@ -74,6 +77,7 @@ export interface CreatorUserInfo {
   publicRole?: null[] | null
   userId: number
   userType: number
+  isVerify?: VerifyStatus
 }
 
 export interface LikeInfo {

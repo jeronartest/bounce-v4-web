@@ -23,6 +23,7 @@ export interface IPoolsParams {
   orderBy: string
   poolId?: string
   poolName?: string
+  CreatorUserId?: number
   poolStatusFrontend?: string
   token0Address?: string
 }

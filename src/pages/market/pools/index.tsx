@@ -41,6 +41,7 @@ import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlined
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
@@ -100,7 +101,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
-  const [chain, setChain] = useState<number>(3)
+  const [chain, setChain] = useState<number>(0)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
       .then(res => {
@@ -117,6 +118,7 @@ const Pools: React.FC = ({}) => {
   const {
     pagination: poolsPagination,
     data: poolsData,
+    loading,
     run,
     params
   } = usePagination<any, Params>(
@@ -338,7 +340,19 @@ const Pools: React.FC = ({}) => {
                       </FormItem>
                     </Stack>
                     <Box mt={16}>
-                      {poolsData?.total > 0 ? (
+                      {loading ? (
+                        <Box
+                          sx={{
+                            width: '100%',
+                            height: '70vh',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <BounceAnime />
+                        </Box>
+                      ) : poolsData?.total > 0 ? (
                         <Grid container spacing={18}>
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
@@ -348,7 +362,7 @@ const Pools: React.FC = ({}) => {
                                 href={routes.auction.fixedPrice
                                   .replace(
                                     ':chainShortName',
-                                    getLabelById(chain, 'shortName', optionDatas?.chainInfoOpt)
+                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
                                   )
                                   .replace(':poolId', fixedSwaptem.poolId)}
                               >
