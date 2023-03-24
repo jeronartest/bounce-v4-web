@@ -13,7 +13,6 @@ import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/pro
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
-import { useUserInfo } from 'state/users/hooks'
 
 interface Params {
   whitelist: string[]
@@ -38,16 +37,12 @@ export function useCreateFixedSwapPool() {
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
-  const userInfo = useUserInfo()
 
   return useCallback(async (): Promise<{
     hash: string
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
-    if (!userInfo) {
-      return Promise.reject('user info error')
-    }
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
@@ -61,7 +56,7 @@ export function useCreateFixedSwapPool() {
       delayUnlockingTime: values.shouldDelayUnlocking
         ? values.delayUnlockingTime?.unix() || 0
         : values.endTime?.unix() || 0,
-      poolName: values.poolName.slice(0, 50) + `#${userInfo.userId}`,
+      poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.tokenFrom.address,
       tokenFormDecimal: values.tokenFrom.decimals,
       tokenToAddress: values.tokenTo.address,
@@ -159,16 +154,7 @@ export function useCreateFixedSwapPool() {
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
         }
       })
-  }, [
-    account,
-    addTransaction,
-    chainConfigInBackend?.id,
-    currencyFrom,
-    currencyTo,
-    fixedSwapERC20Contract,
-    userInfo,
-    values
-  ])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
 }
 
 function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {
