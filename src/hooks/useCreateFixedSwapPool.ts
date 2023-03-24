@@ -13,6 +13,8 @@ import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/pro
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
+import { useWeb3Instance } from './useWeb3Instance'
+import { useUserInfo } from 'state/users/hooks'
 
 interface Params {
   whitelist: string[]
@@ -30,13 +32,29 @@ interface Params {
 }
 const NO_LIMIT_ALLOCATION = '0'
 
+export function useSignMessage() {
+  const { account } = useActiveWeb3React()
+  const web3 = useWeb3Instance()
+  return useCallback(
+    (message: string) => {
+      if (!account || !web3) {
+        throw new Error('account not find')
+      }
+      return web3?.eth.personal.sign(message, account, '')
+    },
+    [account, web3]
+  )
+}
+
 export function useCreateFixedSwapPool() {
+  const userInfo = useUserInfo()
   const { account, chainId } = useActiveWeb3React()
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
+  const makeSignature = useSignMessage()
 
   return useCallback(async (): Promise<{
     hash: string
@@ -82,6 +100,11 @@ export function useCreateFixedSwapPool() {
       return Promise.reject('no contract')
     }
 
+    const walletSignatureMessage = 'Create pool signature for Bounce'
+
+    const walletSignature = await makeSignature(walletSignatureMessage)
+    if (!walletSignature) throw new Error('Signature error')
+
     let merkleroot = ''
 
     if (params.whitelist.length > 0) {
@@ -110,7 +133,9 @@ export function useCreateFixedSwapPool() {
       name: params.poolName,
       openAt: params.startTime,
       token0: params.tokenFromAddress,
-      token1: params.tokenToAddress
+      token1: params.tokenToAddress,
+      signature: walletSignature,
+      message: walletSignatureMessage
     }
 
     const {
@@ -118,7 +143,7 @@ export function useCreateFixedSwapPool() {
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
-      name: signatureParams.name,
+      name: signatureParams.name + `${userInfo.userId.toString().padStart(10, '0')}`,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
       amountTotal0: signatureParams.amountTotal0,
@@ -131,6 +156,10 @@ export function useCreateFixedSwapPool() {
     }
 
     const args = [contractCallParams, expiredTime, signature]
+    console.log(
+      '🚀 ~ file: useCreateFixedSwapPool.ts:159 ~ returnuseCallback ~ contractCallParams:',
+      contractCallParams
+    )
 
     const estimatedGas = await fixedSwapERC20Contract.estimateGas.create(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
@@ -154,7 +183,31 @@ export function useCreateFixedSwapPool() {
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
+  }, [
+    account,
+    addTransaction,
+    chainConfigInBackend?.id,
+    currencyFrom,
+    currencyTo,
+    fixedSwapERC20Contract,
+    makeSignature,
+    userInfo.userId,
+    values.allocationPerWallet,
+    values.allocationStatus,
+    values.delayUnlockingTime,
+    values.endTime,
+    values.participantStatus,
+    values.poolName,
+    values.poolSize,
+    values.shouldDelayUnlocking,
+    values.startTime,
+    values.swapRatio,
+    values.tokenFrom.address,
+    values.tokenFrom.decimals,
+    values.tokenTo.address,
+    values.tokenTo.decimals,
+    values.whitelist
+  ])
 }
 
 function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {
