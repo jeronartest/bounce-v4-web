@@ -156,10 +156,6 @@ export function useCreateFixedSwapPool() {
     }
 
     const args = [contractCallParams, expiredTime, signature]
-    console.log(
-      '🚀 ~ file: useCreateFixedSwapPool.ts:159 ~ returnuseCallback ~ contractCallParams:',
-      contractCallParams
-    )
 
     const estimatedGas = await fixedSwapERC20Contract.estimateGas.create(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
