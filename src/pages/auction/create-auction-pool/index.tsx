@@ -24,6 +24,8 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/types'
 import { useAuctionConfigList } from 'hooks/useAuctionConfig'
+import { useUserInfo } from 'state/users/hooks'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -36,9 +38,16 @@ const initialValues = {
 const CreateAuctionPoolIntroPage = () => {
   const navigate = useNavigate()
   const { redirect } = useQueryParams()
-
   const { account, active, chainId } = useActiveWeb3React()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
+  console.log(
+    '🚀 ~ file: index.tsx:42 ~ CreateAuctionPoolIntroPage ~ chainConfigInBackend:',
+    chainConfigInBackend,
+    chainId
+  )
+
   const walletModalToggle = useWalletModalToggle()
+  const { userId } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
   const [curAuctionType, setCurAuctionType] = useState<AuctionType | undefined>(AuctionType.FIXED_PRICE)
@@ -201,7 +210,7 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {account ? (
+                  {account && userId ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -210,6 +219,16 @@ const CreateAuctionPoolIntroPage = () => {
                         Next
                       </Button>
                     </>
+                  ) : !userId ? (
+                    <Button
+                      variant="contained"
+                      sx={{ width: 140 }}
+                      onClick={() => {
+                        navigate(routes.login)
+                      }}
+                    >
+                      Login
+                    </Button>
                   ) : (
                     <Button
                       variant="contained"
