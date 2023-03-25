@@ -48,6 +48,27 @@ export const GOERLI_TOKEN_LIST: Token[] = [
 export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.MAINNET]: 'https://tokens.coingecko.com/uniswap/all.json',
   [ChainId.GÖRLI]: null,
+  [ChainId.OPTIMISM]: null,
+  [ChainId.CRONOS]: null,
   [ChainId.BSC]: 'https://tokens.pancakeswap.finance/cmc.json',
-  [ChainId.ARBITRUM]: null
+  [ChainId.OKEX]: null,
+  [ChainId.BSCTEST]: null,
+  [ChainId.KLAYTN]: null,
+  [ChainId.GNOSIS]: null,
+  [ChainId.POLYGON]: null,
+  [ChainId.FANTOM]: null,
+  [ChainId.ZKSYNC_ERA]: null,
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: null,
+  [ChainId.MOONBEAM]: null,
+  [ChainId.MOONRIVER]: null,
+  [ChainId.DOGECHAIN]: null,
+  [ChainId.KAVA]: null,
+  [ChainId.FUSION]: null,
+  [ChainId.ARBITRUM]: null,
+  [ChainId.CELO]: null,
+  [ChainId.AVALANCHE]: null,
+  [ChainId.SEPOLIA]: null,
+  [ChainId.AUROEA]: null,
+  [ChainId.HARMONY]: null,
+  [ChainId.PALM]: null
 }

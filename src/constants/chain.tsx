@@ -77,7 +77,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.GÖRLI]: {
     id: ChainId.GÖRLI,
     hexChainId: numberToHex(ChainId.GÖRLI),
-    chainName: 'Ethereum',
+    chainName: 'Goerli',
     nativeCurrency: {
       name: 'GoerliETH',
       symbol: 'ETH',
@@ -279,7 +279,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
       logo: 'https://icons.llamao.fi/icons/chains/rsz_klaytn.jpg'
     },
-    rpcUrls: ['https://klaytn.blockpi.network/v1/rpc/public'],
+    rpcUrls: ['https://public-node-api.klaytnapi.com/v1/cypress'],
     blockExplorerUrls: ['https://scope.klaytn.com/']
   },
   [ChainId.FUSION]: {

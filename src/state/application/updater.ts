@@ -58,7 +58,7 @@ export default function Updater(): null {
   const providers = useMemo(() => SUPPORT_NETWORK_CHAIN_IDS.map(v => getOtherNetworkLibrary(v)), [])
   const [timeInt, setTimeInt] = useState(0)
   useEffect(() => {
-    setTimeout(() => setTimeInt(timeInt + 1), 10000)
+    setTimeout(() => setTimeInt(timeInt + 1), 30000)
     providers.map((provider, index) =>
       provider
         ?.getBlockNumber()
