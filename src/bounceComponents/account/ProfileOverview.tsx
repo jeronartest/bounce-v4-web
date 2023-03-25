@@ -123,8 +123,8 @@ const ProfileOverview = () => {
             <Box
               sx={{
                 position: 'absolute',
-                right: 60,
-                top: 30
+                right: 0,
+                top: -10
               }}
             >
               <LoadingButton

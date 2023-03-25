@@ -13,49 +13,50 @@ export default function MyAccount() {
 
   return (
     <AccountLayout>
-      <Container
-        sx={{
-          padding: '40px 0 80px',
-          maxWidth: '860px !important'
-        }}
-      >
-        <Typography mb={40} variant="h3" fontSize={30}>
-          My Account
-        </Typography>
-        <Box
+      <Box padding="40px 60px 80px">
+        <Container
           sx={{
-            padding: '48px 100px 60px',
-            background: '#F5F5F5',
-            borderRadius: '20px'
+            maxWidth: '860px !important'
           }}
         >
-          <EditInfo userInfoEmail={tempInfo?.email} />
-          <LoginOpton
-            googleEmail={tempInfo?.googleEmail}
-            twitter={tempInfo?.twitterName}
-            linkedin={tempInfo?.linkedinName}
-          />
-          <Box>
-            <Typography variant="h3" fontSize={16}>
-              Account Abstraction Wallet
-            </Typography>
-            <NoData
-              sx={{
-                '& svg': {
-                  height: 'auto',
-                  maxHeight: 'auto'
-                },
-                color: '#D1D4D8'
-              }}
-            >
-              <>
-                Coming soon
-                <Dots />
-              </>
-            </NoData>
+          <Typography mb={40} variant="h3" fontSize={30}>
+            My Account
+          </Typography>
+          <Box
+            sx={{
+              padding: '48px 100px 60px',
+              background: '#F5F5F5',
+              borderRadius: '20px'
+            }}
+          >
+            <EditInfo userInfoEmail={tempInfo?.email} />
+            <LoginOpton
+              googleEmail={tempInfo?.googleEmail}
+              twitter={tempInfo?.twitterName}
+              linkedin={tempInfo?.linkedinName}
+            />
+            <Box>
+              <Typography variant="h3" fontSize={16}>
+                Account Abstraction Wallet
+              </Typography>
+              <NoData
+                sx={{
+                  '& svg': {
+                    height: 'auto',
+                    maxHeight: 'auto'
+                  },
+                  color: '#D1D4D8'
+                }}
+              >
+                <>
+                  Coming soon
+                  <Dots />
+                </>
+              </NoData>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     </AccountLayout>
   )
 }

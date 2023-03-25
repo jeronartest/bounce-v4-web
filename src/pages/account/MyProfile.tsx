@@ -5,26 +5,25 @@ import ProfileOverview from 'bounceComponents/account/ProfileOverview'
 export default function MyProfile() {
   return (
     <AccountLayout>
-      <Box>
+      <Box padding="40px 60px">
         <Container
           sx={{
-            maxWidth: '860px !important'
+            maxWidth: '860px !important',
+            position: 'relative'
           }}
         >
-          <Box padding="40px 60px" position={'relative'}>
-            <Typography variant="h3" fontSize={30}>
-              My Profile
-            </Typography>
-            <Box
-              sx={{
-                mt: 40,
-                padding: '48px 100px',
-                background: '#F5F5F5',
-                borderRadius: '20px'
-              }}
-            >
-              <ProfileOverview />
-            </Box>
+          <Typography variant="h3" fontSize={30}>
+            My Profile
+          </Typography>
+          <Box
+            sx={{
+              mt: 40,
+              padding: '48px 100px',
+              background: '#F5F5F5',
+              borderRadius: '20px'
+            }}
+          >
+            <ProfileOverview />
           </Box>
         </Container>
       </Box>
