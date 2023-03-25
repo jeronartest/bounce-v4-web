@@ -67,31 +67,16 @@ interface ChainObject {
   }
 }
 
-const chains: ChainObject = {
-  [ChainId.MAINNET]: {
-    builder: explorers.etherscan
-  },
-  [ChainId.SEPOLIA]: {
-    builder: explorers.etherscan
-  },
-  [ChainId.GÖRLI]: {
-    builder: explorers.etherscan
-  },
-  [ChainId.BSCTEST]: {
-    builder: explorers.etherscan
-  },
-  [ChainId.BSC]: {
-    builder: explorers.etherscan
-  }
-}
+// Configure special
+const chains: ChainObject = {}
 
 export function getEtherscanLink(
   chainId: ChainId,
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
-  const chain = chains[chainId] || explorers.etherscan
-  return chain.builder(SUPPORTED_NETWORKS[chainId]?.blockExplorerUrls?.[0].replace(/\/$/, '') || '', data, type)
+  const builder = chains[chainId]?.builder || explorers.etherscan
+  return builder(SUPPORTED_NETWORKS[chainId]?.blockExplorerUrls?.[0].replace(/\/$/, '') || '', data, type)
 }
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end

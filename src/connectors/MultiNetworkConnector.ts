@@ -5,8 +5,8 @@ import { ChainId, SUPPORTED_NETWORKS } from '../constants/chain'
 export function getRpcUrl(chainId: ChainId) {
   switch (chainId) {
     case ChainId.MAINNET:
-      return `https://rpc.ankr.com/eth`
-    // return `https://mainnet.infura.io/v3/` + process.env.REACT_APP_INFURA_KEY
+      // return `https://rpc.ankr.com/eth`
+      return `https://mainnet.infura.io/v3/` + process.env.REACT_APP_INFURA_KEY
     case ChainId.SEPOLIA:
       return 'https://sepolia.infura.io/v3/' + process.env.REACT_APP_INFURA_KEY
     case ChainId.GÖRLI:

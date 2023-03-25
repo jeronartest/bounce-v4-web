@@ -4,6 +4,9 @@ import EthUrl from 'assets/svg/eth_logo.svg'
 import BSCUrl from 'assets/svg/binance.svg'
 import { ReactComponent as BSC } from 'assets/svg/binance.svg'
 import BigNumberjs from 'bignumber.js'
+import MaticSvg from 'assets/svg/matic.svg'
+import { ReactComponent as MaticLogo } from 'assets/svg/matic.svg'
+import ZkevmSrc from '../assets/images/zkevm_logo.png'
 
 export function numberToHex(number: number) {
   return '0x' + new BigNumberjs(number).toString(16)
@@ -15,7 +18,9 @@ export enum ChainId {
   SEPOLIA = 11155111,
   BSC = 56,
   BSCTEST = 97,
-  ARBITRUM = 42161
+  ARBITRUM = 42161,
+  POLYGON = 137,
+  POLYGON_ZK_EVM_TESTNET = 1442
 }
 
 export const NETWORK_CHAIN_ID: ChainId = process.env.REACT_APP_CHAIN_ID
@@ -66,6 +71,30 @@ export const AllChainList = [
     name: 'Sepolia',
     id: ChainId.SEPOLIA,
     hex: numberToHex(ChainId.SEPOLIA)
+  },
+  {
+    icon: <ETH />,
+    logo: EthUrl,
+    symbol: 'ETH',
+    name: 'Arbitrum One',
+    id: ChainId.ARBITRUM,
+    hex: numberToHex(ChainId.ARBITRUM)
+  },
+  {
+    icon: <MaticLogo />,
+    logo: MaticSvg,
+    symbol: 'MATIC',
+    name: 'Polygon',
+    id: ChainId.POLYGON,
+    hex: numberToHex(ChainId.POLYGON)
+  },
+  {
+    icon: <img src={ZkevmSrc} />,
+    logo: ZkevmSrc,
+    symbol: 'ETH',
+    name: 'zkEVM-testnet',
+    id: ChainId.POLYGON_ZK_EVM_TESTNET,
+    hex: numberToHex(ChainId.POLYGON_ZK_EVM_TESTNET)
   }
 ]
 
@@ -83,7 +112,7 @@ function getChainIdHex(chainId: ChainId) {
 }
 
 export const SUPPORTED_NETWORKS: {
-  [chainId in ChainId]?: {
+  [chainId in ChainId]: {
     chainId: string
     chainName: string
     nativeCurrency: {
@@ -155,5 +184,41 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
     blockExplorerUrls: ['https://testnet.bscscan.com/']
+  },
+  [ChainId.ARBITRUM]: {
+    chainId: getChainIdHex(ChainId.ARBITRUM),
+    chainName: ChainListMap[ChainId.ARBITRUM]?.name || '',
+    nativeCurrency: {
+      name: 'ArbitrumETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: ChainListMap[ChainId.ARBITRUM]?.logo
+    },
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io']
+  },
+  [ChainId.POLYGON]: {
+    chainId: getChainIdHex(ChainId.POLYGON),
+    chainName: ChainListMap[ChainId.POLYGON]?.name || '',
+    nativeCurrency: {
+      name: 'ArbitrumETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: ChainListMap[ChainId.POLYGON]?.logo
+    },
+    rpcUrls: ['https://polygon-rpc.com/'],
+    blockExplorerUrls: ['https://polygonscan.com/']
+  },
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: {
+    chainId: getChainIdHex(ChainId.POLYGON_ZK_EVM_TESTNET),
+    chainName: ChainListMap[ChainId.POLYGON_ZK_EVM_TESTNET]?.name || '',
+    nativeCurrency: {
+      name: 'ZKETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: ChainListMap[ChainId.POLYGON_ZK_EVM_TESTNET]?.logo
+    },
+    rpcUrls: ['https://rpc.public.zkevm-test.net/'],
+    blockExplorerUrls: ['https://explorer.public.zkevm-test.net/']
   }
 }
