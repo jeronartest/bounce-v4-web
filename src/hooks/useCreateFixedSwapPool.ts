@@ -187,7 +187,7 @@ export function useCreateFixedSwapPool() {
     currencyTo,
     fixedSwapERC20Contract,
     makeSignature,
-    userInfo.userId,
+    userInfo?.userId,
     values.allocationPerWallet,
     values.allocationStatus,
     values.delayUnlockingTime,

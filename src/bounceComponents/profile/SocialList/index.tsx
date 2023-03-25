@@ -4,9 +4,7 @@ import React, { ReactNode } from 'react'
 import * as yup from 'yup'
 import styles from './styles'
 import FormItem from 'bounceComponents/common/FormItem'
-import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email.svg'
 import { ReactComponent as WebsiteSVG } from 'assets/imgs/profile/links/website.svg'
-import { ReactComponent as LinkedInSVG } from 'assets/imgs/profile/links/linkedIn.svg'
 import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
 import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
@@ -44,24 +42,10 @@ export const SocialLinks: React.FC<ISocialLinksProps> = ({ links }) => {
 
 const links: ILinksItem[] = [
   {
-    name: 'contactEmail',
-    label: 'Official email',
-    required: true,
-    icon: <EmailSVG />,
-    autoComplete: ''
-  },
-  {
     name: 'website',
     label: 'Website',
     required: false,
     icon: <WebsiteSVG />,
-    autoComplete: 'off'
-  },
-  {
-    name: 'linkedin',
-    label: 'LinkedIn',
-    required: false,
-    icon: <LinkedInSVG />,
     autoComplete: 'off'
   },
   {
@@ -88,9 +72,7 @@ const links: ILinksItem[] = [
 ]
 
 const validationSchema = yup.object({
-  contactEmail: yup.string().trim().required('Official email is required').email('Please enter a valid email'),
   website: yup.string().trim().url('Please enter a valie URL'),
-  linkedin: yup.string().trim().url('Please enter a valie URL'),
   github: yup.string().trim().url('Please enter a valie URL'),
   twitter: yup.string().trim().url('Please enter a valie URL'),
   instagram: yup.string().trim().url('Please enter a valie URL')
@@ -101,9 +83,7 @@ const SocialList: React.FC = () => {
   const { runAsync: runUpdateBasic } = useUpdateBasic()
 
   const initialValues = {
-    contactEmail: userInfo?.contactEmail || '',
     website: userInfo?.website || '',
-    linkedin: userInfo?.linkedin || '',
     github: userInfo?.github || '',
     twitter: userInfo?.twitter || '',
     instagram: userInfo?.instagram || ''
@@ -124,8 +104,8 @@ const SocialList: React.FC = () => {
         <Stack component={Form} spacing={20} noValidate>
           <SocialLinks links={links} />
           <Box sx={{ textAlign: 'right' }}>
-            <Button variant="contained" sx={{ width: 140, mt: 40 }} type="submit">
-              Submit
+            <Button variant="contained" sx={{ width: 140, mt: 20 }} type="submit">
+              Save
             </Button>
           </Box>
         </Stack>

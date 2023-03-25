@@ -10,7 +10,8 @@ import {
 
 // update profile basic
 export const updateBasic = (body: IupdateBasicParams) => {
-  return ApiInstance.post('/personal/update_basic', body)
+  return ApiInstance.post('/personal/update', body)
+  // return ApiInstance.post('/personal/update_basic', body)
 }
 
 // update profile info
