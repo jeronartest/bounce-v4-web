@@ -188,23 +188,19 @@ export default function Header() {
     >
       <MenuItem
         onClick={() => {
-          navigate(
-            Number(userType) === USER_TYPE.USER
-              ? `${routes.profile.summary}?id=${userId}`
-              : `${routes.company.summary}?id=${userId}`
-          )
+          navigate(routes.account.dashboard)
           setAnchorEl(null)
         }}
       >
-        My Homepage
+        My Dashboard
       </MenuItem>
       <MenuItem
         onClick={() => {
-          navigate(routes.profile.account.settings)
+          navigate(routes.account.myProfile)
           setAnchorEl(null)
         }}
       >
-        Account settings
+        My Profile
       </MenuItem>
       <MenuItem
         onClick={() => {

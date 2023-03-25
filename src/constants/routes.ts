@@ -34,5 +34,11 @@ export const routes = {
   signup: {
     account: '/signup/account',
     thirdPartiesAccount: '/signup/thirdPartiesAccount'
+  },
+  account: {
+    dashboard: '/account/dashboard',
+    myProfile: '/account/my_profile',
+    myAccount: '/account/my_account',
+    tokenOrNFT: '/account/token_nft'
   }
 }

@@ -158,7 +158,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
                                       }`
                                     )
                                   })
-                                  .join(' ') || 'Individual account'
+                                  .join(' ') || ''
                               : 'Individual account'
                           }
                           isVerify={auctionPoolItem.creatorUserInfo?.isVerify || VerifyStatus.NoVerify}

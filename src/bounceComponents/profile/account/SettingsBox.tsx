@@ -10,7 +10,7 @@ export type ISettingsBoxProps = {
 
 const SettingsBox: React.FC<ISettingsBoxProps> = ({ title, children, paddingTop = 40 }) => {
   return (
-    <Box sx={{ px: 100, pt: paddingTop }}>
+    <Box sx={{ pt: paddingTop }}>
       <Typography variant="h5" color={'var(--ps-gray-900)'}>
         {title}
       </Typography>

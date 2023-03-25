@@ -40,6 +40,11 @@ import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 import SignupAccount from 'pages/signup/account'
 import ComingSoon from './ComingSoon'
 
+import AccountDashboard from 'pages/account/Dashboard'
+import AccountMyProfile from 'pages/account/MyProfile'
+import AccountMyAccount from 'pages/account/MyAccount'
+import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   return null
@@ -94,6 +99,11 @@ export default function App() {
 
                     <Route path={routes.signup.account} element={<SignupAccount />} />
                     <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} />
+
+                    <Route path={routes.account.dashboard} element={<AccountDashboard />} />
+                    <Route path={routes.account.myProfile} element={<AccountMyProfile />} />
+                    <Route path={routes.account.myAccount} element={<AccountMyAccount />} />
+                    <Route path={routes.account.tokenOrNFT} element={<MyTokenOrNFT />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
