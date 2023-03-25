@@ -304,7 +304,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                 ETH Balance
               </Typography>
               <Typography variant="h3" fontWeight={500} textAlign={'center'}>
-                {myETH?.toSignificant()} {Currency.getNativeCurrency(chainId).symbol}
+                {myETH?.toSignificant() || '-'} {Currency.getNativeCurrency(chainId).symbol}
               </Typography>
             </Box>
 
@@ -392,7 +392,9 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                   mt: 20,
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
-                  gap: '10px'
+                  gap: '10px',
+                  overflowY: 'auto',
+                  maxHeight: '60vh'
                 }}
               >
                 {ChainList.map(item => (

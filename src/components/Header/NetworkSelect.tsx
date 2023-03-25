@@ -38,7 +38,7 @@ export default function NetworkSelect() {
               if (Object.values(ChainId).includes(option.id)) {
                 library?.provider?.request?.({
                   method: 'wallet_switchEthereumChain',
-                  params: [{ chainId: SUPPORTED_NETWORKS[option.id as ChainId]?.chainId }, account]
+                  params: [{ chainId: SUPPORTED_NETWORKS[option.id as ChainId]?.hexChainId }, account]
                 })
               } else {
                 const params = SUPPORTED_NETWORKS[option.id as ChainId]

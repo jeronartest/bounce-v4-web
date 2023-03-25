@@ -1,11 +1,6 @@
-import { Chain } from 'models/chain'
-import { ReactComponent as ETH } from 'assets/svg/eth_logo.svg'
+import BigNumberjs from 'bignumber.js'
 import EthUrl from 'assets/svg/eth_logo.svg'
 import BSCUrl from 'assets/svg/binance.svg'
-import { ReactComponent as BSC } from 'assets/svg/binance.svg'
-import BigNumberjs from 'bignumber.js'
-import MaticSvg from 'assets/svg/matic.svg'
-import { ReactComponent as MaticLogo } from 'assets/svg/matic.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 
 export function numberToHex(number: number) {
@@ -15,12 +10,32 @@ export function numberToHex(number: number) {
 export enum ChainId {
   MAINNET = 1,
   GÖRLI = 5,
-  SEPOLIA = 11155111,
+  OPTIMISM = 10,
+  CRONOS = 25,
+  // TELOS = 40,
   BSC = 56,
+  OKEX = 66,
   BSCTEST = 97,
-  ARBITRUM = 42161,
+  GNOSIS = 100,
+  // FUSE = 122,
+  // HECO = 128,
   POLYGON = 137,
-  POLYGON_ZK_EVM_TESTNET = 1442
+  FANTOM = 250,
+  ZKSYNC_ERA = 324,
+  POLYGON_ZK_EVM_TESTNET = 1442,
+  MOONBEAM = 1284,
+  MOONRIVER = 1285,
+  DOGECHAIN = 2000,
+  KAVA = 2222,
+  KLAYTN = 8217,
+  FUSION = 32659,
+  ARBITRUM = 42161,
+  CELO = 42220,
+  AVALANCHE = 43114,
+  SEPOLIA = 11155111,
+  AUROEA = 1313161554,
+  HARMONY = 1666600000,
+  PALM = 11297108109
 }
 
 export const NETWORK_CHAIN_ID: ChainId = process.env.REACT_APP_CHAIN_ID
@@ -31,194 +46,373 @@ export const SUPPORT_NETWORK_CHAIN_IDS: ChainId[] = process.env.REACT_APP_CHAIN_
   ? process.env.REACT_APP_CHAIN_IDS.split(',').map(v => Number(v) as ChainId)
   : [ChainId.BSC]
 
-export const AllChainList = [
-  {
-    icon: <ETH />,
-    logo: EthUrl,
-    symbol: 'ETH',
-    name: 'Ethereum',
-    id: ChainId.MAINNET,
-    hex: numberToHex(ChainId.MAINNET)
-  },
-  {
-    icon: <ETH />,
-    logo: EthUrl,
-    symbol: 'ETH',
-    name: 'GÖRLI',
-    id: ChainId.GÖRLI,
-    hex: numberToHex(ChainId.GÖRLI)
-  },
-  {
-    icon: <BSC height={20} width={20} />,
-    logo: BSCUrl,
-    symbol: 'BNB',
-    name: 'BNB Chain',
-    id: ChainId.BSC,
-    hex: numberToHex(ChainId.BSC)
-  },
-  {
-    icon: <BSC />,
-    logo: BSCUrl,
-    symbol: 'tBNB',
-    name: 'BNB Testnet',
-    id: ChainId.BSCTEST,
-    hex: numberToHex(ChainId.BSCTEST)
-  },
-  {
-    icon: <ETH />,
-    logo: EthUrl,
-    symbol: 'ETH',
-    name: 'Sepolia',
-    id: ChainId.SEPOLIA,
-    hex: numberToHex(ChainId.SEPOLIA)
-  },
-  {
-    icon: <ETH />,
-    logo: EthUrl,
-    symbol: 'ETH',
-    name: 'Arbitrum One',
-    id: ChainId.ARBITRUM,
-    hex: numberToHex(ChainId.ARBITRUM)
-  },
-  {
-    icon: <MaticLogo />,
-    logo: MaticSvg,
-    symbol: 'MATIC',
-    name: 'Polygon',
-    id: ChainId.POLYGON,
-    hex: numberToHex(ChainId.POLYGON)
-  },
-  {
-    icon: <img src={ZkevmSrc} />,
-    logo: ZkevmSrc,
-    symbol: 'ETH',
-    name: 'zkEVM-testnet',
-    id: ChainId.POLYGON_ZK_EVM_TESTNET,
-    hex: numberToHex(ChainId.POLYGON_ZK_EVM_TESTNET)
-  }
-]
-
-export const ChainList = AllChainList.filter(v => SUPPORT_NETWORK_CHAIN_IDS.includes(v.id))
-
-export const ChainListMap: {
-  [key in ChainId]?: { icon: JSX.Element; link?: string; selectedIcon?: JSX.Element } & Chain
-} = ChainList.reduce((acc, item) => {
-  acc[item.id] = item
-  return acc
-}, {} as any)
-
-function getChainIdHex(chainId: ChainId) {
-  return ChainListMap[chainId]?.hex || '0x1'
-}
-
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]: {
-    chainId: string
+    id: ChainId
+    hexChainId: string
     chainName: string
     nativeCurrency: {
       name: string
       symbol: string
       decimals: number
-      logo?: string
+      logo: string
     }
     rpcUrls: string[]
     blockExplorerUrls: string[]
   }
 } = {
   [ChainId.MAINNET]: {
-    chainId: getChainIdHex(ChainId.MAINNET),
-    chainName: ChainListMap[ChainId.MAINNET]?.name || '',
+    id: ChainId.MAINNET,
+    hexChainId: numberToHex(ChainId.MAINNET),
+    chainName: 'Ethereum',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: ChainListMap[ChainId.MAINNET]?.logo
+      logo: EthUrl
     },
     rpcUrls: ['https://mainnet.infura.io/v3'],
     blockExplorerUrls: ['https://etherscan.com']
   },
   [ChainId.GÖRLI]: {
-    chainId: getChainIdHex(ChainId.GÖRLI),
-    chainName: ChainListMap[ChainId.GÖRLI]?.name || '',
+    id: ChainId.GÖRLI,
+    hexChainId: numberToHex(ChainId.GÖRLI),
+    chainName: 'Ethereum',
     nativeCurrency: {
       name: 'GoerliETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: ChainListMap[ChainId.GÖRLI]?.logo
+      logo: EthUrl
     },
     rpcUrls: ['https://goerli.infura.io/v3/'],
     blockExplorerUrls: ['https://goerli.etherscan.io/']
   },
-  [ChainId.SEPOLIA]: {
-    chainId: getChainIdHex(ChainId.SEPOLIA),
-    chainName: ChainListMap[ChainId.SEPOLIA]?.name || '',
+  [ChainId.OPTIMISM]: {
+    id: ChainId.OPTIMISM,
+    hexChainId: numberToHex(ChainId.OPTIMISM),
+    chainName: 'Optimism',
     nativeCurrency: {
-      name: 'SepoliaETH',
+      name: 'OptimismETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: ChainListMap[ChainId.SEPOLIA]?.logo
+      logo: 'https://optimistic.etherscan.io/images/svg/brands/optimism.svg'
     },
-    rpcUrls: ['https://sepolia.infura.io/v3/'],
-    blockExplorerUrls: ['https://sepolia.etherscan.io/']
+    rpcUrls: ['https://mainnet.optimism.io'],
+    blockExplorerUrls: ['https://optimistic.etherscan.io/']
+  },
+  [ChainId.CRONOS]: {
+    id: ChainId.CRONOS,
+    hexChainId: numberToHex(ChainId.CRONOS),
+    chainName: 'Cronos',
+    nativeCurrency: {
+      name: 'CRO',
+      symbol: 'CRO',
+      decimals: 18,
+      logo: 'https://cronoscan.com/images/svg/brands/main.svg'
+    },
+    rpcUrls: ['https://evm.cronos.org'],
+    blockExplorerUrls: ['https://cronoscan.com/']
   },
   [ChainId.BSC]: {
-    chainId: getChainIdHex(ChainId.BSC),
-    chainName: ChainListMap[ChainId.BSC]?.name || '',
+    id: ChainId.BSC,
+    hexChainId: numberToHex(ChainId.BSC),
+    chainName: 'BNB Chain',
     nativeCurrency: {
       name: 'Binance Coin',
       symbol: 'BNB',
       decimals: 18,
-      logo: ChainListMap[ChainId.BSC]?.logo
+      logo: BSCUrl
     },
     rpcUrls: ['https://bsc-dataseed.binance.org'],
     blockExplorerUrls: ['https://bscscan.com']
   },
+  [ChainId.OKEX]: {
+    id: ChainId.OKEX,
+    hexChainId: numberToHex(ChainId.OKEX),
+    chainName: 'OKEXChain',
+    nativeCurrency: {
+      name: 'OKEX Coin',
+      symbol: 'OKT',
+      decimals: 18,
+      logo: 'https://pbs.twimg.com/profile_images/1607045883434000385/eP63iKT3_400x400.jpg'
+    },
+    rpcUrls: ['https://exchainrpc.okex.org'],
+    blockExplorerUrls: ['https://www.oklink.com/okexchain/']
+  },
   [ChainId.BSCTEST]: {
-    chainId: getChainIdHex(ChainId.BSCTEST),
-    chainName: ChainListMap[ChainId.BSCTEST]?.name || '',
+    id: ChainId.BSCTEST,
+    hexChainId: numberToHex(ChainId.BSCTEST),
+    chainName: 'BNB Testnet',
     nativeCurrency: {
       name: 'Binance Coin',
-      symbol: 'BNB',
+      symbol: 'tBNB',
       decimals: 18,
-      logo: ChainListMap[ChainId.BSCTEST]?.logo
+      logo: BSCUrl
     },
     rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
     blockExplorerUrls: ['https://testnet.bscscan.com/']
   },
-  [ChainId.ARBITRUM]: {
-    chainId: getChainIdHex(ChainId.ARBITRUM),
-    chainName: ChainListMap[ChainId.ARBITRUM]?.name || '',
+  [ChainId.GNOSIS]: {
+    id: ChainId.GNOSIS,
+    hexChainId: numberToHex(ChainId.GNOSIS),
+    chainName: 'Gnosis Chain',
     nativeCurrency: {
-      name: 'ArbitrumETH',
-      symbol: 'ETH',
+      name: 'xDAI',
+      symbol: 'xDAI',
       decimals: 18,
-      logo: ChainListMap[ChainId.ARBITRUM]?.logo
+      logo: 'https://gnosisscan.io/images/svg/brands/main.svg'
     },
-    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    blockExplorerUrls: ['https://arbiscan.io']
+    rpcUrls: ['https://rpc.gnosischain.com'],
+    blockExplorerUrls: ['https://gnosisscan.io']
   },
   [ChainId.POLYGON]: {
-    chainId: getChainIdHex(ChainId.POLYGON),
-    chainName: ChainListMap[ChainId.POLYGON]?.name || '',
+    id: ChainId.POLYGON,
+    hexChainId: numberToHex(ChainId.POLYGON),
+    chainName: 'Polygon',
     nativeCurrency: {
-      name: 'ArbitrumETH',
-      symbol: 'ETH',
+      name: 'MATIC',
+      symbol: 'MATIC',
       decimals: 18,
-      logo: ChainListMap[ChainId.POLYGON]?.logo
+      logo: 'https://polygonscan.com/images/svg/brands/poly.png'
     },
-    rpcUrls: ['https://polygon-rpc.com/'],
+    rpcUrls: ['https://rpc.ankr.com/polygon'],
     blockExplorerUrls: ['https://polygonscan.com/']
   },
+  [ChainId.FANTOM]: {
+    id: ChainId.FANTOM,
+    hexChainId: numberToHex(ChainId.FANTOM),
+    chainName: 'Fantom',
+    nativeCurrency: {
+      name: 'FTM',
+      symbol: 'FTM',
+      decimals: 18,
+      logo: 'https://ftmscan.com/images/svg/brands/fantom.svg'
+    },
+    rpcUrls: ['https://rpc.ankr.com/fantom'],
+    blockExplorerUrls: ['https://ftmscan.com']
+  },
+  [ChainId.ZKSYNC_ERA]: {
+    id: ChainId.ZKSYNC_ERA,
+    hexChainId: numberToHex(ChainId.ZKSYNC_ERA),
+    chainName: 'Zksync Era',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://zksync.io/favicon-32x32.png'
+    },
+    rpcUrls: ['https://mainnet.era.zksync.io'],
+    blockExplorerUrls: ['https://explorer.zksync.io/']
+  },
   [ChainId.POLYGON_ZK_EVM_TESTNET]: {
-    chainId: getChainIdHex(ChainId.POLYGON_ZK_EVM_TESTNET),
-    chainName: ChainListMap[ChainId.POLYGON_ZK_EVM_TESTNET]?.name || '',
+    id: ChainId.POLYGON_ZK_EVM_TESTNET,
+    hexChainId: numberToHex(ChainId.POLYGON_ZK_EVM_TESTNET),
+    chainName: 'Polygon zkEVM',
     nativeCurrency: {
       name: 'ZKETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: ChainListMap[ChainId.POLYGON_ZK_EVM_TESTNET]?.logo
+      logo: ZkevmSrc
     },
     rpcUrls: ['https://rpc.public.zkevm-test.net/'],
     blockExplorerUrls: ['https://explorer.public.zkevm-test.net/']
+  },
+  [ChainId.MOONBEAM]: {
+    id: ChainId.MOONBEAM,
+    hexChainId: numberToHex(ChainId.MOONBEAM),
+    chainName: 'Moonbeam',
+    nativeCurrency: {
+      name: 'GLMR',
+      symbol: 'GLMR',
+      decimals: 18,
+      logo: 'https://moonbeam.moonscan.io/images/svg/brands/main.svg'
+    },
+    rpcUrls: ['https://rpc.api.moonbeam.network'],
+    blockExplorerUrls: ['https://moonbeam.moonscan.io']
+  },
+  [ChainId.MOONRIVER]: {
+    id: ChainId.MOONRIVER,
+    hexChainId: numberToHex(ChainId.MOONRIVER),
+    chainName: 'Moonriver',
+    nativeCurrency: {
+      name: 'MOVR',
+      symbol: 'MOVR',
+      decimals: 18,
+      logo: 'https://moonriver.moonscan.io/images/svg/brands/main.svg'
+    },
+    rpcUrls: ['https://rpc.api.moonriver.moonbeam.network'],
+    blockExplorerUrls: ['https://moonriver.moonscan.io']
+  },
+  [ChainId.DOGECHAIN]: {
+    id: ChainId.DOGECHAIN,
+    hexChainId: numberToHex(ChainId.DOGECHAIN),
+    chainName: 'Dogechain',
+    nativeCurrency: {
+      name: 'DOGE',
+      symbol: 'DOGE',
+      decimals: 18,
+      logo: 'https://icons.llamao.fi/icons/chains/rsz_dogechain.jpg'
+    },
+    rpcUrls: ['https://rpc.dogechain.dog'],
+    blockExplorerUrls: ['https://explorer.dogechain.dog']
+  },
+  [ChainId.KAVA]: {
+    id: ChainId.KAVA,
+    hexChainId: numberToHex(ChainId.KAVA),
+    chainName: 'Kava',
+    nativeCurrency: {
+      name: 'KAVA',
+      symbol: 'KAVA',
+      decimals: 18,
+      logo: 'https://explorer.kava.io/images/kava-logo-d1d14a40f6b1398ca363f68181111125.png'
+    },
+    rpcUrls: ['https://evm2.kava.io'],
+    blockExplorerUrls: ['https://explorer.kava.io/']
+  },
+  [ChainId.KLAYTN]: {
+    id: ChainId.KLAYTN,
+    hexChainId: numberToHex(ChainId.KLAYTN),
+    chainName: 'Klaytn',
+    nativeCurrency: {
+      name: 'KLAY',
+      symbol: 'KLAY',
+      decimals: 18,
+      logo: 'https://icons.llamao.fi/icons/chains/rsz_klaytn.jpg'
+    },
+    rpcUrls: ['https://klaytn.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://scope.klaytn.com/']
+  },
+  [ChainId.FUSION]: {
+    id: ChainId.FUSION,
+    hexChainId: numberToHex(ChainId.FUSION),
+    chainName: 'Fusion',
+    nativeCurrency: {
+      name: 'FSN',
+      symbol: 'FSN',
+      decimals: 18,
+      logo: 'https://fsnscan.com/static/media/fsnLogo.971385b07107c4f1c641bb0bd8db8756.svg'
+    },
+    rpcUrls: ['https://mainnet.anyswap.exchange'],
+    blockExplorerUrls: ['https://fsnscan.com']
+  },
+  [ChainId.ARBITRUM]: {
+    id: ChainId.ARBITRUM,
+    hexChainId: numberToHex(ChainId.ARBITRUM),
+    chainName: 'Arbitrum One',
+    nativeCurrency: {
+      name: 'ArbitrumETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://arbiscan.io/images/svg/brands/arbitrum.svg'
+    },
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io']
+  },
+  [ChainId.CELO]: {
+    id: ChainId.CELO,
+    hexChainId: numberToHex(ChainId.CELO),
+    chainName: 'Celo',
+    nativeCurrency: {
+      name: 'CELO',
+      symbol: 'CELO',
+      decimals: 18,
+      logo: 'https://celoscan.io/images/svg/brands/mainbrand-1.svg'
+    },
+    rpcUrls: ['https://rpc.ankr.com/celo'],
+    blockExplorerUrls: ['https://celoscan.io']
+  },
+  [ChainId.AVALANCHE]: {
+    id: ChainId.AVALANCHE,
+    hexChainId: numberToHex(ChainId.AVALANCHE),
+    chainName: 'Avalanche',
+    nativeCurrency: {
+      name: 'AVAX',
+      symbol: 'AVAX',
+      decimals: 18,
+      logo: 'https://snowtrace.io/images/svg/brands/main.svg'
+    },
+    rpcUrls: ['https://rpc.ankr.com/avalanche'],
+    blockExplorerUrls: ['https://snowtrace.io/']
+  },
+  [ChainId.SEPOLIA]: {
+    id: ChainId.SEPOLIA,
+    hexChainId: numberToHex(ChainId.SEPOLIA),
+    chainName: 'SEPOLIA',
+    nativeCurrency: {
+      name: 'SepoliaETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: EthUrl
+    },
+    rpcUrls: ['https://sepolia.infura.io/v3/'],
+    blockExplorerUrls: ['https://sepolia.etherscan.io/']
+  },
+  [ChainId.AUROEA]: {
+    id: ChainId.AUROEA,
+    hexChainId: numberToHex(ChainId.AUROEA),
+    chainName: 'Aurora',
+    nativeCurrency: {
+      name: 'AuroraETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://icons.llamao.fi/icons/chains/rsz_aurora.jpg'
+    },
+    rpcUrls: ['https://mainnet.aurora.dev/'],
+    blockExplorerUrls: ['https://explorer.mainnet.aurora.dev/']
+  },
+  [ChainId.HARMONY]: {
+    id: ChainId.HARMONY,
+    hexChainId: numberToHex(ChainId.HARMONY),
+    chainName: 'Harmony',
+    nativeCurrency: {
+      name: 'ONE',
+      symbol: 'ONE',
+      decimals: 18,
+      logo: 'https://miro.medium.com/v2/resize:fill:88:88/2*LOzzPwKfJXD2aXSxBG-nng.png'
+    },
+    rpcUrls: ['https://api.harmony.one/'],
+    blockExplorerUrls: ['https://explorer.harmony.one/']
+  },
+  [ChainId.PALM]: {
+    id: ChainId.PALM,
+    hexChainId: numberToHex(ChainId.PALM),
+    chainName: 'Palm',
+    nativeCurrency: {
+      name: 'PALM',
+      symbol: 'PALM',
+      decimals: 18,
+      logo: 'https://icons.llamao.fi/icons/chains/rsz_palm.jpg'
+    },
+    rpcUrls: ['https://palm-mainnet.public.blastapi.io'],
+    blockExplorerUrls: ['https://explorer.palm.io/']
   }
 }
+
+export const AllChainList: {
+  logo: string
+  symbol: string
+  name: string
+  id: ChainId
+  hex: string
+}[] = Object.values(SUPPORTED_NETWORKS).map(item => ({
+  logo: item.nativeCurrency.logo,
+  symbol: item.nativeCurrency.symbol,
+  name: item.chainName,
+  id: item.id,
+  hex: item.hexChainId
+}))
+
+export const ChainList = AllChainList.filter(v => SUPPORT_NETWORK_CHAIN_IDS.includes(v.id))
+
+export const ChainListMap: {
+  [key in ChainId]?: {
+    logo: string
+    symbol: string
+    name: string
+    id: ChainId
+    hex: string
+  }
+} = ChainList.reduce((acc, item) => {
+  acc[item.id] = item
+  return acc
+}, {} as any)

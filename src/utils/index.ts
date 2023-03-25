@@ -58,6 +58,48 @@ const explorers = {
       default:
         return `${link}/${type}/${data}`
     }
+  },
+  moonriver: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+  fuse: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+  telos: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/transaction/${data}`
+      case 'token':
+        return `${link}/address/${data}`
+      case 'address':
+        return `${link}/address/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+  moonbeam: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
   }
 }
 
@@ -68,7 +110,35 @@ interface ChainObject {
 }
 
 // Configure special
-const chains: ChainObject = {}
+const chains: ChainObject = {
+  [ChainId.GNOSIS]: {
+    builder: explorers.blockscout
+  },
+  [ChainId.AVALANCHE]: {
+    builder: explorers.blockscout
+  },
+  [ChainId.HARMONY]: {
+    builder: explorers.harmony
+  },
+  [ChainId.OKEX]: {
+    builder: explorers.okex
+  },
+  [ChainId.MOONRIVER]: {
+    builder: explorers.moonriver
+  },
+  // [ChainId.FUSE]: {
+  //   builder: explorers.fuse
+  // },
+  // [ChainId.TELOS]: {
+  //   builder: explorers.telos
+  // },
+  [ChainId.MOONBEAM]: {
+    builder: explorers.moonbeam
+  },
+  [ChainId.KAVA]: {
+    builder: explorers.blockscout
+  }
+}
 
 export function getEtherscanLink(
   chainId: ChainId,

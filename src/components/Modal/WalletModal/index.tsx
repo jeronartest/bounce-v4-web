@@ -229,7 +229,7 @@ export default function WalletModal({
                 params?.nativeCurrency.symbol === 'ETH'
                   ? window.ethereum?.request?.({
                       method: 'wallet_switchEthereumChain',
-                      params: [{ chainId: params.chainId }, account]
+                      params: [{ chainId: params.hexChainId }, account]
                     })
                   : window.ethereum?.request?.({ method: 'wallet_addEthereumChain', params: [params, account] })
               }}
