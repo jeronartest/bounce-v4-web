@@ -25,6 +25,11 @@ export interface ILikeUnlikeParams {
   likeObj: LIKE_OBJ
   objId: number
 }
+export interface CollectToggleParams {
+  collected: boolean
+  collectionId: number
+  collectionType: 1 | 2 | 3 //1:job, 2:portfolio 3:pool
+}
 
 export interface ILikeUnlikeRes {
   dislikeCount: number
