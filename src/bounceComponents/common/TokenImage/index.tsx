@@ -11,7 +11,15 @@ const TokenImage = (props: TokenImageProps) => {
     <Avatar
       {...props}
       src={src || BlockSVG}
-      sx={{ ...sx, width: !src ? fallbackSize ?? size : size, height: !src ? fallbackSize ?? size : size }}
+      sx={{
+        '& img': {
+          height: 'auto',
+          width: 'auto'
+        },
+        ...sx,
+        width: !src ? fallbackSize ?? size : size,
+        height: !src ? fallbackSize ?? size : size
+      }}
     >
       <Avatar {...props} src={BlockSVG} sx={{ ...sx, width: fallbackSize ?? size, height: fallbackSize ?? size }} />
     </Avatar>
