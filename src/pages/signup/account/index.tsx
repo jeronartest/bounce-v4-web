@@ -88,11 +88,12 @@ const Account: React.FC = ({}) => {
       email: values.email.trim(),
       accessToken: '',
       registerType: ACCOUNT_TYPE.EMAIL,
-      userType: USER_TYPE.USER
+      userType: USER_TYPE.USER,
+      verifyCode: values.code
     })
   }
 
-  const { run: sendVerifyCode } = useRequest(async email => verifyCode({ email: email }), {
+  const { run: sendVerifyCode } = useRequest(async email => verifyCode({ email: email, codeType: 1 }), {
     manual: true,
     onSuccess: response => {
       const { code } = response

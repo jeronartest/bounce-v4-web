@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { login, logout } from 'api/user'
-import { ACCOUNT_TYPE, ILoginParams, USER_TYPE } from 'api/user/type'
-import { fetchUserInfo, saveLoginInfo, removeUserInfo, fetchCompanyInfo } from 'state/users/reducer'
+import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
+import { fetchUserInfo, saveLoginInfo, removeUserInfo } from 'state/users/reducer'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
@@ -47,36 +47,18 @@ export const useLogin = (path?: string) => {
           userType: data?.userType
         }
       })
-      if (data?.userType === USER_TYPE.USER) {
-        const res = await dispatch(
-          fetchUserInfo({
-            userId: data?.userId
-          })
-        )
-        if (path) {
-          return navigate(path)
-        }
-        if (res.payload?.avatar?.fileUrl) {
-          navigate(routes.profile.edit.overview)
-        } else {
-          navigate(routes.profile.basic)
-        }
+      const res = await dispatch(
+        fetchUserInfo({
+          userId: data?.userId
+        })
+      )
+      if (path) {
+        return navigate(path)
+      }
+      if (res.payload?.avatar?.fileUrl) {
+        navigate(routes.account.myProfile)
       } else {
-        const res = await dispatch(
-          fetchCompanyInfo({
-            companyId: data?.userId,
-            thirdpartId: 0,
-            userId: data?.userId
-          })
-        )
-        if (path) {
-          return navigate(path)
-        }
-        if (res.payload?.avatar?.fileUrl) {
-          navigate(routes.company.edit.overview)
-        } else {
-          navigate(routes.company.index)
-        }
+        navigate(routes.account.dashboard)
       }
     }
   })

@@ -18,6 +18,9 @@ export const useRegister = () => {
       if (code === 10409 || code === 10419 || code === 10408) {
         return toast.error('Your account has been registered, please login')
       }
+      if (code === 10501) {
+        return toast.error('Verification code error')
+      }
       if (code !== 200) {
         return toast.error('Signup Fail')
       }

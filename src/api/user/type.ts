@@ -23,6 +23,7 @@ export interface IRegisterParams {
   password: string
   registerType: ACCOUNT_TYPE
   userType: USER_TYPE
+  verifyCode?: string
 }
 
 export interface ILoginParams {
@@ -64,6 +65,7 @@ export interface IUserInfoParams {
 
 export interface IVerifyCodeParams {
   email: string
+  codeType?: 0 | 1 // 0 resetPassword 1 register
 }
 
 export interface IChangePasswordParams {
