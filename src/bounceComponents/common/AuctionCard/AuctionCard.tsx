@@ -109,7 +109,11 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
               alt={chainConfigInBackend?.shortName}
             />
           }
-          label={chainConfigInBackend?.shortName}
+          label={
+            chainConfigInBackend?.ethChainId
+              ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.name || ''
+              : ''
+          }
           color="info"
           sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }}
         />

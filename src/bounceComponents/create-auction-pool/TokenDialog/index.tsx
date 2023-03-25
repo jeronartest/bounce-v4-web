@@ -4,11 +4,11 @@ import { useDebounce } from 'ahooks'
 import { Box, CircularProgress, OutlinedInput, Stack, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
-import { Token } from '../types'
 import VirtualizedList from './TokenList'
 import Dialog from 'bounceComponents/common/DialogBase'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import { ChainId } from 'constants/chain'
+import { Token } from 'bounceComponents/fixed-swap/type'
 
 export interface BasicToken {
   address: string

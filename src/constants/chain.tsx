@@ -31,22 +31,22 @@ export const AllChainList = [
     icon: <ETH />,
     logo: EthUrl,
     symbol: 'ETH',
-    name: 'ETH Mainnet',
+    name: 'Ethereum',
     id: ChainId.MAINNET,
     hex: numberToHex(ChainId.MAINNET)
   },
   {
     icon: <ETH />,
     logo: EthUrl,
-    symbol: 'GÖRLI',
-    name: 'GÖRLI Testnet',
+    symbol: 'ETH',
+    name: 'GÖRLI',
     id: ChainId.GÖRLI,
     hex: numberToHex(ChainId.GÖRLI)
   },
   {
     icon: <BSC height={20} width={20} />,
     logo: BSCUrl,
-    symbol: 'BSC',
+    symbol: 'BNB',
     name: 'BNB Chain',
     id: ChainId.BSC,
     hex: numberToHex(ChainId.BSC)
@@ -54,7 +54,7 @@ export const AllChainList = [
   {
     icon: <BSC />,
     logo: BSCUrl,
-    symbol: 'BSCTEST',
+    symbol: 'tBNB',
     name: 'BNB Testnet',
     id: ChainId.BSCTEST,
     hex: numberToHex(ChainId.BSCTEST)
@@ -62,7 +62,7 @@ export const AllChainList = [
   {
     icon: <ETH />,
     logo: EthUrl,
-    symbol: 'Sepolia',
+    symbol: 'ETH',
     name: 'Sepolia',
     id: ChainId.SEPOLIA,
     hex: numberToHex(ChainId.SEPOLIA)
