@@ -185,7 +185,7 @@ const CreateAuctionPoolIntroPage = () => {
                                 borderRadius: 20
                               }}
                             >
-                              UnLinked X
+                              Not connected X
                             </Box>
                           )}
                         </Box>

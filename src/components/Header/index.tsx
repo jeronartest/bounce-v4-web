@@ -149,7 +149,7 @@ export default function Header() {
 
   const navigate = useNavigate()
 
-  const { userId, userType, userInfo, companyInfo, token } = useUserInfo()
+  const { userType, userInfo, companyInfo, token } = useUserInfo()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const userOpen = Boolean(anchorEl)
   const handleUserMenuClose = () => {

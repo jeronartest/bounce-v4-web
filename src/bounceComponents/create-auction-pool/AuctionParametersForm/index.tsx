@@ -253,7 +253,7 @@ const AuctionParametersForm = (): JSX.Element => {
                           sx={{ mr: 20, minWidth: 60 }}
                           disabled={!balance}
                           onClick={() => {
-                            setFieldValue('poolSize', balance?.toSignificant(60))
+                            setFieldValue('poolSize', balance?.toExact())
                           }}
                         >
                           Max
