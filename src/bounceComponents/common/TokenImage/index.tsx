@@ -14,7 +14,9 @@ const TokenImage = (props: TokenImageProps) => {
       sx={{
         '& img': {
           height: 'auto',
-          width: 'auto'
+          width: 'auto',
+          maxHeight: '100%',
+          maxWidth: '100%'
         },
         ...sx,
         width: !src ? fallbackSize ?? size : size,

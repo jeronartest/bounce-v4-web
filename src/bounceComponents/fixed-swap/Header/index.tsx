@@ -51,7 +51,7 @@ const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoo
             }
           }}
         />
-        {!!userId && <Favorite collectionId={Number(poolInfo.poolId)} defaultCollected={poolInfo.ifCollect} />}
+        {!!userId && <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />}
       </Stack>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
