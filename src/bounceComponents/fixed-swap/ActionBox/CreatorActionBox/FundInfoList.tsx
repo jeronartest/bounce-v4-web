@@ -50,6 +50,13 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           </Typography>
         </Box>
       </PoolInfoItem>
+
+      <PoolInfoItem title="Creator wallet address">
+        <Stack direction="row" spacing={6}>
+          <Typography>{shortenAddress(poolInfo.creator)}</Typography>
+          <CopyToClipboard text={poolInfo.creator} />
+        </Stack>
+      </PoolInfoItem>
     </Stack>
   )
 }

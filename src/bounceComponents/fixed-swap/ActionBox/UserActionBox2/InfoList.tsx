@@ -7,6 +7,8 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from 'utils/number'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import { shortenAddress } from 'utils'
 
 const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
   const formatedSwappedAmount0 = poolInfo.participant.currencySwappedAmount0?.greaterThan('0')
@@ -42,6 +44,13 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
             <Typography>{formatedSwappedAmount0}</Typography>
             <TokenImage alt={poolInfo.token0.symbol} src={poolInfo.token0.largeUrl} size={20} />
             <Typography>{poolInfo.token0.symbol}</Typography>
+          </Stack>
+        </PoolInfoItem>
+
+        <PoolInfoItem title="Creator wallet address">
+          <Stack direction="row" spacing={6}>
+            <Typography>{shortenAddress(poolInfo.creator)}</Typography>
+            <CopyToClipboard text={poolInfo.creator} />
           </Stack>
         </PoolInfoItem>
 

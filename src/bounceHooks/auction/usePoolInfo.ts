@@ -49,7 +49,8 @@ const useBackedPoolInfo = () => {
       // cacheKey: `POOL_INFO_${poolId}`,
       ready: !!poolId && !!chainConfigInBackend?.id,
       pollingInterval: 30000,
-      refreshDeps: [account]
+      refreshDeps: [account],
+      retryInterval: 5000
     }
   )
 }

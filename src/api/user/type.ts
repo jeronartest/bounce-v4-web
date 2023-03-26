@@ -42,7 +42,7 @@ export interface ChainInfoOpt {
 }
 
 export interface IConfigResponse {
-  chainInfoOpt: ChainInfoOpt[]
+  chainInfoOpt?: ChainInfoOpt[]
   companySizeOpt: [{ id: number; size: string }]
   companyStateOpt: [{ id: number; state: string }]
   degreeOpt: [{ degree: string; id: number }]

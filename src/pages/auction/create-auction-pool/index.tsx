@@ -77,7 +77,7 @@ const CreateAuctionPoolIntroPage = () => {
   }, [account])
 
   const menuList = useMemo(() => {
-    const supportIds = chainInfoOpt.map(i => i.ethChainId)
+    const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
       <MenuItem key={item.id} value={item.id}>
         {item.name}

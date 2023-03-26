@@ -7,12 +7,12 @@ import {
 } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
 
-export function useDashboardUserCreated() {
+export function useDashboardUserCreated(queryType: DashboardQueryType) {
   return useRequest(
     async () => {
       const response = await getUserPoolsDashboardCreated({
         chainId: 0,
-        queryType: DashboardQueryType.ongoing,
+        queryType,
         limit: 100
       })
 
@@ -44,7 +44,6 @@ export function useDashboardUserCollect() {
     async () => {
       const response = await getUserPoolsDashboardCollect({
         chainId: 0,
-        queryType: DashboardQueryType.ongoing,
         limit: 100
       })
 

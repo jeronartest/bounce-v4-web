@@ -27,7 +27,6 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
-import { TransactionReceipt } from '@ethersproject/providers'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -87,26 +86,32 @@ const CreatePoolButton = () => {
         }
       }
 
-      const ret: Promise<TransactionReceipt> = new Promise((resolve, rpt) => {
+      const ret: Promise<string> = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
           rpt()
           handleCloseDialog()
         })
         transactionReceipt.then(curReceipt => {
-          resolve(curReceipt)
-          setButtonCommitted('success')
+          const poolId = getPoolId(curReceipt.logs)
+          if (poolId) {
+            resolve(poolId)
+            setButtonCommitted('success')
+          } else {
+            hideDialogConfirmation()
+            show(DialogTips, {
+              iconType: 'error',
+              cancelBtn: 'Cancel',
+              title: 'Oops..',
+              content: 'The creation may have failed. Please check some parameters, such as the start time'
+            })
+            rpt()
+          }
         })
       })
       ret
-        .then(curReceipt => {
+        .then(poolId => {
           const goToPoolInfoPage = () => {
-            const poolId = getPoolId(curReceipt.logs)
-
-            if (!poolId) {
-              navigate(routes.market.pools)
-              return
-            }
             navigate(
               routes.auction.fixedPrice
                 .replace(':chainShortName', chainConfigInBackend?.shortName || '')

@@ -19,6 +19,7 @@ import {
   DashboardStatCard,
   DashboardToPoolButton
 } from 'bounceComponents/account/Dashboard'
+import { DashboardQueryType } from 'api/account/types'
 
 const btnStyle = {
   height: 26,
@@ -110,12 +111,13 @@ export default function Dashboard() {
               mt={50}
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { lg: '1fr 1fr', md: '1fr 1fr', xs: '1fr' },
+                gridTemplateColumns: { lg: '1fr 1fr 1fr', md: '1fr 1fr', xs: '1fr' },
                 gap: 30
               }}
             >
-              <CreateAuctionsList />
+              <CreateAuctionsList title="Ongoing Auctions" queryType={DashboardQueryType.ongoing} />
               <FavoritesAuctionsList />
+              <CreateAuctionsList title="Pending Claim" queryType={DashboardQueryType.claim} />
             </Box>
           </Box>
         </Container>
@@ -202,10 +204,10 @@ function FavoritesAuctionsList() {
     </DashboardPoolCard>
   )
 }
-function CreateAuctionsList() {
-  const { data, loading } = useDashboardUserCreated()
+function CreateAuctionsList({ title, queryType }: { title: string; queryType: DashboardQueryType }) {
+  const { data, loading } = useDashboardUserCreated(queryType)
   return (
-    <DashboardPoolCard title="Ongoing Auctions">
+    <DashboardPoolCard title={title}>
       <>
         {loading ? (
           <BounceAnime />
@@ -228,7 +230,11 @@ function CreateAuctionsList() {
               <Typography fontSize={12}>#{item.poolId}</Typography>
               <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
               <Box display={'flex'} justifyContent="right">
-                <DashboardToPoolButton text="Participate" poolId={item.poolId} backedChainId={item.chainId} />
+                <DashboardToPoolButton
+                  text={queryType === DashboardQueryType.ongoing ? 'Check' : 'Claim'}
+                  poolId={item.poolId}
+                  backedChainId={item.chainId}
+                />
               </Box>
             </Box>
           ))
