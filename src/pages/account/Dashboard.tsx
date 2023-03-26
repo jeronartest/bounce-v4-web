@@ -1,30 +1,39 @@
-import { Box, Button, Container, Skeleton, Stack, styled, Typography } from '@mui/material'
+import { Box, Button, Container, Skeleton, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import AccountAvatar from 'bounceComponents/account/AccountAvatar'
 import { useUserInfo } from 'state/users/hooks'
-import { getLabelById } from 'utils'
+import { getCurrentTimeStamp, getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
 import { routes } from 'constants/routes'
+import { useDashboardStat, useDashboardUserCollect, useDashboardUserCreated } from 'bounceHooks/account/useDashboard'
+import { formatGroupNumber } from 'utils/number'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import { Timer } from 'components/Timer'
+import {
+  DashboardNoData,
+  DashboardPoolCard,
+  DashboardShowCategoryName,
+  DashboardStatCard,
+  DashboardToPoolButton
+} from 'bounceComponents/account/Dashboard'
 
-const StyledStatCard = styled(Box)({
-  height: 100,
-  display: 'grid',
-  gap: 14,
-  alignContent: 'center',
-  backgroundColor: '#fff',
-  borderRadius: '20px',
-  p: {
-    textAlign: 'center'
-  }
-})
+const btnStyle = {
+  height: 26,
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: 12,
+  padding: '0 8px',
+  borderRadius: 20
+}
 
 export default function Dashboard() {
   const { userInfo } = useUserInfo()
   const optionDatas = useOptionDatas()
   const navigate = useNavigate()
+  const { data: dashboardStat } = useDashboardStat()
 
   return (
     <AccountLayout>
@@ -101,13 +110,12 @@ export default function Dashboard() {
               mt={50}
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { lg: '1fr 1fr 1fr', md: '1fr 1fr', xs: '1fr' },
-                gap: 20
+                gridTemplateColumns: { lg: '1fr 1fr', md: '1fr 1fr', xs: '1fr' },
+                gap: 30
               }}
             >
-              <PoolCard items={[]} title="Ongoing Auctions" />
-              <PoolCard items={[]} title="Favorites Auctions" />
-              <PoolCard items={[]} title="Pending Claim" />
+              <CreateAuctionsList />
+              <FavoritesAuctionsList />
             </Box>
           </Box>
         </Container>
@@ -130,10 +138,19 @@ export default function Dashboard() {
                 }}
                 gap={20}
               >
-                <StatCard name="Auction Participated" value="10" />
-                <StatCard name="Auction Created" value="17" />
-                <StatCard name="Auction Sale Volume" value="$107" />
-                <StatCard name="Auction Buy Volume" value="$107" />
+                <DashboardStatCard
+                  name="Auction Participated"
+                  value={formatGroupNumber(dashboardStat?.participantCount || 0)}
+                />
+                <DashboardStatCard name="Auction Created" value={formatGroupNumber(dashboardStat?.createdCount || 0)} />
+                <DashboardStatCard
+                  name="Auction Sale Volume"
+                  value={formatGroupNumber(Number(dashboardStat?.saledVolume) || 0, '$', 2)}
+                />
+                <DashboardStatCard
+                  name="Auction Buy Volume"
+                  value={formatGroupNumber(Number(dashboardStat?.buyVolume) || 0, '$', 2)}
+                />
               </Box>
             </Box>
           </Container>
@@ -143,47 +160,80 @@ export default function Dashboard() {
   )
 }
 
-function PoolCard({ title, items }: { title: string; items: JSX.Element[][] }) {
+function FavoritesAuctionsList() {
+  const { data, loading } = useDashboardUserCollect()
+  const curTime = getCurrentTimeStamp()
   return (
-    <Box
-      sx={{
-        border: '1px solid #E0E0E0',
-        borderRadius: '20px',
-        padding: 16
-      }}
-    >
-      <Typography fontWeight={500}>{title}</Typography>
-      <Box
-        height={240}
-        sx={{
-          overflow: 'auto'
-        }}
-      >
-        <Box
-          sx={{
-            pl: '10px'
-          }}
-        >
-          {items.map((item, idx) => (
-            <Box display={'grid'} key={idx} gridTemplateColumns="1fr 4fr 2fr" gap={8}>
-              {item[0]}
-              {item[1]}
-              {item[2]}
+    <DashboardPoolCard title="Favorites Auctions">
+      <>
+        {loading ? (
+          <BounceAnime />
+        ) : !data?.length ? (
+          <DashboardNoData />
+        ) : (
+          data?.map((item, idx) => (
+            <Box
+              display={'grid'}
+              key={idx}
+              gridTemplateColumns="1.3fr 4fr 2fr"
+              gap={10}
+              sx={{
+                padding: '4px 0 4px 10px',
+                alignItems: 'center',
+                background: '#F5F5F5',
+                borderRadius: 100
+              }}
+            >
+              <Typography fontSize={12}>#{item.poolId}</Typography>
+              <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
+              <Box display={'flex'} justifyContent="right">
+                {curTime < item.openAt ? (
+                  <Box sx={{ ...btnStyle, background: '#E6E6E6' }}>
+                    <Timer timer={item.openAt * 1000} />
+                  </Box>
+                ) : (
+                  <DashboardToPoolButton text="Participate" poolId={item.poolId} backedChainId={item.chainId} />
+                )}
+              </Box>
             </Box>
-          ))}
-        </Box>
-      </Box>
-    </Box>
+          ))
+        )}
+      </>
+    </DashboardPoolCard>
   )
 }
-
-function StatCard({ name, value }: { name: string; value: string | number }) {
+function CreateAuctionsList() {
+  const { data, loading } = useDashboardUserCreated()
   return (
-    <StyledStatCard>
-      <Typography color={'#908E96'}>{name}</Typography>
-      <Typography fontSize={22} fontWeight={500} color="#2663FF">
-        {value}
-      </Typography>
-    </StyledStatCard>
+    <DashboardPoolCard title="Ongoing Auctions">
+      <>
+        {loading ? (
+          <BounceAnime />
+        ) : !data?.length ? (
+          <DashboardNoData />
+        ) : (
+          data?.map((item, idx) => (
+            <Box
+              display={'grid'}
+              key={idx}
+              gridTemplateColumns="1.3fr 4fr 2fr"
+              gap={10}
+              sx={{
+                padding: '4px 0 4px 10px',
+                alignItems: 'center',
+                background: '#F5F5F5',
+                borderRadius: 100
+              }}
+            >
+              <Typography fontSize={12}>#{item.poolId}</Typography>
+              <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
+              <Box display={'flex'} justifyContent="right">
+                <DashboardToPoolButton text="Participate" poolId={item.poolId} backedChainId={item.chainId} />
+              </Box>
+            </Box>
+          ))
+        )}
+      </>
+    </DashboardPoolCard>
   )
 }

@@ -170,9 +170,9 @@ const Verify: React.FC = () => {
       iconType: 'success',
       cancelBtn: 'Skip',
       againBtn: 'Edit Now',
-      onClose: () => navigate.push(`/company/summary?id=${data?.userId}`),
-      onCancel: () => navigate.push(`/company/summary?id=${data?.userId}`),
-      onAgain: () => navigate.push('/company/edit')
+      onClose: () => navigate(`/company/summary?id=${data?.userId}`),
+      onCancel: () => navigate(`/company/summary?id=${data?.userId}`),
+      onAgain: () => navigate('/company/edit')
     })
     return
   }

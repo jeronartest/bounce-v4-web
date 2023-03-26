@@ -27,8 +27,6 @@ export const formatNumber = (
     }
     return readableBigNumber.toFixed()
   }
-
-  return readableBigNumber.toString()
 }
 
 export const removeRedundantZeroOfFloat = (floatInput: string) => {
@@ -42,4 +40,17 @@ export const bigNumberToString = (input: number | string) => {
 
 export const fixToDecimals = (value: string | number, decimals: number) => {
   return new BigNumber(value).toFixed(decimals, BigNumber.ROUND_DOWN)
+}
+
+export function formatGroupNumber(value: number, currencyText = '', fractionDigits = 1) {
+  if (value / 1_000_000_000 >= 1) {
+    return currencyText + Number((value / 1_000_000_000).toFixed(fractionDigits)).toLocaleString() + 'b'
+  }
+  if (value / 1_000_000 >= 1) {
+    return currencyText + Number((value / 1_000_000).toFixed(fractionDigits)).toLocaleString() + 'm'
+  }
+  if (value / 1_000 >= 1) {
+    return currencyText + Number((value / 1_000).toFixed(fractionDigits)).toLocaleString() + 'k'
+  }
+  return currencyText + Number(value.toFixed(fractionDigits)).toLocaleString()
 }

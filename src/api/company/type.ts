@@ -3,7 +3,6 @@ import { ILikeUnlikeRes } from '../idea/type'
 import { VerifyStatus } from '../profile/type'
 import { IFile } from 'bounceComponents/common/Uploader'
 import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
-import { CompanyStep } from '@/pages/company/edit'
 
 export interface IGetCompanyTeamParams {
   limit?: number
@@ -63,7 +62,6 @@ export interface ICompanyProfileParams {
   companyInvestors?: ICompanyInvestorsListItems[]
   companyTokens?: ICompanyTokensListItems[]
   teamMembers?: ICompanyTeamListItems[]
-  activeStep?: CompanyStep
   completed?: CompletedSteps
 }
 

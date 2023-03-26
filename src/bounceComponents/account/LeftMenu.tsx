@@ -65,6 +65,9 @@ const StyledMenuItem = styled(MenuItem)<{ selected?: boolean }>(({ selected }) =
   borderRadius: '56px',
   backgroundColor: selected ? '#2B51DA !important' : 'transparent',
   color: selected ? '#fff' : 'rgba(23, 23, 23, 0.5);',
+  '& svg': {
+    flex: 'none'
+  },
   '& svg path': {
     fill: selected ? '#fff' : '',
     fillOpacity: selected ? 1 : 0.5
