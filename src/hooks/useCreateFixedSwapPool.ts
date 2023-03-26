@@ -91,7 +91,7 @@ export function useCreateFixedSwapPool() {
       return Promise.reject('amountTotal0 or amountTotal1 error')
     }
     if (!chainConfigInBackend?.id) {
-      return Promise.reject(new Error('No chain id in backend'))
+      return Promise.reject(new Error('This chain is not supported for the time being'))
     }
     if (!account) {
       return Promise.reject('no account')
