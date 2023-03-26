@@ -14,7 +14,7 @@ import {
   Typography
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
@@ -59,7 +59,7 @@ const initialValues = {
   tokenFromSymbol: '',
   tokenFromLogoURI: '',
   tokenFromDecimals: '',
-  poolStatus: 0,
+  poolStatus: 'live',
   auctionType: 1,
   chain: 0
 }
@@ -71,11 +71,12 @@ export interface IFormObserverProps {
 }
 const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   const { values }: any = useFormikContext()
-  const refPoolStatus = useRef(0)
+  const refPoolStatus = useRef('live')
   const refTokenFromAddress = useRef('')
   const refAuctionType = useRef(1)
   const refChain = useRef(3)
   const refSortBy = useRef(0)
+
   useEffect(() => {
     if (values.poolStatus !== refPoolStatus.current) {
       refPoolStatus.current = values.poolStatus
@@ -139,7 +140,7 @@ const Pools: React.FC = ({}) => {
         return Promise.reject(new Error('No ChainId'))
       }
 
-      const resp = await getPools({
+      const resp: any = await getPools({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category: category,
@@ -175,26 +176,30 @@ const Pools: React.FC = ({}) => {
       }
     },
     {
-      defaultPageSize: defaultIdeaPageSize
+      defaultPageSize: defaultIdeaPageSize,
+      debounceWait: 500
     }
   )
 
-  const handleSubmit = (values: typeof initialValues) => {
-    setChain(values.chain)
-    run({
-      current: 1,
-      pageSize: 12,
-      category: values.auctionType,
-      chainId: values.chain,
-      creatorAddress: values.searchType === 3 ? values.searchText : '',
-      creatorName: values.searchType === 2 ? values.searchText : '',
-      orderBy: values.sortBy,
-      poolId: values.searchType === 1 ? values.searchText : '',
-      poolName: values.searchType === 0 ? values.searchText : '',
-      poolStatusFrontend: values.poolStatus,
-      token0Address: values.tokenFromAddress
-    })
-  }
+  const handleSubmit = useCallback(
+    (values: typeof initialValues) => {
+      setChain(values.chain)
+      run({
+        current: 1,
+        pageSize: 12,
+        category: values.auctionType,
+        chainId: values.chain,
+        creatorAddress: values.searchType === 3 ? values.searchText : '',
+        creatorName: values.searchType === 2 ? values.searchText : '',
+        orderBy: values.sortBy,
+        poolId: values.searchType === 1 ? values.searchText : '',
+        poolName: values.searchType === 0 ? values.searchText : '',
+        poolStatusFrontend: values.poolStatus,
+        token0Address: values.tokenFromAddress
+      })
+    },
+    [run]
+  )
 
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)

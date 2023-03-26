@@ -18,7 +18,7 @@ import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContai
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useQueryParams } from 'hooks/useQueryParams'
-import { ChainId, ChainList, ChainListMap } from 'constants/chain'
+import { ChainId, ChainListMap } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
@@ -26,6 +26,7 @@ import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/typ
 import { useAuctionConfigList } from 'hooks/useAuctionConfig'
 import { useUserInfo } from 'state/users/hooks'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -48,6 +49,7 @@ const CreateAuctionPoolIntroPage = () => {
 
   const walletModalToggle = useWalletModalToggle()
   const { userId } = useUserInfo()
+  const { chainInfoOpt } = useOptionDatas()
   const switchNetwork = useSwitchNetwork()
   const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
   const [curAuctionType, setCurAuctionType] = useState<AuctionType | undefined>(AuctionType.FIXED_PRICE)
@@ -82,12 +84,12 @@ const CreateAuctionPoolIntroPage = () => {
   }, [account])
 
   const menuList = useMemo(() => {
-    return ChainList.map(item => (
+    return chainInfoOpt?.map(item => (
       <MenuItem key={item.id} value={item.id}>
-        {item.name}
+        {item.chainName}
       </MenuItem>
     ))
-  }, [])
+  }, [chainInfoOpt])
 
   return (
     <section>

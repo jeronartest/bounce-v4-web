@@ -112,6 +112,7 @@ export interface FixedSwapPool {
     regreted?: boolean
     swappedAmount0?: string
   }
+  ifCollect: boolean
   poolId: string
   poolPrice: number
   ratio: string

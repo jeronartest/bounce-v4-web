@@ -11,11 +11,6 @@ import { shortenAddress } from 'utils'
 const TX_FEE_RATIO = 0.025
 
 const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
-  const formatedSwappedAmount1 = new BigNumber(
-    poolInfo.currencySwappedAmount0.toSignificant(64, { groupSeparator: '' })
-  )
-    .times(poolInfo.ratio)
-    .toFormat(6)
   const formatedChargedFee = new BigNumber(poolInfo.currencySwappedAmount0.toSignificant(64, { groupSeparator: '' }))
     .times(poolInfo.ratio)
     .times(TX_FEE_RATIO)
@@ -33,7 +28,7 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
 
       <PoolInfoItem title="Successful fund raised" tip="The amount of fund raised from your auction.">
         <Stack direction="row" spacing={6} alignItems="center">
-          <Typography>{formatedSwappedAmount1}</Typography>
+          <Typography>{poolInfo.currencySwappedTotal1.toSignificant()}</Typography>
           <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
           <Typography>{poolInfo.token1.symbol}</Typography>
         </Stack>
