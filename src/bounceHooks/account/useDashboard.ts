@@ -1,10 +1,5 @@
 import { useRequest } from 'ahooks'
-import {
-  getUserDashboardStat,
-  getUserPoolsDashboardCollect,
-  getUserPoolsDashboardCreated,
-  getUserPoolsDashboardParticipant
-} from 'api/account'
+import { getUserDashboardStat, getUserPoolsDashboardCollect, getUserPoolsDashboardCreated } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
 
 export function useDashboardUserCreated(queryType: DashboardQueryType) {
@@ -21,21 +16,6 @@ export function useDashboardUserCreated(queryType: DashboardQueryType) {
     {
       debounceWait: 100
     }
-  )
-}
-
-export function useDashboardUserParticipant() {
-  return useRequest(
-    async () => {
-      const response = await getUserPoolsDashboardParticipant({
-        chainId: 0,
-        queryType: DashboardQueryType.ongoing,
-        limit: 100
-      })
-
-      return response.data.list
-    },
-    { debounceWait: 100 }
   )
 }
 

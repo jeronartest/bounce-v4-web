@@ -10,13 +10,6 @@ export const getUserPoolsDashboardCreated = (params: GetUserPoolsDashboardParams
   return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/dashboard/created', params)
 }
 
-export const getUserPoolsDashboardParticipant = (params: GetUserPoolsDashboardParams) => {
-  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>(
-    '/user/pools/dashboard/participant',
-    params
-  )
-}
-
 export const getUserPoolsDashboardCollect = (params: GetUserPoolsDashboardParams) => {
   return ApiInstance.post<{ list: GetUserPoolsDashboardCollectRes[]; total: number }>(
     '/user/pools/dashboard/collect',
@@ -26,4 +19,16 @@ export const getUserPoolsDashboardCollect = (params: GetUserPoolsDashboardParams
 
 export const getUserDashboardStat = () => {
   return ApiInstance.get<GetUserPoolsDashboardStatRes>('/user/pools/dashboard/stat', {})
+}
+
+export const getUserPoolsTokenParticipant = (params: GetUserPoolsDashboardParams) => {
+  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/participant', params)
+}
+
+export const getUserPoolsTokenCreated = (params: GetUserPoolsDashboardParams) => {
+  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/created', params)
+}
+
+export const getUserPoolsTokenCollect = (params: GetUserPoolsDashboardParams) => {
+  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/collect', params)
 }

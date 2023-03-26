@@ -149,7 +149,7 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
               >
                 {optionDatas?.chainInfoOpt?.map((item: any, index: number) => (
                   <MenuItem key={index} value={item.id}>
-                    {item.chainName.split(' ')[0]}
+                    {item.chainName}
                   </MenuItem>
                 ))}
               </Select>

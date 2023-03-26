@@ -6,8 +6,8 @@ export enum PoolType {
   'FixedSwap' = 1,
   'Duch' = 2,
   'Lottery' = 3,
-  'SealedBid' = 4,
-  'fixed_swap_nft' = 5
+  'SealedBid' = 4
+  // 'fixed_swap_nft' = 5
 }
 
 export interface GetPoolCreationSignatureParams {

@@ -66,7 +66,7 @@ const usePlaceBid = (poolInfo: FixedSwapPoolProp) => {
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} swap to {${poolInfo.token0.symbol}}`,
+            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} swap to ${poolInfo.token0.symbol}`,
             userSubmitted: {
               account,
               action: `fixed_price_swap`,

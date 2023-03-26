@@ -1,26 +1,30 @@
-import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
+import FormItem from 'bounceComponents/common/FormItem'
+import { useState } from 'react'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { ReactComponent as AddIcon } from 'assets/svg/add.svg'
+import { Link } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useUserInfo } from 'state/users/hooks'
 import { usePagination } from 'ahooks'
+import NoData from 'bounceComponents/common/NoData'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { FixedSwapPool } from 'api/pool/type'
-import { useOptionDatas } from 'state/configOptions/hooks'
-import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
-import { IProfileUserInfo } from 'api/user/type'
-import NoData from 'bounceComponents/common/NoData'
-import FormItem from 'bounceComponents/common/FormItem'
-import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { getPools } from 'api/market'
-import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
+import { getUserPoolsTokenCreated } from 'api/account'
+import { DashboardQueryType } from 'api/account/types'
+import { useActiveWeb3React } from 'hooks'
 
-export type IActivitieProps = {
-  userInfo: IProfileUserInfo
-}
-const defaultPageSize = 3
+const defaultPageSize = 6
 
-const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
+export default function CreatedTab() {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
+  const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
+  const { userId } = useUserInfo()
+  const { account } = useActiveWeb3React()
 
   const {
     pagination,
@@ -28,14 +32,18 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     loading
   } = usePagination<IAuctionPoolsItems<FixedSwapPool>, Params>(
     async ({ current, pageSize }) => {
+      if (!account)
+        return {
+          total: 0,
+          list: []
+        }
       const category = 1
-      const resp = await getPools({
+      const resp: any = await getUserPoolsTokenCreated({
         offset: (current - 1) * pageSize,
         limit: pageSize,
-        CreatorUserId: userInfo.id,
         category,
         chainId: curChain,
-        orderBy: ''
+        queryType
       })
       if (category === 1) {
         return {
@@ -61,7 +69,9 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     },
     {
       defaultPageSize,
-      refreshDeps: [userInfo.id, curChain]
+      ready: !!account,
+      refreshDeps: [account, curChain, queryType],
+      debounceWait: 100
     }
   )
 
@@ -70,12 +80,9 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
   }
 
   return (
-    <Box mx={12} mb={48} p={'40px 30px 48px 36px'}>
-      <Box display={'flex'} justifyContent="space-between" alignItems={'center'}>
-        <Typography fontFamily={'"Sharp Grotesk DB Cyr Medium 22"'} fontSize={24}>
-          Token & NFT Auction
-        </Typography>
-        <Stack>
+    <Box>
+      <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
+        <Stack spacing={10} direction="row">
           <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
             <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
               <MenuItem key={0} value={0}>
@@ -88,7 +95,23 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
               ))}
             </Select>
           </FormItem>
+          <FormItem name="status" label="Status" sx={{ width: 190 }}>
+            <Select value={queryType} onChange={e => setQueryType(Number(e.target?.value) || 0)}>
+              <MenuItem key={0} value={0}>
+                All
+              </MenuItem>
+              <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
+              <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
+            </Select>
+          </FormItem>
         </Stack>
+        {userId && (
+          <Link to={routes.auction.createAuctionPool}>
+            <Button variant="contained">
+              Create a pool <AddIcon style={{ marginLeft: 6 }} />
+            </Button>
+          </Link>
+        )}
       </Box>
 
       {loading ? (
@@ -98,11 +121,9 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
       ) : !auctionPoolData?.total || auctionPoolData?.total === 0 ? (
         <NoData sx={{ padding: 40 }}>
           <Box display={'grid'} justifyItems="center">
-            <NoPoolFoundSVG />
             <Typography fontWeight={500} fontSize={20} mt={10}>
-              {userInfo.fullName} {'hasn’t created Auction'}{' '}
+              {'Hasn’t created Auction'}{' '}
             </Typography>
-            <Typography>Once they do, those Auctions will show up here.</Typography>
           </Box>
         </NoData>
       ) : (
@@ -129,5 +150,3 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     </Box>
   )
 }
-
-export default TokenAuction
