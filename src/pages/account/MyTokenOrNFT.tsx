@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Typography } from '@mui/material'
+import { Box, Button, Container, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import AuctionCreatedTab from 'bounceComponents/account/AuctionAddressTab/CreatedTab'
 import AuctionParticipatedTab from 'bounceComponents/account/AuctionAddressTab/ParticipatedTab'
@@ -27,9 +27,12 @@ export default function MyProfile() {
           <Typography padding="40px 60px 0" variant="h3" fontSize={30}>
             My Token & NFT Auction
           </Typography>
-          <Typography pl={60} mt={5}>
-            Current address: {account}
-          </Typography>
+          {account && (
+            <Typography pl={60} mt={5}>
+              Current address: {account}
+            </Typography>
+          )}
+
           <Box
             sx={{
               mt: 40,
@@ -56,10 +59,14 @@ export default function MyProfile() {
             <Box padding="40px 60px">
               {!account ? (
                 <NoData>
-                  <Typography onClick={toggleWalletModal} fontSize={24} textAlign="center" sx={{ cursor: 'pointer' }}>
-                    Connect Wallet
-                    <Typography>Connect wallet to view information for this address</Typography>
-                  </Typography>
+                  <Box display={'grid'} gap="10px" justifyItems="center">
+                    <Button variant="contained" onClick={toggleWalletModal}>
+                      Connect Wallet
+                    </Button>
+                    <Typography color={'var(--ps-gray-600)'}>
+                      Connect wallet to view information for this address
+                    </Typography>
+                  </Box>
                 </NoData>
               ) : (
                 <>
