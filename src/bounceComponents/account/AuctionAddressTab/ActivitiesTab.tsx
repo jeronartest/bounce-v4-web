@@ -162,7 +162,7 @@ const ActivitiesTab = () => {
               {data.list.map(record => (
                 <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledTableCell>
-                    <Image src={record.ethChainId ? ChainListMap[record.ethChainId]?.logo || '' : ''} sizes="24px" />
+                    <Image src={record.ethChainId ? ChainListMap[record.ethChainId]?.logo || '' : ''} width="24px" />
                   </StyledTableCell>
                   <StyledTableCell>#{record.poolId}</StyledTableCell>
                   <StyledTableCell>Token Fixed Price Auction</StyledTableCell>

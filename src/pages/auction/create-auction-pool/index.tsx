@@ -26,6 +26,7 @@ import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/typ
 import { useAuctionConfigList } from 'hooks/useAuctionConfig'
 import { useUserInfo } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import Image from 'components/Image'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -79,8 +80,19 @@ const CreateAuctionPoolIntroPage = () => {
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
-      <MenuItem key={item.id} value={item.id}>
-        {item.name}
+      <MenuItem
+        sx={{
+          padding: '10px 15px'
+        }}
+        key={item.id}
+        value={item.id}
+      >
+        <Box display={'flex'} alignItems="center">
+          <Image width="20px" src={item.logo} />
+          <Typography ml={10} fontSize={16}>
+            {item.name}
+          </Typography>
+        </Box>
       </MenuItem>
     ))
   }, [chainInfoOpt])
@@ -115,7 +127,17 @@ const CreateAuctionPoolIntroPage = () => {
                       if (!value) {
                         return <em>Not Connected</em>
                       }
-                      return chainId ? ChainListMap[chainId]?.name : ''
+                      return (
+                        <Box display={'flex'} alignItems="center">
+                          <Image width="32px" src={value ? ChainListMap[value]?.logo || '' : ''} />
+                          <Box ml={10}>
+                            <Typography fontSize={12} color={'var(--ps-gray-700)'}>
+                              Select Chain
+                            </Typography>
+                            <Typography>{chainId ? ChainListMap[chainId]?.name : ''}</Typography>
+                          </Box>
+                        </Box>
+                      )
                     }}
                   >
                     {menuList}

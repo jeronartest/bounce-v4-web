@@ -1,5 +1,5 @@
 import BigNumberjs from 'bignumber.js'
-import EthUrl from 'assets/svg/eth_logo.svg'
+import EthUrl from 'assets/images/eth_logo.png'
 import BSCUrl from 'assets/svg/binance.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 
