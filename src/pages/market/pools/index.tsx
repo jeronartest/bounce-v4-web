@@ -360,18 +360,19 @@ const Pools: React.FC = ({}) => {
                       ) : poolsData?.total > 0 ? (
                         <Grid container spacing={18}>
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
-                            <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
+                            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                               <Box
                                 component={'a'}
                                 target="_blank"
                                 href={routes.auction.fixedPrice
                                   .replace(
                                     ':chainShortName',
-                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
                                   )
                                   .replace(':poolId', fixedSwaptem.poolId)}
                               >
                                 <AuctionCard
+                                  style={{ minWidth: 'unset' }}
                                   poolId={fixedSwaptem.poolId}
                                   title={fixedSwaptem.name}
                                   status={fixedSwaptem.status}

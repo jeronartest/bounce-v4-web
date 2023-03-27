@@ -41,12 +41,12 @@ const Links: {
   {
     name: 'My Real World Asset Auction',
     svg: <RealIcon />,
-    disabled: true
+    route: routes.account.realAuction
   },
   {
     name: 'My Advertisement Auction',
     svg: <AdsIcon />,
-    disabled: true
+    route: routes.account.adsAuction
   },
   {
     name: 'Developer & SDK',

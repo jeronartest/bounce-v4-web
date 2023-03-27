@@ -39,6 +39,8 @@ export const routes = {
     dashboard: '/account/dashboard',
     myProfile: '/account/my_profile',
     myAccount: '/account/my_account',
-    tokenOrNFT: '/account/token_nft'
+    tokenOrNFT: '/account/token_nft',
+    realAuction: '/account/real_auction',
+    adsAuction: '/account/ads_auction'
   }
 }

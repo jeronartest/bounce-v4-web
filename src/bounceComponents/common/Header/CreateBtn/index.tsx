@@ -55,7 +55,7 @@ const CreateBtn: React.FC = () => {
           setAnchorEl(null)
         }}
       >
-        Create a pool
+        Create an auction
       </MenuItem>
       {/* <MenuItem
         onClick={() => {

@@ -46,6 +46,9 @@ import AccountMyProfile from 'pages/account/MyProfile'
 import AccountMyAccount from 'pages/account/MyAccount'
 import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 
+import AccountRealAuction from 'pages/account/AccountRealAuction'
+import AccountAdsAuction from 'pages/account/AccountAdsAuction'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   return null
@@ -106,6 +109,8 @@ export default function App() {
                       <Route path={routes.account.myProfile} element={<AccountMyProfile />} />
                       <Route path={routes.account.myAccount} element={<AccountMyAccount />} />
                       <Route path={routes.account.tokenOrNFT} element={<MyTokenOrNFT />} />
+                      <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
+                      <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
 
                       <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                       <Route path="/" element={<Navigate to={routes.market.index} replace />} />

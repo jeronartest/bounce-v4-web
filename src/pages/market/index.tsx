@@ -158,7 +158,7 @@ const Market: React.FC = ({}) => {
               {loading ? (
                 <Grid container spacing={18}>
                   {Array.from(new Array(8)).map((lodingItem, index) => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
+                    <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                       <Box>
                         <Skeleton
                           variant="rounded"
@@ -172,7 +172,7 @@ const Market: React.FC = ({}) => {
               ) : (
                 <Grid container spacing={18}>
                   {data?.list?.map((fixedSwaptem: any, index: number) => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
+                    <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                       <Link
                         to={routes.auction.fixedPrice
                           .replace(
@@ -182,6 +182,7 @@ const Market: React.FC = ({}) => {
                           .replace(':poolId', fixedSwaptem.poolId)}
                       >
                         <AuctionCard
+                          style={{ minWidth: 'unset' }}
                           poolId={fixedSwaptem.poolId}
                           title={fixedSwaptem.name}
                           status={fixedSwaptem.status}
