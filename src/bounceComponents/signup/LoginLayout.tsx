@@ -1,9 +1,10 @@
 import { Container, Typography } from '@mui/material'
 import { Box, Stack } from '@mui/system'
-import React from 'react'
+import React, { useEffect } from 'react'
 import SignupLayout from './SignupLayout'
 import login_bg from 'assets/svg/login_bg.svg'
 import Footer from 'bounceComponents/common/Footer'
+import { useUserInfo } from 'state/users/hooks'
 
 export type ILoginLayoutProps = {
   title: string
@@ -12,6 +13,14 @@ export type ILoginLayoutProps = {
 }
 
 const LoginLayout: React.FC<ILoginLayoutProps> = ({ title, subTitle, children }) => {
+  const { userId } = useUserInfo()
+
+  useEffect(() => {
+    if (userId) {
+      window.history.back()
+    }
+  }, [userId])
+
   return (
     <SignupLayout>
       <Container maxWidth="xl">

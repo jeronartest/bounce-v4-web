@@ -100,8 +100,6 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
     if (isAddress(filterValue || '') && isFilterValueNotFoundInApiTokenList && isSingleTokenValid) {
       return [singleToken]
     } else {
-      // TOTD NATIVE_TOKENS
-
       return enableEth
         ? (() => {
             const nativeToken = Currency.getNativeCurrency(chainId)
