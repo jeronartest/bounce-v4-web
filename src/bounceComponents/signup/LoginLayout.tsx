@@ -3,6 +3,7 @@ import { Box, Stack } from '@mui/system'
 import React from 'react'
 import SignupLayout from './SignupLayout'
 import login_bg from 'assets/svg/login_bg.svg'
+import Footer from 'bounceComponents/common/Footer'
 
 export type ILoginLayoutProps = {
   title: string
@@ -55,6 +56,7 @@ const LoginLayout: React.FC<ILoginLayoutProps> = ({ title, subTitle, children })
           </Box>
         </Box>
       </Container>
+      <Footer />
     </SignupLayout>
   )
 }
