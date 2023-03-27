@@ -1,20 +1,27 @@
 import React from 'react'
 import { Box, SxProps, Theme, Typography } from '@mui/material'
 import { ReactComponent as NoDataSVG } from 'assets/imgs/no_data.svg'
+import { ReactComponent as NoDataSVG1 } from 'assets/imgs/no_data1.svg'
 
 export interface INoDataProps {
   svgColor?: string
   color?: string
   children?: JSX.Element | string | number
   sx?: SxProps<Theme> | undefined
+  widthSvg?: boolean
 }
 
-const NoData: React.FC<INoDataProps> = ({ svgColor, color, children, sx }) => {
+const NoData: React.FC<INoDataProps> = ({ svgColor, color, children, sx, widthSvg }) => {
   return (
     <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: 20, ...sx }}>
-      <NoDataSVG
-        style={{ maxWidth: '100%', margin: 'auto', color: svgColor ? svgColor : 'var(--ps-gray-50)', minHeight: 308 }}
-      />
+      {widthSvg ? (
+        <NoDataSVG1 />
+      ) : (
+        <NoDataSVG
+          style={{ maxWidth: '100%', margin: 'auto', color: svgColor ? svgColor : 'var(--ps-gray-50)', minHeight: 308 }}
+        />
+      )}
+
       {children ? (
         <Box
           sx={{

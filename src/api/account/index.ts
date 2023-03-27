@@ -24,15 +24,15 @@ export const getUserDashboardStat = () => {
 }
 
 export const getUserPoolsTokenParticipant = (params: GetUserPoolsDashboardParams) => {
-  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/participant', params)
+  return ApiInstance.post('/user/pools/token/participant', params)
 }
 
 export const getUserPoolsTokenCreated = (params: GetUserPoolsDashboardParams) => {
-  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/created', params)
+  return ApiInstance.post('/user/pools/token/created', params)
 }
 
 export const getUserPoolsTokenCollect = (params: GetUserPoolsDashboardParams) => {
-  return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/collect', params)
+  return ApiInstance.post('/user/pools/token/collect', params)
 }
 
 export const getAddressActivities = (params: GetAddressActivitiesParams) => {
