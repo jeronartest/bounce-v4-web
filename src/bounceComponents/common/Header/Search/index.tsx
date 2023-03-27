@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Box } from '@mui/material'
-import SearchInput, { ISearchOption } from '../../SearchInput'
+import HeaderSearchInput, { ISearchOption } from '../../SearchInput/HeaderSearchInput'
 import { searchUser } from 'api/optionsData'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { USER_TYPE } from 'api/user/type'
@@ -38,16 +38,21 @@ const Search: React.FC = () => {
   return (
     <Box
       sx={{
-        width: 240,
         height: 40,
+        position: 'relative',
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {
-            background: 'rgba(255, 255, 255, 0.2)'
+            background: 'rgb(255, 255, 255)',
+            width: 310
           }
         },
         '.MuiOutlinedInput-root': {
-          background: '#F5F6F8',
+          transition: 'width 0.5s',
+          position: 'absolute',
+          right: 0,
+          width: 40,
           height: 40,
+          background: '#F5F6F8',
           padding: '0 !important',
           '& input': {
             paddingTop: '7.5px !important',
@@ -56,7 +61,7 @@ const Search: React.FC = () => {
         }
       }}
     >
-      <SearchInput
+      <HeaderSearchInput
         options={userData}
         filterOptions={(list: any) => list}
         renderOption={option => {
