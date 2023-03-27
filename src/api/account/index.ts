@@ -1,5 +1,7 @@
 import { ApiInstance } from 'api'
 import {
+  GetAddressActivitiesParams,
+  GetAddressActivitiesRes,
   GetUserPoolsDashboardCollectRes,
   GetUserPoolsDashboardParams,
   GetUserPoolsDashboardRes,
@@ -31,4 +33,8 @@ export const getUserPoolsTokenCreated = (params: GetUserPoolsDashboardParams) =>
 
 export const getUserPoolsTokenCollect = (params: GetUserPoolsDashboardParams) => {
   return ApiInstance.post<{ list: GetUserPoolsDashboardRes[]; total: number }>('/user/pools/token/collect', params)
+}
+
+export const getAddressActivities = (params: GetAddressActivitiesParams) => {
+  return ApiInstance.post<{ list: GetAddressActivitiesRes[]; total: number }>('/user/pools/activities', params)
 }

@@ -177,7 +177,7 @@ const Market: React.FC = ({}) => {
                         to={routes.auction.fixedPrice
                           .replace(
                             ':chainShortName',
-                            getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt)
+                            getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
                           )
                           .replace(':poolId', fixedSwaptem.poolId)}
                       >

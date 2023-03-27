@@ -104,7 +104,7 @@ const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(0)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
-    show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt) })
+    show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) })
       .then(res => {
         setFieldValue('tokenFromAddress', res.address)
         setFieldValue('tokenFromSymbol', res.symbol)

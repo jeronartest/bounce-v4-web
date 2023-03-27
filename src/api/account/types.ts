@@ -1,4 +1,4 @@
-import { PoolType } from 'api/pool/type'
+import { PoolEvent, PoolType } from 'api/pool/type'
 
 export interface GetUserPoolsDashboardParams {
   address?: string
@@ -29,4 +29,30 @@ export interface GetUserPoolsDashboardStatRes {
   createdCount: number
   participantCount: number
   saledVolume: string
+}
+
+export interface GetAddressActivitiesParams {
+  address: string
+  category?: PoolType // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
+  chainId: number
+  limit?: number
+  offset?: number
+}
+
+export interface GetAddressActivitiesRes {
+  blockTs: number
+  category: PoolType
+  chainId: number
+  event: PoolEvent
+  id: number
+  is721: number
+  poolId: string
+  regreted: boolean
+  requestor: string
+  token0Amount: string
+  token0Decimals: number
+  token0Symbol: string
+  token0Volume: string
+  tokenId: string
+  txHash: string
 }

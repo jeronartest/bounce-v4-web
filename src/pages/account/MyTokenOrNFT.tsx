@@ -2,6 +2,7 @@ import { Box, Button, Container, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import AuctionCreatedTab from 'bounceComponents/account/AuctionAddressTab/CreatedTab'
 import AuctionParticipatedTab from 'bounceComponents/account/AuctionAddressTab/ParticipatedTab'
+import ActivitiesTab from 'bounceComponents/account/AuctionAddressTab/ActivitiesTab'
 import NoData from 'bounceComponents/common/NoData'
 import { useActiveWeb3React } from 'hooks'
 import { useState } from 'react'
@@ -72,6 +73,7 @@ export default function MyProfile() {
                 <>
                   {curTab === TabListProp.Auction_Created && <AuctionCreatedTab />}
                   {curTab === TabListProp.Auction_Participated && <AuctionParticipatedTab />}
+                  {curTab === TabListProp.Activities && <ActivitiesTab />}
                 </>
               )}
             </Box>
