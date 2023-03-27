@@ -25,11 +25,11 @@ export default function MyProfile() {
     <AccountLayout>
       <Box>
         <Container maxWidth="lg">
-          <Typography padding="40px 60px 0" variant="h3" fontSize={30}>
+          <Typography padding="40px 20px 0" variant="h3" fontSize={30}>
             My Token & NFT Auction
           </Typography>
           {account && (
-            <Typography pl={60} mt={5}>
+            <Typography pl={20} mt={5}>
               Current address: {account}
             </Typography>
           )}
@@ -57,7 +57,7 @@ export default function MyProfile() {
               </Stack>
             </Stack>
 
-            <Box padding="40px 60px">
+            <Box padding="40px 20px">
               {!account ? (
                 <NoData>
                   <Box display={'grid'} gap="10px" justifyItems="center">

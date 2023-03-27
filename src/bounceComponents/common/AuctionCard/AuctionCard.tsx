@@ -27,6 +27,7 @@ export type IAuctionCardProps = {
   isCreator?: boolean
   whiteList: string
   chainId: number
+  style?: React.CSSProperties | undefined
 }
 
 export const AuctionCard: React.FC<IAuctionCardProps> = ({
@@ -45,6 +46,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   chainId,
   progress,
   listItems,
+  style,
   claimAt
 }) => {
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
@@ -74,7 +76,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   }
 
   return (
-    <Card sx={styles.card} elevation={0} style={{ minWidth: 355, cursor: 'pointer' }}>
+    <Card sx={styles.card} elevation={0} style={{ minWidth: 355, cursor: 'pointer', ...style }}>
       <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
         <Typography>#{poolId}</Typography>
         <Stack direction="row" spacing={6} height={24} alignItems={'center'}>

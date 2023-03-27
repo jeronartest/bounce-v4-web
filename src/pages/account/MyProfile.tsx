@@ -5,7 +5,7 @@ import ProfileOverview from 'bounceComponents/account/ProfileOverview'
 export default function MyProfile() {
   return (
     <AccountLayout>
-      <Box padding="40px 60px">
+      <Box padding="40px 20px">
         <Container
           sx={{
             maxWidth: '860px !important',

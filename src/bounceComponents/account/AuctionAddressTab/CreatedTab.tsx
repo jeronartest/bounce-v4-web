@@ -129,9 +129,9 @@ export default function CreatedTab() {
       ) : (
         <Box mt={20}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
-            <Grid container spacing={18}>
+            <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
+                <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
                   <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                 </Grid>
               ))}

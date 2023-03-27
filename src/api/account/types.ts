@@ -1,4 +1,6 @@
 import { PoolEvent, PoolType } from 'api/pool/type'
+import { ChainId } from 'constants/chain'
+import { CurrencyAmount } from 'constants/token'
 
 export interface GetUserPoolsDashboardParams {
   address?: string
@@ -43,6 +45,7 @@ export interface GetAddressActivitiesRes {
   blockTs: number
   category: PoolType
   chainId: number
+  ethChainId?: ChainId
   event: PoolEvent
   id: number
   is721: number
@@ -53,6 +56,7 @@ export interface GetAddressActivitiesRes {
   token0Decimals: number
   token0Symbol: string
   token0Volume: string
+  currency0Amount?: CurrencyAmount
   tokenId: string
   txHash: string
 }

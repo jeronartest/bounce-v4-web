@@ -13,7 +13,7 @@ export default function MyAccount() {
 
   return (
     <AccountLayout>
-      <Box padding="40px 60px 80px">
+      <Box padding="40px 20px 80px">
         <Container
           sx={{
             maxWidth: '860px !important'

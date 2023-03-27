@@ -6,7 +6,7 @@ export default {
     borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '0px 60px'
+    padding: '0px 20px'
   },
   menu: {
     paddingBottom: 9,

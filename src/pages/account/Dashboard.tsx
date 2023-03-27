@@ -20,6 +20,7 @@ import {
   DashboardToPoolButton
 } from 'bounceComponents/account/Dashboard'
 import { DashboardQueryType } from 'api/account/types'
+import { useMemo } from 'react'
 
 const btnStyle = {
   height: 26,
@@ -40,7 +41,7 @@ export default function Dashboard() {
     <AccountLayout>
       <Box>
         <Container maxWidth="lg">
-          <Box padding="40px 60px">
+          <Box padding="40px 20px">
             <Typography variant="h3" fontSize={30}>
               Dashboard
             </Typography>
@@ -111,13 +112,13 @@ export default function Dashboard() {
               mt={50}
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { lg: '1fr 1fr 1fr', md: '1fr 1fr', xs: '1fr' },
+                gridTemplateColumns: { lg: '346fr 346fr 346fr', md: '346fr 346fr', xs: '1fr' },
                 gap: 30
               }}
             >
               <CreateAuctionsList title="Ongoing Auctions" queryType={DashboardQueryType.ongoing} />
               <FavoritesAuctionsList />
-              <CreateAuctionsList title="Pending Claim" queryType={DashboardQueryType.claim} />
+              <PendingClaimAuctionsList />
             </Box>
           </Box>
         </Container>
@@ -235,6 +236,48 @@ function CreateAuctionsList({ title, queryType }: { title: string; queryType: Da
                   poolId={item.poolId}
                   backedChainId={item.chainId}
                 />
+              </Box>
+            </Box>
+          ))
+        )}
+      </>
+    </DashboardPoolCard>
+  )
+}
+
+function PendingClaimAuctionsList() {
+  const { data, loading } = useDashboardUserCreated(DashboardQueryType.claim)
+  const { data: colletData, loading: colletLoading } = useDashboardUserCollect(DashboardQueryType.claim)
+
+  const list = useMemo(() => {
+    return [...(data || []), ...(colletData || [])]
+  }, [colletData, data])
+
+  return (
+    <DashboardPoolCard title={'Pending Claim'}>
+      <>
+        {loading || colletLoading ? (
+          <BounceAnime />
+        ) : !data?.length ? (
+          <DashboardNoData />
+        ) : (
+          list.map((item, idx) => (
+            <Box
+              display={'grid'}
+              key={idx}
+              gridTemplateColumns="1.3fr 4fr 2fr"
+              gap={10}
+              sx={{
+                padding: '4px 0 4px 10px',
+                alignItems: 'center',
+                background: '#F5F5F5',
+                borderRadius: 100
+              }}
+            >
+              <Typography fontSize={12}>#{item.poolId}</Typography>
+              <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
+              <Box display={'flex'} justifyContent="right">
+                <DashboardToPoolButton text={'Claim'} poolId={item.poolId} backedChainId={item.chainId} />
               </Box>
             </Box>
           ))

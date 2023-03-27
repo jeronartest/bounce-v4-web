@@ -19,7 +19,6 @@ import moment from 'moment'
 import NoData from 'bounceComponents/common/NoData'
 import { PoolEvent } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useState } from 'react'
@@ -31,8 +30,10 @@ import { useActiveWeb3React } from 'hooks'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { GetAddressActivitiesRes } from 'api/account/types'
-import { ChainId, ChainListMap } from 'constants/chain'
+import { ChainListMap } from 'constants/chain'
 import Image from 'components/Image'
+import { Currency, CurrencyAmount } from 'constants/token'
+import { ZERO_ADDRESS } from '../../../constants'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -95,7 +96,17 @@ const ActivitiesTab = () => {
         address: account
       })
       return {
-        list: resp.data.list,
+        list: resp.data.list.map(i => {
+          const ethChainId = getLabelById(i.chainId, 'ethChainId', optionDatas?.chainInfoOpt || [])
+          return {
+            ...i,
+            ethChainId,
+            currency0Amount: CurrencyAmount.fromRawAmount(
+              new Currency(ethChainId, ZERO_ADDRESS, i.token0Decimals, i.token0Symbol),
+              i.token0Amount
+            )
+          }
+        }),
         total: resp.data.total
       }
     },
@@ -151,21 +162,13 @@ const ActivitiesTab = () => {
               {data.list.map(record => (
                 <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledTableCell>
-                    <Image
-                      src={(() => {
-                        const ec = getLabelById(record.chainId, 'ethChainId', optionDatas?.chainInfoOpt || [])
-                        return ec ? ChainListMap[ec as ChainId]?.logo || '' : ''
-                      })()}
-                      sizes="24px"
-                    />
+                    <Image src={record.ethChainId ? ChainListMap[record.ethChainId]?.logo || '' : ''} sizes="24px" />
                   </StyledTableCell>
-                  <StyledTableCell>{record.poolId}</StyledTableCell>
+                  <StyledTableCell>#{record.poolId}</StyledTableCell>
                   <StyledTableCell>Token Fixed Price Auction</StyledTableCell>
                   <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
                   <StyledTableCell>
-                    {removeRedundantZeroOfFloat(
-                      formatNumber(record.token0Amount, { unit: record.token0Decimals, decimalPlaces: 4 })
-                    )}
+                    {record.currency0Amount?.toSignificant(6)}
                     &nbsp;
                     {record.token0Symbol}
                   </StyledTableCell>

@@ -8,6 +8,7 @@ export function useDashboardUserCreated(queryType: DashboardQueryType) {
       const response = await getUserPoolsDashboardCreated({
         chainId: 0,
         queryType,
+        category: 1,
         limit: 100
       })
 
@@ -19,12 +20,14 @@ export function useDashboardUserCreated(queryType: DashboardQueryType) {
   )
 }
 
-export function useDashboardUserCollect() {
+export function useDashboardUserCollect(queryType?: DashboardQueryType) {
   return useRequest(
     async () => {
       const response = await getUserPoolsDashboardCollect({
         chainId: 0,
-        limit: 100
+        category: 1,
+        limit: 100,
+        queryType
       })
 
       return response.data.list

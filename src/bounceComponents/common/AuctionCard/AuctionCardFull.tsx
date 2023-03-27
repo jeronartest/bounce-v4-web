@@ -23,6 +23,7 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
         .replace(':poolId', auctionPoolItem.poolId)}
     >
       <AuctionCard
+        style={{ minWidth: 'unset' }}
         poolId={auctionPoolItem.poolId}
         title={auctionPoolItem.name}
         status={auctionPoolItem.status}

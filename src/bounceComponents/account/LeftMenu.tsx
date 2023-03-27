@@ -51,12 +51,12 @@ const Links: {
   {
     name: 'Developer & SDK',
     svg: <SdkIcon />,
-    link: 'https://google.com'
+    link: 'https://www.npmjs.com/package/bounce-sdk-beta'
   },
   {
     name: 'Jobs Network',
     svg: <JobsIcon />,
-    link: 'https://google.com'
+    link: 'https://jobs.bounce.finance/'
   }
 ]
 
