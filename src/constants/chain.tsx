@@ -22,6 +22,7 @@ export enum ChainId {
   POLYGON = 137,
   FANTOM = 250,
   ZKSYNC_ERA = 324,
+  POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
   MOONBEAM = 1284,
   MOONRIVER = 1285,
@@ -203,6 +204,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://mainnet.era.zksync.io'],
     blockExplorerUrls: ['https://explorer.zksync.io/']
+  },
+  [ChainId.POLYGON_ZK_EVM]: {
+    id: ChainId.POLYGON_ZK_EVM,
+    hexChainId: numberToHex(ChainId.POLYGON_ZK_EVM),
+    chainName: 'Polygon zkEVM',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: ZkevmSrc
+    },
+    rpcUrls: ['https://zkevm-rpc.com'],
+    blockExplorerUrls: ['https://zkevm.polygonscan.com/']
   },
   [ChainId.POLYGON_ZK_EVM_TESTNET]: {
     id: ChainId.POLYGON_ZK_EVM_TESTNET,

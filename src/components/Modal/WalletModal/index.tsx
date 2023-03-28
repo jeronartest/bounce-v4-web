@@ -209,17 +209,20 @@ export default function WalletModal({
           <Typography variant="h3" fontWeight={500}>
             {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}
           </Typography>
-          <Box padding={isUpToMD ? '16px' : '2rem 6rem 52px'}>
-            {error instanceof UnsupportedChainIdError
-              ? `Please connect to the    ${
-                  SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]
-                    ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName
-                    : 'Binance Smart Chain'
-                }.`
-              : 'Error connecting. Try refreshing the page.'}
+          <Box padding={isUpToMD ? '16px' : '2rem'}>
+            <Typography>
+              {error instanceof UnsupportedChainIdError
+                ? `Please connect to the ${
+                    SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]
+                      ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName
+                      : 'Binance Smart Chain'
+                  }.`
+                : 'Error connecting. Try refreshing the page.'}
+            </Typography>
           </Box>
           {window.ethereum && window.ethereum.isMetaMask && (
             <Button
+              variant="contained"
               onClick={() => {
                 const id = Object.values(ChainId).find(val => val === NETWORK_CHAIN_ID)
                 if (!id) {
