@@ -57,7 +57,7 @@ export const Tabs: Tab[] = [
 
 const navLinkSX = ({ theme }: any) => ({
   textDecoration: 'none',
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: 500,
   color: theme.palette.text.primary,
   opacity: 1,
@@ -76,12 +76,12 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
-  padding: '0 16px 0 16px!important',
+  padding: '0 36px 0 36px!important',
   zIndex: theme.zIndex.drawer,
   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
     textDecoration: 'none',
-    fontSize: 14,
+    fontSize: 16,
     color: theme.palette.text.primary,
     marginRight: 24,
     paddingBottom: '3px',
@@ -283,7 +283,7 @@ export default function Header() {
                     </PlainSelect>
                   </Box>
                 ) : link ? (
-                  <ExternalLink href={link} className={'link'} key={link + idx} style={{ fontSize: 14 }}>
+                  <ExternalLink href={link} className={'link'} key={link + idx} style={{ fontSize: 16 }}>
                     {titleContent ?? title}
                   </ExternalLink>
                 ) : (

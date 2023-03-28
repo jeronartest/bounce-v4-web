@@ -19,6 +19,7 @@ import CompanyBanner from 'bounceComponents/company/CompanyBanner'
 import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
 import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
 import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
+import Banner28 from 'assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Marketcard from 'bounceComponents/investment/marketcard/Marketcard'
@@ -57,6 +58,10 @@ const Market: React.FC = ({}) => {
     }
   })
   const bannerList = [
+    {
+      img: Banner28,
+      title: 'Bounce Finance Supports Polygon zkEVM for On-Chain Auctions'
+    },
     {
       img: MarketPNG,
       title: 'Explore the market place & participate in Auctions'
