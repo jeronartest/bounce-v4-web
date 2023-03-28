@@ -59,7 +59,7 @@ const initialValues = {
   tokenFromSymbol: '',
   tokenFromLogoURI: '',
   tokenFromDecimals: '',
-  poolStatus: 'live',
+  poolStatus: 0,
   auctionType: 1,
   chain: 0
 }
@@ -71,7 +71,7 @@ export interface IFormObserverProps {
 }
 const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   const { values }: any = useFormikContext()
-  const refPoolStatus = useRef('live')
+  const refPoolStatus = useRef(0)
   const refTokenFromAddress = useRef('')
   const refAuctionType = useRef(1)
   const refChain = useRef(3)
