@@ -56,9 +56,9 @@ export const useLogin = (path?: string) => {
         return navigate(path)
       }
       if (res.payload?.avatar?.fileUrl) {
-        navigate(routes.account.myProfile)
+        navigate(routes.market.index)
       } else {
-        navigate(routes.account.dashboard)
+        navigate(routes.market.index)
       }
     }
   })
