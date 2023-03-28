@@ -6,6 +6,7 @@ import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
 import { Currency } from 'constants/token'
+import localDefaultAllList from 'assets/tokenList/default.json'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -34,10 +35,14 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
     refreshDeps: [chainId]
   })
 
-  const baseTokenList = useMemo(
-    () => (chainId === ChainId.GÖRLI ? GOERLI_TOKEN_LIST : apiTokenList ?? []),
-    [apiTokenList, chainId]
-  )
+  const baseTokenList = useMemo(() => {
+    if (chainId === ChainId.GÖRLI) {
+      return (GOERLI_TOKEN_LIST || apiTokenList) ?? []
+    } else {
+      const localDefaultList = localDefaultAllList.token.filter(i => i.chainId === chainId)
+      return [...localDefaultList, ...(apiTokenList || [])]
+    }
+  }, [apiTokenList, chainId])
 
   const filteredApiTokenList = useMemo(() => {
     if (!baseTokenList) {
