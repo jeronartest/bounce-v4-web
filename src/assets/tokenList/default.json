@@ -1,0 +1,125 @@
+{
+  "token": [
+    {
+      "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png",
+      "name": "USDCoin(PoS)",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    {
+      "address": "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/9956/large/4943.png",
+      "name": "(PoS)DaiStablecoin",
+      "symbol": "DAI",
+      "decimals": 18
+    },
+    {
+      "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+      "name": "WrappedEther",
+      "symbol": "WETH",
+      "decimals": 18
+    },
+    {
+      "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
+      "name": "(PoS)TetherUSD",
+      "symbol": "USDT",
+      "decimals": 6
+    },
+    {
+      "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/4713/large/matic-token-icon.png",
+      "name": "WrappedMatic",
+      "symbol": "WMATIC",
+      "decimals": 18
+    },
+
+    {
+      "address": "0x04068da6c83afcfa0e13ba15a6696662335d5b75",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png",
+      "name": "USDCoin",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    {
+      "address": "0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/9956/large/4943.png",
+      "name": "DaiStablecoin",
+      "symbol": "DAI",
+      "decimals": 18
+    },
+    {
+      "address": "0x74b23882a30290451a17c44f4f05243b6b58c76d",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "decimals": 18
+    },
+    {
+      "address": "0x5cc61a78f164885776aa610fb0fe1257df78e59b",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/15118/large/4mY2Biy9_400x400.jpg",
+      "name": "SpiritSwapToken",
+      "symbol": "SPIRIT",
+      "decimals": 18
+    },
+    {
+      "address": "0x841fad6eae12c286d1fd18d1d525dffa75c7effe",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/15223/large/logo_200x200.png",
+      "name": "SpookyToken",
+      "symbol": "BOO",
+      "decimals": 18
+    },
+    {
+      "address": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
+      "chainId": 250,
+      "logoURI": "https://assets.coingecko.com/coins/images/4001/large/Fantom.png",
+      "name": "Fantom",
+      "symbol": "WFTM",
+      "decimals": 18
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "chainId": 10,
+      "logoURI": "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "decimals": 18
+    },
+    {
+      "address": "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+      "chainId": 10,
+      "logoURI": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    {
+      "address": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "chainId": 10,
+      "logoURI": "https://assets.coingecko.com/coins/images/9956/large/4943.png",
+      "name": "Dai Stablecoin",
+      "symbol": "DAI",
+      "decimals": 18
+    },
+    {
+      "address": "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "chainId": 10,
+      "logoURI": "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6
+    }
+  ]
+}
