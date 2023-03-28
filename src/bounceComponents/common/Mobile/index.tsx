@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Stack, Typography } from '@mui/material'
-import Image from 'components/Image'
+import { BounceAnime } from '../BounceAnime'
 
 export const Mobile: React.FC = ({}) => {
   return (
@@ -21,9 +21,10 @@ export const Mobile: React.FC = ({}) => {
       }}
     >
       <Stack sx={{ alignItems: 'center' }}>
-        <Image src="/imgs/mobile/pc.png" alt="" width={193} height={188} />
-        <Typography variant="h3" sx={{ mt: 28, color: '#111111', textAlign: 'center' }}>
-          Mobile version is coming soon, please use the desktop version for now.
+        <BounceAnime />
+
+        <Typography variant="h3" sx={{ mt: 40, textAlign: 'center' }}>
+          Thank you for your interest in Bounce! Mobile version coming soon! Please use desktop for now.
         </Typography>
       </Stack>
     </Box>
