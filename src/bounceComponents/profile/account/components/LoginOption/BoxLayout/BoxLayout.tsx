@@ -15,7 +15,7 @@ const BoxLayout: React.FC<IBoxLayoutProps> = ({ email, title, emailSvg, onBind }
       px={20}
       alignItems="center"
       height={60}
-      sx={{ border: '1px solid #D7D6D9', borderRadius: 20 }}
+      sx={{ border: '1px solid #D7D6D9', backgroundColor: '#fff', borderRadius: 20 }}
     >
       {emailSvg}
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>

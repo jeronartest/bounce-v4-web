@@ -57,11 +57,7 @@ export default function MyAccount() {
               }}
             >
               <EditInfo userInfoEmail={userInfo?.email} />
-              <LoginOpton
-                googleEmail={userInfo?.googleEmail}
-                twitter={userInfo?.twitterName}
-                linkedin={userInfo?.linkedinName}
-              />
+              <LoginOpton googleEmail={userInfo?.googleEmail} twitter={userInfo?.twitterName} />
               <Box>
                 <Typography variant="h3" fontSize={16}>
                   Account Abstraction Wallet

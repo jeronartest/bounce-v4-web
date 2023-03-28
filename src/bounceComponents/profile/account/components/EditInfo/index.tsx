@@ -156,7 +156,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
       ) : (
         <Stack pt={40} spacing={20}>
           <Typography variant="h4">Email</Typography>
-          <Box sx={{ border: '1px solid #D7D6D9', borderRadius: 20, p: '12px 20px' }}>
+          <Box sx={{ border: '1px solid #D7D6D9', backgroundColor: '#fff', borderRadius: 20, p: '12px 20px' }}>
             <Typography variant="body2" color={'var(--ps-gray-700)'}>
               Email
             </Typography>

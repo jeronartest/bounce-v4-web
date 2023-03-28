@@ -43,20 +43,22 @@ const Search: React.FC = () => {
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {
             background: 'rgb(255, 255, 255)',
+            border: 'none !important',
             width: 310
           }
         },
         '.MuiOutlinedInput-root': {
-          transition: 'width 0.5s',
+          transition: 'all 0.5s',
           position: 'absolute',
           right: 0,
           width: 40,
           height: 40,
+          overflow: 'hidden',
           background: '#F5F6F8',
           padding: '0 !important',
+          border: 'none',
           '& input': {
-            paddingTop: '7.5px !important',
-            paddingRight: '10px !important'
+            padding: '0 !important'
           }
         }
       }}

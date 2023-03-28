@@ -71,7 +71,7 @@ export default function Dashboard() {
                       <Typography variant="h1" fontWeight={500}>
                         {userInfo?.fullName}
                       </Typography>
-                      <Typography variant="body1" color="rgba(23, 23, 23, 0.7)" ml={10} sx={{ fontSize: 20 }}>
+                      <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
                         {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
                       </Typography>
                     </Stack>
