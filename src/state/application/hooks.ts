@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useActiveWeb3React } from '../../hooks'
 import { AppDispatch, AppState } from '../index'
-import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from './actions'
+import { addPopup, ApplicationModal, PopupContent, removePopup, setCurrentRegion, setOpenModal } from './actions'
 
 export function useBlockNumber(chainId?: ChainId): number | undefined {
   const { chainId: curChainId } = useActiveWeb3React()
@@ -25,6 +25,23 @@ export function useToggleModal(modal: ApplicationModal): () => void {
 export function useOpenModal(modal: ApplicationModal): () => void {
   const dispatch = useDispatch<AppDispatch>()
   return useCallback(() => dispatch(setOpenModal(modal)), [dispatch, modal])
+}
+
+export function useCurrentRegionBlock() {
+  const currentRegion = useSelector((state: AppState) => state.application.currentRegion)
+
+  return currentRegion === 'US'
+}
+
+export function useSetCurrentRegion() {
+  const dispatch = useDispatch()
+
+  return useCallback(
+    (val: string | null) => {
+      dispatch(setCurrentRegion({ val }))
+    },
+    [dispatch]
+  )
 }
 
 export function useCloseModals(): () => void {

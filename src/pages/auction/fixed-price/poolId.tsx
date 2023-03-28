@@ -8,10 +8,17 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
+import { useCurrentRegionBlock } from 'state/application/hooks'
+import NoService from 'components/NoService'
 
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const isBlock = useCurrentRegionBlock()
+
+  if (isBlock) {
+    return <NoService />
+  }
 
   if (!poolInfo) {
     return (
