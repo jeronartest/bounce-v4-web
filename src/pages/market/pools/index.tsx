@@ -391,8 +391,9 @@ const Pools: React.FC = ({}) => {
                                                 return (
                                                   getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
                                                   `${
-                                                    index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 &&
-                                                    ', '
+                                                    index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1
+                                                      ? ', '
+                                                      : ''
                                                   }`
                                                 )
                                               }

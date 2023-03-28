@@ -41,7 +41,7 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
                     ?.map((item: any, index: number) => {
                       return (
                         getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                        `${index !== (auctionPoolItem.creatorUserInfo?.publicRole?.length || 0) - 1 && ', '}`
+                        `${index !== (auctionPoolItem.creatorUserInfo?.publicRole?.length || 0) - 1 ? ', ' : ''}`
                       )
                     })
                     .join(' ') || ''

@@ -204,7 +204,7 @@ const Market: React.FC = ({}) => {
                                   ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
                                       return (
                                         getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                        `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 && ', '}`
+                                        `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''}`
                                       )
                                     })
                                   : 'Individual account'
