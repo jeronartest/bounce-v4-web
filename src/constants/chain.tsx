@@ -221,7 +221,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.POLYGON_ZK_EVM_TESTNET]: {
     id: ChainId.POLYGON_ZK_EVM_TESTNET,
     hexChainId: numberToHex(ChainId.POLYGON_ZK_EVM_TESTNET),
-    chainName: 'Polygon zkEVM',
+    chainName: 'zkEVM Testnet',
     nativeCurrency: {
       name: 'ZKETH',
       symbol: 'ETH',
