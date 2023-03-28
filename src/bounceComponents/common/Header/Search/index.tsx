@@ -17,7 +17,7 @@ const Search: React.FC = () => {
     searchUser({
       limit: 100,
       offset: 0,
-      userType: 0,
+      userType: USER_TYPE.USER,
       value: searchText
     }).then(res => {
       const { code, data } = res
