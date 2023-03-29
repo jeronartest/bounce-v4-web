@@ -133,7 +133,7 @@ export function useAutoLogin() {
           type: 'users/saveLoginInfo',
           payload: {
             token: token,
-            userId: userId,
+            userId: Number(userId),
             userType
           }
         })

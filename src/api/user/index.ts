@@ -43,7 +43,7 @@ export const login = async (params: ILoginParams) => {
 }
 
 export const getUserInfo = async (params: IUserInfoParams) => {
-  return ApiInstance.post('/personal/profile', params)
+  return ApiInstance.post('/personal/profile', { userId: Number(params.userId) })
 }
 
 export const logout = async () => {
