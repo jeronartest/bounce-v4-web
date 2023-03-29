@@ -49,10 +49,12 @@ import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
+// import { useAutoLogin } from 'state/users/hooks'
 
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
+  // useAutoLogin()
   return null
 }
 

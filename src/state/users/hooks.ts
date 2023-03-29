@@ -6,10 +6,12 @@ import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
 import { fetchUserInfo, saveLoginInfo, removeUserInfo } from 'state/users/reducer'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useEffect } from 'react'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -116,4 +118,41 @@ export const useLinkedInOauth = (onChange: (accessToken: string, oauthType: ACCO
 export function useUserInfo() {
   const userInfo = useSelector<AppState, AppState['users']>(state => state.users)
   return userInfo
+}
+
+export function useAutoLogin() {
+  const { token, userId, userType } = useQueryParams()
+  const { token: loginToken, userId: loginUserId } = useUserInfo()
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  useEffect(() => {
+    ;(async () => {
+      if (token && userId && userType && pathname === '/') {
+        dispatch({
+          type: 'users/saveLoginInfo',
+          payload: {
+            token: token,
+            userId: userId,
+            userType
+          }
+        })
+        dispatch(
+          fetchUserInfo({
+            userId: userId
+          })
+        )
+      }
+    })()
+  }, [dispatch, navigate, pathname, token, userId, userType])
+
+  useEffect(() => {
+    loginToken &&
+      dispatch(
+        fetchUserInfo({
+          userId: loginUserId
+        })
+      )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 }

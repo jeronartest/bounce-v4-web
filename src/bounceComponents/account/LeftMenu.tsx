@@ -9,56 +9,9 @@ import { ReactComponent as TokenIcon } from 'assets/svg/account/my-token.svg'
 import { ReactComponent as SdkIcon } from 'assets/svg/account/sdk.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { routes } from 'constants/routes'
+import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-const Links: {
-  name: string
-  svg: JSX.Element
-  route?: string
-  link?: string
-  disabled?: boolean
-}[] = [
-  {
-    name: 'Dashboard',
-    svg: <DashboardIcon />,
-    route: routes.account.dashboard
-  },
-  {
-    name: 'My Profile',
-    svg: <ProfileIcon />,
-    route: routes.account.myProfile
-  },
-  {
-    name: 'My Account',
-    svg: <AccountIcon />,
-    route: routes.account.myAccount
-  },
-  {
-    name: 'My Token & NFT Auction',
-    svg: <TokenIcon />,
-    route: routes.account.tokenOrNFT
-  },
-  {
-    name: 'My Real World Asset Auction',
-    svg: <RealIcon />,
-    route: routes.account.realAuction
-  },
-  {
-    name: 'My Advertisement Auction',
-    svg: <AdsIcon />,
-    route: routes.account.adsAuction
-  },
-  {
-    name: 'Developer & SDK',
-    svg: <SdkIcon />,
-    link: 'https://www.npmjs.com/package/bounce-sdk-beta'
-  },
-  {
-    name: 'Jobs Network',
-    svg: <JobsIcon />,
-    link: 'https://jobs.bounce.finance/'
-  }
-]
+import { useUserInfo } from 'state/users/hooks'
 
 const StyledMenuItem = styled(MenuItem)<{ selected?: boolean }>(({ selected }) => ({
   height: 60,
@@ -78,6 +31,62 @@ export default function LeftMenu() {
   const theme = useTheme()
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { userId, token } = useUserInfo()
+
+  const Links: {
+    name: string
+    svg: JSX.Element
+    route?: string
+    link?: string
+    _blank?: boolean
+    disabled?: boolean
+  }[] = useMemo(
+    () => [
+      {
+        name: 'Dashboard',
+        svg: <DashboardIcon />,
+        route: routes.account.dashboard
+      },
+      {
+        name: 'My Profile',
+        svg: <ProfileIcon />,
+        route: routes.account.myProfile
+      },
+      {
+        name: 'My Account',
+        svg: <AccountIcon />,
+        route: routes.account.myAccount
+      },
+      {
+        name: 'My Token & NFT Auction',
+        svg: <TokenIcon />,
+        route: routes.account.tokenOrNFT
+      },
+      {
+        name: 'My Real World Asset Auction',
+        svg: <RealIcon />,
+        route: routes.account.realAuction
+      },
+      {
+        name: 'My Advertisement Auction',
+        svg: <AdsIcon />,
+        route: routes.account.adsAuction
+      },
+      {
+        name: 'Developer & SDK',
+        svg: <SdkIcon />,
+        _blank: true,
+        link: 'https://www.npmjs.com/package/bounce-sdk-beta'
+      },
+      {
+        name: 'Jobs Network',
+        svg: <JobsIcon />,
+        link: `https://jobs.bounce.finance/?token=${token}&userId=${userId}&userType=1`
+      }
+    ],
+    [token, userId]
+  )
+
   return (
     <Box>
       <Box
@@ -97,7 +106,15 @@ export default function LeftMenu() {
           {Links.map(item => (
             <StyledMenuItem
               selected={!!(item.route && pathname.includes(item.route))}
-              onClick={() => (item.route ? navigate(item.route) : item.link ? window.open(item.link) : {})}
+              onClick={() =>
+                item.route
+                  ? navigate(item.route)
+                  : item.link
+                  ? item._blank
+                    ? window.open(item.link)
+                    : (location.href = item.link)
+                  : {}
+              }
               key={item.name}
             >
               {item.svg}
@@ -108,7 +125,7 @@ export default function LeftMenu() {
                   </Typography>
                 </Tooltip>
               ) : item.link ? (
-                <Tooltip title={item.link}>
+                <Tooltip title={`Go to ${item.name}`}>
                   <Typography ml={10} sx={{ whiteSpace: 'pre-wrap' }}>
                     {item.name}
                   </Typography>
