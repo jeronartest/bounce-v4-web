@@ -40,6 +40,10 @@ export const getUserPoolsFixedSwap = async (params: IPoolFixedSwapParams) => {
   return ApiInstance.post('/user/pools/fixed_swap', params)
 }
 
+export const getUserPoolsFixedSwapNft = async (params: IPoolFixedSwapParams) => {
+  return ApiInstance.post('/user/pools/fixed_swap_nft', params)
+}
+
 export const getActivitiesTotal = async (params: IActivitiesTotalParams) => {
   return ApiInstance.post('/user/activities', params)
 }

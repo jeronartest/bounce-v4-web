@@ -25,7 +25,8 @@ import {
   IUserFollowedCountParams,
   IUserFollowUserParams,
   IClaimCheckParams,
-  IUserUpdateBannerParams
+  IUserUpdateBannerParams,
+  GetUserNFTsParams
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -128,4 +129,11 @@ export const getUserFollowUser = async (params: IUserFollowUserParams) => {
 
 export const updateUserBanner = async (params: IUserUpdateBannerParams) => {
   return ApiInstance.post('/user/update_banner', params)
+}
+
+/**
+ * Get nfts of login user
+ */
+export const getUserNFTsInfo = (params: GetUserNFTsParams) => {
+  return ApiInstance.post('/user/nfts ', params)
 }

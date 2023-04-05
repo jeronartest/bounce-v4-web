@@ -1,35 +1,44 @@
-import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material'
-import React, { ReactNode, useEffect, useState } from 'react'
+import { Avatar, Box, Stack, Typography } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
+import SocialMediaButtonGroup from './SocialMediaButtonGroup'
+import AuctionDescription from './AuctionDescription'
+import AuctionFiles from './AuctionFiles'
 import { getCompanyInfo } from 'api/company'
 import { getUserInfo } from 'api/user'
 import { USER_TYPE } from 'api/user/type'
-import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+// import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { CreatorUserInfo } from 'api/pool/type'
-import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
-import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
-import { ReactComponent as WebsiteSVG } from 'assets/imgs/auction/website.svg'
-import { ReactComponent as LinkedinSVG } from 'assets/imgs/auction/linkedin.svg'
-import { ReactComponent as GithubSVG } from 'assets/imgs/auction/github.svg'
-import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
+// import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
+// import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
+// import { ReactComponent as WebsiteSVG } from 'assets/imgs/auction/website.svg'
+// import { ReactComponent as LinkedinSVG } from 'assets/imgs/auction/linkedin.svg'
+// import { ReactComponent as GithubSVG } from 'assets/imgs/auction/github.svg'
+// import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { useActiveWeb3React } from 'hooks'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 interface ICreatorInfoCardProps {
+  poolId: number
   creatorUserInfo: CreatorUserInfo
 }
 
-const SocialMediaButton = ({ children, href }: { children?: ReactNode; href: string }) => {
-  return (
-    <IconButton href={href} target="_blank" sx={{ border: '1px solid rgba(0, 0, 0, 0.27)', width: 38, height: 38 }}>
-      {children}
-    </IconButton>
-  )
+const useIsCurrentAddressCreatedThisPool = () => {
+  const { data: poolInfo } = usePoolInfo()
+
+  const { account } = useActiveWeb3React()
+
+  return useMemo(() => {
+    return !!poolInfo && !!account && poolInfo.creator === account
+  }, [account, poolInfo])
 }
 
-const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) => {
+const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolId, creatorUserInfo }) => {
   const { token } = useUserInfo()
   const navigate = useNavigate()
 
@@ -47,6 +56,8 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
       getInfo()
     }
   }, [creatorUserInfo])
+
+  const isCurrentUserCreatedThisPool = useIsCurrentAddressCreatedThisPool()
 
   const handleUser = () => {
     if (userInfo?.userType === USER_TYPE.USER) {
@@ -86,7 +97,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
         </Typography>
         <VerifiedIcon isVerify={userInfo?.isVerify} />
       </Stack>
-      <Tooltip title={userInfo?.description || userInfo?.briefIntro}>
+      <Tooltip title={userInfo?.description || userInfo?.briefIntro || 'No description yet'}>
         <Typography
           variant="body1"
           sx={{
@@ -96,47 +107,32 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ creatorUserInfo }) =
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: '-webkit-box',
-            '-webkitLineClamp': '3',
-            '-webkitBoxOrient': 'vertical'
+            WebkitLineClamp: '3',
+            WebkitBoxOrient: 'vertical'
           }}
         >
-          {userInfo?.description || userInfo?.briefIntro}
+          {userInfo?.description || userInfo?.briefIntro || 'No description yet'}
         </Typography>
       </Tooltip>
 
-      <Stack spacing={8} direction="row" sx={{ mt: 24 }}>
-        {userInfo?.contactEmail && token ? (
-          <SocialMediaButton href={`mailto:${userInfo?.contactEmail}`}>
-            <EmailSVG />
-          </SocialMediaButton>
-        ) : null}
+      <SocialMediaButtonGroup
+        email={userInfo?.contactEmail}
+        shouldShowEmailButton={!!token}
+        twitter={userInfo?.twitter}
+        instagram={userInfo?.instagram}
+        website={userInfo?.website}
+        linkedin={userInfo?.linkedin}
+        github={userInfo?.github}
+      />
 
-        {userInfo?.twitter && (
-          <SocialMediaButton href={userInfo.twitter}>
-            <TwitterSVG />
-          </SocialMediaButton>
-        )}
-        {userInfo?.instagram && (
-          <SocialMediaButton href={userInfo.instagram}>
-            <InstagramSVG />
-          </SocialMediaButton>
-        )}
-        {userInfo?.website && (
-          <SocialMediaButton href={userInfo.website}>
-            <WebsiteSVG />
-          </SocialMediaButton>
-        )}
-        {userInfo?.linkedin && (
-          <SocialMediaButton href={userInfo.linkedin}>
-            <LinkedinSVG />
-          </SocialMediaButton>
-        )}
-        {userInfo?.github && (
-          <SocialMediaButton href={userInfo.github}>
-            <GithubSVG />
-          </SocialMediaButton>
-        )}
-      </Stack>
+      <AuctionDescription poolId={poolId} canEdit={isCurrentUserCreatedThisPool} />
+
+      <AuctionFiles
+        poolId={poolId}
+        canDownloadFile={!isCurrentUserCreatedThisPool}
+        canDeleteFile={isCurrentUserCreatedThisPool}
+        canAddFile={isCurrentUserCreatedThisPool}
+      />
     </Box>
   )
 }

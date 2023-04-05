@@ -1,13 +1,14 @@
 import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
+import { Post } from '../type'
 
 export enum PoolType {
   'FixedSwap' = 1,
   'Duch' = 2,
   'Lottery' = 3,
-  'SealedBid' = 4
-  // 'fixed_swap_nft' = 5
+  'SealedBid' = 4,
+  'fixed_swap_nft' = 5
 }
 
 export interface GetPoolCreationSignatureParams {
@@ -26,6 +27,7 @@ export interface GetPoolCreationSignatureParams {
   token1: string
   message: string
   signature: string
+  tokenId?: string
 }
 
 export interface GetPoolCreationSignatureResponse {
@@ -99,6 +101,7 @@ export interface FixedSwapPool {
   creator: string
   creatorClaimed: boolean
   creatorUserInfo: CreatorUserInfo
+  description: string
   likeInfo: LikeInfo
   id: number
   currentTotal0: string
@@ -117,6 +120,7 @@ export interface FixedSwapPool {
   poolId: string
   poolPrice: number
   ratio: string
+  posts: null | Post[]
   status: PoolStatus
   swappedAmount0: string
   token0: TokenFromApi
@@ -146,6 +150,7 @@ export interface GetPoolInfoResponse {
   fixedSwapPool: FixedSwapPool
   lotteryPool: any
   sealedBidPool: any
+  fixedSwapNftPool: any
 }
 
 export interface GetPoolHistoryParams {
@@ -200,4 +205,10 @@ export interface PoolHistory {
 export interface GetPoolHistoryResponse {
   list: PoolHistory[]
   total: number
+}
+
+export interface UpdateAuctionBackgroundParams {
+  id: number
+  description?: string
+  posts?: Post[]
 }

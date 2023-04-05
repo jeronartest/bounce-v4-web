@@ -7,7 +7,8 @@ import {
   GetPoolInfoParams,
   GetPoolInfoResponse,
   GetWhitelistMerkleTreeRootParams,
-  GetWhitelistMerkleTreeRootResponse
+  GetWhitelistMerkleTreeRootResponse,
+  UpdateAuctionBackgroundParams
 } from './type'
 
 /**
@@ -36,4 +37,15 @@ export const getPoolInfo = (params: GetPoolInfoParams) => {
  */
 export const getPoolHistory = (params: GetPoolHistoryParams) => {
   return ApiInstance.post<GetPoolHistoryResponse>('/pools/pool/activities', params)
+}
+
+/**
+ * Update auction background.
+ * @param {Object} params
+ * @param {number} employee.id -  ID of auction pool to be updated.
+ * @param {string} employee.description - New description.
+ * @param {Object[]} employee.posts - New files.
+ */
+export const updateAuctionBackground = (params: UpdateAuctionBackgroundParams) => {
+  return ApiInstance.post('/user/update_pool', params)
 }

@@ -40,7 +40,19 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
           <VerifiedIcon isVerify={isVerify} />
         </Stack>
 
-        <Typography variant="body2" color="var(--ps-gray-700)">
+        <Typography
+          variant="body2"
+          color="var(--ps-gray-700)"
+          display="-webkit-box"
+          textOverflow={'ellipsis'}
+          overflow="hidden"
+          height={15}
+          sx={{
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 1,
+            wordBreak: 'break-all'
+          }}
+        >
           {description}
         </Typography>
       </Stack>

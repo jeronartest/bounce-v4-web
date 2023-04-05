@@ -5,13 +5,11 @@ import ProjectCardSvg from '../common/ProjectCardSvg'
 import LikeUnlike from '../common/LikeUnlike'
 import VerifiedIcon from '../common/VerifiedIcon'
 import { ReactComponent as CommentSVG } from 'assets/imgs/comment.svg'
-import { ReactComponent as EditSVG } from 'assets/imgs/components/edit.svg'
+import { ReactComponent as EditSVG } from 'assets/imgs/icon/edit.svg'
 import { ILikeUnlikeRes } from 'api/idea/type'
 import { ReactComponent as DefaultAvatar } from 'assets/imgs/profile/default_avatar_ideas.svg'
 import { getLabelById } from 'utils'
 import { VerifyStatus } from 'api/profile/type'
-import { useNavigate } from 'react-router-dom'
-import { routes } from 'constants/routes'
 import { useOptionDatas } from 'state/configOptions/hooks'
 
 export type IInstitutionCardProps = {
@@ -26,6 +24,7 @@ export type IInstitutionCardProps = {
   isEdit?: boolean
   refresh?: any
   acitve: number
+  isCompany?: boolean
   companyState?: number
   isTopCompanies?: boolean
   publicRole?: number[]
@@ -42,6 +41,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   likeAmount,
   isEdit,
   companyState,
+  isCompany,
   startup,
   objId,
   publicRole,
@@ -52,7 +52,6 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
   commentCount
 }) => {
   const optionDatas = useOptionDatas()
-  const navigate = useNavigate()
   const [initLikeAmount, setInitLikeAmount] = useState<ILikeUnlikeRes | undefined>(likeAmount)
   const getPublicPoleLable = (publicRoleId: number) => {
     return getLabelById(publicRoleId, 'role', optionDatas?.publicRoleOpt)
@@ -127,7 +126,6 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
             <IconButton
               onClick={e => {
                 e.preventDefault()
-                navigate(`${routes.idea.create}?id=${objId}`)
               }}
             >
               <EditSVG />
@@ -219,7 +217,7 @@ const InstitutionCard: React.FC<Partial<IInstitutionCardProps>> = ({
           <Box justifyContent={'space-between'} display={'flex'} mt={10}>
             {objId !== undefined && initLikeAmount !== undefined && (
               <LikeUnlike
-                likeObj={isTopCompanies ? 2 : 3}
+                likeObj={isCompany ? 1 : isTopCompanies ? 2 : 3}
                 objId={objId}
                 likeAmount={initLikeAmount}
                 onSuccess={res => {

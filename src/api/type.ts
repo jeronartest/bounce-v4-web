@@ -12,3 +12,12 @@ export type IPager<TData> = {
   list: TData[]
   total: number
 }
+
+export interface Post {
+  id: number
+  fileUrl: string
+  fileName?: string
+  fileSize?: number
+  fileThumbnailUrl?: string
+  fileType?: string
+}

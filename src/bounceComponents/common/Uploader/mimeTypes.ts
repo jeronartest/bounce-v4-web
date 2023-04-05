@@ -41,3 +41,24 @@ export enum FileAcceptType {
   'wav' = 'audio/wav',
   'weba' = 'audio/webm'
 }
+
+export const PPT_FILES_MIMES: string[] = [
+  'application/vnd.ms-powerpoint', // .pot .ppa .pps .ppt
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation', //.pptx
+  'application/vnd.openxmlformats-officedocument.presentationml.template', //.potx
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow', //.ppsx
+  'application/vnd.ms-powerpoint.addin.macroEnabled.12', //.ppam
+  'application/vnd.ms-powerpoint.presentation.macroEnabled.12', //.pptm
+  'application/vnd.ms-powerpoint.template.macroEnabled.12', //.potm
+  'application/vnd.ms-powerpoint.slideshow.macroEnabled.12' //.ppsm
+]
+
+export const DOC_FILES_MIMES: string[] = [
+  'application/msword ', // .doc .dot
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', //.docx
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.template', //.dotx
+  'application/vnd.ms-word.document.macroEnabled.12', //.docm
+  'application/vnd.ms-word.template.macroEnabled.12' //.dotm
+]
+
+export const PDF_FILES_MIMES: string[] = ['application/pdf']

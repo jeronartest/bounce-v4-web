@@ -18,7 +18,7 @@ import {
 } from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
-
+import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
@@ -30,6 +30,7 @@ import { CurrencyAmount } from 'constants/token'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import NumberInput from 'bounceComponents/common/NumberInput'
 
 interface FormValues {
   tokenFromAddress: string
@@ -64,11 +65,19 @@ const AuctionParametersForm = (): JSX.Element => {
     swapRatio: Yup.number()
       .positive('Swap ratio must be positive')
       .typeError('Please input valid number')
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      })
       .required('Swap ratio is required'),
     poolSize: Yup.number()
-      // .typeError('Please input valid number')
-      // .max(balance.to || 0, 'Pool size cannot be greater than your balance')
+      .positive('Amount must be positive')
+      .typeError('Please input valid number')
       .required('Amount is required')
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      })
       .test(
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
@@ -79,7 +88,14 @@ const AuctionParametersForm = (): JSX.Element => {
     allocationPerWallet: Yup.number()
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
-        then: Yup.number().typeError('Please input valid number').required('Allocation per wallet is required')
+        then: Yup.number()
+          .typeError('Please input valid number')
+          .positive('Allocation per wallet must be positive')
+          .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+            const _value = new BigNumber(value || 0).toFixed()
+            return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+          })
+          .required('Allocation per wallet is required')
       })
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
@@ -215,7 +231,11 @@ const AuctionParametersForm = (): JSX.Element => {
                   <Typography>1 {values.tokenFromSymbol} =</Typography>
 
                   <FormItem name="swapRatio" placeholder="0.00" required sx={{ flex: 1 }}>
-                    <OutlinedInput
+                    <NumberInput
+                      value={values.swapRatio}
+                      onUserInput={value => {
+                        setFieldValue('swapRatio', value)
+                      }}
                       endAdornment={
                         <>
                           <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
@@ -244,7 +264,11 @@ const AuctionParametersForm = (): JSX.Element => {
                 </Stack>
 
                 <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
-                  <OutlinedInput
+                  <NumberInput
+                    value={values.poolSize}
+                    onUserInput={value => {
+                      setFieldValue('poolSize', value)
+                    }}
                     endAdornment={
                       <>
                         <Button
@@ -253,7 +277,7 @@ const AuctionParametersForm = (): JSX.Element => {
                           sx={{ mr: 20, minWidth: 60 }}
                           disabled={!balance}
                           onClick={() => {
-                            setFieldValue('poolSize', balance?.toExact())
+                            setFieldValue('poolSize', balance?.toSignificant(60))
                           }}
                         >
                           Max

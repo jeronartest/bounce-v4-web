@@ -59,7 +59,7 @@ const TokenInformationForm = (): JSX.Element => {
   return (
     <Box sx={{ mt: 52 }}>
       <Typography variant="h2">Token Information</Typography>
-      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
+      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Swap Auction</Typography>
 
       <Formik
         initialValues={internalInitialValues}

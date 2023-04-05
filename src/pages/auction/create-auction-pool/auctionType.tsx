@@ -16,6 +16,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import Erc20Pool from './Erc20Pool'
+import Erc1155Pool from './Erc1155Pool'
 
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -41,6 +42,7 @@ const CreateAuctionPool = () => {
           </Box>
         )}
         {valuesState.tokenType === TokenType.ERC20 ? <Erc20Pool /> : null}
+        {valuesState.tokenType === TokenType.ERC1155 ? <Erc1155Pool /> : null}
       </RoundedContainer>
     </>
   )

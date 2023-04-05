@@ -2,6 +2,7 @@ import { IAvatarLinkType } from '../upload/type'
 import { PoolType } from '../pool/type'
 import { VerifyStatus } from '../profile/type'
 import { IFile } from 'bounceComponents/common/Uploader'
+import { Post } from '../type'
 
 export enum ACCOUNT_TYPE {
   EMAIL = 1,
@@ -259,4 +260,59 @@ export interface IUserFollowUserParams {
 }
 export interface IUserUpdateBannerParams {
   banner: string
+}
+
+export interface UserNFTCollection {
+  balance?: string // nft token balance
+  contractAddr?: string
+  contractName?: string
+  description?: string
+  image?: string
+  name?: string
+  tokenId?: string
+}
+export interface GetUserNFTsResponse {
+  list: UserNFTCollection[]
+  total: number
+}
+export interface GetUserNFTsParams {
+  chainId: number
+  creator: string
+  isERC721?: boolean
+  limit?: number
+  offset?: number
+}
+export interface UserUpdateServiceParams {
+  category: number
+  deliverTime: string
+  description: string
+  id: number
+  posts: Post[]
+  price: string
+  title: string
+}
+
+export interface UserUpdateServiceResponse {
+  id: number
+}
+
+export interface getUserServiceParams {
+  limit?: number
+  offset?: number
+  id?: number
+  category?: number[]
+  userId?: number
+}
+
+export interface UserServiceResponse {
+  category: number
+  deliverTime: string
+  description: string
+  id: number
+  posts: Post[]
+  price: string
+  title: string
+  name: string
+  avatar: string
+  userId: number
 }

@@ -14,9 +14,10 @@ export interface DialogProps extends MuiDialogProps {
   title?: string
   children?: React.ReactNode
   onClose: () => void
+  contentStyle?: React.CSSProperties
 }
 
-const Dialog = ({ title, children, open, onClose, ...restProps }: DialogProps) => {
+const Dialog = ({ title, children, open, onClose, contentStyle, ...restProps }: DialogProps) => {
   return (
     <MuiDialog
       open={open}
@@ -50,7 +51,7 @@ const Dialog = ({ title, children, open, onClose, ...restProps }: DialogProps) =
         </Stack>
       </DialogTitle>
 
-      <DialogContent sx={{ padding: '20px 102px 48px' }}>{children}</DialogContent>
+      <DialogContent sx={{ padding: '20px 102px 48px', ...contentStyle }}>{children}</DialogContent>
     </MuiDialog>
   )
 }

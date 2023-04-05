@@ -33,11 +33,11 @@ const HeartMenu = () => {
     [router?.pathname]
   )
   return (
-    <Stack direction="row" spacing={60} alignItems="center">
+    <Stack direction="row" spacing={60} mx={15} alignItems="center">
       {menus.map(menu => (
         <Typography
           key={menu.label}
-          sx={{ ...styles.menu, ...(hasActive(menu.href) ? styles.menuActive : ({} as any)) }}
+          sx={{ ...styles.menu, ...(menu.href && hasActive(menu.href) ? styles.menuActive : ({} as any)) }}
         >
           {menu.target ? (
             <Link href={menu.href} target={menu.target}>

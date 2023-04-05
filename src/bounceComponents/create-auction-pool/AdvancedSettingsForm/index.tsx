@@ -204,6 +204,27 @@ export const DateRangePickerDemo = () => {
                 </Box>
 
                 <Box sx={{ mt: 38, mb: 34 }}>
+                  <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
+                    <Typography variant="h3" sx={{ fontSize: 16 }}>
+                      Refundable
+                    </Typography>
+
+                    <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
+                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                    </Tooltip>
+                  </Stack>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="body1">Auction will be refundable before the end time</Typography>
+
+                    {values?.endTime ? (
+                      <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
+                        Before {values.endTime.format('MMM D, YYYY hh:mm A')}
+                      </Box>
+                    ) : null}
+                  </Box>
+                </Box>
+                <Box sx={{ mt: 38, mb: 34 }}>
                   <Stack direction="row" alignItems="center" spacing={8}>
                     <Typography variant="h3" sx={{ fontSize: 16 }}>
                       Participant
@@ -227,60 +248,33 @@ export const DateRangePickerDemo = () => {
                     />
                   </Field>
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 32 }}>
-                    <ButtonBase
-                      sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
-                      disabled={values.participantStatus !== ParticipantStatus.Whitelist}
-                      onClick={() => {
-                        showImportWhitelistDialog(values, setValues)
-                      }}
-                    >
-                      <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
-                    </ButtonBase>
-                  </Box>
-
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
                 </Box>
-
-                {/* <p>{values.whitelist}</p> */}
-
-                <Box sx={{ mt: 38, mb: 34 }}>
-                  <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
-                    <Typography variant="h3" sx={{ fontSize: 16 }}>
-                      Refundable
-                    </Typography>
-
-                    <Tooltip title="Creators will be able to claim the swapped tokens and remaining tokens after the refundable period.">
-                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                    </Tooltip>
-                  </Stack>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body1">Auction will be refundable before the end time</Typography>
-
-                    {values?.endTime ? (
-                      <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
-                        Before {values.endTime.format('MMM D, YYYY hh:mm A')}
-                      </Box>
-                    ) : null}
-                  </Box>
-                </Box>
-
-                <Stack direction="row" spacing={10} justifyContent="end">
-                  <Button
-                    variant="outlined"
-                    sx={{ width: 140 }}
+                <Stack direction="row" spacing={10} justifyContent="space-between">
+                  <ButtonBase
+                    sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
+                    disabled={values.participantStatus !== ParticipantStatus.Whitelist}
                     onClick={() => {
-                      history.back()
+                      showImportWhitelistDialog(values, setValues)
                     }}
                   >
-                    Cancel
-                  </Button>
+                    <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                  </ButtonBase>
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      sx={{ width: 140, marginRight: '15px' }}
+                      onClick={() => {
+                        history.back()
+                      }}
+                    >
+                      Cancel
+                    </Button>
 
-                  <Button type="submit" variant="contained" sx={{ width: 140 }}>
-                    Next
-                  </Button>
+                    <Button type="submit" variant="contained" sx={{ width: 140 }}>
+                      Next
+                    </Button>
+                  </Box>
                 </Stack>
               </Form>
             )

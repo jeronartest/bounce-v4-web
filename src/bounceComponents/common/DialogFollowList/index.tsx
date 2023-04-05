@@ -53,7 +53,7 @@ export const TabsStyle = styled(Box)(() => ({
   flexFlow: 'row nowrap',
   justifyContent: 'flex-start',
   '.item': {
-    fontFamily: 'Sharp Grotesk DB Cyr Medium 22',
+    fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
     fontWeight: 'bold',
     fontSize: '16px',
     lineHeight: '20px',
@@ -67,7 +67,7 @@ export const TabsStyle = styled(Box)(() => ({
     }
   },
   '.active': {
-    fontFamily: 'Sharp Grotesk DB Cyr Medium 22',
+    fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
     fontSize: '16px',
     fontWeight: 'bold',
     color: '#171717',
