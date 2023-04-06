@@ -5,7 +5,7 @@ import { ContractReceipt } from 'ethers'
 
 import { parseUnits } from 'ethers/lib/utils.js'
 import RefundButton from './RefundButton'
-import PoolInfoItem from '@/components/fixed-swap/PoolInfoItem'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
 
 export interface ConfirmRefundProps {

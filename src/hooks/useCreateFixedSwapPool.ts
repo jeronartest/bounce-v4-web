@@ -206,7 +206,7 @@ export function useCreateFixedSwapPool() {
   ])
 }
 
-function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {
+export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {
   for (const log of logs) {
     if (log.address !== contract.address) {
       continue

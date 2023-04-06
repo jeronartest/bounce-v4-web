@@ -3,8 +3,8 @@ import React, { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
 import Image from 'next/image'
 import PoolInfoItem from '../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
 import { shortenAddress } from '@/utils/web3/address'
 import { formatNumber } from '@/utils/web3/number'
@@ -12,9 +12,9 @@ import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
 
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
-import PoolProgress from '@/components/common/PoolProgress'
+import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from '@/constants/auction/color'
-import DefaultNftIcon from '@/components/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
+import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>

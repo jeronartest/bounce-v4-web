@@ -9,12 +9,12 @@ import { getCompanyInfo } from '@/api/company'
 import { getUserInfo } from '@/api/user'
 import { USER_TYPE } from '@/api/user/type'
 import { CreatorUserInfo } from '@/api/pool/type'
-import Tooltip from '@/components/common/Tooltip'
+import Tooltip from 'bounceComponents/common/Tooltip'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import SocialMediaButtonGroup from '@/components/common/SocialMediaButtonGroup'
+import SocialMediaButtonGroup from 'bounceComponents/common/SocialMediaButtonGroup'
 
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import VerifiedIcon from '@/components/common/VerifiedIcon'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 interface ICreatorInfoCardProps {
   poolId: number

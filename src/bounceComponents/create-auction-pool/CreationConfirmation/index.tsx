@@ -142,7 +142,10 @@ const CreatePoolButton = () => {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        content:
+          typeof err === 'string'
+            ? err
+            : err?.data?.message || err?.error?.message || err?.message || 'Something went wrong',
         onAgain: toCreate
       })
     }

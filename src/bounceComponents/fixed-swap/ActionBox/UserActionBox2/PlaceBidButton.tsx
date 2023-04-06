@@ -55,7 +55,8 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        content:
+          err?.error?.message || err?.data?.message || err?.message || 'Something went wrong' || 'Something went wrong',
         onAgain: toApprove
       })
     }

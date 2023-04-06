@@ -1,31 +1,27 @@
 import { Button, Stack, OutlinedInput, Box, Typography, FormControlLabel } from '@mui/material'
 
 import { Field, Form, Formik } from 'formik'
-import React, { SetStateAction } from 'react'
+import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
-import { parseUnits } from 'ethers/lib/utils.js'
-import { useRequest } from 'ahooks'
 
-import { useAccount, useNetwork } from 'wagmi'
-import { useRouter } from 'next/router'
 import ShowNFTCard from '../TokenERC1155InforationForm/components/NFTCard/showCard'
-import { AllocationStatus, Token } from '../types'
+import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
-import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
-import { UserNFTCollection } from '@/api/user/type'
-import FormItem from '@/components/common/FormItem'
-import { formatNumber } from '@/utils/web3/number'
-import Tooltip from '@/components/common/Tooltip'
-import { SupportedChainId } from '@/constants/web3/chains'
-import TokenImage from '@/components/common/TokenImage'
-import { useErc1155Contract } from '@/hooks/web3/useContractHooks/useContract'
-import { getTokenBalance } from '@/hooks/web3/useContractHooks/useErc1155'
-import EmptyNFTIcon from '@/components/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
+import { UserNFTCollection } from 'api/user/type'
+import FormItem from 'bounceComponents/common/FormItem'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import EmptyNFTIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
+import { ChainId } from 'constants/chain'
+import { Token } from 'bounceComponents/fixed-swap/type'
+import { useActiveWeb3React } from 'hooks'
+import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
 
 interface FormValues {
   tokenFromAddress: string
@@ -59,20 +55,31 @@ const toFixed = (x: number) => {
   return x
 }
 const Auction1155ParametersForm = (): JSX.Element => {
+  const valuesState = useValuesState()
+  const valuesDispatch = useValuesDispatch()
+  const auctionChainId = useAuctionInChain()
+  const { account } = useActiveWeb3React()
+  const balance1155 = useERC1155Balance(
+    valuesState.nftTokenFrom.contractAddr,
+    account || undefined,
+    valuesState.nftTokenFrom.tokenId,
+    auctionChainId
+  )
+
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
       .required('Token is required')
       .test(
         'DIFFERENT_TOKENS',
         'Please choose a different token',
-        (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress,
+        (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
     swapRatio: Yup.number()
       .positive('Swap ratio must be positive')
       .typeError('Please input valid number')
       .required('Swap ratio is required')
-      .test('NO_MORE_6_DIGITS', 'Should be no more than 6 digits after point', (value) => {
-        const strArr = String(toFixed(value)).split('.')
+      .test('NO_MORE_6_DIGITS', 'Should be no more than 6 digits after point', value => {
+        const strArr = String(toFixed(value || 0)).split('.')
         if (strArr.length === 2 && strArr[1].length > 6) return false
         return true
       }),
@@ -81,14 +88,14 @@ const Auction1155ParametersForm = (): JSX.Element => {
       // .typeError('Please input valid number')
       // .positive('Swap ratio must be positive')
       .required('Amount is required')
-      .test('NOT_ZERO', 'Pool size must be greater than 0', (value) => {
+      .test('NOT_ZERO', 'Pool size must be greater than 0', value => {
         if (Number(value) <= 0) return false
         return true
       })
       .test(
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
-        (value) => !value || (balance && Number(value) <= Number(balance.toString())),
+        value => !value || !!(balance1155 && Number(value) <= Number(balance1155.toString()))
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
@@ -97,7 +104,7 @@ const Auction1155ParametersForm = (): JSX.Element => {
         then: Yup.number()
           .integer()
           .typeError('Please input valid number')
-          .required('Allocation per wallet is required'),
+          .required('Allocation per wallet is required')
       })
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
@@ -108,13 +115,10 @@ const Auction1155ParametersForm = (): JSX.Element => {
             'GREATER_THAN_POOL_SIZE',
             'Allocation per wallet cannnot be greater than pool size times swap ratio',
             (value, context) =>
-              !context.parent.poolSize || !context.parent.swapRatio || value <= context.parent.poolSize,
-          ),
-      }),
+              !context.parent.poolSize || !context.parent.swapRatio || (value || 0) <= context.parent.poolSize
+          )
+      })
   })
-
-  const valuesState = useValuesState()
-  const valuesDispatch = useValuesDispatch()
 
   const internalInitialValues: FormValues = {
     tokenFromAddress: valuesState.nftTokenFrom.contractAddr || '',
@@ -128,50 +132,37 @@ const Auction1155ParametersForm = (): JSX.Element => {
     swapRatio: valuesState.swapRatio || '0.00',
     poolSize: valuesState.poolSize || '',
     allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
-    allocationPerWallet: valuesState.allocationPerWallet || '',
+    allocationPerWallet: valuesState.allocationPerWallet || ''
   }
 
-  const router = useRouter()
-
-  const { chain } = useNetwork()
-
   const showTokenDialog = (
-    chainId: SupportedChainId,
+    chainId: ChainId,
     values: FormValues,
-    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void,
+    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
-    show<Token>(TokenDialog, { enableEth: true, chainId })
-      .then((res) => {
+    show<Token>(TokenDialog, { enableEth: true, chainId: auctionChainId })
+      .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           ...values,
           tokenToAddress: res.address,
-          tokenToSymbol: res.symbol,
+          tokenToSymbol: res.symbol || '',
           tokenToLogoURI: res.logoURI,
-          tokenToDecimals: res.decimals,
+          tokenToDecimals: res.decimals
         })
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('TokenDialog Rejected: ', err)
       })
   }
 
-  const { address, isConnected } = useAccount()
-  const erc1155Contract = useErc1155Contract(valuesState.nftTokenFrom.contractAddr)
-  const { data: balance } = useRequest(
-    async () => getTokenBalance(erc1155Contract, address, valuesState.nftTokenFrom.tokenId),
-    {
-      ready: !!erc1155Contract,
-      refreshDeps: [address, erc1155Contract],
-    },
-  )
   return (
     <Box sx={{ mt: 52 }}>
       <Typography variant="h2">Auction Parameters</Typography>
       <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Swap Auction</Typography>
       <Formik
         initialValues={internalInitialValues}
-        onSubmit={(values) => {
+        onSubmit={values => {
           console.log('on submit', values)
           valuesDispatch({
             type: ActionType.CommitAuctionParameters,
@@ -180,13 +171,13 @@ const Auction1155ParametersForm = (): JSX.Element => {
                 address: values.tokenToAddress,
                 logoURI: values.tokenToLogoURI,
                 symbol: values.tokenToSymbol,
-                decimals: values.tokenToDecimals,
+                decimals: values.tokenToDecimals
               },
               swapRatio: values.swapRatio,
               poolSize: values.poolSize,
               allocationPerWallet: values.allocationPerWallet,
-              allocationStatus: values.allocationStatus,
-            },
+              allocationStatus: values.allocationStatus
+            }
           })
         }}
         validationSchema={validationSchema}
@@ -196,14 +187,14 @@ const Auction1155ParametersForm = (): JSX.Element => {
             <Box
               sx={{
                 display: 'flex',
-                flexFlow: 'row nowrap',
+                flexFlow: 'row nowrap'
               }}
             >
               <ShowNFTCard nft={valuesState.nftTokenFrom as unknown as UserNFTCollection} hideClose={true} />
               <Box
                 sx={{
                   flex: 1,
-                  marginLeft: 50,
+                  marginLeft: 50
                 }}
               >
                 <Stack component={Form} spacing={32} noValidate>
@@ -235,8 +226,8 @@ const Auction1155ParametersForm = (): JSX.Element => {
                         <FakeOutlinedInput
                           disabled
                           onClick={() => {
-                            if (isConnected) {
-                              showTokenDialog(chain?.id, values, setValues)
+                            if (account) {
+                              showTokenDialog(auctionChainId, values, setValues)
                             }
                           }}
                         />
@@ -278,15 +269,7 @@ const Auction1155ParametersForm = (): JSX.Element => {
                         </Tooltip>
                       </Stack>
 
-                      {values.tokenFromSymbol && (
-                        <Typography>
-                          Balance:{' '}
-                          {balance
-                            ? `${balance.toString()} 
-                  ${values.tokenFromSymbol}`
-                            : '-'}
-                        </Typography>
-                      )}
+                      <Typography>Balance: {`${balance1155 || '-'} ${values.tokenFromSymbol}`}</Typography>
                     </Stack>
 
                     <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
@@ -297,16 +280,16 @@ const Auction1155ParametersForm = (): JSX.Element => {
                               size="small"
                               variant="outlined"
                               sx={{ mr: 20, minWidth: 60 }}
-                              disabled={!balance}
+                              disabled={!balance1155}
                               onClick={() => {
-                                setFieldValue('poolSize', balance.toString())
+                                setFieldValue('poolSize', balance1155 || '0')
                               }}
                             >
                               Max
                             </Button>
                             <TokenImage
                               alt={'nft collection'}
-                              src={valuesState.nftTokenFrom.image || EmptyNFTIcon.src}
+                              src={valuesState.nftTokenFrom.image || EmptyNFTIcon}
                               size={24}
                             />
                             <Typography sx={{ ml: 8 }}>{valuesState.nftTokenFrom.contractName}</Typography>
@@ -353,7 +336,7 @@ const Auction1155ParametersForm = (): JSX.Element => {
                             <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography> */}
                             <TokenImage
                               alt={'nft collection'}
-                              src={valuesState.nftTokenFrom.image || EmptyNFTIcon.src}
+                              src={valuesState.nftTokenFrom.image || EmptyNFTIcon}
                               size={24}
                             />
                             <Typography sx={{ ml: 8 }}>{valuesState.nftTokenFrom.contractName}</Typography>
@@ -368,7 +351,7 @@ const Auction1155ParametersForm = (): JSX.Element => {
                       variant="outlined"
                       sx={{ width: 140 }}
                       onClick={() => {
-                        router.back()
+                        window.history.back()
                       }}
                     >
                       Cancel

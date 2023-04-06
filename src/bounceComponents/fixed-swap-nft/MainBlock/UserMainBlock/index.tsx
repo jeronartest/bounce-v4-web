@@ -5,7 +5,7 @@ import UserActionBox2 from '../../ActionBox/UserActionBox2'
 import BottomBox from './BottomBox'
 import Alert from './Alert'
 import { PoolStatus } from '@/api/pool/type'
-import NFTDefaultIcon from '@/components/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
+import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
 import useNftGoApi from '@/hooks/auction/useNftInfoByNftGo'
 
 export interface NftDateParams {
@@ -89,7 +89,7 @@ export const NftCard = (props: NftCardParams) => {
   const { name, symbol, largeUrl, smallUrl, thumbUrl } = props.nft?.token0
   const { swappedAmount0, amountTotal0, tokenId } = props.nft
   const { suspicious } = props
-  const formatPrice = (num) => {
+  const formatPrice = num => {
     return String(num)
       .split('')
       .reverse()
@@ -103,7 +103,7 @@ export const NftCard = (props: NftCardParams) => {
         width: 368,
         padding: '24px',
         border: suspicious ? '1px solid #F53030' : '1px solid rgba(23, 23, 23, 0.1)',
-        borderRadius: '20px',
+        borderRadius: '20px'
       }}
     >
       <Box
@@ -113,7 +113,7 @@ export const NftCard = (props: NftCardParams) => {
           height: '320px',
           borderRadius: '10px',
           overflow: 'hidden',
-          marginBottom: '10px',
+          marginBottom: '10px'
         }}
       >
         <picture>
@@ -121,7 +121,7 @@ export const NftCard = (props: NftCardParams) => {
             src={largeUrl || thumbUrl || smallUrl || NFTDefaultIcon.src}
             style={{
               width: '320px',
-              height: '320px',
+              height: '320px'
             }}
             alt="nft"
             srcSet=""
@@ -136,7 +136,7 @@ export const NftCard = (props: NftCardParams) => {
               width: '100%',
               height: '100%',
               background: `linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)`,
-              backdropFilter: `blur(7.5px)`,
+              backdropFilter: `blur(7.5px)`
             }}
           >
             <Box
@@ -154,7 +154,7 @@ export const NftCard = (props: NftCardParams) => {
                 fontSize: '22px',
                 lineHeight: '53px',
                 color: 'rgba(255, 255, 255, 0.6)',
-                textAlign: 'center',
+                textAlign: 'center'
               }}
             >
               Incorrect address
@@ -175,7 +175,7 @@ export const NftCard = (props: NftCardParams) => {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           color: '#171717',
-          marginBottom: '4px',
+          marginBottom: '4px'
         }}
       >
         {name?.toUpperCase() || symbol?.toUpperCase()}
@@ -191,7 +191,7 @@ export const NftCard = (props: NftCardParams) => {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           color: '#171717',
-          marginBottom: '10px',
+          marginBottom: '10px'
         }}
       >
         ID:{tokenId || ' --'}
@@ -199,7 +199,7 @@ export const NftCard = (props: NftCardParams) => {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'space-between'
         }}
       >
         <Typography
@@ -211,7 +211,7 @@ export const NftCard = (props: NftCardParams) => {
             height: '18px',
             lineHeight: '18px',
             color: '#908E96',
-            marginRigiht: '10px',
+            marginRigiht: '10px'
           }}
         >
           NFT Sold
@@ -227,7 +227,7 @@ export const NftCard = (props: NftCardParams) => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             color: '#171717',
-            marginBottom: '10px',
+            marginBottom: '10px'
           }}
         >
           {`${formatPrice(swappedAmount0)} /  ${formatPrice(amountTotal0)}`}
@@ -240,7 +240,7 @@ export const NftCard = (props: NftCardParams) => {
           height: '6px',
           background: '#F5F5F5',
           borderRadius: '4px',
-          overflow: 'hidden',
+          overflow: 'hidden'
         }}
       >
         <Box
@@ -252,7 +252,7 @@ export const NftCard = (props: NftCardParams) => {
             height: '6px',
             background: '#2663FF',
             borderRadius: '4px',
-            overflow: 'hidden',
+            overflow: 'hidden'
           }}
         ></Box>
       </Box>

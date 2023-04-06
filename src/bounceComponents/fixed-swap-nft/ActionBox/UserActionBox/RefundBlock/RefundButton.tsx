@@ -11,8 +11,8 @@ import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
 import { reverseCall } from '@/utils/web3/contractCalls/fixedSwap'
 import { PoolStatus } from '@/api/pool/type'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
 
 export interface RefundButtonProps {
@@ -26,7 +26,7 @@ const RefundButton = ({
   token0AmountToRefund,
   disabled,
   onRefundPart,
-  onRefundAll,
+  onRefundAll
 }: RefundButtonProps): JSX.Element => {
   const { isConnected } = useAccount()
 
@@ -46,7 +46,7 @@ const RefundButton = ({
       show(DialogConfirmation, {
         title: 'Bounce waiting for transaction settlement',
         subTitle:
-          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
       })
 
       return tx.wait(1)
@@ -58,20 +58,20 @@ const RefundButton = ({
       onBefore: () => {
         show(DialogConfirmation, {
           title: 'Bounce requests wallet interaction',
-          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.',
+          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
         })
       },
-      onSuccess: (data) => {
+      onSuccess: data => {
         hide(DialogConfirmation)
         show<any, DialogTipsProps>(id, {
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: `You have successfully refunded.`,
+          content: `You have successfully refunded.`
         })
         const regretBalanceUnits = parseUnits(
           poolWithParticipantInfo.participant.swappedAmount0,
-          poolWithParticipantInfo.token0.decimals,
+          poolWithParticipantInfo.token0.decimals
         )
 
         if (token0AmountToRefund.lt(regretBalanceUnits)) {
@@ -90,14 +90,14 @@ const RefundButton = ({
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: refund,
+          onAgain: refund
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return (

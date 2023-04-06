@@ -8,8 +8,8 @@ import { parseUnits } from 'ethers/lib/utils.js'
 import { useFixedSwapNftContract } from '@/hooks/web3/useContractHooks/useContract'
 import { reverseCall } from '@/utils/web3/contractCalls/erc1155'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
 import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
 
@@ -49,7 +49,7 @@ const useRegretBid = (options?: {
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: `You have successfully refunded.`,
+          content: `You have successfully refunded.`
         })
 
         const token0UnitsToRegret = parseUnits(params[0], poolInfo.token0.decimals)
@@ -69,14 +69,14 @@ const useRegretBid = (options?: {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: request.refresh,
+          onAgain: request.refresh
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return request

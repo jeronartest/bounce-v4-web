@@ -9,15 +9,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from '@mui/material'
 import moment from 'moment'
 
-import NoData from '@/components/common/NoData'
+import NoData from 'bounceComponents/common/NoData'
 import usePoolHistory from '@/hooks/auction/useNftPoolHistory'
 import { shortenAddress } from '@/utils/web3/address'
 import { PoolEvent } from '@/api/pool/type'
-import CopyToClipboard from '@/components/common/CopyToClipboard'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber, removeRedundantZeroOfFloat } from '@/utils/web3/number'
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -25,11 +25,11 @@ const StyledTableCell = styled(TableCell)(() => ({
     color: '#908E96',
     backgroundColor: '#FFFFFF',
     paddingTop: '4px',
-    paddingBottom: '4px',
+    paddingBottom: '4px'
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 }))
 
 const StyledTableRow = styled(TableRow)(() => ({
@@ -38,24 +38,24 @@ const StyledTableRow = styled(TableRow)(() => ({
 
     'td:first-of-type': {
       borderTopLeftRadius: 20,
-      borderBottomLeftRadius: 20,
+      borderBottomLeftRadius: 20
     },
     'td:last-child': {
       borderTopRightRadius: 20,
-      borderBottomRightRadius: 20,
-    },
+      borderBottomRightRadius: 20
+    }
   },
   td: {
-    border: 0,
-  },
+    border: 0
+  }
 }))
 
-const SaleTypography = <Typography sx={(theme) => ({ color: theme.palette.success.main })}>Sale</Typography>
-const RegretTypography = <Typography sx={(theme) => ({ color: theme.palette.error.main })}>Regret</Typography>
+const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
+const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
 
 const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Swapped: SaleTypography,
-  Reversed: RegretTypography,
+  Reversed: RegretTypography
 }
 
 const ActionHistory = () => {
@@ -79,7 +79,7 @@ const ActionHistory = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data.list.map((record) => (
+              {data.list.map(record => (
                 <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
                   <StyledTableCell>

@@ -1,27 +1,38 @@
 import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
-import Image from 'next/image'
-import React, { ReactNode } from 'react'
-import { useRouter } from 'next/router'
+import Image from 'components/Image'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { BigNumber } from 'bignumber.js'
-import { useAccount, useNetwork } from 'wagmi'
 import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
-import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import EmptyNFTIcon from '../TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
-import { shortenAddress } from '@/utils/web3/address'
-import ConnectWalletDialog from '@/components/common/ConnectWalletDialog'
-import DialogTips from '@/components/common/DialogTips'
-import useCreateFixedSwap1155Pool from '@/hooks/web3/useCreateFixedSwap1155Pool'
-import { CHAIN_ICONS, CHAIN_NAMES } from '@/constants/web3/chains'
-import TokenImage from '@/components/common/TokenImage'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 import { ReactComponent as ZeroIcon } from 'assets/imgs/auction/zero-icon.svg'
-
-import { formatNumber } from '@/utils/web3/number'
-
-const NO_LIMIT_ALLOCATION = '0'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useActiveWeb3React } from 'hooks'
+import { ChainListMap } from 'constants/chain'
+import { shortenAddress } from 'utils'
+import { formatNumber } from 'utils/number'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useCreateFixedSwap1155Pool } from 'hooks/useCreateFixedSwap1155Pool'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
+import { FIXED_SWAP_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
+import JSBI from 'jsbi'
+import { ApprovalState } from 'hooks/useApproveCallback'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -32,121 +43,246 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
   </Stack>
 )
 
+type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
+
 const CreatePoolButton = () => {
-  const router = useRouter()
-  const { redirect } = router.query
-
+  const { redirect } = useQueryParams()
+  const navigate = useNavigate()
+  const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
+  const createFixedSwap1155Pool = useCreateFixedSwap1155Pool()
+  const auctionInChainId = useAuctionInChain()
+  const walletModalToggle = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
+  const auctionAccountBalance = useERC1155Balance(
+    values.nftTokenFrom.contractAddr,
+    account || undefined,
+    values.nftTokenFrom.tokenId,
+    auctionInChainId
+  )
 
-  const { run, loading, refresh } = useCreateFixedSwap1155Pool(values.nftTokenFrom.contractAddr, {
-    onSuccess: (receipt, chainShortName) => {
-      console.log('receipt: ', receipt)
-      const goToPoolInfoPage = () => {
-        const createdEvent = receipt.events.find(e => e.event === 'Created')
+  const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
+  const [approvalState, approveCallback] = useNFTApproveAllCallback(
+    values.nftTokenFrom.contractAddr,
+    chainId === auctionInChainId ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+  )
 
-        // console.log('chainShortName: ', chainShortName)
-
-        if (!createdEvent) {
-          router.push('/market/nftAuctionPool')
-          return
-        }
-
-        const poolId = createdEvent.args.index.toString()
-
-        router.push(`/auction/fixed-swap-nft/${chainShortName}/${poolId}`)
-      }
+  const toCreate = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      setButtonCommitted('wait')
+      const { getPoolId, transactionReceipt } = await createFixedSwap1155Pool()
+      setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
         if (redirect && typeof redirect === 'string') {
-          router.push(redirect)
+          navigate(redirect)
+        } else {
+          navigate(routes.market.pools)
         }
       }
 
-      show(DialogTips, {
-        iconType: 'success',
-        againBtn: 'To the pool',
-        cancelBtn: 'Not now',
-        title: 'Congratulations!',
-        content: `You have successfully created the auction.`,
-        onAgain: goToPoolInfoPage,
-        onCancel: handleCloseDialog,
-        onClose: handleCloseDialog
+      const ret: Promise<string> = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+          handleCloseDialog()
+        })
+        transactionReceipt.then(curReceipt => {
+          const poolId = getPoolId(curReceipt.logs)
+          if (poolId) {
+            resolve(poolId)
+            setButtonCommitted('success')
+          } else {
+            hideDialogConfirmation()
+            show(DialogTips, {
+              iconType: 'error',
+              cancelBtn: 'Cancel',
+              title: 'Oops..',
+              content: 'The creation may have failed. Please check some parameters, such as the start time'
+            })
+            rpt()
+          }
+        })
       })
-    },
-    onError: error => {
-      console.log('>>>> create error: ', error)
+      ret
+        .then(poolId => {
+          const goToPoolInfoPage = () => {
+            navigate(
+              routes.auction.fixedPrice
+                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
+                .replace(':poolId', poolId)
+            )
+          }
+
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'To the pool',
+            cancelBtn: 'Not now',
+            title: 'Congratulations!',
+            content: `You have successfully created the auction.`,
+            onAgain: goToPoolInfoPage,
+            onCancel: handleCloseDialog,
+            onClose: handleCloseDialog
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      setButtonCommitted(undefined)
       show(DialogTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: 'Something went wrong',
-        onAgain: refresh
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toCreate
       })
     }
-  })
+  }, [chainConfigInBackend?.shortName, createFixedSwap1155Pool, navigate, redirect])
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          toCreate()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content:
+          typeof err === 'string'
+            ? err
+            : err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, toCreate])
+
+  const confirmBtn: {
+    disabled?: boolean
+    loading?: boolean
+    text?: string
+    run?: () => void
+  } = useMemo(() => {
+    if (!account) {
+      return {
+        text: 'Connect wallet',
+        run: walletModalToggle
+      }
+    }
+    if (chainId !== auctionInChainId) {
+      return {
+        text: 'Switch network',
+        run: () => switchNetwork(auctionInChainId)
+      }
+    }
+    if (buttonCommitted !== undefined) {
+      if (buttonCommitted === 'success') {
+        return {
+          text: 'Success',
+          disabled: true
+        }
+      }
+      return {
+        text: 'Confirm',
+        loading: true
+      }
+    }
+    if (
+      !auctionAccountBalance ||
+      !values.poolSize ||
+      JSBI.lessThan(JSBI.BigInt(auctionAccountBalance), JSBI.BigInt(values.poolSize))
+    ) {
+      return {
+        text: 'Insufficient Balance',
+        disabled: true
+      }
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return {
+          text: `Approving use of ${values.nftTokenFrom.contractName} ...`,
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return {
+          text: 'Loading...',
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return {
+          text: `Approve use of ${values.nftTokenFrom.contractName}`,
+          run: toApprove
+        }
+      }
+    }
+    return {
+      run: toCreate
+    }
+  }, [
+    account,
+    approvalState,
+    auctionAccountBalance,
+    auctionInChainId,
+    buttonCommitted,
+    chainId,
+    switchNetwork,
+    toApprove,
+    toCreate,
+    values.nftTokenFrom.contractName,
+    values.poolSize,
+    walletModalToggle
+  ])
 
   return (
     <LoadingButton
       fullWidth
       variant="contained"
-      loading={loading}
-      onClick={() => {
-        console.log('run params>>>>', {
-          whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-          poolSize: values.poolSize,
-          swapRatio: values.swapRatio,
-          allocationPerWallet:
-            values.allocationStatus === AllocationStatus.Limited
-              ? new BigNumber(values.allocationPerWallet).toString()
-              : NO_LIMIT_ALLOCATION,
-          startTime: values.startTime.unix(),
-          endTime: values.endTime.unix(),
-          delayUnlockingTime: values.shouldDelayUnlocking ? values.delayUnlockingTime.unix() : values.endTime.unix(),
-          poolName: values.poolName,
-          tokenFromAddress: values.nftTokenFrom.contractAddr,
-          tokenFormDecimal: '',
-          tokenToAddress: values.tokenTo.address,
-          tokenToDecimal: values.tokenTo.decimals
-        })
-        run({
-          whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-          poolSize: values.poolSize,
-          swapRatio: values.swapRatio,
-          allocationPerWallet:
-            values.allocationStatus === AllocationStatus.Limited
-              ? new BigNumber(values.allocationPerWallet).toString()
-              : NO_LIMIT_ALLOCATION,
-          startTime: values.startTime.unix(),
-          endTime: values.endTime.unix(),
-          delayUnlockingTime: values.shouldDelayUnlocking ? values.delayUnlockingTime.unix() : values.endTime.unix(),
-          poolName: values.poolName,
-          tokenFromAddress: values.nftTokenFrom.contractAddr,
-          tokenFormDecimal: '',
-          tokenToAddress: values.tokenTo.address,
-          tokenToDecimal: values.tokenTo.decimals,
-          tokenId: values.nftTokenFrom.tokenId
-        })
-      }}
+      loadingPosition="start"
+      loading={confirmBtn.loading}
+      disabled={confirmBtn.disabled}
+      onClick={confirmBtn.run}
     >
-      Confirm
+      {confirmBtn.text || 'Confirm'}
     </LoadingButton>
   )
 }
 
 const CreationConfirmation = () => {
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
+  const { account } = useActiveWeb3React()
+
+  const auctionChainId = useAuctionInChain()
+  const toggleWalletModal = useWalletModalToggle()
 
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
-
-  const router = useRouter()
-  const { auctionType } = router.query
-
-  const showConnectWalletDialog = () => {
-    show(ConnectWalletDialog)
-  }
+  const { auctionType } = useQueryParams()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
@@ -180,8 +316,13 @@ const CreationConfirmation = () => {
           <Stack spacing={24}>
             <ConfirmationInfoItem title="Chain">
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Image src={CHAIN_ICONS[chain?.id]} alt={CHAIN_NAMES[chain?.id]} width={20} height={20} />
-                <Typography sx={{ ml: 4 }}>{CHAIN_NAMES[chain?.id]}</Typography>
+                <Image
+                  src={ChainListMap[auctionChainId]?.logo || ''}
+                  alt={ChainListMap[auctionChainId]?.name || ''}
+                  width={20}
+                  height={20}
+                />
+                <Typography sx={{ ml: 4 }}>{ChainListMap[auctionChainId]?.name || ''}</Typography>
               </Box>
             </ConfirmationInfoItem>
 
@@ -193,8 +334,13 @@ const CreationConfirmation = () => {
               <Stack spacing={15}>
                 <ConfirmationInfoItem title="Token Contact address">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Image src={CHAIN_ICONS[chain?.id]} alt={CHAIN_NAMES[chain?.id]} width={20} height={20} />
-                    <Typography ml={4}>{shortenAddress(values.nftTokenFrom.contractAddr)}</Typography>
+                    <Image
+                      src={ChainListMap[auctionChainId]?.logo || ''}
+                      alt={ChainListMap[auctionChainId]?.name || ''}
+                      width={20}
+                      height={20}
+                    />
+                    <Typography ml={4}>{shortenAddress(values.nftTokenFrom?.contractAddr || '')}</Typography>
                   </Box>
                 </ConfirmationInfoItem>
                 <ConfirmationInfoItem title="Token Type">
@@ -204,7 +350,7 @@ const CreationConfirmation = () => {
                   <Stack direction="row" spacing={8} alignItems="center">
                     <TokenImage
                       alt={values.nftTokenFrom.contractName}
-                      src={values.nftTokenFrom.image || EmptyNFTIcon.src}
+                      src={values.nftTokenFrom.image || EmptyNFTIcon}
                       size={20}
                     />
                     <Typography>{values.nftTokenFrom.contractName || '--'}</Typography>
@@ -262,7 +408,7 @@ const CreationConfirmation = () => {
               <Stack spacing={15}>
                 <ConfirmationInfoItem title="Pool duration">
                   <Typography>
-                    From {values.startTime.format('MM.DD.Y HH:mm')} - To {values.endTime.format('MM.DD.Y HH:mm')}
+                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
                   </Typography>
                 </ConfirmationInfoItem>
 
@@ -283,10 +429,10 @@ const CreationConfirmation = () => {
         </Box>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
-          {isConnected ? (
+          {account ? (
             <CreatePoolButton />
           ) : (
-            <LoadingButton fullWidth variant="contained" onClick={showConnectWalletDialog}>
+            <LoadingButton fullWidth variant="contained" onClick={toggleWalletModal}>
               Connect Wallet
             </LoadingButton>
           )}

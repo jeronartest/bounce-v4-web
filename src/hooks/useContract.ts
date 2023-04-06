@@ -12,8 +12,10 @@ import { useActiveWeb3React } from './index'
 import { ChainId } from '../constants/chain'
 import { getOtherNetworkLibrary } from 'connectors/MultiNetworkConnector'
 import ERC721_ABI from '../constants/abis/erc721.json'
+import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
-import { FIXED_SWAP_ERC20_ADDRESSES } from '../constants'
+import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
+import { FIXED_SWAP_ERC20_ADDRESSES, FIXED_SWAP_NFT_CONTRACT_ADDRESSES } from '../constants'
 
 // returns null on errors
 function useContract(
@@ -118,8 +120,18 @@ export function useERC721Contract(address: string | undefined, queryChainId?: Ch
   return useContract(address, ERC721_ABI, true, queryChainId)
 }
 
+export function useERC1155Contract(address: string | undefined, queryChainId?: ChainId): Contract | null {
+  return useContract(address, ERC1155_ABI, true, queryChainId)
+}
+
 export function useFixedSwapERC20Contract(queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   return useContract(cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined, FIXED_SWAP_ABI, true, queryChainId)
+}
+
+export function useFixedSwapNftContract(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined, FIXED_SWAP_NFT_ABI, true, queryChainId)
 }

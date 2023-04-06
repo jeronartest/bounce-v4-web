@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useRequest } from 'ahooks'
 
-import Uploader from '@/components/common/Uploader'
+import Uploader from 'bounceComponents/common/Uploader'
 import { ReactComponent as AddCircleOutlineSVG } from 'assets/imgs/icon/add_circle_outline.svg'
 
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'

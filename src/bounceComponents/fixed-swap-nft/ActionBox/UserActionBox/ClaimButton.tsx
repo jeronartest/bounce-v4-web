@@ -11,8 +11,8 @@ import { userClaimCall } from '@/utils/web3/contractCalls/fixedSwap'
 import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
 import { PoolStatus } from '@/api/pool/type'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 import { formatNumber } from '@/utils/web3/number'
 import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
 
@@ -31,7 +31,7 @@ const ClaimButton = () => {
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: poolInfo.claimAt * 1000,
-    onEnd: getPoolInfo,
+    onEnd: getPoolInfo
   })
 
   const { run: userClaim, loading: isUserClaimming } = useRequest(
@@ -41,7 +41,7 @@ const ClaimButton = () => {
       show(DialogConfirmation, {
         title: 'Bounce waiting for transaction settlement',
         subTitle:
-          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
       })
 
       return tx.wait(1)
@@ -52,7 +52,7 @@ const ClaimButton = () => {
       onBefore: () => {
         show(DialogConfirmation, {
           title: 'Bounce requests wallet interaction',
-          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.',
+          subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
         })
       },
       onSuccess: () => {
@@ -65,12 +65,12 @@ const ClaimButton = () => {
             formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
               unit: poolInfo.token0.decimals,
               decimalPlaces: 4,
-              shouldSplitByComma: false,
-            }),
-          )} ${poolInfo.token0.symbol}`,
+              shouldSplitByComma: false
+            })
+          )} ${poolInfo.token0.symbol}`
         })
       },
-      onError: (error) => {
+      onError: error => {
         hide(DialogConfirmation)
         show<any, DialogTipsProps>(id, {
           iconType: 'error',
@@ -78,14 +78,14 @@ const ClaimButton = () => {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: userClaim,
+          onAgain: userClaim
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   if (poolInfo.status === PoolStatus.Closed && moment().unix() <= poolInfo.claimAt) {
@@ -96,7 +96,7 @@ const ClaimButton = () => {
             display: 'flex',
             justifyContent: countdown > 0 ? 'space-between' : 'center',
             alignItems: 'center',
-            width: '100%',
+            width: '100%'
           }}
         >
           <Typography component="span">Claim Token</Typography>

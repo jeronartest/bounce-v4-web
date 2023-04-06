@@ -14,7 +14,7 @@ import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
 import { PoolStatus } from '@/api/pool/type'
 import useIsLimitExceeded from '@/hooks/auction/useIsLimit1155Exceeded'
 import useIsBalanceInsufficient from '@/hooks/auction/useIs1155BalanceInsufficient'
-import SwitchNetworkButton from '@/components/fixed-swap/SwitchNetworkButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { fixToDecimals } from '@/utils/web3/number'
 
 interface BidButtonBlockProps {
@@ -32,7 +32,7 @@ const BidButtonBlock = ({
   handleGoToCheck,
   handlePlaceBid,
   isBidding,
-  handleCancelButtonClick,
+  handleCancelButtonClick
 }: BidButtonBlockProps) => {
   const { data: poolInfo } = usePoolInfo()
   const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)

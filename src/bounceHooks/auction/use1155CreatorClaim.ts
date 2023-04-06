@@ -4,8 +4,8 @@ import { hide, show } from '@ebay/nice-modal-react'
 import { creatorClaimCall } from '@/utils/web3/contractCalls/erc1155'
 import { useFixedSwapNftContract } from '@/hooks/web3/useContractHooks/useContract'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import DialogTips from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import DialogTips from 'bounceComponents/common/DialogTips'
 import { formatNumber } from '@/utils/web3/number'
 import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
 import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
@@ -18,10 +18,10 @@ const useCreatorClaim = () => {
 
   const hasToken0ToClaim = poolWithParticipantInfo?.currentTotal0 && poolWithParticipantInfo.currentTotal0 !== '0'
   const token0ToClaim = formatNumber(poolWithParticipantInfo?.currentTotal0, {
-    unit: poolInfo.token0.decimals,
+    unit: poolInfo.token0.decimals
   })
   const token1ToClaim = formatNumber(poolWithParticipantInfo?.currentTotal1, {
-    unit: poolInfo.token1.decimals,
+    unit: poolInfo.token1.decimals
   })
   const token1ToClaimText = `${token1ToClaim} ${poolInfo.token1.symbol}`
   const token0ToClaimText = hasToken0ToClaim ? ` and ${token0ToClaim} ${poolInfo.token0.symbol}` : ''
@@ -46,7 +46,7 @@ const useCreatorClaim = () => {
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: successDialogContent,
+          content: successDialogContent
         })
       },
       onError: (error: Error & { reason: string }) => {
@@ -58,14 +58,14 @@ const useCreatorClaim = () => {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: request.refresh,
+          onAgain: request.refresh
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return request

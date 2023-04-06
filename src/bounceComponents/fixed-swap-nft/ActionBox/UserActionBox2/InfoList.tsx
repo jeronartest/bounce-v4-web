@@ -4,12 +4,12 @@ import moment from 'moment'
 import { useCountDown } from 'ahooks'
 
 import PoolInfoItem from '../../PoolInfoItem'
-import TokenImage from '@/components/common/TokenImage'
+import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
 import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
 import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoined1155Pool'
-import DefaultNftIcon from '@/components/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
+import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 const InfoList = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { data: poolWithParticipantInfo, loading: isPoolWithParticipantInfoLoading } = usePoolWithParticipantInfo()
@@ -32,7 +32,7 @@ const InfoList = () => {
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: isClaimmingDelayed ? poolInfo.claimAt * 1000 : poolInfo.closeAt * 1000,
-    onEnd: getPoolInfo,
+    onEnd: getPoolInfo
   })
   return (
     <>

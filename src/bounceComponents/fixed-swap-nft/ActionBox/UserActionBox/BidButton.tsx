@@ -19,8 +19,8 @@ import { getUserWhitelistProof } from '@/api/user'
 import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
 import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
 import { NATIVE_TOEN_ADDRESS } from '@/constants/auction'
-import DialogConfirmation from '@/components/common/DialogConfirmation'
-import { DialogProps as DialogTipsProps, id } from '@/components/common/DialogTips'
+import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
+import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 
 export interface BidButtonProps {
   bidAmount?: string
@@ -43,7 +43,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: poolInfo.openAt * 1000,
-    onEnd: getPoolInfo,
+    onEnd: getPoolInfo
   })
 
   // TODO: collect poolId, chainId into a context
@@ -60,18 +60,18 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
 
       if (poolInfo.enableWhiteList) {
         const {
-          data: { proof: rawProofStr },
+          data: { proof: rawProofStr }
         } = await getUserWhitelistProof({
           address: account,
           category: PoolType.FixedSwap,
           chainId: chainConfigInBackend?.id,
-          poolId: String(poolId),
+          poolId: String(poolId)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
 
         if (Array.isArray(rawProofJson)) {
-          proofArr = rawProofJson.map((rawProof) => `0x${rawProof}`)
+          proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
         }
       }
 
@@ -83,7 +83,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
         if (allowance.lt(parsedBidAmount)) {
           show(DialogConfirmation, {
             title: 'Bounce requests wallet approval',
-            subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.',
+            subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.'
           })
           const approvalReceipt = await approveCall(erc20Contract, fixedSwapContractAddress, parsedBidAmount)
 
@@ -96,7 +96,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
       // Swap
       show(DialogConfirmation, {
         title: 'Bounce requests wallet interaction',
-        subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.',
+        subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
       })
 
       let tx: ContractTransaction
@@ -110,7 +110,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
       show(DialogConfirmation, {
         title: 'Bounce waiting for transaction settlement',
         subTitle:
-          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+          'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
       })
 
       return tx.wait(1)
@@ -129,7 +129,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
           iconType: 'success',
           againBtn: 'Close',
           title: 'Congratulations!',
-          content: `You have successfully bid ${bidAmount} ${poolInfo.token0.symbol}`,
+          content: `You have successfully bid ${bidAmount} ${poolInfo.token0.symbol}`
         })
         setAction('Bid_Or_Regret')
       },
@@ -142,14 +142,14 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: 'Something went wrong',
-          onAgain: swap,
+          onAgain: swap
         })
       },
       onFinally: () => {
         hide(DialogConfirmation)
         getPoolInfo()
-      },
-    },
+      }
+    }
   )
 
   return (
@@ -165,7 +165,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
         sx={{
           width: '100%',
           display: 'flex',
-          justifyContent: poolInfo.status === PoolStatus.Upcoming ? 'space-between' : 'center',
+          justifyContent: poolInfo.status === PoolStatus.Upcoming ? 'space-between' : 'center'
         }}
       >
         <Typography component="span" sx={{ width: 'fit-content' }}>

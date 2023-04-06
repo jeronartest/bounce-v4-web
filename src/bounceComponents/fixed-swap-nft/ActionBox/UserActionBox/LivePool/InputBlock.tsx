@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, OutlinedInput, Typography } from '@mui/material'
-import NumberInput from '@/components/common/NumberInput'
+import NumberInput from 'bounceComponents/common/NumberInput'
 
 export interface InputBlockProps {
   action: any

@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
 
-import ConnectWalletDialog from '@/components/common/ConnectWalletDialog'
+import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
 
 const ConnectWalletButton = () => {
   return (

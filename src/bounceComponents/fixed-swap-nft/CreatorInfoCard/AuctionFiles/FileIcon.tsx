@@ -13,7 +13,7 @@ import {
   PDF_FILES_MIMES,
   PPT_FILES_MIMES,
   VIDEO_FILES_MIMES
-} from '@/components/common/Uploader/mimeTypes'
+} from 'bounceComponents/common/Uploader/mimeTypes'
 
 export interface FileIconProps {
   fileType?: string

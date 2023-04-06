@@ -1,4 +1,4 @@
-import { TransactionResponse } from '@ethersproject/providers'
+import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import { useCallback, useMemo } from 'react'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin } from '../utils'
@@ -18,10 +18,10 @@ function useGetApproved(contract: Contract | undefined, spender: string | undefi
   }, [res.loading, res.result])
 }
 
-export function useERC721ApproveAllCallback(
+export function useNFTApproveAllCallback(
   contractAddress: string | undefined,
   spender: string | undefined
-): [ApprovalState, () => Promise<void>] {
+): [ApprovalState, () => Promise<{ transactionReceipt: Promise<TransactionReceipt> }>] {
   // const { account } = useActiveWeb3React()
   const { hideModal } = useModal()
   const contract = useERC721Contract(contractAddress)
@@ -39,20 +39,20 @@ export function useERC721ApproveAllCallback(
 
   const addTransaction = useTransactionAdder()
 
-  const approve = useCallback(async (): Promise<void> => {
+  const approve = useCallback(async (): Promise<{ transactionReceipt: Promise<TransactionReceipt> }> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {
       console.error('approve was called unnecessarily')
-      return
+      return Promise.reject('approve was called unnecessarily')
     }
 
     if (!contract) {
       console.error('Contract is null')
-      return
+      return Promise.reject('tokenContract is null')
     }
 
     if (!spender) {
       console.error('no spender')
-      return
+      return Promise.reject('no spender')
     }
 
     const estimatedGas = await contract.estimateGas.setApprovalForAll(spender, true).catch((error: Error) => {
@@ -70,6 +70,7 @@ export function useERC721ApproveAllCallback(
           summary: 'Approve NFT',
           approval: { tokenAddress: contract.address, spender }
         })
+        return { transactionReceipt: response.wait(1) }
       })
       .catch((error: Error) => {
         hideModal()
