@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 
 import { PoolType } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { getUserWhitelistProof } from '@/api/user'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 const useIsUserInWhitelist = () => {
   const { data: poolInfo } = usePoolInfo()

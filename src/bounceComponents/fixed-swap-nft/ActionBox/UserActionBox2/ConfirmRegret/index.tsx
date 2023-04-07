@@ -6,7 +6,7 @@ import { ContractReceipt } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils.js'
 import RegretButton from './RegretButton'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { formatNumber } from '@/utils/web3/number'
 
 export interface ConfirmRegretProps {

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useRequest } from 'ahooks'
-import { getNftInfoByNftGo } from '@/utils/nftGo'
+import { getNftInfoByNftGo } from 'utils/nftGo'
 
 const useNftGoApi = (contract_address: string, tokenId: number | string) => {
     return useRequest(

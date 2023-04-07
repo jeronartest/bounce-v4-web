@@ -1,95 +1,22 @@
-import React from 'react'
 import { Box, Typography } from '@mui/material'
 
 import UserActionBox2 from '../../ActionBox/UserActionBox2'
 import BottomBox from './BottomBox'
 import Alert from './Alert'
-import { PoolStatus } from '@/api/pool/type'
 import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
-import useNftGoApi from '@/hooks/auction/useNftInfoByNftGo'
+import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
-export interface NftDateParams {
-  id?: number
-  chainId?: number
-  contract?: string
-  createdTxHash?: string
-  poolId?: string
-  category?: number
-  creator?: string
-  creatorClaimed: true
-  name?: string
-  description?: string
-  posts?: []
-  enableWhiteList: false
-  token0: {
-    address?: string
-    decimals?: number
-    name?: string
-    symbol?: string
-    thumbUrl?: string
-    smallUrl?: string
-    largeUrl?: string
-    coingeckoId?: string
-    currentPrice?: number
-  }
-  openAt?: number
-  closeAt?: number
-  claimAt?: number
-  tokenId?: string
-  is721?: number
-  status?: PoolStatus
-  token1: {
-    address?: string
-    decimals?: number
-    name?: string
-    symbol?: string
-    thumbUrl?: string
-    smallUrl?: string
-    largeUrl?: string
-    coingeckoId?: string
-    currentPrice?: number
-  }
-  amountTotal0?: string
-  amountTotal1?: string
-  swappedAmount0?: string
-  currentTotal0?: string
-  currentTotal1?: string
-  ratio?: string
-  poolPrice?: string
-  maxAmount1PerWallet?: string
-  participant: {
-    address?: string
-    swappedAmount0?: string
-    claimed: false
-    regreted: false
-  }
-  creatorUserInfo: {
-    userId?: number
-    name?: string
-    avatar?: string
-    publicRole?: number[]
-    userType?: number
-    companyName?: string
-    companyAvatar?: string
-    companyIntroduction?: string
-    isVerify?: number
-  }
-  likeInfo: {
-    likeCount?: number
-    dislikeCount?: number
-    myLike?: number
-    myDislike?: number
-  }
-}
 export interface NftCardParams {
-  nft: NftDateParams
+  nft: FixedSwapNFTPoolProp
   suspicious?: boolean // Is it not tradeable on OpenSea?
 }
 export const NftCard = (props: NftCardParams) => {
   const { name, symbol, largeUrl, smallUrl, thumbUrl } = props.nft?.token0
   const { swappedAmount0, amountTotal0, tokenId } = props.nft
   const { suspicious } = props
-  const formatPrice = num => {
+  const formatPrice = (num: number) => {
     return String(num)
       .split('')
       .reverse()
@@ -118,7 +45,7 @@ export const NftCard = (props: NftCardParams) => {
       >
         <picture>
           <img
-            src={largeUrl || thumbUrl || smallUrl || NFTDefaultIcon.src}
+            src={largeUrl || thumbUrl || smallUrl || NFTDefaultIcon}
             style={{
               width: '320px',
               height: '320px'
@@ -211,7 +138,7 @@ export const NftCard = (props: NftCardParams) => {
             height: '18px',
             lineHeight: '18px',
             color: '#908E96',
-            marginRigiht: '10px'
+            marginRight: '10px'
           }}
         >
           NFT Sold
@@ -230,7 +157,7 @@ export const NftCard = (props: NftCardParams) => {
             marginBottom: '10px'
           }}
         >
-          {`${formatPrice(swappedAmount0)} /  ${formatPrice(amountTotal0)}`}
+          {`${formatPrice(Number(swappedAmount0))} /  ${formatPrice(Number(amountTotal0))}`}
         </Typography>
       </Box>
       <Box
@@ -259,23 +186,25 @@ export const NftCard = (props: NftCardParams) => {
     </Box>
   )
 }
-export interface UserMainBlockParams {
-  poolInfo: NftDateParams
+
+export interface FixedSwapPoolParams {
+  poolInfo: PoolInfoProp
+  getPoolInfo?: () => void
 }
-const UserMainBlock = (props: UserMainBlockParams): JSX.Element => {
+const UserMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
   const { poolInfo } = props
   const nftGoInfo = useNftGoApi(poolInfo?.contract, poolInfo?.tokenId)
   return (
     <Box
       sx={{ borderRadius: 20, px: 24, py: 20, bgcolor: '#fff', display: 'flex', flexDirection: 'column', rowGap: 12 }}
     >
-      <Alert />
+      <Alert poolInfo={poolInfo} />
       <Box sx={{ display: 'flex', columnGap: 65, marginBottom: 30 }}>
         {/* <UserActionBox /> */}
         <NftCard nft={poolInfo} suspicious={!!nftGoInfo?.data?.suspicious} />
-        <UserActionBox2 />
+        {/* <UserActionBox2 poolInfo={poolInfo} /> */}
       </Box>
-      <BottomBox />
+      <BottomBox poolInfo={poolInfo} />
     </Box>
   )
 }

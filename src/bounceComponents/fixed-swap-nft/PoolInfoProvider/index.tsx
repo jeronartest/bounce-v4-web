@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 import { useRequest } from 'ahooks'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { FixedSwapPool, PoolType } from '@/api/pool/type'
 import { getPoolInfo } from '@/api/pool'
 
@@ -35,7 +35,7 @@ const PoolInfoProvider = ({ children }: { children: ReactNode }): JSX.Element =>
         poolId,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend?.id,
-        address: account,
+        address: account
       })
 
       return response.data.fixedSwapPool || null
@@ -44,8 +44,8 @@ const PoolInfoProvider = ({ children }: { children: ReactNode }): JSX.Element =>
       cacheKey: `POOL_INFO_${account}`,
       ready: typeof poolId === 'string' && !!poolId && !!chainConfigInBackend?.id,
       // pollingInterval: 10000,
-      refreshDeps: [account],
-    },
+      refreshDeps: [account]
+    }
   )
 
   return <PoolInfoContext.Provider value={poolInfo}>{children}</PoolInfoContext.Provider>

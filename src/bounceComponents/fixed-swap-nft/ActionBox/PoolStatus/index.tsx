@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
 import { useCountDown } from 'ahooks'
-import { PoolStatus } from '@/api/pool/type'
+import { PoolStatus } from 'api/pool/type'
 
 export interface PoolStatusBoxProps {
   status: PoolStatus
@@ -14,7 +13,7 @@ const PoolStatusBox = ({ status, openTime, closeTime, onEnd }: PoolStatusBoxProp
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming ? openTime * 1000 : status === PoolStatus.Live ? closeTime * 1000 : undefined,
-    onEnd,
+    onEnd
   })
 
   switch (status) {
@@ -50,7 +49,7 @@ const PoolStatusBox = ({ status, openTime, closeTime, onEnd }: PoolStatusBoxProp
       )
 
     default:
-      return null
+      return <></>
   }
 }
 

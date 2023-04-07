@@ -1,5 +1,5 @@
 import { Avatar, Box, Stack, Typography } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SocialMediaButtonGroup from './SocialMediaButtonGroup'
 import AuctionDescription from './AuctionDescription'
 import AuctionFiles from './AuctionFiles'
@@ -21,26 +21,19 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { useActiveWeb3React } from 'hooks'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { PoolInfoProp } from '../type'
 
 interface ICreatorInfoCardProps {
-  poolId: number
   creatorUserInfo: CreatorUserInfo
+  creator: string
+  poolInfo: PoolInfoProp
+  getPoolInfo: () => void
 }
 
-const useIsCurrentAddressCreatedThisPool = () => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const { account } = useActiveWeb3React()
-
-  return useMemo(() => {
-    return !!poolInfo && !!account && poolInfo.creator === account
-  }, [account, poolInfo])
-}
-
-const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolId, creatorUserInfo }) => {
+const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInfo, creator, creatorUserInfo }) => {
   const { token } = useUserInfo()
   const navigate = useNavigate()
+  const { account } = useActiveWeb3React()
 
   const [userInfo, setUserInfo] = useState<any>(null)
 
@@ -57,7 +50,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolId, creatorUserI
     }
   }, [creatorUserInfo])
 
-  const isCurrentUserCreatedThisPool = useIsCurrentAddressCreatedThisPool()
+  const isCurrentUserCreatedThisPool = creator.toLowerCase() === account?.toLowerCase()
 
   const handleUser = () => {
     if (userInfo?.userType === USER_TYPE.USER) {
@@ -125,10 +118,11 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolId, creatorUserI
         github={userInfo?.github}
       />
 
-      <AuctionDescription poolId={poolId} canEdit={isCurrentUserCreatedThisPool} />
+      <AuctionDescription poolInfo={poolInfo} getPoolInfo={getPoolInfo} canEdit={isCurrentUserCreatedThisPool} />
 
       <AuctionFiles
-        poolId={poolId}
+        poolInfo={poolInfo}
+        getPoolInfo={getPoolInfo}
         canDownloadFile={!isCurrentUserCreatedThisPool}
         canDeleteFile={isCurrentUserCreatedThisPool}
         canAddFile={isCurrentUserCreatedThisPool}

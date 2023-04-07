@@ -8,7 +8,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
 import { shortenAddress } from '@/utils/web3/address'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_outline.svg'

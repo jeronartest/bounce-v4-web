@@ -1,7 +1,7 @@
 import React from 'react'
 import { SxProps } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import useIsUserInWhitelist from '@/hooks/auction/useIsUserIn1155Whitelist'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserIn1155Whitelist'
 
 export interface PlaceBidButtonProps {
   bidAmount: string

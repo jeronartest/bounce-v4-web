@@ -5,10 +5,10 @@ import { parseUnits } from 'ethers/lib/utils.js'
 import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import NumberInput from 'bounceComponents/common/NumberInput'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { formatNumber } from '@/utils/web3/number'
-import useToken1Balance from '@/hooks/auction/useToken1Balance'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
+import useToken1Balance from 'bounceHooks/auction/useToken1Balance'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
 import { getUserNftSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
 
 interface BidAmountInputProps {

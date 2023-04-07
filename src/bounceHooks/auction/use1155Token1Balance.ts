@@ -3,8 +3,8 @@ import { useRequest } from 'ahooks'
 import { useAccount, useBalance } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import { balanceOfCall } from '@/utils/web3/contractCalls/erc20'
-import { useErc20Contract } from '@/hooks/web3/useContractHooks/useContract'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import { useErc20Contract } from 'bounceHooks/web3/useContractHooks/useContract'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { NATIVE_TOEN_ADDRESS } from '@/constants/auction'
 const useToken1Balance = () => {
   const { address: account } = useAccount()

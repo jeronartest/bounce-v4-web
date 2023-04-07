@@ -1,18 +1,15 @@
 import { Box, Stack, Typography } from '@mui/material'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
-import Image from 'next/image'
 import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
-import { shortenAddress } from '@/utils/web3/address'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-
 // import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 // import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
+import { shortenAddress } from 'utils'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -20,15 +17,7 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   </Typography>
 )
 
-const BottomBox = (): JSX.Element => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const formatedAmountTotal0 = poolInfo?.token0
-    ? formatNumber(poolInfo?.amountTotal0, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: 6
-      })
-    : '-'
+const BottomBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Element => {
   const formatedMaxAmount1PerWallet =
     poolInfo?.maxAmount1PerWallet &&
     poolInfo.maxAmount1PerWallet !== '0' &&
@@ -64,7 +53,7 @@ const BottomBox = (): JSX.Element => {
                 alt={poolInfo.token0.symbol}
                 size={20}
               />
-              <Typography>{poolInfo.token0.symbol}</Typography>
+              <Typography>{poolInfo.token0.symbol || '-'}</Typography>
             </Stack>
           </PoolInfoItem>
         </Stack>
@@ -76,7 +65,7 @@ const BottomBox = (): JSX.Element => {
           <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
           <PoolInfoItem title="Allocation per Wallet">{formatedMaxAmount1PerWallet}</PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
-            {formatedAmountTotal0} {poolInfo.token0.symbol}
+            {poolInfo.amountTotal0} {poolInfo.token0.symbol}
           </PoolInfoItem>
           <PoolInfoItem title="Price per unit, $">
             {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}

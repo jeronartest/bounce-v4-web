@@ -14,7 +14,7 @@ import {
 import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
-import usePoolHistory from '@/hooks/auction/useNftPoolHistory'
+import usePoolHistory from 'bounceHooks/auction/useNftPoolHistory'
 import { shortenAddress } from '@/utils/web3/address'
 import { PoolEvent } from '@/api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'

@@ -5,9 +5,9 @@ import DownloadFileButton from '../DownloadFileButton'
 
 import { getfilesize } from 'utils'
 import { ellipseFileName } from 'utils/file'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 export interface FileItemProps {
-  poolId: number
   canDeleteFile?: boolean
   canDownloadFile?: boolean
   fileId?: number
@@ -16,10 +16,11 @@ export interface FileItemProps {
   fileUrl?: string
   fileName?: string
   fileSize?: number
+  poolInfo: PoolInfoProp
+  getPoolInfo: () => void
 }
 
 const FileItem = ({
-  poolId,
   canDeleteFile,
   canDownloadFile,
   fileId,
@@ -27,6 +28,8 @@ const FileItem = ({
   thumbnailUrl,
   fileUrl,
   fileName,
+  poolInfo,
+  getPoolInfo,
   fileSize
 }: FileItemProps) => {
   return (
@@ -34,7 +37,8 @@ const FileItem = ({
       {canDownloadFile && <DownloadFileButton fileType={fileType} thumbnailUrl={thumbnailUrl} fileUrl={fileUrl} />}
       {canDeleteFile && (
         <DeleteFileButton
-          poolId={poolId}
+          poolInfo={poolInfo}
+          getPoolInfo={getPoolInfo}
           fileId={fileId}
           fileType={fileType}
           thumbnailUrl={thumbnailUrl}

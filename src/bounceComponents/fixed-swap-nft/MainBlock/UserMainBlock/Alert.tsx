@@ -1,21 +1,17 @@
-import React from 'react'
+import { FixedSwapNFTPoolProp, PoolStatus, PoolType } from 'api/pool/type'
+import AuctionClosedAlert from 'bounceComponents/fixed-swap/Alerts/AuctionClosedAlert'
+import ClaimYourTokenAlert from 'bounceComponents/fixed-swap/Alerts/ClaimYourTokenAlert'
+import NotEligibleAlert from 'bounceComponents/fixed-swap/Alerts/NotEligibleAlert'
+import PayAttentionAlert from 'bounceComponents/fixed-swap/Alerts/PayAttentionAlert'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { useIsUserJoined1155Pool } from 'bounceHooks/auction/useIsUserJoinedPool'
 
-import PayAttentionAlert from '../../Alerts/PayAttentionAlert'
-import ClaimYourTokenAlert from '../../Alerts/ClaimYourTokenAlert'
-import AuctionClosedAlert from '../../Alerts/AuctionClosedAlert'
-import NotEligibleAlert from '../../Alerts/NotEligibleAlert'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
-import useIsUserInWhitelist from '@/hooks/auction/useIsUserInWhitelist'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoined1155Pool'
-
-const Alert = () => {
-  const { data: poolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist()
-  const isUserJoinedPool = useIsUserJoinedPool()
+const Alert = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
+    poolInfo,
+    PoolType.fixedSwapNft
+  )
+  const isUserJoinedPool = useIsUserJoined1155Pool(poolInfo)
 
   if (isCheckingWhitelist) {
     return null
@@ -33,11 +29,7 @@ const Alert = () => {
     return <AuctionClosedAlert />
   }
 
-  if (
-    poolInfo.status === PoolStatus.Closed &&
-    poolWithParticipantInfo?.participant.swappedAmount0 &&
-    !poolWithParticipantInfo?.participant.claimed
-  ) {
+  if (poolInfo.status === PoolStatus.Closed && poolInfo.participant.swappedAmount0 && !poolInfo.participant.claimed) {
     return <ClaimYourTokenAlert />
   }
 

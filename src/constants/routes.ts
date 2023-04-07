@@ -2,12 +2,15 @@ export const routes = {
   auction: {
     createAuctionPool: '/auction/create-auction-pool',
     createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName/:tokenType',
+
+    fixedSwapNft: '/auction/fixed-swap-1155/:chainShortName/:poolId',
     fixedPrice: '/auction/fixed-price/:chainShortName/:poolId'
   },
   login: '/login',
   market: {
     index: '/market',
-    pools: '/market/pools'
+    pools: '/market/pools',
+    nftPools: '/market/nft-pools'
   },
   realAuction: {
     index: '/real-auction'

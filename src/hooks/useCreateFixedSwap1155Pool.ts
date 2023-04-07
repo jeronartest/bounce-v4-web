@@ -95,7 +95,7 @@ export function useCreateFixedSwap1155Pool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.fixed_swap_nft,
+        category: PoolType.fixedSwapNft,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -108,7 +108,7 @@ export function useCreateFixedSwap1155Pool() {
         .times(params.swapRatio)
         // Prevent exponential notation
         .toFixed(0, BigNumber.ROUND_DOWN),
-      category: PoolType.fixed_swap_nft,
+      category: PoolType.fixedSwapNft,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,

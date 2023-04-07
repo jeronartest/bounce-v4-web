@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import React from 'react'
-import useIsUserInWhitelist from '@/hooks/auction/useIsUserInWhitelist'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 
 export interface GoToCheckButtonProps {
   onClick: () => void

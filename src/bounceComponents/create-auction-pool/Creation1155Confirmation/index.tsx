@@ -225,7 +225,7 @@ const CreatePoolButton = () => {
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
-          text: `Approving use of ${values.nftTokenFrom.contractName} ...`,
+          text: `Approving use of ${values.nftTokenFrom.contractName || 'NFT'} ...`,
           loading: true
         }
       }
@@ -237,7 +237,7 @@ const CreatePoolButton = () => {
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
-          text: `Approve use of ${values.nftTokenFrom.contractName}`,
+          text: `Approve use of ${values.nftTokenFrom.contractName || 'NFT'}`,
           run: toApprove
         }
       }

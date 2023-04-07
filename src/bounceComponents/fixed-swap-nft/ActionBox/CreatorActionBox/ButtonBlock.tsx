@@ -1,41 +1,118 @@
-import React from 'react'
-import { useAccount, useNetwork } from 'wagmi'
+import { FixedSwapNFTPoolProp, PoolStatus } from 'api/pool/type'
+import { useCreatorClaimNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
+import { useActiveWeb3React } from 'hooks'
+import { useCallback, useMemo } from 'react'
+import { LoadingButton } from '@mui/lab'
+import { show } from '@ebay/nice-modal-react'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
-import SwitchNetworkButton from '../../SwitchNetworkButton'
-import CancelButton from './CancelButton'
-import ClaimButton from './ClaimButton'
-import ConnectWalletButton from './ConnectWalletButton'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
-import useCreatorClaim from '@/hooks/auction/use1155CreatorClaim'
+const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
-const ButtonBlock = () => {
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
+  const isAllTokenSwapped = useMemo(() => Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0), [poolInfo])
 
-  const { data: poolInfo } = usePoolInfo()
+  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name)
 
-  const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)
-  const chainOfPool = chainConfig.ethChainId
-  const isCurrentChainEqualChainOfPool = chain?.id && chain.id === chainOfPool
+  const successDialogContent = useMemo(() => {
+    const hasToken0ToClaim = !isAllTokenSwapped
+    const token1ToClaimText = `${poolInfo.currencySwappedTotal1.toSignificant()} ${poolInfo.token1.symbol}`
+    const token0ToClaimText = hasToken0ToClaim
+      ? ` and ${Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0)} ${poolInfo.token0.symbol}`
+      : ''
+    return `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
+  }, [
+    isAllTokenSwapped,
+    poolInfo.amountTotal0,
+    poolInfo.currencySwappedTotal1,
+    poolInfo.swappedAmount0,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol
+  ])
 
-  const { run: claim, loading: isClaiming } = useCreatorClaim()
+  const toClaim = useCallback(
+    async (isCancel: boolean) => {
+      showRequestConfirmDialog()
+      try {
+        const { transactionReceipt } = await claim()
 
-  if (!isConnected) {
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Close',
+              title: 'Congratulations!',
+              content: isCancel
+                ? '`You have successfully cancelled the pool and claimed your tokens`'
+                : successDialogContent
+            })
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+          onAgain: () => toClaim(isCancel)
+        })
+      }
+    },
+    [claim, successDialogContent]
+  )
+
+  if (!account) {
     return <ConnectWalletButton />
   }
 
   if (!isCurrentChainEqualChainOfPool) {
-    return <SwitchNetworkButton targetChain={chainConfig.ethChainId} />
+    return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
 
   if (poolInfo.status === PoolStatus.Closed && !poolInfo.creatorClaimed) {
-    return <ClaimButton onClick={claim} loading={isClaiming} />
+    return (
+      <LoadingButton
+        variant="contained"
+        fullWidth
+        loadingPosition="start"
+        loading={submitted.complete || submitted.submitted}
+        onClick={() => toClaim(false)}
+      >
+        <span>{!isAllTokenSwapped ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'}</span>
+      </LoadingButton>
+    )
   }
 
   if (poolInfo.status === PoolStatus.Upcoming) {
-    return <CancelButton />
+    return (
+      <LoadingButton
+        variant="outlined"
+        fullWidth
+        loadingPosition="start"
+        sx={{ mt: 24, mb: 12 }}
+        loading={submitted.complete || submitted.submitted}
+        onClick={() => toClaim(true)}
+      >
+        Cancel & Claim tokens
+      </LoadingButton>
+    )
   }
 
   return null

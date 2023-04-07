@@ -1,35 +1,28 @@
-import React from 'react'
 import { Box, Typography } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
 import UpcomingPoolCreatorAlert from '../../Alerts/UpcomingPoolCreatorAlert'
 import LivePoolCreatorAlert from '../../Alerts/LivePoolCreatorAlert'
-import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import SuspiciousTips from '../SuspiciousStatisTip'
 import FundInfoList from './FundInfoList'
 import ButtonBlock from './ButtonBlock'
-import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import useNftGoApi from '@/hooks/auction/useNftInfoByNftGo'
-const CreatorActionBox = (): JSX.Element => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+import { FixedSwapNFTPoolProp, PoolStatus } from 'api/pool/type'
+import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
+
+const CreatorActionBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Element => {
   const nftGoInfo = useNftGoApi(poolInfo.contract, poolInfo.tokenId)
 
   return (
     <Box sx={{ flex: 1, pt: 28 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h2">My Pool</Typography>
-        <PoolStatusBox
-          status={poolInfo.status}
-          openTime={poolInfo.openAt}
-          closeTime={poolInfo.closeAt}
-          onEnd={getPoolInfo}
-        />
+        <PoolStatusBox status={poolInfo.status} openTime={poolInfo.openAt} closeTime={poolInfo.closeAt} />
       </Box>
 
-      <FundInfoList />
+      <FundInfoList poolInfo={poolInfo} />
 
-      <ButtonBlock />
+      <ButtonBlock poolInfo={poolInfo} />
 
       {poolInfo.status === PoolStatus.Upcoming && <UpcomingPoolCreatorAlert />}
       {poolInfo.status === PoolStatus.Live && <LivePoolCreatorAlert />}

@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useNetwork } from 'wagmi'
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import usePoolInfo from './useNftPoolInfo'
+import useNFTPoolInfo from './useNftPoolInfo'
 
 const useIsCurrentChainEqualChainOfPool = () => {
-  const { data: poolInfo } = usePoolInfo()
+  const { data: poolInfo } = useNFTPoolInfo()
   const { chain } = useNetwork()
 
   const chainConfig = useChainConfigInBackend('id', poolInfo?.chainId)

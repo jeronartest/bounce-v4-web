@@ -8,7 +8,7 @@ export enum PoolType {
   'Duch' = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
-  'fixed_swap_nft' = 5
+  'fixedSwapNft' = 5
 }
 
 export interface GetPoolCreationSignatureParams {
@@ -115,6 +115,8 @@ export interface FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
+    is721?: 0 | 1
+    tokenId?: string
   }
   ifCollect: boolean
   poolId: string
@@ -125,6 +127,7 @@ export interface FixedSwapPool {
   swappedAmount0: string
   token0: TokenFromApi
   token1: TokenFromApi
+  tokenId: string
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {
@@ -142,6 +145,22 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     swappedAmount0?: string
     currencySwappedAmount0: CurrencyAmount | undefined
     currencySwappedAmount1: CurrencyAmount | undefined
+  }
+}
+
+export interface FixedSwapNFTPoolProp extends FixedSwapPool {
+  currencyAmountTotal1: CurrencyAmount
+  currencyMaxAmount1PerWallet: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount1: CurrencyAmount | undefined
+    is721?: 0 | 1
+    tokenId?: string
   }
 }
 

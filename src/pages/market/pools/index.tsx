@@ -49,7 +49,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid'
+  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft'
 }
 const initialValues = {
   searchText: '',

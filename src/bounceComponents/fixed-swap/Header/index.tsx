@@ -3,9 +3,9 @@ import Image from 'components/Image'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
 import { ChainListMap } from 'constants/chain'
-import { FixedSwapPoolProp } from 'api/pool/type'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
+import { PoolInfoProp } from '../type'
 
 const styles = {
   p: '7px 16px',
@@ -16,12 +16,12 @@ const styles = {
   }
 }
 
-const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }): JSX.Element => {
+const Header = ({ poolInfo, getPoolInfo }: { poolInfo: PoolInfoProp; getPoolInfo: () => void }): JSX.Element => {
   const { userId } = useUserInfo()
   if (!poolInfo.ethChainId) return <></>
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Stack direction="row" spacing={20} sx={{ alignItems: 'center' }}>
+      <Stack direction="row" spacing={20} sx={{ alignItems: 'center' }} maxWidth={'80%'}>
         <Typography variant="h1" sx={{ fontSize: 30 }}>
           {poolInfo?.name} Fixed-Price Pool
         </Typography>

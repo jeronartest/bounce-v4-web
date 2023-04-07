@@ -11,16 +11,16 @@ import ConfirmRegret from './ConfirmRegret'
 import Bid from './Bid'
 import ClaimingCountdownButton from './ClaimingCountdownButton'
 import ClaimButton from './ClaimButton'
-import usePlaceBid from '@/hooks/auction/use1155PlaceBid'
-import useRegretBid from '@/hooks/auction/use1155RegretBid'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoined1155Pool'
-import useIsCurrentChainEqualChainOfPool from '@/hooks/auction/useIsCurrentChainEqualChainOfPool'
+import usePlaceBid from 'bounceHooks/auction/use1155PlaceBid'
+import useRegretBid from 'bounceHooks/auction/use1155RegretBid'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoined1155Pool'
+import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
 import { PoolStatus } from '@/api/pool/type'
-import useIsUserClaimedPool from '@/hooks/auction/useIsUserClaimed1155Pool'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import useUserClaim from '@/hooks/auction/use1155UserClaim'
+import useIsUserClaimedPool from 'bounceHooks/auction/useIsUserClaimed1155Pool'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import useUserClaim from 'bounceHooks/auction/use1155UserClaim'
 import { fixToDecimals } from '@/utils/web3/number'
-import useNftGoApi from '@/hooks/auction/useNftInfoByNftGo'
+import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -39,7 +39,7 @@ const getInitialAction = (
   isJoined?: boolean,
   isClaimed?: boolean,
   poolStatus?: PoolStatus,
-  claimAt?: number,
+  claimAt?: number
 ): UserAction => {
   // console.log('internal isJoined: ', isJoined)
   // console.log('internal isClaimed: ', isClaimed)
@@ -94,7 +94,7 @@ const ActionBlock = () => {
   const { run: bid, loading: isBidding } = usePlaceBid({
     onSuccess: () => {
       setAction('BID_OR_REGRET')
-    },
+    }
   })
   const { run: regret, loading: isRegretting } = useRegretBid({
     onRegretAll: () => {
@@ -104,12 +104,12 @@ const ActionBlock = () => {
     onRegretPart: () => {
       console.log('onRegretPart')
       setAction('BID_OR_REGRET')
-    },
+    }
   })
   const { run: claim, loading: isClaiming } = useUserClaim({
     onSuccess: () => {
       setAction('CLAIMED')
-    },
+    }
   })
 
   // console.log('action: ', action)

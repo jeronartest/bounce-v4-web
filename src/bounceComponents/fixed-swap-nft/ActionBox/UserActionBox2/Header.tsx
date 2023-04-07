@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
 import JoinStatus from '../JoinStatus'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 
 const Header = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()

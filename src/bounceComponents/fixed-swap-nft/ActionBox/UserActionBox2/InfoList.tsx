@@ -6,9 +6,9 @@ import { useCountDown } from 'ahooks'
 import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoined1155Pool'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoined1155Pool'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 const InfoList = () => {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()

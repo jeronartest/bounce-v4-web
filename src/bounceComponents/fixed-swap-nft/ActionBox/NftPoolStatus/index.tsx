@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useCountDown } from 'ahooks'
-import { PoolStatus } from '@/api/pool/type'
+import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
 export interface PoolStatusBoxProps {
   status: PoolStatus
@@ -109,7 +109,7 @@ const PoolStatusBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: P
       )
 
     default:
-      return null
+      return <></>
   }
 }
 

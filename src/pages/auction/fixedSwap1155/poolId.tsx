@@ -1,19 +1,19 @@
 import { Box, Container, Stack } from '@mui/material'
 
-import CreatorMainBlock from 'bounceComponents/fixed-swap/MainBlock/CreatorMainBlock'
+import CreatorMainBlock from 'bounceComponents/fixed-swap-nft/MainBlock/CreatorMainBlock'
 import CreatorInfoCard from 'bounceComponents/fixed-swap/CreatorInfoCard'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import Header from 'bounceComponents/fixed-swap/Header'
-import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import UserMainBlock from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
+import useNftPoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = useNftPoolInfo()
   const isBlock = useCurrentRegionBlock()
 
   if (isBlock) {
@@ -35,15 +35,15 @@ const FixedSwapPoolPageContent = () => {
 
         <Box sx={{ mt: 40, display: 'flex', columnGap: 20 }}>
           <CreatorInfoCard
-            poolInfo={poolInfo}
             creator={poolInfo.creator}
+            poolInfo={poolInfo}
             getPoolInfo={getPoolInfo}
             creatorUserInfo={poolInfo.creatorUserInfo}
           />
 
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
-              <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+              <CreatorMainBlock poolInfo={poolInfo} />
             ) : (
               <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
             )}

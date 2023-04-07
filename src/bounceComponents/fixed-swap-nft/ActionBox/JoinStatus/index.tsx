@@ -1,7 +1,6 @@
-import React from 'react'
 import { Typography } from '@mui/material'
 
-import useIsUserJoinedPool from '@/hooks/auction/useIsUserJoined1155Pool'
+import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoined1155Pool'
 
 const JoinStatus = () => {
   const isUserJoinedPool = useIsUserJoinedPool()

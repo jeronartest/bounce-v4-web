@@ -8,13 +8,13 @@ import { hide, show } from '@ebay/nice-modal-react'
 
 import { commify } from 'ethers/lib/utils.js'
 import { userClaimCall } from '@/utils/web3/contractCalls/fixedSwap'
-import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { PoolStatus } from '@/api/pool/type'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
 
 const ClaimButton = () => {
   const { isConnected } = useAccount()

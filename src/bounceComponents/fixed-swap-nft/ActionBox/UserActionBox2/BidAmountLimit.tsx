@@ -1,6 +1,6 @@
 import React from 'react'
 import PoolInfoItem from '../../PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 interface IBidAmountLimitProps {
   bidAmount?: string
 }
@@ -15,7 +15,7 @@ const BidAmountLimit = (props: IBidAmountLimitProps) => {
       sx={{
         mt: 8,
         color:
-          bidAmount && formatedMMaxAmount1PerWallet && bidAmount > formatedMMaxAmount1PerWallet ? '#F53030' : 'black',
+          bidAmount && formatedMMaxAmount1PerWallet && bidAmount > formatedMMaxAmount1PerWallet ? '#F53030' : 'black'
       }}
     >
       {bidAmount || 0} NFT / {formatedMMaxAmount1PerWallet}&nbsp; NFT

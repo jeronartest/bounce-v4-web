@@ -27,6 +27,8 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import Image from 'components/Image'
+import { NFTCard } from 'pages/market/nftAuctionPool'
+import NoData from 'bounceComponents/common/NoData'
 
 // export type IMarketProps = {}
 
@@ -34,7 +36,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid'
+  [PoolType.SealedBid]: 'SealedBid',
+  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft'
 }
 const Market: React.FC = ({}) => {
   const navigate = useNavigate()
@@ -57,6 +60,26 @@ const Market: React.FC = ({}) => {
       total: resp.data.fixedSwapList.total
     }
   })
+
+  const { data: nftPoolData, loading: nftLoading } = useRequest(async () => {
+    const resp = await getPools({
+      offset: 0,
+      limit: 6,
+      category: 5,
+      chainId: 2,
+      creatorAddress: '',
+      creatorName: '',
+      orderBy: 'openTs',
+      poolId: '',
+      poolName: '',
+      token0Address: ''
+    })
+    return {
+      list: resp.data.fixedSwapNftList.list,
+      total: resp.data.fixedSwapNftList.total
+    }
+  })
+
   const bannerList = [
     {
       img: Banner28,
@@ -99,7 +122,14 @@ const Market: React.FC = ({}) => {
                 navigate(routes.market.pools)
               }}
             />
-            <Marketcard title={'NFT Auction Pool'} imageUrl={'/imgs/investment/platform/nftPool.svg'} />
+            <Marketcard
+              hover={true}
+              title={'NFT Auction Pool'}
+              imageUrl={'/imgs/investment/platform/nftPool.svg'}
+              handleClick={() => {
+                navigate(routes.market.nftPools)
+              }}
+            />
             <Marketcard title={'NFT Launchpad'} imageUrl={'/imgs/investment/platform/launchpad.svg'} />
             <Marketcard title={'Private Group Auction'} imageUrl={'/imgs/investment/platform/privateAuciton.svg'} />
           </Stack>
@@ -124,9 +154,15 @@ const Market: React.FC = ({}) => {
                   description="Token Decentralized Auction platform including Fixed Swap Auction, Dutch Auction and Sealed-Bid Auction."
                 />
               </Grid>
-              <Grid xs={3} item>
+              <Grid
+                xs={3}
+                item
+                onClick={() => {
+                  navigate(routes.market.nftPools)
+                }}
+              >
                 <SummaryCard
-                  active={true}
+                  rightSVG={true}
                   imageUrl="/imgs/investment/platform/nft.svg"
                   title="NFT Auction Pool"
                   description="NFT Decentralized Auction platform including Dutch Auction, English Auction and Lottery Auction."
@@ -284,6 +320,53 @@ const Market: React.FC = ({}) => {
                 </Grid>
               )}
             </Box>
+          </Box>
+
+          <Box sx={styles.nftBox}>
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+              <Typography variant="h2" fontSize={24} color={'var(--ps-gray-900)'}>
+                NFT Auction Pool
+              </Typography>
+              <Button variant="outlined" sx={{ border: ' 1px solid var(--ps-gray-900)' }} href={routes.market.nftPools}>
+                Explore all
+              </Button>
+            </Box>
+            {nftLoading && (
+              <Grid container spacing={18}>
+                {Array.from(new Array(6)).map((_, index) => (
+                  <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
+                    <Box>
+                      <Skeleton
+                        variant="rounded"
+                        height={400}
+                        sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
+                      />
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+            {!nftLoading && !nftPoolData?.list.length ? (
+              <NoData />
+            ) : (
+              <Grid rowSpacing={24} columnSpacing={20} container pt={18}>
+                {optionDatas?.chainInfoOpt &&
+                  nftPoolData?.list.map((nft: any, i: number) => (
+                    <Grid key={i} xs={4} item>
+                      <Link
+                        to={routes.auction.fixedSwapNft
+                          .replace(
+                            ':chainShortName',
+                            getLabelById(nft.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                          )
+                          .replace(':poolId', nft.poolId)}
+                      >
+                        <NFTCard nft={nft} hiddenStatus={true} />
+                      </Link>
+                    </Grid>
+                  ))}
+              </Grid>
+            )}
           </Box>
         </Box>
       </Container>

@@ -1,24 +1,24 @@
 import { Stack } from '@mui/material'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 import FileItem from './FileItem'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 export interface FileItemListProps {
-  poolId: number
   canDeleteFile?: boolean
   canDownloadFile?: boolean
+  poolInfo: PoolInfoProp
+  getPoolInfo: () => void
 }
 
-const FileItemList = ({ poolId, canDeleteFile, canDownloadFile }: FileItemListProps) => {
-  const { data: poolInfo } = usePoolInfo()
-
+const FileItemList = ({ poolInfo, getPoolInfo, canDeleteFile, canDownloadFile }: FileItemListProps) => {
   return (
     <Stack spacing={20}>
       {poolInfo?.posts?.slice(0, 3).map(file => {
         return (
           <FileItem
+            poolInfo={poolInfo}
+            getPoolInfo={getPoolInfo}
             key={file.id}
-            poolId={poolId}
             canDeleteFile={canDeleteFile}
             canDownloadFile={canDownloadFile}
             fileId={file.id}

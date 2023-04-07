@@ -23,7 +23,7 @@ const DownloadFileButton = ({ fileType, thumbnailUrl, fileUrl }: DownloadFileBut
           '&:hover div': {
             display: 'flex'
           },
-          border: shouldFileTypeShowIcon(fileType) ? '1px solid #D7D6D9' : undefined
+          border: fileType && shouldFileTypeShowIcon(fileType) ? '1px solid #D7D6D9' : undefined
         }}
       >
         <FileIcon fileType={fileType} thumbnailUrl={thumbnailUrl} fileUrl={fileUrl} />

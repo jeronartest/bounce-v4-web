@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box } from '@mui/material'
 
 import RegretBalance from './RegretBalance'
@@ -19,7 +18,7 @@ const InputRegretAmount = ({
   slicedRegretAmount,
   setRegretAmount,
   onCancel,
-  onConfirm,
+  onConfirm
 }: InputRegretAmountProps) => {
   return (
     <Box>

@@ -11,7 +11,7 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 
-export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
+const useBackedPoolInfo = () => {
   const { poolId, chainShortName } = useQueryParams()
   const { account } = useActiveWeb3React()
 
@@ -25,12 +25,12 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
 
       const response = await getPoolInfo({
         poolId,
-        category,
+        category: PoolType.FixedSwap,
         chainId: chainConfigInBackend.id,
         address: account || ''
       })
 
-      const rawPoolInfo = category === PoolType.FixedSwap ? response.data.fixedSwapPool : response.data.fixedSwapNftPool
+      const rawPoolInfo = response.data.fixedSwapPool
 
       return {
         ...rawPoolInfo,

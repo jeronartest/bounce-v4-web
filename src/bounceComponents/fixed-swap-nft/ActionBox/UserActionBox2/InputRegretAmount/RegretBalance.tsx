@@ -8,9 +8,9 @@ import Image from 'next/image'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from '@/utils/web3/number'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import NumberInput from 'bounceComponents/common/NumberInput'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
 
 import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
 

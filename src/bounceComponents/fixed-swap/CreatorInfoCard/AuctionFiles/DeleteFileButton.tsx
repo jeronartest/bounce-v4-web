@@ -8,19 +8,25 @@ import { ReactComponent as DeleteSVG } from 'assets/imgs/icon/delete.svg'
 import { UpdateAuctionBackgroundParams } from 'api/pool/type'
 import { updateAuctionBackground } from 'api/pool'
 import { shouldFileTypeShowIcon } from 'utils/file'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 export interface DownloadFileButtonProps {
-  poolId: number
   fileId?: number
   fileType?: string
   thumbnailUrl?: string
   fileUrl?: string
+  poolInfo: PoolInfoProp
+  getPoolInfo: () => void
 }
 
-const DeleteFileButton = ({ poolId, fileId, fileType, thumbnailUrl, fileUrl }: DownloadFileButtonProps) => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-
+const DeleteFileButton = ({
+  poolInfo,
+  getPoolInfo,
+  fileId,
+  fileType,
+  thumbnailUrl,
+  fileUrl
+}: DownloadFileButtonProps) => {
   const { run: update } = useRequest((params: UpdateAuctionBackgroundParams) => updateAuctionBackground(params), {
     manual: true,
     onSuccess: () => {
@@ -42,7 +48,7 @@ const DeleteFileButton = ({ poolId, fileId, fileType, thumbnailUrl, fileUrl }: D
       }}
       onClick={() => {
         update({
-          id: poolId,
+          id: Number(poolInfo.id),
           description: poolInfo?.description,
           posts: poolInfo?.posts?.filter(post => post.id !== fileId)
         })

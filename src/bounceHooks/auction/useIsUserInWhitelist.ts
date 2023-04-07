@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
+import { PoolType } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
-const useIsUserInWhitelist = (poolInfo: FixedSwapPoolProp) => {
+const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolType.FixedSwap) => {
   const { account } = useActiveWeb3React()
 
   const { poolId, chainShortName } = useQueryParams()
@@ -36,7 +37,7 @@ const useIsUserInWhitelist = (poolInfo: FixedSwapPoolProp) => {
     try {
       const proof = await getUserWhitelistProof({
         address: account,
-        category: PoolType.FixedSwap,
+        category: category,
         chainId: chainConfigInBackend?.id,
         poolId: String(poolId)
       })
@@ -47,7 +48,7 @@ const useIsUserInWhitelist = (poolInfo: FixedSwapPoolProp) => {
     } finally {
       setisCheckingWhitelist(false)
     }
-  }, [account, chainConfigInBackend?.id, poolId, poolInfo.enableWhiteList])
+  }, [account, category, chainConfigInBackend?.id, poolId, poolInfo.enableWhiteList])
 
   useEffect(() => {
     checkIsUserInWhitelist()

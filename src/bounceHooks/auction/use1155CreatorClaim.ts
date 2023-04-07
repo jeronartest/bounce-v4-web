@@ -2,12 +2,12 @@ import { useRequest } from 'ahooks'
 import { hide, show } from '@ebay/nice-modal-react'
 
 import { creatorClaimCall } from '@/utils/web3/contractCalls/erc1155'
-import { useFixedSwapNftContract } from '@/hooks/web3/useContractHooks/useContract'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import { useFixedSwapNftContract } from 'bounceHooks/web3/useContractHooks/useContract'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { formatNumber } from '@/utils/web3/number'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
 import { showRequestConfirmDialog, showWaitingTxDialog } from '@/utils/auction'
 
 const useCreatorClaim = () => {

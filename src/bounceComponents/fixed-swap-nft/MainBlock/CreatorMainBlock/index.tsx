@@ -1,22 +1,21 @@
 import { Box } from '@mui/material'
-import React from 'react'
-import { BigNumber } from 'bignumber.js'
 import CreatorActionBox from '../../ActionBox/CreatorActionBox'
 import BottomBox from '../UserMainBlock/BottomBox'
-import NotStartedAlert from '../../Alerts/NotStartedAlert'
-import ClaimBackAlert from '../../Alerts/ClaimBackAlert'
-import AllTokenAuctionedAlert from '../../Alerts/AllTokenAuctionedAlert'
-import AuctionLiveAlert from '../../Alerts/AuctionLiveAlert'
-import { NftCard, UserMainBlockParams } from '../UserMainBlock'
-import { PoolStatus } from '@/api/pool/type'
-import useIsAllTokenSwapped from '@/hooks/auction/useIsAllNftTokenSwapped'
-import useNftGoApi from '@/hooks/auction/useNftInfoByNftGo'
+import { NftCard, FixedSwapPoolParams } from '../UserMainBlock'
+import { PoolStatus } from 'api/pool/type'
+import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
+import { useMemo } from 'react'
+import NotStartedAlert from 'bounceComponents/fixed-swap/Alerts/NotStartedAlert'
+import AuctionLiveAlert from 'bounceComponents/fixed-swap/Alerts/AuctionLiveAlert'
+import ClaimBackAlert from 'bounceComponents/fixed-swap/Alerts/ClaimBackAlert'
+import AllTokenAuctionedAlert from 'bounceComponents/fixed-swap/Alerts/AllTokenAuctionedAlert'
 
-const CreatorMainBlock = (props: UserMainBlockParams): JSX.Element => {
+const CreatorMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
   const { poolInfo } = props
 
-  const isAllTokenSwapped = useIsAllTokenSwapped()
+  const isAllTokenSwapped = useMemo(() => Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0), [poolInfo])
   const nftGoInfo = useNftGoApi(poolInfo.contract, poolInfo.tokenId)
+
   return (
     <Box
       sx={{ borderRadius: 20, px: 24, py: 20, bgcolor: '#fff', display: 'flex', flexDirection: 'column', rowGap: 12 }}
@@ -29,11 +28,10 @@ const CreatorMainBlock = (props: UserMainBlockParams): JSX.Element => {
       )}
 
       <Box sx={{ display: 'flex', columnGap: 65, marginBottom: 30 }}>
-        {/* <UserActionBox /> */}
         <NftCard nft={poolInfo} suspicious={!!nftGoInfo?.data?.suspicious} />
-        <CreatorActionBox />
+        <CreatorActionBox poolInfo={poolInfo} />
       </Box>
-      <BottomBox />
+      <BottomBox poolInfo={poolInfo} />
     </Box>
   )
 }

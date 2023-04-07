@@ -1,25 +1,19 @@
-import React from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import PoolInfoItem from '../../PoolInfoItem'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { formatNumber } from '@/utils/web3/number'
-import { shortenAddress } from '@/utils/web3/address'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
+import { formatNumber } from 'utils/number'
+import { shortenAddress } from 'utils'
 
 const TX_FEE_RATIO = 0.0
 // const TX_FEE_RATIO = 0.025
 
-const FundInfoList = () => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const formatedSwappedAmount0 = formatNumber(poolInfo.swappedAmount0, {
-    unit: poolInfo.token0.decimals,
-    decimalPlaces: 6
-  })
+const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
+  const formatedSwappedAmount0 = poolInfo.swappedAmount0
   const formatedSwappedAmount1 = formatNumber(new BigNumber(poolInfo.swappedAmount0).times(poolInfo.ratio).toString(), {
     unit: poolInfo.token0.decimals,
     decimalPlaces: 6
@@ -38,7 +32,7 @@ const FundInfoList = () => {
         <Stack direction="row" spacing={6} alignItems="center">
           <Typography>{formatedSwappedAmount0}</Typography>
           <TokenImage
-            src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon.src}
+            src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
             alt={poolInfo.token0.symbol}
             size={20}
           />

@@ -8,16 +8,15 @@ import { ReactComponent as AddCircleOutlineSVG } from 'assets/imgs/icon/add_circ
 
 import { updateAuctionBackground } from 'api/pool'
 import { UpdateAuctionBackgroundParams } from 'api/pool/type'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 export interface UploadButtonProps {
-  poolId: number
+  poolInfo: PoolInfoProp
+  getPoolInfo: () => void
 }
 
-const UploadButton = ({ poolId }: UploadButtonProps) => {
+const UploadButton = ({ poolInfo, getPoolInfo }: UploadButtonProps) => {
   const [isUploading, setIsUploading] = useState(false)
-
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
 
   const { run: update, loading: isUpdating } = useRequest(
     (params: UpdateAuctionBackgroundParams) => updateAuctionBackground(params),
@@ -42,7 +41,7 @@ const UploadButton = ({ poolId }: UploadButtonProps) => {
         onSuccess={res => {
           setIsUploading(false)
           update({
-            id: poolId,
+            id: Number(poolInfo.id),
             description: poolInfo?.description,
             posts: [...(poolInfo?.posts || []), { ...res, fileSize: Number(res.fileSize), id: 0 }]
           })

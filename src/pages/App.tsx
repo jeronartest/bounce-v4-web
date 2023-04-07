@@ -20,12 +20,15 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import CreateAuctionPool from 'pages/auction/create-auction-pool/index'
 import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType'
-import AuctionPoolId from 'pages/auction/fixed-price/poolId'
+
+import AuctionFixedPricePoolId from 'pages/auction/fixed-price/poolId'
+import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
 
 import Login from 'pages/login'
 
 import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
+import MarketNFTPools from 'pages/market/nftAuctionPool'
 
 import AccountSettings from 'pages/profile/account/settings'
 import ProfileActivities from 'pages/profile/activities'
@@ -86,12 +89,14 @@ export default function App() {
                   <Routes>
                     <Route path={routes.auction.createAuctionPool} element={<CreateAuctionPool />} />
                     <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
-                    <Route path={routes.auction.fixedPrice} element={<AuctionPoolId />} />
+                    <Route path={routes.auction.fixedPrice} element={<AuctionFixedPricePoolId />} />
+                    <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />
+                    <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
 
                     <Route path={routes.realAuction.index} element={<ComingSoon />} />
                     <Route path={routes.adsAuction.index} element={<ComingSoon />} />

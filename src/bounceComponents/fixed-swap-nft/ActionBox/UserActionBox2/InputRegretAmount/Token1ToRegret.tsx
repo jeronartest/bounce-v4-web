@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import { formatNumber } from '@/utils/web3/number'
 
 interface Token1ToRegretProps {

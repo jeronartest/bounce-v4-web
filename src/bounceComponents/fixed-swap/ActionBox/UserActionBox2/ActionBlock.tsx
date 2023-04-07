@@ -134,8 +134,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content:
-          err?.error?.message || err?.data?.message || err?.message || 'Something went wrong' || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -181,8 +180,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content:
-          err?.error?.message || err?.data?.message || err?.message || 'Something went wrong' || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toRegret
       })
     }
@@ -227,8 +225,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content:
-          err?.error?.message || err?.data?.message || err?.message || 'Something went wrong' || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toClaim
       })
     }

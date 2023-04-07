@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import useToken1Balance from '@/hooks/auction/use1155Token1Balance'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import useToken1Balance from 'bounceHooks/auction/use1155Token1Balance'
 
 const useIsBalanceInsufficient = (bidAmount: string) => {
     const { data: poolInfo } = usePoolInfo()

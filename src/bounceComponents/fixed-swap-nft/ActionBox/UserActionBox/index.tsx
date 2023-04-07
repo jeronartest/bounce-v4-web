@@ -18,9 +18,9 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolStatus } from '@/api/pool/type'
 import { formatNumber } from '@/utils/web3/number'
 import ConnectWalletDialog from 'bounceComponents/common/ConnectWalletDialog'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
-import useChainConfigInBackend from '@/hooks/web3/useChainConfigInBackend'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import ErrorSVG from 'assets/imgs/icon/error_outline.svg'
 
 const ConnectWalletButton = () => {

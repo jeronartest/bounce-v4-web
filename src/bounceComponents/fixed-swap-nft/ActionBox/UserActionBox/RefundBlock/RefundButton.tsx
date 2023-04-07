@@ -7,13 +7,13 @@ import { useRouter } from 'next/router'
 
 import { hide, show } from '@ebay/nice-modal-react'
 import { parseUnits } from 'ethers/lib/utils.js'
-import { useFixedSwapContract } from '@/hooks/web3/useContractHooks/useContract'
+import { useFixedSwapContract } from 'bounceHooks/web3/useContractHooks/useContract'
 import { reverseCall } from '@/utils/web3/contractCalls/fixedSwap'
 import { PoolStatus } from '@/api/pool/type'
-import usePoolInfo from '@/hooks/auction/useNftPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import { DialogProps as DialogTipsProps, id } from 'bounceComponents/common/DialogTips'
-import usePoolWithParticipantInfo from '@/hooks/auction/use1155PoolWithParticipantInfo'
+import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
 
 export interface RefundButtonProps {
   token0AmountToRefund?: BigNumber

@@ -6,18 +6,17 @@ import { updateAuctionBackground } from 'api/pool'
 import { UpdateAuctionBackgroundParams } from 'api/pool/type'
 
 import { ReactComponent as EditSVG } from 'assets/imgs/icon/edit.svg'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { PoolInfoProp } from '../type'
 
 export interface AuctionDescriptionProps {
-  poolId: number
+  poolInfo: PoolInfoProp
   canEdit?: boolean
+  getPoolInfo: () => void
 }
 
 const MAX_DESCRIPTION_CHARACTER_COUNT = 350
 
-const AuctionDescription = ({ poolId, canEdit = false }: AuctionDescriptionProps) => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-
+const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionDescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [inputValue, setInputValue] = useState(poolInfo?.description || 'No description')
 
@@ -54,7 +53,7 @@ const AuctionDescription = ({ poolId, canEdit = false }: AuctionDescriptionProps
             <ButtonBase
               disabled={isUpdating}
               onClick={() => {
-                update({ id: poolId, description: inputValue, posts: poolInfo?.posts || undefined })
+                update({ id: poolInfo.id, description: inputValue, posts: poolInfo?.posts || undefined })
               }}
             >
               <Typography color="#2663FF">Save</Typography>

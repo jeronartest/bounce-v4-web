@@ -1,54 +1,104 @@
-import { useRequest } from 'ahooks'
-import { useRouter } from 'next/router'
+import { Currency } from 'constants/token/currency'
+import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useMemo } from 'react'
+import { useSingleCallResult } from 'state/multicall/hooks'
+import { useBackedPoolInfo } from './usePoolInfo'
+import { useActiveWeb3React } from 'hooks'
+import { useFixedSwapNftContract } from 'hooks/useContract'
+import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
 
-import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import usePoolHistory from './useNftPoolHistory'
-import { getPoolInfo } from '@/api/pool'
-import { PoolType } from '@/api/pool/type'
+const useNftPoolInfo = () => {
+  const { poolId } = useQueryParams()
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
 
-const usePoolInfo = () => {
-  const router = useRouter()
-  const { poolId, chainShortName } = router.query
+  const fixedSwapNftContract = useFixedSwapNftContract()
+  const { account } = useActiveWeb3React()
+  const amountSwap0Res = useSingleCallResult(
+    fixedSwapNftContract,
+    'amountSwap0',
+    [poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const amountSwap1PRes = useSingleCallResult(
+    fixedSwapNftContract,
+    'amountSwap1',
+    [poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const creatorClaimedRes = useSingleCallResult(
+    fixedSwapNftContract,
+    'creatorClaimed',
+    [poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const myAmountSwapped0Res = useSingleCallResult(
+    fixedSwapNftContract,
+    'myAmountSwapped0',
+    [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const myAmountSwapped1Res = useSingleCallResult(
+    fixedSwapNftContract,
+    'myAmountSwapped1',
+    [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const myClaimedRes = useSingleCallResult(
+    fixedSwapNftContract,
+    'myClaimed',
+    [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
 
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName)
+  const data: FixedSwapNFTPoolProp | undefined = useMemo(() => {
+    if (!poolInfo) return undefined
+    const _t1 = poolInfo.token1
+    const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
 
-  const { run: getPoolHistory } = usePoolHistory()
-
-  return useRequest(
-    async () => {
-      if (typeof poolId !== 'string') {
-        return Promise.reject(new Error('Invalid poolId'))
-      }
-
-      const response = await getPoolInfo({
-        poolId,
-        category: PoolType.fixedSwapNft,
-        chainId: chainConfigInBackend?.id,
-      })
-
-      const rawPoolInfo = response.data.fixedSwapNftPool
-
-      return {
-        ...rawPoolInfo,
-        token0: {
-          ...rawPoolInfo.token0,
-          symbol: rawPoolInfo.token0.symbol.toUpperCase(),
-        },
-        token1: {
-          ...rawPoolInfo.token1,
-          symbol: rawPoolInfo.token1.symbol.toUpperCase(),
-        },
-      }
-    },
-    {
-      cacheKey: `POOL_INFO_${poolId}`,
-      ready: !!poolId && !!chainConfigInBackend?.id,
-      pollingInterval: 30000,
-      onSuccess: () => {
-        getPoolHistory()
+    return {
+      ...poolInfo,
+      token0: {
+        ...poolInfo.token0,
+        symbol: poolInfo.token0.symbol.toUpperCase()
       },
-    },
-  )
+      token1: {
+        ...poolInfo.token1,
+        symbol: poolInfo.token1.symbol.toUpperCase()
+      },
+      participant: {
+        ...poolInfo.participant,
+        claimed: myClaimedRes?.[0] || poolInfo.participant.claimed,
+        swappedAmount0: myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0 || '0',
+        currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0')
+      },
+      creatorClaimed: creatorClaimedRes?.[0] || poolInfo.creatorClaimed,
+      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
+      swappedAmount0: amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0',
+      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
+      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
+    }
+  }, [
+    amountSwap0Res,
+    amountSwap1PRes,
+    creatorClaimedRes,
+    myAmountSwapped0Res,
+    myAmountSwapped1Res,
+    myClaimedRes,
+    poolInfo
+  ])
+
+  return {
+    loading,
+    run: getPoolInfo,
+    data
+  }
 }
 
-export default usePoolInfo
+export default useNftPoolInfo
