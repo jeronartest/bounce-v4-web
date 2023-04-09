@@ -1,83 +1,73 @@
-import React, { useCallback, useMemo } from 'react'
-import { Button, Typography } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+import { Button } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import { parseUnits } from 'ethers/lib/utils.js'
-import PoolInfoItem from '../../PoolInfoItem'
-import TokenImage from 'bounceComponents/common/TokenImage'
 import NumberInput from 'bounceComponents/common/NumberInput'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import { formatNumber } from '@/utils/web3/number'
-import useToken1Balance from 'bounceHooks/auction/useToken1Balance'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
-import { getUserNftSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import { useActiveWeb3React } from 'hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { formatNumber } from 'utils/number'
 
 interface BidAmountInputProps {
   bidAmount: string
   setBidAmount: (value: string) => void
 }
 
-const BidAmountInput = ({ bidAmount, setBidAmount }: BidAmountInputProps) => {
-  const { data: poolInfo } = usePoolInfo()
+const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputProps & FixedSwapPoolParams) => {
+  const { account } = useActiveWeb3React()
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
 
-  const { token1Balance } = useToken1Balance()
-  const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-  const availableAmount1 = useMemo(() => poolInfo.currentTotal0, [poolInfo.currentTotal0])
+  const availableAmount0 = useMemo(() => poolInfo.currentTotal0, [poolInfo.currentTotal0])
 
   const hasBidLimit = new BigNumber(poolInfo.maxAmount1PerWallet).gt(0)
 
-  // const isJoined = useIsUserJoinedPool()
+  const userSwappedAmount0Units = useMemo(() => {
+    return poolInfo.participant.swappedAmount0 || 0
+  }, [poolInfo.participant.swappedAmount0])
 
-  const userSwappedAmount1Units = useMemo(() => {
-    return poolWithParticipantInfo?.participant.swappedAmount0 || 0
-  }, [poolWithParticipantInfo?.participant.swappedAmount0])
-
-  const leftAllocationToken1 = useMemo(
+  const leftAllocationToken0 = useMemo(
     () =>
       hasBidLimit
-        ? new BigNumber(poolInfo.maxAmount1PerWallet).gt(userSwappedAmount1Units)
-          ? new BigNumber(poolInfo.maxAmount1PerWallet).minus(userSwappedAmount1Units)
+        ? new BigNumber(poolInfo.maxAmount1PerWallet).gt(userSwappedAmount0Units)
+          ? new BigNumber(poolInfo.maxAmount1PerWallet).minus(userSwappedAmount0Units)
           : 0
-        : new BigNumber(poolInfo.amountTotal1),
-    [hasBidLimit, poolInfo.amountTotal1, poolInfo.maxAmount1PerWallet, userSwappedAmount1Units]
+        : new BigNumber(poolInfo.currentTotal0),
+    [hasBidLimit, poolInfo.currentTotal0, poolInfo.maxAmount1PerWallet, userSwappedAmount0Units]
   )
 
   const handleMaxButtonClick = useCallback(() => {
-    console.log('___ leftAmount1InPool: ', availableAmount1.toString())
-    console.log(
-      '___ token1Balance: ',
-      token1Balance.div(new BigNumber(10).pow(poolInfo.token1.decimals)).div(poolInfo.ratio).integerValue().toString()
-    )
-    console.log('___ leftAllocationToken1: ', leftAllocationToken1.toString(), leftAllocationToken1.toString().length)
+    if (!userToken1Balance) {
+      setBidAmount('0')
+      return
+    }
+
     const minimum = BigNumber.minimum(
-      token1Balance.div(new BigNumber(10).pow(poolInfo.token1.decimals)).div(poolInfo.ratio).integerValue(),
-      availableAmount1,
+      new BigNumber(userToken1Balance.toFixed(18)).div(poolInfo.ratio).integerValue(),
+      availableAmount0,
       poolInfo.amountTotal0,
-      leftAllocationToken1
+      leftAllocationToken0
     )
     const amount = minimum.toString()
     setBidAmount(amount)
-  }, [
-    availableAmount1,
-    leftAllocationToken1,
-    poolInfo.amountTotal0,
-    poolInfo.ratio,
-    poolInfo.token1.decimals,
-    setBidAmount,
-    token1Balance
-  ])
+  }, [availableAmount0, leftAllocationToken0, poolInfo.amountTotal0, poolInfo.ratio, setBidAmount, userToken1Balance])
+
   const setValueAble = useCallback(
     (value: string) => {
+      if (!userToken1Balance) {
+        setBidAmount('')
+        return
+      }
       const result = Math.round(Number(value)) + ''
       const minimum = BigNumber.minimum(
-        token1Balance.div(new BigNumber(10).pow(poolInfo.token1.decimals)).div(poolInfo.ratio).integerValue(),
-        availableAmount1,
-        leftAllocationToken1,
+        new BigNumber(userToken1Balance.toFixed(18)).div(poolInfo.ratio).integerValue(),
+        availableAmount0,
+        leftAllocationToken0,
         new BigNumber(result)
       )
       const amount = minimum.toString()
       setBidAmount(amount)
     },
-    [availableAmount1, leftAllocationToken1, poolInfo.ratio, poolInfo.token1.decimals, setBidAmount, token1Balance]
+    [availableAmount0, leftAllocationToken0, poolInfo.ratio, setBidAmount, userToken1Balance]
   )
   const formattedTokenWillPay = bidAmount
     ? formatNumber(new BigNumber(bidAmount).times(poolInfo.ratio), { unit: 0 })

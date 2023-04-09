@@ -1,7 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
-import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
@@ -10,6 +9,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import { shortenAddress } from 'utils'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -47,9 +47,7 @@ const BottomBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Elemen
           <PoolInfoItem title="Token symbol">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               <TokenImage
-                src={
-                  poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon.src
-                }
+                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
                 alt={poolInfo.token0.symbol}
                 size={20}
               />

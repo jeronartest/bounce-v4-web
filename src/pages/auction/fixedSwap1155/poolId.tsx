@@ -2,7 +2,6 @@ import { Box, Container, Stack } from '@mui/material'
 
 import CreatorMainBlock from 'bounceComponents/fixed-swap-nft/MainBlock/CreatorMainBlock'
 import CreatorInfoCard from 'bounceComponents/fixed-swap/CreatorInfoCard'
-import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import Header from 'bounceComponents/fixed-swap/Header'
 import UserMainBlock from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
@@ -10,6 +9,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import useNftPoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import ActionHistory from 'bounceComponents/fixed-swap-nft/ActionHistory'
 
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()

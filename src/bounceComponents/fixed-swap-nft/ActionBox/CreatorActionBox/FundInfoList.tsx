@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import PoolInfoItem from '../../PoolInfoItem'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -8,6 +7,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import { formatNumber } from 'utils/number'
 import { shortenAddress } from 'utils'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const TX_FEE_RATIO = 0.0
 // const TX_FEE_RATIO = 0.025

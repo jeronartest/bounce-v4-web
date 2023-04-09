@@ -157,6 +157,7 @@ const BidButton = ({ bidAmount, disabled, setAction, sx }: BidButtonProps): JSX.
       variant="contained"
       fullWidth
       sx={{ ...sx }}
+      loadingPosition="start"
       loading={isSwapping}
       disabled={disabled || poolInfo.status !== PoolStatus.Live}
       onClick={swap}

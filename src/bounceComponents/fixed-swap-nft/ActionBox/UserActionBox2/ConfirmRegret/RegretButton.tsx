@@ -1,4 +1,3 @@
-import React from 'react'
 import { LoadingButton } from '@mui/lab'
 
 export interface RegretButtonProps {
@@ -8,7 +7,14 @@ export interface RegretButtonProps {
 
 const RegretButton = ({ onClick, loading }: RegretButtonProps): JSX.Element => {
   return (
-    <LoadingButton variant="contained" fullWidth sx={{ mt: 24, mb: 12, px: 40 }} loading={loading} onClick={onClick}>
+    <LoadingButton
+      loadingPosition="start"
+      variant="contained"
+      fullWidth
+      sx={{ mt: 24, mb: 12, px: 40 }}
+      loading={loading}
+      onClick={onClick}
+    >
       Confirm
     </LoadingButton>
   )

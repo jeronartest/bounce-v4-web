@@ -111,7 +111,14 @@ const ClaimButton = () => {
   }
 
   return (
-    <LoadingButton variant="contained" fullWidth sx={{ mt: 32 }} onClick={userClaim} loading={isUserClaimming}>
+    <LoadingButton
+      variant="contained"
+      loadingPosition="start"
+      fullWidth
+      sx={{ mt: 32 }}
+      onClick={userClaim}
+      loading={isUserClaimming}
+    >
       Claim Token
     </LoadingButton>
   )

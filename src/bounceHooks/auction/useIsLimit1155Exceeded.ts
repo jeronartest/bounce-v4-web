@@ -1,53 +1,35 @@
-/* eslint-disable prettier/prettier */
 import { useMemo } from 'react'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
-import { parseUnits } from 'ethers/lib/utils.js'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
-// import { getUserSwappedAmount1, getUserSwappedUnits1 } from '@/utils/auction'
-import { getUserSwappedUnits1 } from '@/utils/auction'
 
-// const useUserSwappedAmount1Units = () => {
-//   const { data: poolInfo } = usePoolInfo()
+function useMaxSwapAmount0Limit(poolInfo: FixedSwapNFTPoolProp) {
+  const hasBidLimit = new BigNumber(poolInfo.maxAmount1PerWallet).gt(0)
+  const availableAmount0 = useMemo(() => poolInfo.currentTotal0, [poolInfo.currentTotal0])
 
-//   const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
+  const userSwappedAmount0Units = useMemo(() => {
+    return poolInfo.participant.swappedAmount0 || 0
+  }, [poolInfo.participant.swappedAmount0])
 
-//   return getUserSwappedUnits1(
-//     getUserSwappedAmount1(
-//       poolWithParticipantInfo?.participant.swappedAmount0,
-//       poolInfo.token0.decimals,
-//       poolInfo.token1.decimals,
-//       poolInfo.ratio,
-//     ),
-//     poolInfo.token1.decimals,
-//   )
-// }
+  const leftAllocationToken0 = useMemo(
+    () =>
+      hasBidLimit
+        ? new BigNumber(poolInfo.maxAmount1PerWallet).gt(userSwappedAmount0Units)
+          ? new BigNumber(poolInfo.maxAmount1PerWallet).minus(userSwappedAmount0Units)
+          : 0
+        : new BigNumber(poolInfo.currentTotal0),
+    [hasBidLimit, poolInfo.currentTotal0, poolInfo.maxAmount1PerWallet, userSwappedAmount0Units]
+  )
 
-const useToken1AllocationUnits = () => {
-    const { data: poolInfo } = usePoolInfo()
-
-    const hasBidLimit = new BigNumber(poolInfo.maxAmount1PerWallet).gt(0)
-
-    return hasBidLimit ? new BigNumber(poolInfo.maxAmount1PerWallet) : new BigNumber(poolInfo.amountTotal1)
+  return useMemo(() => {
+    const minimum = BigNumber.minimum(availableAmount0, poolInfo.amountTotal0, leftAllocationToken0)
+    return minimum.toString()
+  }, [availableAmount0, leftAllocationToken0, poolInfo.amountTotal0])
 }
 
-const useIsLimitExceeded = (bidAmount: string) => {
-    const { data: poolWithParticipantInfo } = usePoolWithParticipantInfo()
-    const userSwappedAmount1Units = new BigNumber(poolWithParticipantInfo?.participant.swappedAmount0)
-    const token1AllocationUnits = useToken1AllocationUnits()
-    const bidAmountUnits = new BigNumber(bidAmount)
+const useIsLimitExceeded1155 = (bidAmount: string, poolInfo: FixedSwapNFTPoolProp) => {
+  const token0Allocation = useMaxSwapAmount0Limit(poolInfo)
 
-    const isBidAmountGtLeftAllocationToken1 = bidAmountUnits.gt(token1AllocationUnits)
-
-    const isUserSwappedAmount1GteToken1Allocation = userSwappedAmount1Units.gte(token1AllocationUnits)
-
-    // console.log('isBidAmountGtLeftAllocationToken1: ', isBidAmountGtLeftAllocationToken1)
-    // console.log('isUserSwappedAmount1GteLeftAllocationToken1: ', isUserSwappedAmount1GteToken1Allocation)
-
-    return useMemo(
-        () => isBidAmountGtLeftAllocationToken1 || isUserSwappedAmount1GteToken1Allocation,
-        [isBidAmountGtLeftAllocationToken1, isUserSwappedAmount1GteToken1Allocation],
-    )
+  return useMemo(() => Number(bidAmount) > Number(token0Allocation), [bidAmount, token0Allocation])
 }
 
-export default useIsLimitExceeded
+export default useIsLimitExceeded1155

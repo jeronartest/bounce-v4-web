@@ -3,14 +3,14 @@ import { Box } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
 import JoinStatus from '../JoinStatus'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
 
-const Header = () => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+const Header = (props: FixedSwapPoolParams) => {
+  const { poolInfo, getPoolInfo } = props
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <JoinStatus />
+      <JoinStatus poolInfo={poolInfo} />
       <PoolStatusBox
         status={poolInfo.status}
         openTime={poolInfo.openAt}

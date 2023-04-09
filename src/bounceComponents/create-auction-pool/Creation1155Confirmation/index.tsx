@@ -110,7 +110,7 @@ const CreatePoolButton = () => {
         .then(poolId => {
           const goToPoolInfoPage = () => {
             navigate(
-              routes.auction.fixedPrice
+              routes.auction.fixedSwapNft
                 .replace(':chainShortName', chainConfigInBackend?.shortName || '')
                 .replace(':poolId', poolId)
             )

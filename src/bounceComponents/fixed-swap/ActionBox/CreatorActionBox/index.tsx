@@ -23,6 +23,7 @@ const CreatorActionBox = ({
           status={poolInfo.status}
           openTime={poolInfo.openAt}
           closeTime={poolInfo.closeAt}
+          claimAt={poolInfo.claimAt}
           onEnd={getPoolInfo}
         />
       </Box>

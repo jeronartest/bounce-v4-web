@@ -50,7 +50,8 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
       ready: !!poolId && !!chainConfigInBackend?.id,
       pollingInterval: 30000,
       refreshDeps: [account],
-      retryInterval: 5000
+      retryInterval: 10000,
+      retryCount: 20
     }
   )
 }

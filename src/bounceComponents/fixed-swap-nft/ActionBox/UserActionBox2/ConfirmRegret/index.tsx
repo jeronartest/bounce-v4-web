@@ -1,13 +1,9 @@
-import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import { ContractReceipt } from 'ethers'
-
-import { parseUnits } from 'ethers/lib/utils.js'
 import RegretButton from './RegretButton'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import { formatNumber } from '@/utils/web3/number'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import { CurrencyAmount } from 'constants/token'
 
 export interface ConfirmRegretProps {
   regretAmount: string
@@ -16,25 +12,25 @@ export interface ConfirmRegretProps {
   isRegretting?: boolean
 }
 
-const ConfirmRegret = ({ regretAmount, onCancel, handleRegret, isRegretting }: ConfirmRegretProps): JSX.Element => {
-  const { data: poolInfo } = usePoolInfo()
-
-  const formattedToken0RegretAmount = regretAmount
-    ? formatNumber(new BigNumber(regretAmount).toString(), {
-        unit: 0,
-        decimalPlaces: poolInfo.token0.decimals
-      })
-    : '0'
+const ConfirmRegret = ({
+  regretAmount,
+  onCancel,
+  handleRegret,
+  poolInfo,
+  isRegretting
+}: ConfirmRegretProps & FixedSwapPoolParams): JSX.Element => {
+  const formattedToken0RegretAmount = regretAmount || '0'
 
   const token1RegretAmount = regretAmount
-    ? formatNumber(new BigNumber(regretAmount).times(poolInfo.ratio).toString(), {
-        unit: 0,
-        decimalPlaces: poolInfo.token1.decimals
-      })
+    ? new BigNumber(formattedToken0RegretAmount).times(poolInfo.ratio).toString()
     : '0'
+  const currencyToken1RegretAmount = CurrencyAmount.fromAmount(
+    poolInfo.currencyAmountTotal1.currency,
+    token1RegretAmount
+  )
 
   return (
-    <Box sx={{ mt: 62 }}>
+    <Box sx={{ mt: 24 }}>
       <Box sx={{ border: '1px solid #D1D4D8', borderRadius: 20, px: 16, py: 16 }}>
         <Typography variant="h5">Confirmation</Typography>
         <PoolInfoItem title="Regret amount" sx={{ mt: 8 }}>
@@ -44,7 +40,7 @@ const ConfirmRegret = ({ regretAmount, onCancel, handleRegret, isRegretting }: C
         </PoolInfoItem>
         <PoolInfoItem title="Bid you want to regret" sx={{ mt: 8 }}>
           <Typography>
-            {token1RegretAmount} {poolInfo.token1.symbol}
+            {currencyToken1RegretAmount?.toSignificant() || '-'} {poolInfo.token1.symbol}
           </Typography>
         </PoolInfoItem>
       </Box>

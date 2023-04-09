@@ -325,7 +325,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
 
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
 
-      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton poolInfo={poolInfo} getPoolInfo={getPoolInfo} />}
+      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
 
       {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />}
     </Box>

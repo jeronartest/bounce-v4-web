@@ -12,6 +12,6 @@ export default useIsUserJoinedPool
 
 export function useIsUserJoined1155Pool(poolInfo: FixedSwapNFTPoolProp) {
   return useMemo(() => {
-    return poolInfo.participant && Number(poolInfo.participant.swappedAmount0) > 0
+    return poolInfo?.participant && Number(poolInfo.participant.swappedAmount0) > 0
   }, [poolInfo])
 }

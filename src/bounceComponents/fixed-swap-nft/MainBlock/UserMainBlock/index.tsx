@@ -6,7 +6,6 @@ import Alert from './Alert'
 import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
 import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
-import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 export interface NftCardParams {
   nft: FixedSwapNFTPoolProp
@@ -188,7 +187,7 @@ export const NftCard = (props: NftCardParams) => {
 }
 
 export interface FixedSwapPoolParams {
-  poolInfo: PoolInfoProp
+  poolInfo: FixedSwapNFTPoolProp
   getPoolInfo?: () => void
 }
 const UserMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
@@ -202,7 +201,7 @@ const UserMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
       <Box sx={{ display: 'flex', columnGap: 65, marginBottom: 30 }}>
         {/* <UserActionBox /> */}
         <NftCard nft={poolInfo} suspicious={!!nftGoInfo?.data?.suspicious} />
-        {/* <UserActionBox2 poolInfo={poolInfo} /> */}
+        <UserActionBox2 poolInfo={poolInfo} />
       </Box>
       <BottomBox poolInfo={poolInfo} />
     </Box>

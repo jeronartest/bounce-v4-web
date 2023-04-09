@@ -104,6 +104,7 @@ const RefundButton = ({
     <LoadingButton
       variant="contained"
       fullWidth
+      loadingPosition="start"
       sx={{ mt: 24, mb: 12, px: 40 }}
       loading={isRefunding}
       disabled={disabled || poolInfo.status !== PoolStatus.Live}

@@ -1,16 +1,9 @@
 import { useCountDown } from 'ahooks'
 import { Box, Button, Typography } from '@mui/material'
-import { FixedSwapPoolProp } from 'api/pool/type'
 
-const ClaimingCountdownButton = ({
-  poolInfo,
-  getPoolInfo
-}: {
-  poolInfo: FixedSwapPoolProp
-  getPoolInfo: () => void
-}) => {
+const ClaimingCountdownButton = ({ claimAt, getPoolInfo }: { claimAt: number; getPoolInfo?: () => void }) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: poolInfo.claimAt * 1000,
+    targetDate: claimAt * 1000,
     onEnd: getPoolInfo
   })
 

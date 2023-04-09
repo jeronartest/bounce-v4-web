@@ -12,8 +12,9 @@ const useNftGoApi = (contract_address: string, tokenId: number | string) => {
             return response
         },
         {
+          cacheKey: `${contract_address}_${tokenId}`,
             ready: !!contract_address && !!tokenId,
-            pollingInterval: 30000,
+            // pollingInterval: 30000,
         },
     )
 }

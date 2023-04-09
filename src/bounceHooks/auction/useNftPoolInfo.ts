@@ -81,7 +81,6 @@ const useNftPoolInfo = () => {
       creatorClaimed: creatorClaimedRes?.[0] || poolInfo.creatorClaimed,
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       swappedAmount0: amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0',
-      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
     }
   }, [

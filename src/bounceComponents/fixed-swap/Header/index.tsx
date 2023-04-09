@@ -5,7 +5,7 @@ import { LIKE_OBJ } from 'api/idea/type'
 import { ChainListMap } from 'constants/chain'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
-import { PoolInfoProp } from '../type'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
 
 const styles = {
   p: '7px 16px',
@@ -16,7 +16,7 @@ const styles = {
   }
 }
 
-const Header = ({ poolInfo, getPoolInfo }: { poolInfo: PoolInfoProp; getPoolInfo: () => void }): JSX.Element => {
+const Header = ({ poolInfo, getPoolInfo }: FixedSwapPoolParams): JSX.Element => {
   const { userId } = useUserInfo()
   if (!poolInfo.ethChainId) return <></>
   return (

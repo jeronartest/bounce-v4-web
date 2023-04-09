@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Box } from '@mui/material'
 import moment from 'moment'
-import { BigNumber } from 'bignumber.js'
-import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import SuspiciousTips from '../SuspiciousStatisTip'
-import BidOrRegret from './BidOrRegret'
-import Check from './Check'
 import InputRegretAmount from './InputRegretAmount'
 import ConfirmRegret from './ConfirmRegret'
 import Bid from './Bid'
-import ClaimingCountdownButton from './ClaimingCountdownButton'
-import ClaimButton from './ClaimButton'
-import usePlaceBid from 'bounceHooks/auction/use1155PlaceBid'
-import useRegretBid from 'bounceHooks/auction/use1155RegretBid'
-import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoined1155Pool'
-import useIsCurrentChainEqualChainOfPool from 'bounceHooks/auction/useIsCurrentChainEqualChainOfPool'
-import { PoolStatus } from '@/api/pool/type'
-import useIsUserClaimedPool from 'bounceHooks/auction/useIsUserClaimed1155Pool'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import useUserClaim from 'bounceHooks/auction/use1155UserClaim'
-import { fixToDecimals } from '@/utils/web3/number'
+import usePlaceBid1155 from 'bounceHooks/auction/usePlaceBid1155'
+import useRegretBid1155 from 'bounceHooks/auction/useRegretBid1155'
+import { PoolStatus } from 'api/pool/type'
+import useUserClaim1155 from 'bounceHooks/auction/useUserClaim1155'
 import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import { useActiveWeb3React } from 'hooks'
+import { useIsUserJoined1155Pool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import Check from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/Check'
+import BidOrRegret from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidOrRegret'
+import ClaimingCountdownButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimingCountdownButton'
+import ClaimButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimButton'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -58,7 +58,7 @@ const getInitialAction = (
       if (isClaimed) {
         return 'CLAIMED'
       } else {
-        if (moment().unix() > claimAt) {
+        if (moment().unix() > (claimAt || 0)) {
           return 'NEED_TO_CLAIM'
         } else {
           return 'WAIT_FOR_DELAY'
@@ -73,48 +73,150 @@ const getInitialAction = (
 
 export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
-const ActionBlock = () => {
-  const { data: poolInfo } = usePoolInfo()
+const ActionBlock = (props: FixedSwapPoolParams) => {
+  const { poolInfo, getPoolInfo } = props
+  const { chainId } = useActiveWeb3React()
   const nftGoInfo = useNftGoApi(poolInfo.contract, poolInfo.tokenId)
 
-  const isCurrentChainEqualChainOfPool = useIsCurrentChainEqualChainOfPool()
-  const isJoined = useIsUserJoinedPool()
-  const isUserClaimed = useIsUserClaimedPool()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
+  const isJoined = useIsUserJoined1155Pool(poolInfo)
+  const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
 
   const [action, setAction] = useState<UserAction>()
   const [bidAmount, setBidAmount] = useState('')
   const [regretAmount, setRegretAmount] = useState('')
-  // don't calculation value here, just calculation (value = bidAmount * ratio) before Swap
-  const slicedBidAmount = bidAmount
-    ? // ? fixToDecimals(new BigNumber(bidAmount).times(poolInfo.ratio).toString(), poolInfo.token1.decimals).toString()
-      new BigNumber(bidAmount).toString()
-    : ''
-  const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token0.decimals).toString() : ''
 
-  const { run: bid, loading: isBidding } = usePlaceBid({
-    onSuccess: () => {
-      setAction('BID_OR_REGRET')
-    }
-  })
-  const { run: regret, loading: isRegretting } = useRegretBid({
-    onRegretAll: () => {
-      console.log('onRegretAll')
-      setAction('FIRST_BID')
-    },
-    onRegretPart: () => {
-      console.log('onRegretPart')
-      setAction('BID_OR_REGRET')
-    }
-  })
-  const { run: claim, loading: isClaiming } = useUserClaim({
-    onSuccess: () => {
-      setAction('CLAIMED')
-    }
-  })
+  const slicedRegretAmount = regretAmount || ''
 
-  // console.log('action: ', action)
-  // console.log('isJoined: ', isJoined)
-  // console.log('isUserClaimed: ', isUserClaimed)
+  const { run: bid, submitted: placeBidSubmitted } = usePlaceBid1155(poolInfo)
+  const toBid = useCallback(async () => {
+    if (!bidAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await bid(bidAmount)
+      setBidAmount('')
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          // TOTD ?
+          setAction('BID_OR_REGRET')
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid ${bidAmount} ${poolInfo.token0.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [bid, bidAmount, poolInfo.token0.symbol])
+
+  const { run: regret, submitted: regretBidSubmitted } = useRegretBid1155(poolInfo)
+  const toRegret = useCallback(async () => {
+    if (!regretAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await regret(regretAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+          setAction('INPUT_REGRET_AMOUNT')
+          setRegretAmount('')
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          setRegretAmount('')
+          setAction('INPUT_REGRET_AMOUNT')
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully refunded.`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toRegret
+      })
+    }
+  }, [regret, regretAmount])
+
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim1155(poolInfo)
+  const toClaim = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await claim()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          setAction('CLAIMED')
+
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully claimed ${poolInfo.participant.swappedAmount0} ${poolInfo.token0.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toClaim
+      })
+    }
+  }, [claim, poolInfo.participant.swappedAmount0, poolInfo.token0.symbol])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
@@ -139,6 +241,7 @@ const ActionBlock = () => {
       setRegretAmount('')
     }
   }, [action])
+
   return (
     <Box sx={{ mt: 32 }}>
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
@@ -152,10 +255,9 @@ const ActionBlock = () => {
           handleCancelButtonClick={() => {
             setAction('BID_OR_REGRET')
           }}
-          handlePlaceBid={() => {
-            bid(slicedBidAmount)
-          }}
-          isBidding={isBidding}
+          handlePlaceBid={toBid}
+          poolInfo={poolInfo}
+          isBidding={placeBidSubmitted.submitted}
         />
       )}
 
@@ -183,6 +285,8 @@ const ActionBlock = () => {
           regretAmount={regretAmount}
           slicedRegretAmount={slicedRegretAmount}
           setRegretAmount={setRegretAmount}
+          poolInfo={poolInfo}
+          isRegretting={regretBidSubmitted.submitted}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}
@@ -194,14 +298,15 @@ const ActionBlock = () => {
 
       {action === 'CONFIRM_REGRET' && (
         <ConfirmRegret
+          poolInfo={poolInfo}
           regretAmount={regretAmount}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}
           handleRegret={() => {
-            regret(slicedRegretAmount)
+            toRegret()
           }}
-          isRegretting={isRegretting}
+          isRegretting={regretBidSubmitted.submitted}
         />
       )}
 
@@ -209,16 +314,9 @@ const ActionBlock = () => {
 
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
 
-      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton />}
+      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
 
-      {action === 'NEED_TO_CLAIM' && (
-        <ClaimButton
-          onClick={() => {
-            claim()
-          }}
-          loading={isClaiming}
-        />
-      )}
+      {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />}
       {!!nftGoInfo?.data?.suspicious && <SuspiciousTips />}
     </Box>
   )

@@ -1,18 +1,17 @@
 import { useRequest } from 'ahooks'
 
-import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import { getPoolHistory } from '@/api/pool'
-import { PoolType } from '@/api/pool/type'
+import { getPoolHistory } from 'api/pool'
+import { PoolType } from 'api/pool/type'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useActiveWeb3React } from 'hooks'
 
 const usePoolHistory = () => {
-  const router = useRouter()
-  const { poolId, chainShortName } = router.query
+  const { poolId, chainShortName } = useQueryParams()
 
-  const { address: account, isConnected } = useAccount()
+  const { account } = useActiveWeb3React()
 
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName)
+  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
 
   return useRequest(
     async () => {
@@ -23,18 +22,18 @@ const usePoolHistory = () => {
       const response = await getPoolHistory({
         poolId,
         category: PoolType.fixedSwapNft,
-        chainId: chainConfigInBackend?.id,
-        address: account,
+        chainId: chainConfigInBackend?.id || 0,
+        address: account || ''
       })
 
       return response.data
     },
     {
-      cacheKey: `POOL_HISTORY_${account}`,
+      // cacheKey: `POOL_HISTORY_${account}`,
       ready: !!poolId && !!chainConfigInBackend?.id,
-      // pollingInterval: 10000,
-      refreshDeps: [account, isConnected],
-    },
+      pollingInterval: 30000,
+      refreshDeps: [account]
+    }
   )
 }
 

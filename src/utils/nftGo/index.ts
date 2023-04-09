@@ -1,3 +1,4 @@
+// !todo chainId?
 export const getNftInfoByNftGo = async (contract_address: string, tokenId: number | string) => {
   const serviceResp = await fetch(`https://data-api.nftgo.io/eth/v1/nft/${contract_address}/${tokenId}/info`, {
     method: 'get',

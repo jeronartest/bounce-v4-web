@@ -1,32 +1,22 @@
-import React from 'react'
 import { Divider, Stack, Typography } from '@mui/material'
 import moment from 'moment'
 import { useCountDown } from 'ahooks'
 
-import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { formatNumber } from '@/utils/web3/number'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import usePoolWithParticipantInfo from 'bounceHooks/auction/use1155PoolWithParticipantInfo'
-import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoined1155Pool'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
-const InfoList = () => {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const { data: poolWithParticipantInfo, loading: isPoolWithParticipantInfoLoading } = usePoolWithParticipantInfo()
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { formatNumber } from 'utils/number'
+import { useIsUserJoined1155Pool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { shortenAddress } from 'utils'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 
-  const formatedSwappedAmount0 =
-    !isPoolWithParticipantInfoLoading && !poolWithParticipantInfo
-      ? '-'
-      : // participant.swappedAmount0 from API could be empty string
-      poolWithParticipantInfo?.participant.swappedAmount0
-      ? poolWithParticipantInfo?.participant.swappedAmount0
-      : '0'
-  // ? formatNumber(poolWithParticipantInfo?.participant.swappedAmount0, {
-  //     unit: poolWithParticipantInfo.token0.decimals,
-  //   })
-  // : '0'
+const InfoList = (props: FixedSwapPoolParams) => {
+  const { poolInfo, getPoolInfo } = props
 
-  const isJoined = useIsUserJoinedPool()
+  const formatedSwappedAmount0 = !poolInfo ? '-' : poolInfo?.participant.swappedAmount0 || '0'
+
+  const isJoined = useIsUserJoined1155Pool(poolInfo)
   const isClaimmingDelayed = poolInfo.claimAt > poolInfo.closeAt
   const formattedClaimTime = moment(poolInfo.claimAt * 1000).format('MMM D, YYYY hh:mm A')
 
@@ -42,9 +32,7 @@ const InfoList = () => {
             <Typography>1</Typography>
             <TokenImage
               alt={poolInfo.token0.symbol}
-              src={
-                poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon.src
-              }
+              src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
               size={20}
             />
             <Typography>
@@ -60,12 +48,17 @@ const InfoList = () => {
             <Typography>{formatedSwappedAmount0}</Typography>
             <TokenImage
               alt={poolInfo.token0.symbol}
-              src={
-                poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon.src
-              }
+              src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
               size={20}
             />
             <Typography>{poolInfo.token0.symbol}</Typography>
+          </Stack>
+        </PoolInfoItem>
+
+        <PoolInfoItem title="Creator wallet address">
+          <Stack direction="row" spacing={6}>
+            <Typography>{shortenAddress(poolInfo.creator)}</Typography>
+            <CopyToClipboard text={poolInfo.creator} />
           </Stack>
         </PoolInfoItem>
 

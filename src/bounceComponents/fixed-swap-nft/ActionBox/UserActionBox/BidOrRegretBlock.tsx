@@ -1,7 +1,5 @@
-import { Box, Button, Divider, Stack, Typography } from '@mui/material'
-import { useCountDown } from 'ahooks'
+import { Box, Button, Stack } from '@mui/material'
 import React from 'react'
-import PoolInfoItem from '../../PoolInfoItem'
 import { ActionState } from '.'
 
 export interface BidOrRegretBlockProps {

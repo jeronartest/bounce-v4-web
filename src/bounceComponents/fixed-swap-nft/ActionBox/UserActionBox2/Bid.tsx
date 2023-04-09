@@ -1,12 +1,12 @@
-import React from 'react'
 import { Box, Typography } from '@mui/material'
-import Balance from './Balance'
 import BidAmountInput from './BidAmountInput'
 import BidButtonBlock from './BidButtonBlock'
-import BidAmountLimit from './BidAmountLimit'
 import { UserBidAction } from './ActionBlock'
-import usePoolInfo from 'bounceHooks/auction/useNftPoolInfo'
-import { checkIfAllocationLimitExist } from '@/utils/auction'
+import { checkIfAllocationLimitExist } from 'utils/auction'
+import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import { useActiveWeb3React } from 'hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 interface BidProps {
   action: UserBidAction
@@ -25,21 +25,38 @@ const Bid = ({
   handleGoToCheck,
   handleCancelButtonClick,
   handlePlaceBid,
+  poolInfo,
   isBidding
-}: BidProps) => {
-  const { data: poolInfo } = usePoolInfo()
+}: BidProps & FixedSwapPoolParams) => {
   const isAllocationLimitExist = checkIfAllocationLimitExist(poolInfo.maxAmount1PerWallet)
+  const { account } = useActiveWeb3React()
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
 
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h5">Your Bid Amount</Typography>
-        <Balance />
+        <Typography>
+          Balance: {userToken1Balance?.toSignificant()} {poolInfo.token1.symbol}
+        </Typography>
       </Box>
 
-      <BidAmountInput bidAmount={bidAmount} setBidAmount={setBidAmount} />
+      <BidAmountInput poolInfo={poolInfo} bidAmount={bidAmount} setBidAmount={setBidAmount} />
 
-      {isAllocationLimitExist && <BidAmountLimit bidAmount={bidAmount} />}
+      {isAllocationLimitExist && (
+        <PoolInfoItem
+          title="Bid amount limit"
+          sx={{
+            mt: 8,
+            color:
+              bidAmount && poolInfo.maxAmount1PerWallet && Number(bidAmount) > Number(poolInfo.maxAmount1PerWallet)
+                ? '#F53030'
+                : 'black'
+          }}
+        >
+          {bidAmount || 0} NFT / {poolInfo.maxAmount1PerWallet || '-'}&nbsp; NFT
+        </PoolInfoItem>
+      )}
 
       <BidButtonBlock
         action={action}
@@ -48,6 +65,7 @@ const Bid = ({
         isBidding={isBidding}
         handleGoToCheck={handleGoToCheck}
         handleCancelButtonClick={handleCancelButtonClick}
+        poolInfo={poolInfo}
       />
     </>
   )
