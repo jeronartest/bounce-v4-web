@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { IResponse } from './type'
 import store from 'state'
-import { removeLoginInfo } from 'state/users/reducer'
+import { removeLoginInfo, removeUserInfo } from 'state/users/reducer'
 
 const request = (url: string, options?: any) => {
   // TODO: add request/response interceptors
@@ -9,6 +9,7 @@ const request = (url: string, options?: any) => {
     if (response.status === 401) {
       toast.error('Login has expired, please login again.')
       store.dispatch(removeLoginInfo())
+      store.dispatch(removeUserInfo())
       location.href = '/login'
       setTimeout(() => {
         window.location.reload()

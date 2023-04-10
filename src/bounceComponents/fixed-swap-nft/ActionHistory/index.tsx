@@ -63,7 +63,7 @@ const ActionHistory = () => {
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
-        Action History
+        Auction History
       </Typography>
 
       {data && data?.list.length > 0 && !isGettingPoolHistory ? (
