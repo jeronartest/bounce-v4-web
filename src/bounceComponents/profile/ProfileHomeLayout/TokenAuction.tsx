@@ -1,9 +1,9 @@
 import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
-import { FixedSwapPool } from 'api/pool/type'
+import { FixedSwapPool, PoolType } from 'api/pool/type'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import { IProfileUserInfo } from 'api/user/type'
@@ -21,6 +21,7 @@ const defaultPageSize = 3
 const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
+  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
 
   const {
     pagination,
@@ -28,7 +29,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     loading
   } = usePagination<IAuctionPoolsItems<FixedSwapPool>, Params>(
     async ({ current, pageSize }) => {
-      const category = 1
+      const category = curPoolType
       const resp = await getPools({
         offset: (current - 1) * pageSize,
         limit: pageSize,
@@ -47,6 +48,11 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
           list: resp.data.dutchPoolList.list,
           total: resp.data.dutchPoolList.total
         }
+      } else if (category === PoolType.fixedSwapNft) {
+        return {
+          list: resp.data.fixedSwapNftList.list,
+          total: resp.data.fixedSwapNftList.total
+        }
       } else if (category === 3) {
         return {
           list: resp.data.lotteryPoolList.list,
@@ -61,13 +67,11 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     },
     {
       defaultPageSize,
-      refreshDeps: [userInfo.id, curChain]
+      refreshDeps: [userInfo.id, curChain, curPoolType]
     }
   )
 
-  const handlePageChange = (_: any, p: number) => {
-    pagination.changeCurrent(p)
-  }
+  const handlePageChange = useCallback((_: any, p: number) => pagination.changeCurrent(p), [pagination])
 
   return (
     <Box mx={12} mb={48} p={'40px 30px 48px 36px'}>
@@ -75,7 +79,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
         <Typography fontFamily={'"Sharp Grotesk DB Cyr Medium 22"'} fontSize={24}>
           Token & NFT Auction
         </Typography>
-        <Stack>
+        <Stack direction={'row'} spacing={15}>
           <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
             <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
               <MenuItem key={0} value={0}>
@@ -86,6 +90,16 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
                   {item.chainName}
                 </MenuItem>
               ))}
+            </Select>
+          </FormItem>
+          <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
+            <Select
+              defaultValue={PoolType.FixedSwap}
+              value={curPoolType}
+              onChange={e => setCurPoolType(e.target.value as PoolType)}
+            >
+              <MenuItem value={PoolType.FixedSwap}>Fixed Price</MenuItem>
+              <MenuItem value={PoolType.fixedSwapNft}>Fixed Swap NFT</MenuItem>
             </Select>
           </FormItem>
         </Stack>
