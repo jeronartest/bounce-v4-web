@@ -35,7 +35,7 @@ export interface GetUserPoolsDashboardStatRes {
 
 export interface GetAddressActivitiesParams {
   address: string
-  category?: PoolType // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
+  category: PoolType // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
   chainId: number
   limit?: number
   offset?: number

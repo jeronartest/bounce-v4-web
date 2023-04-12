@@ -1,6 +1,6 @@
 import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { usePagination } from 'ahooks'
 import NoData from 'bounceComponents/common/NoData'
@@ -8,10 +8,14 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
-import { FixedSwapPool } from 'api/pool/type'
+import { FixedSwapPool, PoolType } from 'api/pool/type'
 import { getUserPoolsTokenParticipant } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
 import { useActiveWeb3React } from 'hooks'
+import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+import { NFTCard } from 'pages/market/nftAuctionPool'
+import { routes } from 'constants/routes'
+import { getLabelById } from 'utils'
 
 const defaultPageSize = 6
 
@@ -20,6 +24,7 @@ export default function ParticipatedTab() {
   const [curChain, setCurChain] = useState(0)
   const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
   const { account } = useActiveWeb3React()
+  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
 
   const {
     pagination,
@@ -32,7 +37,7 @@ export default function ParticipatedTab() {
           total: 0,
           list: []
         }
-      const category = 1
+      const category = curPoolType
       const resp: any = await getUserPoolsTokenParticipant({
         offset: (current - 1) * pageSize,
         limit: pageSize,
@@ -43,13 +48,18 @@ export default function ParticipatedTab() {
       })
       if (category === 1) {
         return {
-          list: resp.data.fixedSwapList.list,
+          list: resp.data.fixedSwapList.list.map((item: any) => Object.assign(item, { category })),
           total: resp.data.fixedSwapList.total
         }
       } else if (category === 2) {
         return {
           list: resp.data.dutchPoolList.list,
           total: resp.data.dutchPoolList.total
+        }
+      } else if (category === PoolType.fixedSwapNft) {
+        return {
+          list: resp.data.fixedSwapNftList.list.map((item: any) => Object.assign(item, { category })),
+          total: resp.data.fixedSwapNftList.total
         }
       } else if (category === 3) {
         return {
@@ -66,10 +76,15 @@ export default function ParticipatedTab() {
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain, queryType],
+      refreshDeps: [account, curChain, curPoolType, queryType],
       debounceWait: 100
     }
   )
+
+  useEffect(() => {
+    pagination.changeCurrent(1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, curPoolType, queryType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -100,6 +115,7 @@ export default function ParticipatedTab() {
               <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
             </Select>
           </FormItem>
+          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
       </Box>
 
@@ -121,7 +137,22 @@ export default function ParticipatedTab() {
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
-                  <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                  {auctionPoolItem.category === PoolType.FixedSwap ? (
+                    <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                  ) : (
+                    <Box
+                      component={'a'}
+                      target="_blank"
+                      href={routes.auction.fixedSwapNft
+                        .replace(
+                          ':chainShortName',
+                          getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                        )
+                        .replace(':poolId', auctionPoolItem.poolId)}
+                    >
+                      <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
+                    </Box>
+                  )}
                 </Grid>
               ))}
             </Grid>

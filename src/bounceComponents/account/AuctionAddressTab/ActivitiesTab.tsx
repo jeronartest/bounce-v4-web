@@ -17,11 +17,11 @@ import {
 import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
-import { PoolEvent } from 'api/pool/type'
+import { PoolEvent, PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FormItem from 'bounceComponents/common/FormItem'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { usePagination } from 'ahooks'
@@ -34,6 +34,7 @@ import { ChainListMap } from 'constants/chain'
 import Image from 'components/Image'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ZERO_ADDRESS } from '../../../constants'
+import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -79,6 +80,7 @@ const ActivitiesTab = () => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const { account } = useActiveWeb3React()
+  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
 
   const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
     async ({ current, pageSize }) => {
@@ -87,7 +89,7 @@ const ActivitiesTab = () => {
           total: 0,
           list: []
         }
-      const category = 1
+      const category = curPoolType
       const resp = await getAddressActivities({
         offset: (current - 1) * pageSize,
         limit: pageSize,
@@ -104,7 +106,8 @@ const ActivitiesTab = () => {
             currency0Amount: CurrencyAmount.fromRawAmount(
               new Currency(ethChainId, ZERO_ADDRESS, i.token0Decimals, i.token0Symbol),
               i.token0Amount
-            )
+            ),
+            category
           }
         }),
         total: resp.data.total
@@ -113,10 +116,15 @@ const ActivitiesTab = () => {
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain],
+      refreshDeps: [account, curChain, curPoolType],
       debounceWait: 100
     }
   )
+
+  useEffect(() => {
+    pagination.changeCurrent(1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, curPoolType, curPoolType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -138,6 +146,7 @@ const ActivitiesTab = () => {
               ))}
             </Select>
           </FormItem>
+          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
       </Box>
       {loading ? (
@@ -165,7 +174,11 @@ const ActivitiesTab = () => {
                     <Image src={record.ethChainId ? ChainListMap[record.ethChainId]?.logo || '' : ''} width="24px" />
                   </StyledTableCell>
                   <StyledTableCell>#{record.poolId}</StyledTableCell>
-                  <StyledTableCell>Token Fixed Price Auction</StyledTableCell>
+                  <StyledTableCell>
+                    {record.category === PoolType.fixedSwapNft
+                      ? 'NFT Fixed Price Auction'
+                      : 'Token Fixed Price Auction'}
+                  </StyledTableCell>
                   <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
                   <StyledTableCell>
                     {record.currency0Amount?.toSignificant(6)}

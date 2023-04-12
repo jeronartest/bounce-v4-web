@@ -10,6 +10,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { PoolType } from 'api/pool/type'
+import { routes } from 'constants/routes'
+import { getLabelById } from 'utils'
+import { NFTCard } from 'pages/market/nftAuctionPool'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const StatusText = {
   [DashboardQueryType.ongoing]: 'Ongoing Auctions',
@@ -22,6 +26,7 @@ export default function CurrentPoolStatus() {
   const { account } = useActiveWeb3React()
   const [curPage, setCurPage] = useState(1)
   const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const optionDatas = useOptionDatas()
 
   const { data: createdData, loading: createdLoading } = useUserPoolsTokenCreated(
     account || undefined,
@@ -110,7 +115,22 @@ export default function CurrentPoolStatus() {
                 .slice((curPage - 1) * defaultPageSize, curPage * defaultPageSize)
                 .map((auctionPoolItem, index) => (
                   <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
-                    <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                    {auctionPoolItem.category === PoolType.FixedSwap ? (
+                      <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                    ) : (
+                      <Box
+                        component={'a'}
+                        target="_blank"
+                        href={routes.auction.fixedSwapNft
+                          .replace(
+                            ':chainShortName',
+                            getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                          )
+                          .replace(':poolId', auctionPoolItem.poolId)}
+                      >
+                        <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
+                      </Box>
+                    )}
                   </Grid>
                 ))}
             </Grid>
