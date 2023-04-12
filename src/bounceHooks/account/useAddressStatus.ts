@@ -18,7 +18,8 @@ export function useUserPoolsTokenCreated(
         category: category || 1,
         limit: 100
       })
-      return response.data.fixedSwapList.list as FixedSwapPool[]
+      return response.data[category === PoolType.fixedSwapNft ? 'fixedSwapNftList' : 'fixedSwapList']
+        .list as FixedSwapPool[]
     },
     {
       refreshDeps: [address, queryType, category],
@@ -42,7 +43,8 @@ export function useUserPoolsTokenParticipant(
         category: category || 1,
         limit: 100
       })
-      return response.data.fixedSwapList.list as FixedSwapPool[]
+      return response.data[category === PoolType.fixedSwapNft ? 'fixedSwapNftList' : 'fixedSwapList']
+        .list as FixedSwapPool[]
     },
     { refreshDeps: [address, queryType, category], debounceWait: 100 }
   )

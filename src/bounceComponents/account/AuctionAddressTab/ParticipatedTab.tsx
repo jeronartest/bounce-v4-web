@@ -48,7 +48,7 @@ export default function ParticipatedTab() {
       })
       if (category === 1) {
         return {
-          list: resp.data.fixedSwapList.list.map((item: any) => Object.assign(item, { category })),
+          list: resp.data.fixedSwapList.list,
           total: resp.data.fixedSwapList.total
         }
       } else if (category === 2) {
@@ -58,7 +58,7 @@ export default function ParticipatedTab() {
         }
       } else if (category === PoolType.fixedSwapNft) {
         return {
-          list: resp.data.fixedSwapNftList.list.map((item: any) => Object.assign(item, { category })),
+          list: resp.data.fixedSwapNftList.list,
           total: resp.data.fixedSwapNftList.total
         }
       } else if (category === 3) {
