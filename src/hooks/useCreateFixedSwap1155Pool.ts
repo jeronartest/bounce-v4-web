@@ -123,16 +123,20 @@ export function useCreateFixedSwap1155Pool() {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenId: signatureParams.tokenId,
+      tokenId: [signatureParams.tokenId],
       amountTotal0: signatureParams.amountTotal0,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
-      claimAt: signatureParams.claimAt,
       closeAt: signatureParams.closeAt,
+      claimAt: signatureParams.claimAt,
       isERC721: false,
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
+    console.log(
+      '🚀 ~ file: useCreateFixedSwap1155Pool.ts:136 ~ returnuseCallback ~ contractCallParams:',
+      contractCallParams
+    )
 
     const args = [contractCallParams, expiredTime, signature]
 
