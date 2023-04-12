@@ -8,6 +8,7 @@ export interface ICacheLoginInfo {
   token: string
   userId: string | number
   userType: USER_TYPE | string
+  address: string
 }
 
 export const fetchUserInfo: any = createAsyncThunk('users/fetchUserInfo', async (params: IUserInfoParams) => {
@@ -26,7 +27,8 @@ const initialState: ICacheLoginInfo & {
 } = {
   token: '',
   userId: 0,
-  userType: 0,
+  userType: '0',
+  address: '',
   userInfo: null,
   companyInfo: null
 }
@@ -39,11 +41,13 @@ export const userInfoSlice = createSlice({
       state.token = payload.token
       state.userId = payload.userId
       state.userType = payload.userType
+      state.address = payload.address
     },
     removeLoginInfo: state => {
       state.token = ''
       state.userId = 0
       state.userType = ''
+      state.address = ''
     },
     removeUserInfo: state => {
       state.userInfo = null

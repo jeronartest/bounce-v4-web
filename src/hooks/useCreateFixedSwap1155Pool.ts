@@ -11,7 +11,6 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
-import { useSignMessage } from './useWeb3Instance'
 import { useFixedSwapNftContract } from './useContract'
 import { getEventLog } from './useCreateFixedSwapPool'
 
@@ -39,7 +38,6 @@ export function useCreateFixedSwap1155Pool() {
   const { currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
-  const makeSignature = useSignMessage()
 
   return useCallback(async (): Promise<{
     hash: string
@@ -85,11 +83,6 @@ export function useCreateFixedSwap1155Pool() {
       return Promise.reject('no contract')
     }
 
-    const walletSignatureMessage = 'Create pool signature for Bounce'
-
-    const walletSignature = await makeSignature(walletSignatureMessage)
-    if (!walletSignature) throw new Error('Signature error')
-
     let merkleroot = ''
 
     if (params.whitelist.length > 0) {
@@ -119,9 +112,7 @@ export function useCreateFixedSwap1155Pool() {
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      tokenId: params.tokenId,
-      signature: walletSignature,
-      message: walletSignatureMessage
+      tokenId: params.tokenId
     }
 
     const {
@@ -167,5 +158,5 @@ export function useCreateFixedSwap1155Pool() {
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapNftContract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, fixedSwapNftContract, makeSignature, values])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, fixedSwapNftContract, values])
 }

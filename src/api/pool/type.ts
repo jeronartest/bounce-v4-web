@@ -25,8 +25,6 @@ export interface GetPoolCreationSignatureParams {
   openAt: number
   token0: string
   token1: string
-  message: string
-  signature: string
   tokenId?: string
 }
 

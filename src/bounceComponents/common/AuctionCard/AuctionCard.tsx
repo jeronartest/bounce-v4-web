@@ -91,7 +91,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
               sx={{ height: 24, fontSize: 12, bgcolor: 'var(--ps-black)', color: 'var(--ps-white)' }}
             />
           ) : null}
-          <PoolStatusBox status={status} closeTime={closeAt} openTime={dateStr} />
+          <PoolStatusBox claimAt={claimAt} status={status} closeTime={closeAt} openTime={dateStr} />
         </Stack>
       </Stack>
       <CardHeader title={title} />

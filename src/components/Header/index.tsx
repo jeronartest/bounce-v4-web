@@ -1,17 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  styled as muiStyled,
-  styled
-} from '@mui/material'
+import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, Stack, styled as muiStyled, styled } from '@mui/material'
 import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
 import { HideOnMobile, ShowOnMobile } from 'themes/index'
@@ -25,7 +14,9 @@ import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { useLogout, useUserInfo } from 'state/users/hooks'
+import { useLogout, useUserInfo, useWeb3Login } from 'state/users/hooks'
+import { LoadingButton } from '@mui/lab'
+import { useActiveWeb3React } from 'hooks'
 
 interface TabContent {
   title: string
@@ -142,6 +133,7 @@ const LinksWrapper = muiStyled('div')(({ theme }) => ({
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { pathname } = useLocation()
+  const { account } = useActiveWeb3React()
 
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -215,6 +207,8 @@ export default function Header() {
   const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
+  const { run: runLogin, loading: loginLoading } = useWeb3Login()
 
   return (
     <>
@@ -316,47 +310,52 @@ export default function Header() {
           <CreateBtn />
           <Web3Status />
 
-          <Stack direction="row" alignItems="center" spacing={20}>
-            {token ? (
-              <>
-                <div>
-                  <Avatar
-                    component={'button'}
-                    id="userAvatar"
-                    src={
-                      (Number(userType) === USER_TYPE.USER
-                        ? userInfo?.avatar?.fileUrl
-                        : companyInfo?.avatar?.fileUrl) || DefaultAvatarSVG
+          {account && (
+            <Stack direction="row" alignItems="center" spacing={20}>
+              {token ? (
+                <>
+                  <div>
+                    <Avatar
+                      component={'button'}
+                      id="userAvatar"
+                      src={
+                        (Number(userType) === USER_TYPE.USER
+                          ? userInfo?.avatar?.fileUrl
+                          : companyInfo?.avatar?.fileUrl) || DefaultAvatarSVG
+                      }
+                      sx={{
+                        width: 52,
+                        height: 52,
+                        padding: 0,
+                        cursor: 'pointer',
+                        border: 0
+                      }}
+                      onClick={handleUserClick}
+                    />
+                    <UserDialog />
+                  </div>
+                </>
+              ) : (
+                <LoadingButton
+                  variant="outlined"
+                  loadingPosition="start"
+                  loading={loginLoading}
+                  size="small"
+                  sx={{ width: 120, height: 40, borderRadius: 20 }}
+                  onClick={() => {
+                    if (location.pathname === routes.login) {
+                      navigate(routes.login)
+                    } else {
+                      // navigate(`${routes.login}?path=${location.pathname}${location.search}`)
+                      runLogin()
                     }
-                    sx={{
-                      width: 52,
-                      height: 52,
-                      padding: 0,
-                      cursor: 'pointer',
-                      border: 0
-                    }}
-                    onClick={handleUserClick}
-                  />
-                  <UserDialog />
-                </div>
-              </>
-            ) : (
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{ width: 120, height: 40, borderRadius: 20 }}
-                onClick={() => {
-                  if (location.pathname === routes.login) {
-                    navigate(routes.login)
-                  } else {
-                    navigate(`${routes.login}?path=${location.pathname}${location.search}`)
-                  }
-                }}
-              >
-                Login
-              </Button>
-            )}
-          </Stack>
+                  }}
+                >
+                  Login
+                </LoadingButton>
+              )}
+            </Stack>
+          )}
         </Stack>
 
         <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>

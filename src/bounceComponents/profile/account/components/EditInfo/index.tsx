@@ -6,35 +6,25 @@ import React, { useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import { useCountDown, useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import md5 from 'md5'
 import { ReactComponent as CodeSendSVG } from '../../CodeSend.svg'
 import { ReactComponent as EditPwSvg } from './editPw.svg'
 import FormItem from 'bounceComponents/common/FormItem'
-import { changePassword, verifyCode } from 'api/user'
-import { IChangePasswordParams } from 'api/user/type'
-import { useLogout } from 'state/users/hooks'
+import { changeEmail, verifyCode } from 'api/user'
+import { IChangeEmailParams } from 'api/user/type'
+import { isEmail } from 'utils'
+import { fetchUserInfo } from 'state/users/reducer'
+import { useDispatch } from 'react-redux'
 
 export type IEditInfoProps = {
   userInfoEmail: string
+  userId?: number | string
 }
 
-const validationSchema = yup.object({
-  password: yup
-    .string()
-    .trim()
-    .required('Please enter your password')
-    .min(8, 'Password should contain 8-16 characters')
-    .max(16, 'Password should contain 8-16 characters'),
-  code: yup
-    .string()
-    .trim()
-    .required('Please enter your email verification code')
-    .length(6, 'Email verification code should contain 6 characters')
-})
-const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
+const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
   const [editBool, setEditBool] = useState<boolean>(false)
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
   const [showCountDown, setShowCountDown] = useState<number>()
+  const dispatch = useDispatch()
   const [countdown] = useCountDown({
     targetDate: showCountDown,
     onEnd: () => {
@@ -42,38 +32,56 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
     }
   })
 
+  const validationSchema = yup.object({
+    email: yup
+      .string()
+      .trim()
+      .required('Please enter your email address')
+      .email('Incorrect email address')
+      .test('CHECK_EMAIL', 'Email must be inconsistent', val => {
+        return val !== userInfoEmail
+      }),
+    code: yup
+      .string()
+      .trim()
+      .required('Please enter your email verification code')
+      .length(6, 'Email verification code should contain 6 characters')
+  })
+
   const initialValues = {
-    password: '',
     email: userInfoEmail,
     code: ''
   }
-  const { logout } = useLogout()
-  const { run: handleChangePassword, loading } = useRequest(
-    async (params: IChangePasswordParams) => changePassword(params),
-    {
-      manual: true,
-      onSuccess: response => {
-        const { code } = response
-        if (code === 200) {
-          toast.success('Password successfully reset.')
-          logout()
-        } else if (code === 10501) {
-          return toast.error('Incorrect verification code')
-        } else if (code === 10500) {
-          return toast.error('Please wait one minute and try again')
-        } else {
-          return toast.error('Please try again')
-        }
-        return
+  const { run: handleChangeEmail, loading } = useRequest(async (params: IChangeEmailParams) => changeEmail(params), {
+    manual: true,
+    onSuccess: response => {
+      const { code } = response
+      if (code === 200) {
+        toast.success('Password successfully reset.')
+        dispatch(
+          fetchUserInfo({
+            userId
+          })
+        )
+        setEditBool(false)
+      } else if (code === 10501) {
+        return toast.error('Incorrect verification code')
+      } else if (code === 10400) {
+        return toast.error('The email is already in use')
+      } else if (code === 10500) {
+        return toast.error('Please wait one minute and try again')
+      } else {
+        return toast.error('Please try again')
       }
+      return
     }
-  )
+  })
 
   const handleSubmit = (values: typeof initialValues) => {
-    handleChangePassword({ email: values.email, password: md5(values.password), verifyCode: values.code })
+    handleChangeEmail({ email: values.email, verifyCode: values.code })
   }
 
-  const { run: sendVerifyCode } = useRequest(async () => verifyCode({ email: userInfoEmail }), {
+  const { run: sendVerifyCode } = useRequest(async (email: string) => verifyCode({ email, codeType: 1 }), {
     manual: true,
     onSuccess: response => {
       const { code } = response
@@ -96,10 +104,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
               </Typography>
               <Stack component={Form} spacing={20} mb={40}>
                 <FormItem name="email" required label="Email">
-                  <OutlinedInput disabled />
-                </FormItem>
-                <FormItem name="password" required label="New password" tips={'contains 8-16 characters'}>
-                  <OutlinedInput type="password" />
+                  <OutlinedInput />
                 </FormItem>
                 <FormItem name="code" required label="Email verification code">
                   <OutlinedInput
@@ -109,8 +114,12 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
                           <Box
                             sx={{ display: 'flex', cursor: 'pointer' }}
                             onClick={() => {
-                              if (values.values.email) {
-                                sendVerifyCode()
+                              if (
+                                values.values.email &&
+                                isEmail(values.values.email) &&
+                                values.values.email !== userInfoEmail
+                              ) {
+                                sendVerifyCode(values.values.email)
                                 setShowCountDown(Date.now() + 60000)
                               }
                             }}
@@ -161,20 +170,21 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail }) => {
               Email
             </Typography>
             <Typography variant="body1" color={'var(--ps-gray-900)'}>
-              {userInfoEmail}
+              {userInfoEmail || '-'}
             </Typography>
           </Box>
-          <Box display={'flex'} alignItems={'flex-start'}>
+          <Box
+            display={'flex'}
+            alignItems={'flex-start'}
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              setEditBool(true)
+            }}
+          >
             <Typography variant="body1" color={'var(--ps-gray-900)'}>
-              Edit password
+              Edit email
             </Typography>
-            <Box
-              ml={10}
-              sx={{ cursor: 'pointer' }}
-              onClick={() => {
-                setEditBool(true)
-              }}
-            >
+            <Box ml={10}>
               <EditPwSvg />
             </Box>
           </Box>

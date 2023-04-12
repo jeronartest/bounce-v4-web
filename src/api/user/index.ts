@@ -26,7 +26,9 @@ import {
   IUserFollowUserParams,
   IClaimCheckParams,
   IUserUpdateBannerParams,
-  GetUserNFTsParams
+  GetUserNFTsParams,
+  IAddressRegisterLoginParams,
+  IChangeEmailParams
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -43,6 +45,10 @@ export const login = async (params: ILoginParams) => {
   return ApiInstance.post('/login/login', params)
 }
 
+export const addressRegisterOrLogin = async (params: IAddressRegisterLoginParams) => {
+  return ApiInstance.post('/login/register/address', params)
+}
+
 export const getUserInfo = async (params: IUserInfoParams) => {
   return ApiInstance.post('/personal/profile', { userId: Number(params.userId) })
 }
@@ -57,6 +63,10 @@ export const verifyCode = async (params: IVerifyCodeParams) => {
 
 export const changePassword = async (params: IChangePasswordParams) => {
   return ApiInstance.post('/personal/change_password', params)
+}
+
+export const changeEmail = async (params: IChangeEmailParams) => {
+  return ApiInstance.post('/personal/update_email', params)
 }
 
 export const userGetBindAddress = async (params: IUserBindAddressParams) => {

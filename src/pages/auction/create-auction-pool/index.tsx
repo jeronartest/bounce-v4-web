@@ -24,7 +24,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/types'
 import { useAuctionConfigList } from 'hooks/useAuctionConfig'
-import { useUserInfo } from 'state/users/hooks'
+import { useWeb3Login, useUserInfo } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 
@@ -42,7 +42,9 @@ const CreateAuctionPoolIntroPage = () => {
   const { account, active, chainId } = useActiveWeb3React()
 
   const walletModalToggle = useWalletModalToggle()
-  const { userId } = useUserInfo()
+  const { userId, userInfo } = useUserInfo()
+  console.log('🚀 ~ file: index.tsx:46 ~ CreateAuctionPoolIntroPage ~ userInfo:', userInfo)
+  const { run: runWeb3Login } = useWeb3Login()
   const { chainInfoOpt } = useOptionDatas()
   const switchNetwork = useSwitchNetwork()
   const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
@@ -228,7 +230,7 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {account && userId ? (
+                  {account && userId && userInfo?.email ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -238,14 +240,18 @@ const CreateAuctionPoolIntroPage = () => {
                       </Button>
                     </>
                   ) : !userId ? (
+                    <Button variant="contained" sx={{ width: 140 }} onClick={runWeb3Login}>
+                      Login
+                    </Button>
+                  ) : !userInfo?.email ? (
                     <Button
                       variant="contained"
-                      sx={{ width: 140 }}
+                      sx={{ width: 300 }}
                       onClick={() => {
-                        navigate(routes.login)
+                        navigate(routes.account.myAccount)
                       }}
                     >
-                      Login
+                      You need to bind your email first
                     </Button>
                   ) : (
                     <Button

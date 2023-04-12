@@ -3,15 +3,18 @@ import { useRequest } from 'ahooks'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useLinkedIn } from 'react-linkedin-login-oauth2'
-import { login, logout } from 'api/user'
+import { addressRegisterOrLogin, login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
-import { fetchUserInfo, saveLoginInfo, removeUserInfo } from 'state/users/reducer'
+import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo } from 'state/users/reducer'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useEffect } from 'react'
+import { useSignMessage } from 'hooks/useWeb3Instance'
+import { useActiveWeb3React } from 'hooks'
+import { IResponse } from 'api/type'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -66,9 +69,69 @@ export const useLogin = (path?: string) => {
   })
 }
 
-export const useLogout = () => {
+export const useWeb3Login = (path?: string) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { account } = useActiveWeb3React()
+  const signMessage = useSignMessage()
+  return useRequest(
+    () =>
+      new Promise(async (resolve: (value: IResponse<any>) => void, reject) => {
+        try {
+          const message = 'Register or login for Bounce'
+          const signRes = await signMessage(message)
+          const res = await addressRegisterOrLogin({ address: account || '', message, signature: signRes })
+          resolve(res)
+        } catch (error) {
+          reject(error)
+        }
+      }),
+    {
+      manual: true,
+      onSuccess: async response => {
+        const { code, data } = response
+        if (code === 10412) {
+          return toast.error('Incorrect password')
+        }
+        if (code === 10401) {
+          return toast.error('Incorrect Account')
+        }
+        if (code === 10457) {
+          return toast.error(
+            'Your account already exists. For Metalents users who log in to Bounce for the first time, please click Forgot Password to verify your email.'
+          )
+        }
+        if (code === 10406 || code === 10418 || code === 10407) {
+          return toast.error('Sorry, your account has not been registered yet. Please register first.')
+        }
+        if (code !== 200) {
+          return toast.error('Login fail')
+        }
+        toast.success('Welcome to Bounce')
+        dispatch({
+          type: 'users/saveLoginInfo',
+          payload: {
+            token: data?.token,
+            userId: data?.userId,
+            userType: data?.userType,
+            address: account
+          }
+        })
+        await dispatch(
+          fetchUserInfo({
+            userId: data?.userId
+          })
+        )
+        if (path) {
+          return navigate(path)
+        }
+      }
+    }
+  )
+}
+
+export const useLogout = () => {
+  const dispatch = useDispatch()
   const handleLogout = () => {
     logout()
     dispatch(
@@ -79,7 +142,7 @@ export const useLogout = () => {
       })
     )
     dispatch(removeUserInfo())
-    navigate(`${routes.login}?path=${location.pathname}${location.search}`)
+    // navigate(`${routes.login}?path=${location.pathname}${location.search}`)
   }
   return { logout: handleLogout }
 }
@@ -115,9 +178,23 @@ export const useLinkedInOauth = (onChange: (accessToken: string, oauthType: ACCO
   return { linkedInLogin }
 }
 
-export function useUserInfo() {
-  const userInfo = useSelector<AppState, AppState['users']>(state => state.users)
-  return userInfo
+export function useUserInfo(): ICacheLoginInfo & {
+  userInfo: any
+  companyInfo: any
+} {
+  const { account } = useActiveWeb3React()
+  const loginInfo = useSelector<AppState, AppState['users']>(state => state.users)
+  if (account !== loginInfo.address) {
+    return {
+      address: '',
+      token: '',
+      userId: 0,
+      userType: '0',
+      userInfo: {},
+      companyInfo: {}
+    }
+  }
+  return loginInfo
 }
 
 export function useAutoLogin() {

@@ -40,6 +40,7 @@ import { ChainListMap } from 'constants/chain'
 import { ChainId } from 'constants/chain'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 // export type IPoolsProps = {}
 // const poolType: Record<PoolType, string> = {
@@ -192,6 +193,7 @@ export const NFTCard = (props: NFTPrams) => {
     amountTotal0
   } = props.nft
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
+  const navigate = useNavigate()
   return (
     <Box
       sx={{
@@ -210,6 +212,10 @@ export const NFTCard = (props: NFTPrams) => {
           background: '#F5F5F5',
           borderRadius: '12px',
           padding: '8px 12px'
+        }}
+        onClick={e => {
+          e.preventDefault()
+          navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
         }}
         mb={12}
       >

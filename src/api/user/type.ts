@@ -34,6 +34,12 @@ export interface ILoginParams {
   loginType: ACCOUNT_TYPE
 }
 
+export interface IAddressRegisterLoginParams {
+  message: string
+  address: string
+  signature: string
+}
+
 export interface ChainInfoOpt {
   chainName: string
   chain_type: number
@@ -72,6 +78,11 @@ export interface IVerifyCodeParams {
 export interface IChangePasswordParams {
   email: string
   password: string
+  verifyCode: string
+}
+
+export interface IChangeEmailParams {
+  email: string
   verifyCode: string
 }
 

@@ -17,7 +17,7 @@ enum TabListProp {
 const tabsList = [TabListProp.Account_Settings, TabListProp.KYC_Credentials]
 
 export default function MyAccount() {
-  const { userInfo } = useUserInfo()
+  const { userInfo, userId } = useUserInfo()
   const [curTab, setCurTab] = useState(TabListProp.Account_Settings)
 
   return (
@@ -56,7 +56,7 @@ export default function MyAccount() {
                 borderRadius: '20px'
               }}
             >
-              <EditInfo userInfoEmail={userInfo?.email} />
+              <EditInfo userInfoEmail={userInfo?.email} userId={userId} />
               <LoginOpton googleEmail={userInfo?.googleEmail} twitter={userInfo?.twitterName} />
               <Box>
                 <Typography variant="h3" fontSize={16}>
