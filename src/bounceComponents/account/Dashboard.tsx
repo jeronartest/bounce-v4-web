@@ -155,6 +155,8 @@ export function DashboardToPoolButton({
       to={
         category === PoolType.fixedSwapNft
           ? routes.auction.fixedSwapNft
+              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
+              .replace(':poolId', poolId.toString())
           : routes.auction.fixedPrice
               .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
               .replace(':poolId', poolId.toString())
