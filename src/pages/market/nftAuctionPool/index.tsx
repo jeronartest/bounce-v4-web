@@ -41,6 +41,7 @@ import { ChainId } from 'constants/chain'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import { FixedSwapPool } from 'api/pool/type'
 
 // export type IPoolsProps = {}
 // const poolType: Record<PoolType, string> = {
@@ -98,81 +99,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   return null
 }
 interface NFTPrams {
-  nft: {
-    id: number
-    chainId: number
-    contract: string
-    createdTxHash: string
-    poolId: string
-    category: number
-    creator: string
-    creatorClaimed: false
-    name: string
-    description: string
-    posts: []
-    enableWhiteList: false
-    token0: {
-      address: string
-      decimals: number
-      name: string
-      symbol: string
-      thumbUrl: string
-      smallUrl: string
-      largeUrl: string
-      coingeckoId: string
-      currentPrice: number
-    }
-    openAt: number
-    closeAt: number
-    claimAt: number
-    status: number
-    token1: {
-      address: string
-      decimals: number
-      name: string
-      symbol: string
-      thumbUrl: string
-      smallUrl: string
-      largeUrl: string
-      coingeckoId: string
-      currentPrice: number
-    }
-    amountTotal0: string
-    amountTotal1: string
-    swappedAmount0: string
-    currentTotal0: string
-    currentTotal1: string
-    ratio: string
-    poolPrice: string
-    maxAmount1PerWallet: string
-    participant: {
-      address: string
-      swappedAmount0: string
-      claimed: false
-      regreted: false
-      tokenId: string
-      is721: number
-    }
-    creatorUserInfo: {
-      userId: number
-      name: string
-      avatar: string
-      publicRole: number[]
-      userType: number
-      companyName: string
-      companyAvatar: string
-      companyIntroduction: string
-      isVerify: number
-    }
-    likeInfo: {
-      likeCount: number
-      dislikeCount: number
-      myLike: number
-      myDislike: number
-    }
-    tokenId: string
-    is721: number
-  }
+  nft: FixedSwapPool
   hiddenStatus?: boolean
 }
 export const NFTCard = (props: NFTPrams) => {

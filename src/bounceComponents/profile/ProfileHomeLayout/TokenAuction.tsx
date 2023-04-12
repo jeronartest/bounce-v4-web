@@ -12,6 +12,10 @@ import FormItem from 'bounceComponents/common/FormItem'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { getPools } from 'api/market'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
+import { NFTCard } from 'pages/market/nftAuctionPool'
+import { getLabelById } from 'utils'
+import { routes } from 'constants/routes'
+import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 
 export type IActivitieProps = {
   userInfo: IProfileUserInfo
@@ -38,7 +42,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
         chainId: curChain,
         orderBy: ''
       })
-      if (category === 1) {
+      if (category === PoolType.FixedSwap) {
         return {
           list: resp.data.fixedSwapList.list,
           total: resp.data.fixedSwapList.total
@@ -92,16 +96,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
               ))}
             </Select>
           </FormItem>
-          <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
-            <Select
-              defaultValue={PoolType.FixedSwap}
-              value={curPoolType}
-              onChange={e => setCurPoolType(e.target.value as PoolType)}
-            >
-              <MenuItem value={PoolType.FixedSwap}>Fixed Price</MenuItem>
-              <MenuItem value={PoolType.fixedSwapNft}>Fixed Swap NFT</MenuItem>
-            </Select>
-          </FormItem>
+          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
       </Box>
 
@@ -125,7 +120,22 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
             <Grid container spacing={18}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                  {auctionPoolItem.category === PoolType.FixedSwap ? (
+                    <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                  ) : (
+                    <Box
+                      component={'a'}
+                      target="_blank"
+                      href={routes.auction.fixedSwapNft
+                        .replace(
+                          ':chainShortName',
+                          getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                        )
+                        .replace(':poolId', auctionPoolItem.poolId)}
+                    >
+                      <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
+                    </Box>
+                  )}
                 </Grid>
               ))}
             </Grid>

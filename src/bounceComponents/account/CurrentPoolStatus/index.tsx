@@ -8,6 +8,8 @@ import NoData from 'bounceComponents/common/NoData'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+import { PoolType } from 'api/pool/type'
 
 const StatusText = {
   [DashboardQueryType.ongoing]: 'Ongoing Auctions',
@@ -19,11 +21,17 @@ export default function CurrentPoolStatus() {
   const [curQueryType, setCurQueryType] = useState(DashboardQueryType.claim)
   const { account } = useActiveWeb3React()
   const [curPage, setCurPage] = useState(1)
+  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
 
-  const { data: createdData, loading: createdLoading } = useUserPoolsTokenCreated(account || undefined, curQueryType)
+  const { data: createdData, loading: createdLoading } = useUserPoolsTokenCreated(
+    account || undefined,
+    curQueryType,
+    curPoolType
+  )
   const { data: participantData, loading: participantDataLoading } = useUserPoolsTokenParticipant(
     account || undefined,
-    curQueryType
+    curQueryType,
+    curPoolType
   )
 
   const curList = useMemo(() => [...(createdData || []), ...(participantData || [])], [createdData, participantData])
@@ -65,17 +73,21 @@ export default function CurrentPoolStatus() {
           </Button>
         </Stack>
 
-        <Pagination
-          onChange={(_, p) => handlePageChange(p)}
-          sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
-          count={Math.ceil(curList.length / defaultPageSize)}
-          renderItem={item => {
-            if (item.type === 'previous' || item.type === 'next') {
-              return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
-            }
-            return null
-          }}
-        />
+        <Stack direction={'row'} alignItems={'center'} gap="10px">
+          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+
+          <Pagination
+            onChange={(_, p) => handlePageChange(p)}
+            sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
+            count={Math.ceil(curList.length / defaultPageSize)}
+            renderItem={item => {
+              if (item.type === 'previous' || item.type === 'next') {
+                return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
+              }
+              return null
+            }}
+          />
+        </Stack>
       </Box>
 
       <Box mt={16}>

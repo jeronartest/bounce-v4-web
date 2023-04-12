@@ -1,20 +1,23 @@
 import { useRequest } from 'ahooks'
 import { getUserDashboardStat, getUserPoolsDashboardCollect, getUserPoolsDashboardCreated } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
+import { useActiveWeb3React } from 'hooks'
 
 export function useDashboardUserCreated(queryType: DashboardQueryType) {
+  const { account } = useActiveWeb3React()
   return useRequest(
     async () => {
       const response = await getUserPoolsDashboardCreated({
+        address: account || '',
         chainId: 0,
         queryType,
-        category: 1,
         limit: 100
       })
 
       return response.data.list
     },
     {
+      ready: !!account,
       debounceWait: 100
     }
   )

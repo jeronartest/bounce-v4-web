@@ -43,7 +43,6 @@ const CreateAuctionPoolIntroPage = () => {
 
   const walletModalToggle = useWalletModalToggle()
   const { userId, userInfo } = useUserInfo()
-  console.log('🚀 ~ file: index.tsx:46 ~ CreateAuctionPoolIntroPage ~ userInfo:', userInfo)
   const { run: runWeb3Login } = useWeb3Login()
   const { chainInfoOpt } = useOptionDatas()
   const switchNetwork = useSwitchNetwork()
@@ -230,7 +229,7 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {account && userId && userInfo?.email ? (
+                  {account && userId && userInfo?.email && userInfo?.twitterName ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -243,7 +242,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={runWeb3Login}>
                       Login
                     </Button>
-                  ) : !userInfo?.email ? (
+                  ) : !userInfo?.email || !userInfo?.twitterName ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}
@@ -251,7 +250,7 @@ const CreateAuctionPoolIntroPage = () => {
                         navigate(routes.account.myAccount)
                       }}
                     >
-                      You need to bind your email first
+                      You need to bind your email and twitter first
                     </Button>
                   ) : (
                     <Button

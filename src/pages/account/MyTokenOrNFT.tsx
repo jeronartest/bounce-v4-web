@@ -29,11 +29,6 @@ export default function MyProfile() {
           <Typography padding="40px 20px 0" variant="h3" fontSize={30}>
             My Token & NFT Auction
           </Typography>
-          {account && (
-            <Typography pl={20} mt={5}>
-              Current address: {account}
-            </Typography>
-          )}
 
           {!account ? (
             <NoData>

@@ -172,7 +172,11 @@ export function DashboardShowCategoryName({ category, backedChainId }: { categor
     <Box display={'flex'} alignItems="center">
       <TokenImage src={ethChainId ? ChainListMap?.[ethChainId as ChainId]?.logo : ''} size={12} />
       <Typography fontSize={12} ml={4} noWrap>
-        {category === PoolType.FixedSwap ? 'ERC20 Fixed Price' : '-'}
+        {category === PoolType.FixedSwap
+          ? 'ERC20 Fixed Price'
+          : category === PoolType.fixedSwapNft
+          ? 'NFT Fixed Price'
+          : '-'}
       </Typography>
     </Box>
   )

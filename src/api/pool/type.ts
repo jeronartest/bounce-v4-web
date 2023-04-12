@@ -126,6 +126,7 @@ export interface FixedSwapPool {
   token0: TokenFromApi
   token1: TokenFromApi
   tokenId: string
+  is721?: 0 | 1
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {

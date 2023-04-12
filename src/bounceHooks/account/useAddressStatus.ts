@@ -1,9 +1,13 @@
 import { useRequest } from 'ahooks'
 import { getUserPoolsTokenParticipant, getUserPoolsTokenCreated } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
-import { FixedSwapPool } from 'api/pool/type'
+import { FixedSwapPool, PoolType } from 'api/pool/type'
 
-export function useUserPoolsTokenCreated(address: string | undefined, queryType: DashboardQueryType) {
+export function useUserPoolsTokenCreated(
+  address: string | undefined,
+  queryType: DashboardQueryType,
+  category?: PoolType
+) {
   return useRequest(
     async () => {
       if (!address) return []
@@ -11,19 +15,23 @@ export function useUserPoolsTokenCreated(address: string | undefined, queryType:
         address,
         chainId: 0,
         queryType,
-        category: 1,
+        category: category || 1,
         limit: 100
       })
       return response.data.fixedSwapList.list as FixedSwapPool[]
     },
     {
-      refreshDeps: [address, queryType],
+      refreshDeps: [address, queryType, category],
       debounceWait: 100
     }
   )
 }
 
-export function useUserPoolsTokenParticipant(address: string | undefined, queryType?: DashboardQueryType) {
+export function useUserPoolsTokenParticipant(
+  address: string | undefined,
+  queryType?: DashboardQueryType,
+  category?: PoolType
+) {
   return useRequest(
     async () => {
       if (!address) return []
@@ -31,11 +39,11 @@ export function useUserPoolsTokenParticipant(address: string | undefined, queryT
         address,
         chainId: 0,
         queryType,
-        category: 1,
+        category: category || 1,
         limit: 100
       })
       return response.data.fixedSwapList.list as FixedSwapPool[]
     },
-    { refreshDeps: [address, queryType], debounceWait: 100 }
+    { refreshDeps: [address, queryType, category], debounceWait: 100 }
   )
 }
