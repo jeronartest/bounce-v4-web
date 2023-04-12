@@ -6,8 +6,8 @@ import { useCallback } from 'react'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
-import { BigNumber } from 'bignumber.js'
 import { CurrencyAmount } from 'constants/token'
+import JSBI from 'jsbi'
 
 const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
   const { account } = useActiveWeb3React()
@@ -55,22 +55,18 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
         }
       }
 
-      const currencyBid1Amount = CurrencyAmount.fromAmount(
+      const currencyBid1Amount = CurrencyAmount.fromRawAmount(
         poolInfo.currencyAmountTotal1.currency,
-        new BigNumber(bid0Amount).times(poolInfo.ratio).toString()
+        JSBI.multiply(
+          JSBI.BigInt(bid0Amount),
+          JSBI.divide(JSBI.BigInt(poolInfo.amountTotal1), JSBI.BigInt(poolInfo.amountTotal0))
+        )
       )
 
       const args = [poolInfo.poolId, bid0Amount, proofArr]
-      console.log(
-        '🚀 ~ file: usePlaceBid1155.ts:64 ~ usePlaceBid1155 ~ args:',
-        { value: isToken1Native ? currencyBid1Amount?.raw.toString() : undefined },
-        isToken1Native,
-        currencyBid1Amount?.raw.toString(),
-        args
-      )
 
       const estimatedGas = await fixedSwapNFTContract.estimateGas
-        .swap(...args, { value: isToken1Native ? '19999999999999911' : undefined })
+        .swap(...args, { value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined })
         .catch((error: Error) => {
           console.debug('Failed to swap', error)
           throw error
@@ -78,7 +74,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       return fixedSwapNFTContract
         .swap(...args, {
           gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? '19999999999999911' : undefined
+          value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
