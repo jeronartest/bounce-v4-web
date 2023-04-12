@@ -60,7 +60,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
         new BigNumber(bid0Amount).times(poolInfo.ratio).toString()
       )
 
-      const args = [poolInfo.poolId, currencyBid1Amount?.raw.toString(), proofArr]
+      const args = [poolInfo.poolId, bid0Amount, proofArr]
 
       const estimatedGas = await fixedSwapNFTContract.estimateGas
         .swap(...args, { value: isToken1Native ? currencyBid1Amount?.raw.toString() : undefined })
