@@ -123,14 +123,14 @@ export function useCreateFixedSwap1155Pool() {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenIds: [signatureParams.tokenId],
+      tokenId: signatureParams.tokenId,
       amountTotal0: signatureParams.amountTotal0,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
       isERC721: false,
-      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
+      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
     console.log(

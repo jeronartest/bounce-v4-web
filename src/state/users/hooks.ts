@@ -6,12 +6,11 @@ import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { addressRegisterOrLogin, login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
 import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo } from 'state/users/reducer'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
-import { useQueryParams } from 'hooks/useQueryParams'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
@@ -138,7 +137,8 @@ export const useLogout = () => {
       saveLoginInfo({
         token: '',
         userId: '',
-        userType: ''
+        userType: '',
+        address: ''
       })
     )
     dispatch(removeUserInfo())
@@ -197,39 +197,64 @@ export function useUserInfo(): ICacheLoginInfo & {
   return loginInfo
 }
 
-export function useAutoLogin() {
-  const { token, userId, userType } = useQueryParams()
-  const { token: loginToken, userId: loginUserId } = useUserInfo()
-  const { pathname } = useLocation()
-  const navigate = useNavigate()
+// export function useAutoLogin() {
+//   const { token, userId, userType } = useQueryParams()
+//   const { token: loginToken, userId: loginUserId } = useUserInfo()
+//   const { pathname } = useLocation()
+//   const navigate = useNavigate()
+//   const dispatch = useDispatch()
+//   useEffect(() => {
+//     ;(async () => {
+//       if (token && userId && userType && pathname === '/') {
+//         dispatch({
+//           type: 'users/saveLoginInfo',
+//           payload: {
+//             token: token,
+//             userId: Number(userId),
+//             userType
+//           }
+//         })
+//         dispatch(
+//           fetchUserInfo({
+//             userId: userId
+//           })
+//         )
+//       }
+//     })()
+//   }, [dispatch, navigate, pathname, token, userId, userType])
+
+//   useEffect(() => {
+//     loginToken &&
+//       dispatch(
+//         fetchUserInfo({
+//           userId: loginUserId
+//         })
+//       )
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [])
+// }
+
+export function useRefreshUserInfoByFirstLoad() {
+  const [first, setFirst] = useState(true)
   const dispatch = useDispatch()
-  useEffect(() => {
-    ;(async () => {
-      if (token && userId && userType && pathname === '/') {
-        dispatch({
-          type: 'users/saveLoginInfo',
-          payload: {
-            token: token,
-            userId: Number(userId),
-            userType
-          }
-        })
-        dispatch(
-          fetchUserInfo({
-            userId: userId
-          })
-        )
-      }
-    })()
-  }, [dispatch, navigate, pathname, token, userId, userType])
+  const { token, userId } = useUserInfo()
 
   useEffect(() => {
-    loginToken &&
-      dispatch(
-        fetchUserInfo({
-          userId: loginUserId
-        })
-      )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (!first || !token || !userId) return
+    setFirst(false)
+    dispatch(
+      fetchUserInfo({
+        userId: userId
+      })
+    )
+  }, [dispatch, first, token, userId])
+}
+
+export const CurrentAddressToLocalItem = 'CurrentAddressToLocalItem'
+export function useSetCurrentAddressToLocal() {
+  const { account } = useActiveWeb3React()
+
+  useEffect(() => {
+    window.localStorage.setItem(CurrentAddressToLocalItem, account || '')
+  }, [account])
 }

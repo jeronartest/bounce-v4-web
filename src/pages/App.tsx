@@ -38,7 +38,7 @@ import ProfileEditOverview from 'pages/profile/edit/overview'
 import ProfileEditSocial from 'pages/profile/edit/social'
 import ProfileHome from 'pages/profile/home'
 
-import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
+// import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 
 import SignupAccount from 'pages/signup/account'
 import ComingSoon from './ComingSoon'
@@ -52,10 +52,13 @@ import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
+import { useRefreshUserInfoByFirstLoad, useSetCurrentAddressToLocal } from 'state/users/hooks'
 
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
+  useRefreshUserInfoByFirstLoad()
+  useSetCurrentAddressToLocal()
   return null
 }
 
@@ -109,7 +112,7 @@ export default function App() {
                     <Route path={routes.profile.summary} element={<ProfileHome />} />
 
                     <Route path={routes.signup.account} element={<SignupAccount />} />
-                    <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} />
+                    {/* <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} /> */}
 
                     <Route path={routes.account.dashboard} element={<AccountDashboard />} />
                     <Route path={routes.account.myProfile} element={<AccountMyProfile />} />

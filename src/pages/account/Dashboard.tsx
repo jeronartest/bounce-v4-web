@@ -195,7 +195,12 @@ function FavoritesAuctionsList() {
                     <Timer timer={item.openAt * 1000} />
                   </Box>
                 ) : (
-                  <DashboardToPoolButton text="Participate" poolId={item.poolId} backedChainId={item.chainId} />
+                  <DashboardToPoolButton
+                    text="Participate"
+                    category={item.category}
+                    poolId={item.poolId}
+                    backedChainId={item.chainId}
+                  />
                 )}
               </Box>
             </Box>
@@ -232,6 +237,7 @@ function CreateAuctionsList({ title, queryType }: { title: string; queryType: Da
               <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
               <Box display={'flex'} justifyContent="right">
                 <DashboardToPoolButton
+                  category={item.category}
                   text={queryType === DashboardQueryType.ongoing ? 'Check' : 'Claim'}
                   poolId={item.poolId}
                   backedChainId={item.chainId}
@@ -277,7 +283,12 @@ function PendingClaimAuctionsList() {
               <Typography fontSize={12}>#{item.poolId}</Typography>
               <DashboardShowCategoryName category={item.category} backedChainId={item.chainId} />
               <Box display={'flex'} justifyContent="right">
-                <DashboardToPoolButton text={'Claim'} poolId={item.poolId} backedChainId={item.chainId} />
+                <DashboardToPoolButton
+                  category={item.category}
+                  text={'Claim'}
+                  poolId={item.poolId}
+                  backedChainId={item.chainId}
+                />
               </Box>
             </Box>
           ))

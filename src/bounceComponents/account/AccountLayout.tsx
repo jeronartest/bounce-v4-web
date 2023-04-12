@@ -6,14 +6,14 @@ import { useUserInfo } from 'state/users/hooks'
 import LeftMenu from './LeftMenu'
 
 export default function AccountLayout({ children }: { children: JSX.Element | string }) {
-  const { userId } = useUserInfo()
+  const { token } = useUserInfo()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!userId) {
+    if (!token) {
       navigate(routes.market.index)
     }
-  }, [navigate, userId])
+  }, [navigate, token])
 
   return (
     <Box

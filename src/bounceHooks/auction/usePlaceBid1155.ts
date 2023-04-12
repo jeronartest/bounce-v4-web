@@ -61,9 +61,16 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       )
 
       const args = [poolInfo.poolId, bid0Amount, proofArr]
+      console.log(
+        '🚀 ~ file: usePlaceBid1155.ts:64 ~ usePlaceBid1155 ~ args:',
+        { value: isToken1Native ? currencyBid1Amount?.raw.toString() : undefined },
+        isToken1Native,
+        currencyBid1Amount?.raw.toString(),
+        args
+      )
 
       const estimatedGas = await fixedSwapNFTContract.estimateGas
-        .swap(...args, { value: isToken1Native ? currencyBid1Amount?.raw.toString() : undefined })
+        .swap(...args, { value: isToken1Native ? '19999999999999911' : undefined })
         .catch((error: Error) => {
           console.debug('Failed to swap', error)
           throw error
@@ -71,7 +78,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       return fixedSwapNFTContract
         .swap(...args, {
           gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? currencyBid1Amount?.raw.toString() : undefined
+          value: isToken1Native ? '19999999999999911' : undefined
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {

@@ -3,6 +3,129 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "implementation",
+        "type": "address"
+      }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "admin_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "changeAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementation",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "implementation_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "index",
@@ -32,9 +155,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint256[]",
-            "name": "tokenIds",
-            "type": "uint256[]"
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -87,7 +210,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "maxAmount0PerWallet",
+        "name": "maxAmount1PerWallet",
         "type": "uint256"
       }
     ],
@@ -112,7 +235,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       },
       {
@@ -181,7 +304,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       },
       {
@@ -212,7 +335,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       },
       {
@@ -243,25 +366,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       }
     ],
     "name": "UserClaimed",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_ERC721",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -334,9 +444,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint256[]",
-            "name": "tokenIds",
-            "type": "uint256[]"
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -370,7 +480,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "maxAmount0PerWallet",
+            "name": "maxAmount1PerWallet",
             "type": "uint256"
           },
           {
@@ -448,49 +558,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "bitmap",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTokenIdsByBitmap",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTokenIdsByIndex",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "_txFeeRatio",
         "type": "uint256"
       },
@@ -518,7 +585,7 @@
         "type": "uint256"
       }
     ],
-    "name": "maxAmount0PerWallet",
+    "name": "maxAmount1PerWallet",
     "outputs": [
       {
         "internalType": "uint256",
@@ -738,6 +805,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "amountTotal0",
         "type": "uint256"
       },
@@ -786,7 +858,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       }
     ],
@@ -869,7 +941,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "amount0OrTokenIds",
+        "name": "amount0",
         "type": "uint256"
       },
       {
@@ -940,5 +1012,26 @@
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_logic",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "admin_",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "constructor"
   }
 ]

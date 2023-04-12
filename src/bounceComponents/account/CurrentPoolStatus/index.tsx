@@ -38,7 +38,7 @@ export default function CurrentPoolStatus() {
 
   useEffect(() => {
     setCurPage(1)
-  }, [account, curQueryType])
+  }, [account, curPoolType, curQueryType])
 
   const handlePageChange = useCallback((p: number) => {
     setCurPage(p)

@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { IResponse } from './type'
 import store from 'state'
 import { removeLoginInfo, removeUserInfo } from 'state/users/reducer'
+import { CurrentAddressToLocalItem } from 'state/users/hooks'
 
 const request = (url: string, options?: any) => {
   // TODO: add request/response interceptors
@@ -10,10 +11,10 @@ const request = (url: string, options?: any) => {
       toast.error('Login has expired, please login again.')
       store.dispatch(removeLoginInfo())
       store.dispatch(removeUserInfo())
-      location.href = '/login'
-      setTimeout(() => {
-        window.location.reload()
-      }, 1000)
+      // location.href = '/login'
+      // setTimeout(() => {
+      //   window.location.reload()
+      // }, 1000)
     }
     const json = await response?.json()
     if (response.status !== 200) {
@@ -24,9 +25,11 @@ const request = (url: string, options?: any) => {
 }
 
 const initSignature = (): { token: string | undefined } => {
-  const token = store.getState().users.token
+  const { token, address } = store.getState().users
+  const currentAddress = window.localStorage.getItem(CurrentAddressToLocalItem)
+  console.log('🚀 ~ file: index.ts:30 ~ initSignature ~ currentAddress:', currentAddress, token, address)
   return {
-    token: token || ''
+    token: currentAddress === address ? token || '' : ''
   }
 }
 

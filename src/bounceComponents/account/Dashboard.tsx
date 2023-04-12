@@ -141,18 +141,24 @@ export function DashboardNoData() {
 export function DashboardToPoolButton({
   text,
   poolId,
+  category,
   backedChainId
 }: {
   text: string
+  category: PoolType
   poolId: number
   backedChainId: number
 }) {
   const optionDatas = useOptionDatas()
   return (
     <Link
-      to={routes.auction.fixedPrice
-        .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt))
-        .replace(':poolId', poolId.toString())}
+      to={
+        category === PoolType.fixedSwapNft
+          ? routes.auction.fixedSwapNft
+          : routes.auction.fixedPrice
+              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
+              .replace(':poolId', poolId.toString())
+      }
     >
       <Button variant="contained" sx={btnStyle}>
         {text}
