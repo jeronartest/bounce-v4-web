@@ -130,7 +130,7 @@ export function useCreateFixedSwap1155Pool() {
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
       isERC721: false,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
     console.log(
