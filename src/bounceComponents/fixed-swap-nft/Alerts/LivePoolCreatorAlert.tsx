@@ -9,7 +9,7 @@ const LivePoolCreatorAlert = () => {
       sx={{ borderRadius: 20, borderColor: '#D1D4D8' }}
     >
       <Typography variant="body1">
-        You can only claim your fund raised after your auction is finished. There is a 0% platform feed charged
+        You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
         automatically from fund raised.
       </Typography>
     </Alert>

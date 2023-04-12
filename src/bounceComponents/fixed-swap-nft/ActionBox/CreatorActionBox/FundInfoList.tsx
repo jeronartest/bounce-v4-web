@@ -9,8 +9,8 @@ import { formatNumber } from 'utils/number'
 import { shortenAddress } from 'utils'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
-const TX_FEE_RATIO = 0.0
-// const TX_FEE_RATIO = 0.025
+// const TX_FEE_RATIO = 0.0
+const TX_FEE_RATIO = 0.025
 
 const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
   const formatedSwappedAmount0 = poolInfo.swappedAmount0

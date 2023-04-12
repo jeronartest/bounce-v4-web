@@ -41,6 +41,10 @@ export function useCreatorClaimNFT(poolId: number | string, name: string) {
           key: poolId + '_NFT'
         }
       })
+      return {
+        hash: response.hash,
+        transactionReceipt: response.wait(1)
+      }
     })
   }, [account, addTransaction, fixedSwapNftContract, name, poolId])
 

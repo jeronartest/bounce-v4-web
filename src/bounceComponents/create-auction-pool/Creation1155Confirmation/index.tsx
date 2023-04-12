@@ -10,7 +10,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import TokenImage from 'bounceComponents/common/TokenImage'
 
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
-import { ReactComponent as ZeroIcon } from 'assets/imgs/auction/zero-icon.svg'
+// import { ReactComponent as ZeroIcon } from 'assets/imgs/auction/zero-icon.svg'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
@@ -437,7 +437,7 @@ const CreationConfirmation = () => {
             </LoadingButton>
           )}
 
-          <ConfirmationSubtitle sx={{ mt: 12, opacity: 1, color: '#908E96' }}>
+          {/* <ConfirmationSubtitle sx={{ mt: 12, opacity: 1, color: '#908E96' }}>
             Transaction Fee is{' '}
             <span
               style={{
@@ -452,7 +452,8 @@ const CreationConfirmation = () => {
                 verticalAlign: 'middle'
               }}
             />
-          </ConfirmationSubtitle>
+          </ConfirmationSubtitle> */}
+          <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
         </Box>
       </Box>
     </Box>
