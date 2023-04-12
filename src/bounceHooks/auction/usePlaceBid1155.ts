@@ -98,11 +98,12 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       addTransaction,
       fixedSwapNFTContract,
       isToken1Native,
+      poolInfo.amountTotal0,
+      poolInfo.amountTotal1,
       poolInfo.chainId,
       poolInfo.currencyAmountTotal1.currency,
       poolInfo.enableWhiteList,
       poolInfo.poolId,
-      poolInfo.ratio,
       poolInfo.token0.symbol,
       poolInfo.token1.symbol
     ]

@@ -30,12 +30,12 @@ import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
 import MarketNFTPools from 'pages/market/nftAuctionPool'
 
-import AccountSettings from 'pages/profile/account/settings'
-import ProfileActivities from 'pages/profile/activities'
-import ProfileBasic from 'pages/profile/basic'
-import ProfileEditInvestments from 'pages/profile/edit/investments'
-import ProfileEditOverview from 'pages/profile/edit/overview'
-import ProfileEditSocial from 'pages/profile/edit/social'
+// import AccountSettings from 'pages/profile/account/settings'
+// import ProfileActivities from 'pages/profile/activities'
+// import ProfileBasic from 'pages/profile/basic'
+// import ProfileEditInvestments from 'pages/profile/edit/investments'
+// import ProfileEditOverview from 'pages/profile/edit/overview'
+// import ProfileEditSocial from 'pages/profile/edit/social'
 import ProfileHome from 'pages/profile/home'
 
 // import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
@@ -102,12 +102,12 @@ export default function App() {
                     <Route path={routes.realAuction.index} element={<ComingSoon />} />
                     <Route path={routes.adsAuction.index} element={<ComingSoon />} />
 
-                    <Route path={routes.profile.account.settings} element={<AccountSettings />} />
+                    {/* <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />
                     <Route path={routes.profile.basic} element={<ProfileBasic />} />
                     <Route path={routes.profile.edit.investments} element={<ProfileEditInvestments />} />
                     <Route path={routes.profile.edit.overview} element={<ProfileEditOverview />} />
-                    <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} />
+                    <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} /> */}
 
                     <Route path={routes.profile.summary} element={<ProfileHome />} />
 
