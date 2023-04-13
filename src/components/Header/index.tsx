@@ -342,14 +342,7 @@ export default function Header() {
                   loading={loginLoading}
                   size="small"
                   sx={{ width: 120, height: 40, borderRadius: 20 }}
-                  onClick={() => {
-                    if (location.pathname === routes.login) {
-                      navigate(routes.login)
-                    } else {
-                      // navigate(`${routes.login}?path=${location.pathname}${location.search}`)
-                      runLogin()
-                    }
-                  }}
+                  onClick={runLogin}
                 >
                   Login
                 </LoadingButton>

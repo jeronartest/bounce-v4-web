@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     <section>
       <LoginLayout title={'Login'} subTitle={<></>}>
         {account ? (
-          <LoadingButton sx={{ width: 200 }} loadingPosition="start" loading={loading} onClick={runLogin}>
+          <LoadingButton sx={{ width: 300 }} loadingPosition="start" loading={loading} onClick={runLogin}>
             Use wallet signature for login
           </LoadingButton>
         ) : (
