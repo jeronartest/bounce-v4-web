@@ -51,12 +51,13 @@ const ProfileHomeLayout: React.FC = () => {
       const res = await getUserInfo({ userId: Number(id) })
       setPersonalInfo(res.data)
     }
-    if (!id || Number(id) === Number(userId)) {
+    if (isLoginUser) {
       setPersonalInfo(userInfo)
-    } else {
+    } else if (id) {
       getInfo()
     }
-  }, [id, isLoginUser, userId, userInfo])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isLoginUser, userId])
 
   const tabsList: (ITabsListProps & { components: JSX.Element })[] = useMemo(
     () => [
