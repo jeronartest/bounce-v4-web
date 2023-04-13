@@ -7,6 +7,7 @@ import { useBackedPoolInfo } from './usePoolInfo'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapNftContract } from 'hooks/useContract'
 import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
+import JSBI from 'jsbi'
 
 const useNftPoolInfo = () => {
   const { poolId } = useQueryParams()
@@ -80,6 +81,9 @@ const useNftPoolInfo = () => {
       },
       creatorClaimed: creatorClaimedRes?.[0] || poolInfo.creatorClaimed,
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
+      ratio: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1)
+        .divide(JSBI.BigInt(poolInfo.amountTotal0))
+        .toSignificant(64),
       swappedAmount0: amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0',
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
     }

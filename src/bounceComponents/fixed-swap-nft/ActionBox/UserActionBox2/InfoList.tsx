@@ -6,7 +6,7 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import { formatNumber } from 'utils/number'
+// import { formatNumber } from 'utils/number'
 import { useIsUserJoined1155Pool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
@@ -36,7 +36,7 @@ const InfoList = (props: FixedSwapPoolParams) => {
               size={20}
             />
             <Typography>
-              {poolInfo.token0.symbol} = {formatNumber(poolInfo.ratio, { unit: 0 })}
+              {poolInfo.token0.symbol} = {poolInfo.ratio}
             </Typography>
             <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
             <Typography>{poolInfo.token1.symbol}</Typography>
