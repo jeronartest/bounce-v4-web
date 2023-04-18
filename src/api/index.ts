@@ -27,7 +27,6 @@ const request = (url: string, options?: any) => {
 const initSignature = (): { token: string | undefined } => {
   const { token, address } = store.getState().users
   const currentAddress = window.localStorage.getItem(CurrentAddressToLocalItem)
-  console.log('🚀 ~ file: index.ts:30 ~ initSignature ~ currentAddress:', currentAddress, token, address)
   return {
     token: currentAddress === address ? token || '' : ''
   }
