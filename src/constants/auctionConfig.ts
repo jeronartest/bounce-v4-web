@@ -22,6 +22,7 @@ export const AuctionConfig: {
   },
   [ChainId.BSC]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.OKEX]: {

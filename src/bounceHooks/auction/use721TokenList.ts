@@ -2,11 +2,9 @@ import { useState, useEffect, useMemo } from 'react'
 import { getUserNFTsInfo } from 'api/user/index'
 import { UserNFTCollection } from 'api/user/type'
 import { useActiveWeb3React } from 'hooks'
+import { Response1155Token } from './use1155TokenList'
 
-export interface Response1155Token {
-  [key: string]: UserNFTCollection[]
-}
-export function use1155TokenList(chainId: string | number): {
+export function use721TokenList(chainId: string | number): {
   loading: boolean
   data: Response1155Token
 } {
@@ -29,10 +27,27 @@ export function use1155TokenList(chainId: string | number): {
         const nftCollection: Response1155Token = {}
         list.map((item: UserNFTCollection) => {
           if (!item.contractAddr) return
-          if (!Object.prototype.hasOwnProperty.call(nftCollection, item.contractAddr || '')) {
+          if (!Object.prototype.hasOwnProperty.call(nftCollection, item.contractAddr)) {
             nftCollection[item.contractAddr] = []
           }
-          nftCollection[item.contractAddr].push(item)
+          nftCollection[item.contractAddr].push({
+            balance: '1',
+            contractAddr: '0x45B70E9960a244479a124cb6fe7E230b66325656',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '282'
+          })
+          nftCollection[item.contractAddr].push({
+            balance: '1',
+            contractAddr: '0x45B70E9960a244479a124cb6fe7E230b66325656',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '283'
+          })
         })
         setList(nftCollection)
       } catch (error) {
@@ -45,4 +60,4 @@ export function use1155TokenList(chainId: string | number): {
   return res
 }
 
-export default use1155TokenList
+export default use721TokenList

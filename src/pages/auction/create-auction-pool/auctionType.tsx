@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import Erc20Pool from './Erc20Pool'
 import Erc1155Pool from './Erc1155Pool'
+import Erc721Pool from './Erc721Pool'
 
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -43,6 +44,7 @@ const CreateAuctionPool = () => {
         )}
         {valuesState.tokenType === TokenType.ERC20 ? <Erc20Pool /> : null}
         {valuesState.tokenType === TokenType.ERC1155 ? <Erc1155Pool /> : null}
+        {valuesState.tokenType === TokenType.ERC721 ? <Erc721Pool /> : null}
       </RoundedContainer>
     </>
   )

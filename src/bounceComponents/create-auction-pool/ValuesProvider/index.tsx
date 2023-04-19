@@ -73,6 +73,7 @@ const initialValues: AuctionPool = {
     decimals: 18
   },
   auctionChainId: '',
+  nft721TokenFrom: [],
   nftTokenFrom: {
     contractAddr: '',
     contractName: '',
@@ -110,6 +111,7 @@ export enum ActionType {
   SetTokenType = 'SET_TOKEN_TYPE',
   CommitTokenImformation = 'COMMIT_TOKEN_IMFORMATION',
   CommitToken1155Information = 'COMMIT_TOKEN_1155_INFORMATION',
+  CommitToken721Information = 'COMMIT_TOKEN_721_INFORMATION',
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',

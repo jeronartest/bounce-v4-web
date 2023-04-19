@@ -10,16 +10,18 @@ interface NftCardProps {
   handleClear?: () => void
   style?: React.CSSProperties
   hideClose?: boolean
+  imgH?: number
+  boxH?: number
 }
 const ShowCard = (props: NftCardProps) => {
   const { balance, name, contractName, tokenId, image } = props.nft
-  const { handleClear, style, hideClose = false } = props
+  const { handleClear, style, hideClose = false, imgH = 220, boxH = 286 } = props
   return (
     <Box
       sx={{
         position: 'relative',
         width: 220,
-        height: 286,
+        height: boxH,
         background: '#FFFFFF',
         border: '1px solid rgba(23, 23, 23, 0.1)',
         borderRadius: '10px',
@@ -33,8 +35,8 @@ const ShowCard = (props: NftCardProps) => {
           display: 'block',
           objectFit: 'cover'
         }}
-        width={220}
-        height={220}
+        width={'100%'}
+        height={imgH}
         src={image || EmptyNFTIcon}
         alt={'nft'}
       />
@@ -57,15 +59,17 @@ const ShowCard = (props: NftCardProps) => {
       </Box>
       <Box
         sx={{
-          height: 66,
-          display: 'flex',
-          flexFlow: 'column nowrap',
-          justifyContent: 'center',
+          height: boxH - imgH,
+          display: 'grid',
+          alignContent: 'center',
+          // flexFlow: 'column nowrap',
+          // justifyContent: 'center',
           padding: '0 16px'
         }}
       >
         <Typography
           component="h1"
+          noWrap
           sx={{
             fontFamily: 'Sharp Grotesk DB Cyr Book 20',
             fontWeight: 400,
@@ -73,16 +77,14 @@ const ShowCard = (props: NftCardProps) => {
             height: '18px',
             lineHeight: '18px',
             color: '#171717',
-            width: '100%',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis'
+            width: '100%'
           }}
         >
           {contractName || name}
         </Typography>
         <Typography
           component="h1"
+          noWrap
           sx={{
             fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
             fontWeight: 400,
@@ -90,10 +92,7 @@ const ShowCard = (props: NftCardProps) => {
             height: '20px',
             lineHeight: '20px',
             color: '#171717',
-            width: '100%',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis'
+            width: '100%'
           }}
         >
           ID:{tokenId ? (tokenId.length > 8 ? `${tokenId.slice(0, 5)}...${tokenId.slice(-5)}` : tokenId) : '--'}

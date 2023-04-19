@@ -1,7 +1,8 @@
+import { AuctionType } from 'bounceComponents/create-auction-pool/types'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 
-export const AUCTION_TYPES = ['fixed-price']
+export const AUCTION_TYPES: string[] = Object.values(AuctionType)
 
 export const isSupportedAuctionType = (auctionType: string | undefined | null): boolean => {
   return !!auctionType && AUCTION_TYPES.includes(auctionType)

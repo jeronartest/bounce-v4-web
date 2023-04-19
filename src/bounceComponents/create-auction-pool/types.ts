@@ -45,12 +45,14 @@ export enum TokenType {
 }
 
 export enum AuctionType {
+  ENGLISH_AUCTION = 'English Auction',
   FIXED_PRICE = 'fixed-price'
 }
 
 export interface AuctionPool {
   tokenType: TokenType
   nftTokenFrom: NFTToken
+  nft721TokenFrom: NFTToken[]
   auctionChainId?: string
   tokenFrom: Token
   tokenTo: Token

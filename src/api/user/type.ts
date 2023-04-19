@@ -280,7 +280,7 @@ export interface UserNFTCollection {
   description?: string
   image?: string
   name?: string
-  tokenId?: string
+  tokenId: string
 }
 export interface GetUserNFTsResponse {
   list: UserNFTCollection[]
