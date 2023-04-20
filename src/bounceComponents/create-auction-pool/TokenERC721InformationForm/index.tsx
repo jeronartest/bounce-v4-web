@@ -33,23 +33,21 @@ const TokenInformationForm = (): JSX.Element => {
   const valuesDispatch = useValuesDispatch()
 
   const internalInitialValues: FormValues[] = useMemo(() => {
-    return values.nft721TokenFrom.map(item => ({
-      contractAddr: item.contractAddr || '',
-      contractName: item.contractName || '',
-      tokenId: item.tokenId || '',
-      balance: item.balance || '',
-      name: item.name || '',
-      description: item.description || '',
-      image: item.image || ''
-    }))
+    return (
+      values.nft721TokenFrom?.map(item => ({
+        contractAddr: item.contractAddr || '',
+        contractName: item.contractName || '',
+        tokenId: item.tokenId || '',
+        balance: item.balance || '',
+        name: item.name || '',
+        description: item.description || '',
+        image: item.image || ''
+      })) || []
+    )
   }, [values.nft721TokenFrom])
-  console.log(
-    '🚀 ~ file: index.tsx:46 ~ constinternalInitialValues:FormValues[]=useMemo ~ internalInitialValues:',
-    internalInitialValues
-  )
 
   const { account } = useActiveWeb3React()
-  const [resultNft, setResultNft] = useState<UserNFTCollection[]>([])
+  const [resultNft, setResultNft] = useState<UserNFTCollection[]>(internalInitialValues)
 
   const showTokenDialog = (_: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
     show<UserNFTCollection[]>(Token721Dialog, { chainId: auctionInChainId, enableEth: false, maximumSelection: 10 })
@@ -74,7 +72,7 @@ const TokenInformationForm = (): JSX.Element => {
           initialValues={internalInitialValues}
           onSubmit={values => {
             valuesDispatch({
-              type: ActionType.CommitToken1155Information,
+              type: ActionType.CommitToken721Information,
               payload: {
                 nft721TokenFrom: values
               }

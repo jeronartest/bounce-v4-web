@@ -69,4 +69,6 @@ export interface AuctionPool {
   activeStep: CreationStep
   completed: CompletedSteps
   participantStatus: ParticipantStatus
+  priceFloor?: string
+  pricesEachTime?: string
 }

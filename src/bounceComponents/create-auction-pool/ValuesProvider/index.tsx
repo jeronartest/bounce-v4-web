@@ -5,7 +5,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { Moment } from 'moment'
 import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react'
 import { isAddress } from 'utils'
-import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus, TokenType } from '../types'
+import { AllocationStatus, AuctionPool, CompletedSteps, NFTToken, ParticipantStatus, TokenType } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -134,6 +134,11 @@ type Payload = {
     activeStep: number
     completed: CompletedSteps
   }
+  [ActionType.CommitToken721Information]: {
+    nft721TokenFrom: NFTToken[]
+    activeStep: number
+    completed: CompletedSteps
+  }
   [ActionType.CommitToken1155Information]: {
     nftTokenFrom: {
       contractAddr: string
@@ -153,6 +158,8 @@ type Payload = {
     poolSize: string
     allocationStatus: AllocationStatus
     allocationPerWallet: string
+    priceFloor?: string
+    pricesEachTime?: string
     activeStep: number
     completed: CompletedSteps
   }
@@ -213,6 +220,13 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
+    case ActionType.CommitToken721Information:
+      return {
+        ...state,
+        nft721TokenFrom: action.payload.nft721TokenFrom,
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true }
+      }
     case ActionType.CommitToken1155Information:
       return {
         ...state,
@@ -233,6 +247,8 @@ const reducer = (state: AuctionPool, action: Actions) => {
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
         allocationStatus: action.payload.allocationStatus,
+        priceFloor: action.payload.priceFloor,
+        pricesEachTime: action.payload.pricesEachTime,
         allocationPerWallet: action.payload.allocationPerWallet,
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
