@@ -26,6 +26,9 @@ export interface GetPoolCreationSignatureParams {
   token0: string
   token1: string
   tokenId?: string
+  is721?: boolean
+  maxPlayer?: number
+  totalShare?: number
 }
 
 export interface GetPoolCreationSignatureResponse {

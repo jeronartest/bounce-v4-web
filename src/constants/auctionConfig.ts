@@ -12,7 +12,7 @@ export const AuctionConfig: {
     // [TokenType.ERC1155]: []
   },
   [ChainId.GÖRLI]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.OPTIMISM]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]

@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import { useEffect } from 'react'
 
 import RoundedContainer from 'bounceComponents/create-auction-pool/RoundedContainer'
-import { CreationStep, TokenType } from 'bounceComponents/create-auction-pool/types'
+import { CreationStep, TokenType, AuctionType } from 'bounceComponents/create-auction-pool/types'
 import ValuesProvider, {
   ActionType,
   useValuesDispatch,
@@ -17,22 +17,26 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import Erc20Pool from './Erc20Pool'
 import Erc1155Pool from './Erc1155Pool'
-
+import RandomSelection from './RandomSelection'
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
 const CreateAuctionPool = () => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
 
-  const { tokenType } = useQueryParams()
+  const { tokenType, auctionType } = useQueryParams()
 
   useEffect(() => {
+    console.log('tokenType, auctionType>>>', tokenType, auctionType)
     valuesDispatch?.({
       type: ActionType.SetTokenType,
       payload: { tokenType: tokenType || TokenType.ERC20 }
     })
-  }, [tokenType, valuesDispatch])
-
+    valuesDispatch?.({
+      type: ActionType.SetAuctionType,
+      payload: { auctionType: auctionType }
+    })
+  }, [auctionType, tokenType, valuesDispatch])
   return (
     <>
       <RoundedContainer maxWidth="md" sx={{ pt: 22 }}>
@@ -41,8 +45,15 @@ const CreateAuctionPool = () => {
             <Stepper steps={steps} valuesState={valuesState} valuesDispatch={valuesDispatch} />
           </Box>
         )}
-        {valuesState.tokenType === TokenType.ERC20 ? <Erc20Pool /> : null}
-        {valuesState.tokenType === TokenType.ERC1155 ? <Erc1155Pool /> : null}
+        {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC20 ? (
+          <Erc20Pool />
+        ) : null}
+        {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC1155 ? (
+          <Erc1155Pool />
+        ) : null}
+        {valuesState.auctionType === AuctionType.RANDOM_SELECTION && valuesState.tokenType === TokenType.ERC20 ? (
+          <RandomSelection />
+        ) : null}
       </RoundedContainer>
     </>
   )
