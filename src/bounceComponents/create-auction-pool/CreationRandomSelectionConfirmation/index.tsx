@@ -69,6 +69,12 @@ const CreatePoolButton = () => {
         : 0
     return currencyFrom && total ? CurrencyAmount.fromAmount(currencyFrom, total) : undefined
   }, [currencyFrom, values.swapRatio, values.winnerNumber])
+  console.log(
+    'RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId]>>>',
+    RANDOM_SELECTION_CONTRACT_ADDRESSES,
+    auctionInChainId,
+    RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId]
+  )
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     chainId === auctionInChainId ? RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId] : undefined,

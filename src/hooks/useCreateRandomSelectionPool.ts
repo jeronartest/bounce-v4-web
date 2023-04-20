@@ -107,11 +107,12 @@ export function useCreateRandomSelectionPool() {
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      totalShare: params.totalShare
+      totalShare: params.totalShare,
+      nShare: params.totalShare
     }
 
     const {
-      data: { expiredTime, signature }
+      data: { expiredTime: expireAt, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
@@ -119,15 +120,17 @@ export function useCreateRandomSelectionPool() {
       token0: signatureParams.token0,
       token1: signatureParams.token1,
       amountTotal0: signatureParams.amountTotal0,
+      amount1PerWallet: signatureParams.maxAmount1PerWallet,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
       claimAt: signatureParams.claimAt,
       closeAt: signatureParams.closeAt,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      maxPlayer: signatureParams.maxPlayer,
+      nShare: signatureParams.nShare,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [contractCallParams, expiredTime, signature]
+    const args = [contractCallParams, expireAt, signature]
 
     const estimatedGas = await randomSelectionERC20Contract.estimateGas.create(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
