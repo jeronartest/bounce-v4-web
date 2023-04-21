@@ -69,12 +69,6 @@ const CreatePoolButton = () => {
         : 0
     return currencyFrom && total ? CurrencyAmount.fromAmount(currencyFrom, total) : undefined
   }, [currencyFrom, values.swapRatio, values.winnerNumber])
-  console.log(
-    'RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId]>>>',
-    RANDOM_SELECTION_CONTRACT_ADDRESSES,
-    auctionInChainId,
-    RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId]
-  )
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     chainId === auctionInChainId ? RANDOM_SELECTION_CONTRACT_ADDRESSES[auctionInChainId] : undefined,
@@ -381,21 +375,42 @@ const CreationRandomSelectionConfirmation = () => {
                   <Typography>{values.winnerNumber}</Typography>
                 </ConfirmationInfoItem>
                 <ConfirmationInfoItem title="Token per ticket">
-                  <Typography>{values.swapRatio}</Typography>
+                  <Stack direction="row" spacing={8} alignItems="flex-end">
+                    <Typography>{values.swapRatio}</Typography>
+                    <TokenImage alt={values.tokenFrom.symbol} src={values.tokenFrom.logoURI} size={20} />
+                    <Typography>{values.tokenFrom.symbol}</Typography>
+                  </Stack>
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Total amount of token">
-                  <Typography>
-                    {values.winnerNumber && values.swapRatio
-                      ? new BigNumber(values.winnerNumber).times(values.swapRatio).toString()
-                      : '-'}
-                  </Typography>
+                  <Stack direction="row" spacing={8} alignItems="flex-end">
+                    <Typography>
+                      {values.winnerNumber && values.swapRatio
+                        ? new BigNumber(values.winnerNumber).times(values.swapRatio).toString()
+                        : '-'}
+                    </Typography>
+                    <TokenImage alt={values.tokenFrom.symbol} src={values.tokenFrom.logoURI} size={20} />
+                    <Typography>{values.tokenFrom.symbol}</Typography>
+                  </Stack>
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Ticket price">
-                  <Typography>{values.ticketPrice}</Typography>
+                  <Stack direction="row" spacing={8} alignItems="flex-end">
+                    <Typography>{values.ticketPrice}</Typography>
+                    <TokenImage alt={values.tokenTo.symbol} src={values.tokenTo.logoURI} size={20} />
+                    <Typography>{values.tokenTo.symbol}</Typography>
+                  </Stack>
                 </ConfirmationInfoItem>
-
+                {/* <ConfirmationInfoItem title="Unit price of one token">
+                  <Stack direction="row" spacing={8} alignItems="flex-end">
+                    <Typography>1</Typography>
+                    <TokenImage alt={values.tokenFrom.symbol} src={values.tokenFrom.logoURI} size={20} />
+                    <Typography>{values.tokenFrom.symbol}</Typography>
+                    <Typography>={values.swapRatio}</Typography>
+                    <TokenImage alt={values.tokenTo.symbol} src={values.tokenTo.logoURI} size={20} />
+                    <Typography>{values.tokenTo.symbol}</Typography>
+                  </Stack>
+                </ConfirmationInfoItem> */}
                 <ConfirmationInfoItem title="Max participant allowed">
                   <Typography>{values.maxParticipantAllowed}</Typography>
                 </ConfirmationInfoItem>

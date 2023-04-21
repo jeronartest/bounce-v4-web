@@ -216,8 +216,8 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                       }}
                       endAdornment={
                         <>
-                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                          <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
                         </>
                       }
                     />
@@ -246,8 +246,8 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                         ? new BigNumber(values.winnerNumber).times(values.swapRatio).toString()
                         : '-'}
                     </Typography>
-                    <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                    <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                    <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
+                    <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -269,6 +269,12 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                       onUserInput={value => {
                         setFieldValue('ticketPrice', value)
                       }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
                     />
                   </FormItem>
                 </Stack>

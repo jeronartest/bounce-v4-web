@@ -230,8 +230,7 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {/* {account && userId && userInfo?.email && userInfo?.twitterName ? ( */}
-                  {account && userId && userInfo?.email ? (
+                  {account && userId && userInfo?.email && userInfo?.twitterName ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -244,8 +243,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={runWeb3Login}>
                       Login
                     </Button>
-                  ) : !userInfo?.email ? (
-                    //   ) : !userInfo?.email || !userInfo?.twitterName ? (
+                  ) : !userInfo?.email || !userInfo?.twitterName ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}

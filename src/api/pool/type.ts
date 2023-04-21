@@ -12,8 +12,9 @@ export enum PoolType {
 }
 
 export interface GetPoolCreationSignatureParams {
+  amountMin1?: string
   amountTotal0: string
-  amountTotal1: string
+  amountTotal1?: string
   category: PoolType
   chainId: number
   claimAt: number
@@ -28,9 +29,9 @@ export interface GetPoolCreationSignatureParams {
   tokenId?: string
   is721?: boolean
   maxPlayer?: number
-  totalShare?: number
+  totalShare?: string | number
+  nShare?: string | number
 }
-
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string

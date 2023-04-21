@@ -27,6 +27,7 @@ interface Params {
   tokenToDecimal: string | number
   totalShare: string | number
   ticketPrice: string | number
+  maxPlayer: number
 }
 
 export function useCreateRandomSelectionPool() {
@@ -36,7 +37,6 @@ export function useCreateRandomSelectionPool() {
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
-
   return useCallback(async (): Promise<{
     hash: string
     transactionReceipt: Promise<TransactionReceipt>
@@ -55,18 +55,24 @@ export function useCreateRandomSelectionPool() {
       tokenFormDecimal: values.tokenFrom.decimals,
       tokenToAddress: values.tokenTo.address,
       tokenToDecimal: values.tokenTo.decimals,
-      totalShare: values.winnerNumber || 0,
-      ticketPrice: values.ticketPrice || 0
+      totalShare: Number(values.winnerNumber) || 0,
+      ticketPrice: values.ticketPrice || 0,
+      maxPlayer: Number(values.maxParticipantAllowed) || 0
     }
 
     if (!currencyFrom || !currencyTo) {
       return Promise.reject('currencyFrom or currencyTo error')
     }
-    const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
-    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
-
-    if (!amountTotal0 || !amountTotal1) {
-      return Promise.reject('amountTotal0 or amountTotal1 error')
+    const amountTotal0 = CurrencyAmount.fromAmount(
+      currencyFrom,
+      new BigNumber(params.swapRatio).times(params.totalShare).toString()
+    )
+    const amountMin1 = CurrencyAmount.fromAmount(currencyTo, params.ticketPrice)
+    if (!amountTotal0) {
+      return Promise.reject('amountTotal0 error')
+    }
+    if (!amountMin1) {
+      return Promise.reject('amountMin1 error')
     }
     if (!chainConfigInBackend?.id) {
       return Promise.reject(new Error('This chain is not supported for the time being'))
@@ -91,28 +97,25 @@ export function useCreateRandomSelectionPool() {
     }
 
     const signatureParams: GetPoolCreationSignatureParams = {
+      amountMin1: amountMin1.raw.toString(),
       amountTotal0: amountTotal0.raw.toString(),
-      amountTotal1: new BigNumber(amountTotal1.raw.toString())
-        .times(params.swapRatio)
-        // Prevent exponential notation
-        .toFixed(0, BigNumber.ROUND_DOWN),
       category: PoolType.Lottery,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
-      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.ticketPrice)?.raw.toString() || '0',
+      maxAmount1PerWallet: amountMin1.raw.toString(),
       merkleroot: merkleroot,
+      maxPlayer: Number(params.maxPlayer),
       name: params.poolName,
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      totalShare: params.totalShare,
-      nShare: params.totalShare
+      totalShare: params.totalShare
     }
 
     const {
-      data: { expiredTime: expireAt, signature }
+      data: { expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
@@ -121,31 +124,30 @@ export function useCreateRandomSelectionPool() {
       token1: signatureParams.token1,
       amountTotal0: signatureParams.amountTotal0,
       amount1PerWallet: signatureParams.maxAmount1PerWallet,
-      amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
       claimAt: signatureParams.claimAt,
       closeAt: signatureParams.closeAt,
-      maxPlayer: signatureParams.maxPlayer,
-      nShare: signatureParams.nShare,
+      maxPlayer: Number(params.maxPlayer),
+      nShare: signatureParams.totalShare,
       whitelistRoot: merkleroot || NULL_BYTES
     }
-
-    const args = [contractCallParams, expireAt, signature]
-
+    const args = [contractCallParams, expiredTime, signature]
+    console.log('args>>>', args)
     const estimatedGas = await randomSelectionERC20Contract.estimateGas.create(...args).catch((error: Error) => {
-      console.debug('Failed to create fixedSwap', error)
+      console.debug('Failed to create Random Selection', error)
       throw error
     })
+    console.log('estimatedGas>>>', estimatedGas)
     return randomSelectionERC20Contract
       .create(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Create fixedSwap auction',
+          summary: 'Create Random Selection auction',
           userSubmitted: {
             account,
-            action: 'createERC20FixedSwapAuction'
+            action: 'createERC20RandomSelectionAuction'
           }
         })
         return {
@@ -157,12 +159,13 @@ export function useCreateRandomSelectionPool() {
   }, [
     account,
     addTransaction,
-    chainConfigInBackend.id,
+    chainConfigInBackend?.id,
     currencyFrom,
     currencyTo,
     randomSelectionERC20Contract,
     values.delayUnlockingTime,
     values.endTime,
+    values.maxParticipantAllowed,
     values.participantStatus,
     values.poolName,
     values.shouldDelayUnlocking,
