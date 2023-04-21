@@ -145,6 +145,7 @@ const Pools: React.FC = ({}) => {
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category: category,
+        tokenType: 1, // erc20:1, nft:2
         chainId: chainId || 0,
         creatorAddress: creatorAddress,
         creatorName: creatorName,
@@ -154,27 +155,27 @@ const Pools: React.FC = ({}) => {
         poolStatusFrontend: poolStatusFrontend === 0 ? null : poolStatusFrontend,
         token0Address: token0Address
       })
-      if (category === 1) {
-        return {
-          list: resp.data.fixedSwapList.list,
-          total: resp.data.fixedSwapList.total
-        }
-      } else if (category === 2) {
-        return {
-          list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total
-        }
-      } else if (category === 3) {
-        return {
-          list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total
-        }
-      } else {
-        return {
-          list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total
-        }
+      //   if (category === 1) {
+      return {
+        list: resp.data.fixedSwapList.list,
+        total: resp.data.fixedSwapList.total
       }
+      //   } else if (category === 2) {
+      //     return {
+      //       list: resp.data.dutchPoolList.list,
+      //       total: resp.data.dutchPoolList.total
+      //     }
+      //   } else if (category === 3) {
+      //     return {
+      //       list: resp.data.lotteryPoolList.list,
+      //       total: resp.data.lotteryPoolList.total
+      //     }
+      //   } else {
+      //     return {
+      //       list: resp.data.sealedBidPoolList.list,
+      //       total: resp.data.sealedBidPoolList.total
+      //     }
+      //   }
     },
     {
       defaultPageSize: defaultIdeaPageSize,
@@ -335,6 +336,7 @@ const Pools: React.FC = ({}) => {
                         <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
                           <Select defaultValue={1}>
                             <MenuItem value={1}>Fixed Price</MenuItem>
+                            <MenuItem value={3}>Random Selection</MenuItem>
                           </Select>
                         </FormItem>
                       </Stack>
