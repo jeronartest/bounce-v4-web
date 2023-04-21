@@ -6,38 +6,35 @@ import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { CurrencyAmount } from 'constants/token'
-import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
-import { useFixedSwapNftContract } from './useContract'
+import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import { useEnglishAuctionNftContract } from './useContract'
 import { getEventLog } from './useCreateFixedSwapPool'
 
-const NO_LIMIT_ALLOCATION = '0'
 interface Params {
+  amountTotal0: number
   whitelist: string[]
-  poolSize: string
-  swapRatio: string
-  allocationPerWallet: string
   startTime: number
   endTime: number
-  delayUnlockingTime: number
   poolName: string
   tokenFromAddress: string
   tokenToAddress: string
-  tokenFormDecimal: string | number
-  tokenToDecimal: string | number
-  tokenId: string
+  tokenIds: string[]
+  priceFloor: string
+  pricesEachTime: string
 }
 
-export function useCreateFixedSwap1155Pool() {
+export function useCreateEnglishAuctionPool() {
   const { account, chainId } = useActiveWeb3React()
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const englishAuctionNftContract = useEnglishAuctionNftContract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const { currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
+
+  // !TOTD checkout ownerOf
 
   return useCallback(async (): Promise<{
     hash: string
@@ -45,33 +42,26 @@ export function useCreateFixedSwap1155Pool() {
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
     const params: Params = {
+      amountTotal0: values.nft721TokenFrom.length,
+      priceFloor: values.priceFloor || '',
+      pricesEachTime: values.pricesEachTime || '',
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-      poolSize: values.poolSize,
-      swapRatio: values.swapRatio,
-      allocationPerWallet:
-        values.allocationStatus === AllocationStatus.Limited
-          ? new BigNumber(values.allocationPerWallet).toString()
-          : NO_LIMIT_ALLOCATION,
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
-      delayUnlockingTime: values.shouldDelayUnlocking
-        ? values.delayUnlockingTime?.unix() || 0
-        : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
-      tokenFromAddress: values.nftTokenFrom.contractAddr || '',
-      tokenFormDecimal: 0,
-      tokenId: values.nftTokenFrom.tokenId || '0',
-      tokenToAddress: values.tokenTo.address,
-      tokenToDecimal: values.tokenTo.decimals
+      tokenFromAddress: values.nft721TokenFrom[0].contractAddr || '',
+      tokenIds: values.nft721TokenFrom.map(i => i.tokenId?.toString() || ''),
+      tokenToAddress: values.tokenTo.address
     }
 
     if (!currencyTo) {
       return Promise.reject('currencyTo error')
     }
-    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
+    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.priceFloor)
+    const amountEach = CurrencyAmount.fromAmount(currencyTo, params.pricesEachTime)
 
-    if (!amountTotal1) {
-      return Promise.reject('amountTotal1 error')
+    if (!amountTotal1 || !amountEach) {
+      return Promise.reject('amountTotal1 or amountEach error')
     }
     if (!chainConfigInBackend?.id) {
       return Promise.reject(new Error('This chain is not supported for the time being'))
@@ -79,7 +69,7 @@ export function useCreateFixedSwap1155Pool() {
     if (!account) {
       return Promise.reject('no account')
     }
-    if (!fixedSwapNftContract) {
+    if (!englishAuctionNftContract) {
       return Promise.reject('no contract')
     }
 
@@ -88,7 +78,7 @@ export function useCreateFixedSwap1155Pool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.fixedSwapNft,
+        category: PoolType.ENGLISH_AUCTION_NFT,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -96,23 +86,22 @@ export function useCreateFixedSwap1155Pool() {
     }
 
     const signatureParams: GetPoolCreationSignatureParams = {
-      amountTotal0: params.poolSize,
-      amountTotal1: new BigNumber(amountTotal1.raw.toString())
-        .times(params.swapRatio)
-        // Prevent exponential notation
-        .toFixed(0, BigNumber.ROUND_DOWN),
-      category: PoolType.fixedSwapNft,
+      amountTotal0: params.amountTotal0.toString(),
+      amountTotal1: amountTotal1.raw.toString(),
+      category: PoolType.ENGLISH_AUCTION_NFT,
       chainId: chainConfigInBackend.id,
-      claimAt: params.delayUnlockingTime,
+      claimAt: 0,
       closeAt: params.endTime,
       creator: account,
-      maxAmount1PerWallet: params.allocationPerWallet.toString(),
+      maxAmount1PerWallet: '0',
       merkleroot: merkleroot,
       name: params.poolName,
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      tokenId: params.tokenId
+      tokenId: '',
+      tokenIds: params.tokenIds,
+      amountMinIncr1: amountEach.raw.toString()
     }
 
     const {
@@ -123,40 +112,40 @@ export function useCreateFixedSwap1155Pool() {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenId: signatureParams.tokenId,
+      tokenIds: signatureParams.tokenIds,
       amountTotal0: signatureParams.amountTotal0,
-      amountTotal1: signatureParams.amountTotal1,
+      amountMin1: signatureParams.amountTotal1,
+      amountMinIncr1: signatureParams.amountMinIncr1,
       openAt: signatureParams.openAt,
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
-      isERC721: false,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      isERC721: true,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
     const args = [contractCallParams, expiredTime, signature]
 
-    const estimatedGas = await fixedSwapNftContract.estimateGas.create(...args).catch((error: Error) => {
-      console.debug('Failed to create fixedSwap', error)
+    const estimatedGas = await englishAuctionNftContract.estimateGas.create(...args).catch((error: Error) => {
+      console.debug('Failed to create english auction', error)
       throw error
     })
-    return fixedSwapNftContract
+    return englishAuctionNftContract
       .create(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Create fixed swap auction for ERC1155',
+          summary: 'Create english auction for NFT',
           userSubmitted: {
             account,
-            action: 'createERC1155FixedSwapAuction'
+            action: 'createEnglishAuction'
           }
         })
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
-          getPoolId: (logs: Log[]) => getEventLog(fixedSwapNftContract, logs, 'Created', 'index')
+          getPoolId: (logs: Log[]) => getEventLog(englishAuctionNftContract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, fixedSwapNftContract, values])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, englishAuctionNftContract, values])
 }

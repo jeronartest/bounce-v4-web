@@ -1,6 +1,6 @@
-import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import Image from 'components/Image'
-import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
 import { CreationStep, ParticipantStatus } from '../types'
@@ -15,7 +15,7 @@ import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
 import { shortenAddress } from 'utils'
 import { useWalletModalToggle } from 'state/application/hooks'
-import { useCreateFixedSwap1155Pool } from 'hooks/useCreateFixedSwap1155Pool'
+import { useCreateEnglishAuctionPool } from 'hooks/useCreateEnglishAuctionPool'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -26,20 +26,10 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
-import { FIXED_SWAP_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
-import JSBI from 'jsbi'
 import { ApprovalState } from 'hooks/useApproveCallback'
-
-const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
-
-const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
-  <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>
-    {typeof title === 'string' ? <ConfirmationSubtitle>{title}</ConfirmationSubtitle> : title}
-    {children}
-  </Stack>
-)
+import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
@@ -48,29 +38,23 @@ const CreatePoolButton = () => {
   const navigate = useNavigate()
   const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
-  const createFixedSwap1155Pool = useCreateFixedSwap1155Pool()
+  const createEnglishAuctionPool = useCreateEnglishAuctionPool()
   const auctionInChainId = useAuctionInChain()
   const walletModalToggle = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
-  const auctionAccountBalance = useERC1155Balance(
-    values.nftTokenFrom.contractAddr,
-    account || undefined,
-    values.nftTokenFrom.tokenId,
-    auctionInChainId
-  )
 
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
   const [approvalState, approveCallback] = useNFTApproveAllCallback(
-    values.nftTokenFrom.contractAddr,
-    chainId === auctionInChainId ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+    values.nft721TokenFrom[0].contractAddr,
+    chainId === auctionInChainId ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
   )
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt } = await createFixedSwap1155Pool()
+      const { getPoolId, transactionReceipt } = await createEnglishAuctionPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -141,7 +125,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.shortName, createFixedSwap1155Pool, navigate, redirect])
+  }, [chainConfigInBackend?.shortName, createEnglishAuctionPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -210,20 +194,10 @@ const CreatePoolButton = () => {
         loading: true
       }
     }
-    if (
-      !auctionAccountBalance ||
-      !values.poolSize ||
-      JSBI.lessThan(JSBI.BigInt(auctionAccountBalance), JSBI.BigInt(values.poolSize))
-    ) {
-      return {
-        text: 'Insufficient Balance',
-        disabled: true
-      }
-    }
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
-          text: `Approving use of ${values.nftTokenFrom.contractName || 'NFT'} ...`,
+          text: `Approving use of ${values.nft721TokenFrom[0]?.contractName || 'NFT'} ...`,
           loading: true
         }
       }
@@ -235,7 +209,7 @@ const CreatePoolButton = () => {
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
-          text: `Approve use of ${values.nftTokenFrom.contractName || 'NFT'}`,
+          text: `Approve use of  ${values.nft721TokenFrom[0]?.contractName || 'NFT'}`,
           run: toApprove
         }
       }
@@ -246,15 +220,13 @@ const CreatePoolButton = () => {
   }, [
     account,
     approvalState,
-    auctionAccountBalance,
     auctionInChainId,
     buttonCommitted,
     chainId,
     switchNetwork,
     toApprove,
     toCreate,
-    values.nftTokenFrom.contractName,
-    values.poolSize,
+    values.nft721TokenFrom,
     walletModalToggle
   ])
 

@@ -34,9 +34,12 @@ import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
 import JSBI from 'jsbi'
 import { ApprovalState } from 'hooks/useApproveCallback'
 
-const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
+export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[900],
+  opacity: 0.5
+}))
 
-const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
+export const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
   <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>
     {typeof title === 'string' ? <ConfirmationSubtitle>{title}</ConfirmationSubtitle> : title}
     {children}

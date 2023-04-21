@@ -8,7 +8,8 @@ export enum PoolType {
   'Duch' = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
-  'fixedSwapNft' = 5
+  'fixedSwapNft' = 5,
+  ENGLISH_AUCTION_NFT = 6
 }
 
 export interface GetPoolCreationSignatureParams {
@@ -26,6 +27,8 @@ export interface GetPoolCreationSignatureParams {
   token0: string
   token1: string
   tokenId?: string
+  tokenIds?: string[]
+  amountMinIncr1?: string
 }
 
 export interface GetPoolCreationSignatureResponse {

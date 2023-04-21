@@ -15,7 +15,12 @@ import ERC721_ABI from '../constants/abis/erc721.json'
 import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
-import { FIXED_SWAP_ERC20_ADDRESSES, FIXED_SWAP_NFT_CONTRACT_ADDRESSES } from '../constants'
+import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
+import {
+  ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
+  FIXED_SWAP_ERC20_ADDRESSES,
+  FIXED_SWAP_NFT_CONTRACT_ADDRESSES
+} from '../constants'
 
 // returns null on errors
 function useContract(
@@ -134,4 +139,15 @@ export function useFixedSwapNftContract(queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   return useContract(cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined, FIXED_SWAP_NFT_ABI, true, queryChainId)
+}
+
+export function useEnglishAuctionNftContract(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(
+    cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined,
+    ENGLISH_AUCTION_NFT_ABI,
+    true,
+    queryChainId
+  )
 }
