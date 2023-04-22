@@ -117,7 +117,7 @@ const CreatePoolButton = () => {
         .then(poolId => {
           const goToPoolInfoPage = () => {
             navigate(
-              routes.auction.fixedPrice
+              routes.auction.randomSelection
                 .replace(':chainShortName', chainConfigInBackend?.shortName || '')
                 .replace(':poolId', poolId)
             )

@@ -133,15 +133,15 @@ export function useCreateRandomSelectionPool() {
     }
     const args = [contractCallParams, expiredTime, signature]
     console.log('args>>>', args)
-    // const estimatedGas = await randomSelectionERC20Contract.estimateGas.create(...args).catch((error: Error) => {
-    //   console.debug('Failed to create Random Selection', error)
-    //   throw error
-    // })
-    // console.log('estimatedGas>>>', estimatedGas)
+    const estimatedGas = await randomSelectionERC20Contract.estimateGas.create(...args).catch((error: Error) => {
+      console.debug('Failed to create Random Selection', error)
+      throw error
+    })
+    console.log('estimatedGas>>>', estimatedGas)
     return randomSelectionERC20Contract
       .create(...args, {
-        // gasLimit: calculateGasMargin(estimatedGas)
-        gasLimit: 3500000
+        gasLimit: calculateGasMargin(estimatedGas)
+        // gasLimit: 3500000
       })
       .then((response: TransactionResponse) => {
         addTransaction(response, {

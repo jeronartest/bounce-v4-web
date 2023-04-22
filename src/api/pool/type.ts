@@ -10,7 +10,6 @@ export enum PoolType {
   'SealedBid' = 4,
   'fixedSwapNft' = 5
 }
-
 export interface GetPoolCreationSignatureParams {
   amountMin1?: string
   amountTotal0: string
@@ -59,6 +58,7 @@ export interface GetPoolInfoParams {
   chainId: number
   poolId: string
   address?: string
+  tokenType?: number
 }
 
 export interface TokenFromApi {
@@ -149,6 +149,9 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     currencySwappedAmount0: CurrencyAmount | undefined
     currencySwappedAmount1: CurrencyAmount | undefined
   }
+  totalShare?: string | number
+  maxPlayere?: string | number
+  curPlayer?: string | number
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
