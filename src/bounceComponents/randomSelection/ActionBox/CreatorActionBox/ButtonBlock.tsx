@@ -4,7 +4,7 @@ import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import { useCreatorClaim } from 'bounceHooks/auction/useRandomSelectionCreatorClaim'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback, useMemo } from 'react'
-import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
+import useIsAllRandomSelectionTokenSwapped from 'bounceHooks/auction/useIsAllRandomSelectionTokenSwapped'
 import { LoadingButton } from '@mui/lab'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
@@ -15,7 +15,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
-  const isAllTokenSwapped = useIsAllTokenSwapped(poolInfo)
+  const isAllTokenSwapped = useIsAllRandomSelectionTokenSwapped(poolInfo)
 
   const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
 
@@ -101,11 +101,12 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
         variant="outlined"
         fullWidth
         loadingPosition="start"
+        disabled={true}
         sx={{ mt: 24, mb: 12 }}
         loading={submitted.complete || submitted.submitted}
         onClick={() => toClaim(true)}
       >
-        Cancel & Claim tokens
+        Cancel & Claim tokens only after pool is closed
       </LoadingButton>
     )
   }
