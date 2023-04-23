@@ -112,6 +112,7 @@ export function useCurrencyBalances(
   currencies?: (Currency | undefined)[],
   chainId?: ChainId
 ): (CurrencyAmount | undefined)[] {
+  console.log('currencies>>>>', currencies)
   const tokens = useMemo(
     () => currencies?.map(currency => (currency && !currency?.isNative ? currency : undefined)) ?? [],
     [currencies]

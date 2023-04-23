@@ -257,9 +257,10 @@ const LiveCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 28,
+                  fontSize: 24,
                   color: '#fff',
-                  marginBottom: 5
+                  marginBottom: 5,
+                  letterSpacing: 0
                 }}
               >
                 {formatNumber(poolInfo.maxAmount1PerWallet, {
@@ -306,7 +307,7 @@ const LiveCard = ({
   }
   return (
     <>
-      {(action === 'GO_TO_CHECK' || action === 'FIRST_BID') && <NoJoinedCard isJoined={isJoined} />}
+      <NoJoinedCard isJoined={isJoined} />
       <Box
         sx={{
           marginBottom: '30px'

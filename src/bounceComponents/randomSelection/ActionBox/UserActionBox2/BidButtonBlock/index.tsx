@@ -13,7 +13,8 @@ import { fixToDecimals } from 'utils/number'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
+import { ChainId } from 'constants/chain'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -41,12 +42,23 @@ const BidButtonBlock = ({
     () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
     [bidAmount, poolInfo.token1.decimals]
   )
-
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
-  const currencySlicedBidAmount = useMemo(
-    () => CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount),
-    [poolInfo.currencyAmountTotal1.currency, slicedBidAmount]
-  )
+  const currencyAmountTotal1 = {
+    chainId: ChainId.GÖRLI, // random selection only support GORLI
+    address: poolInfo.token1.address,
+    decimals: poolInfo.token1.decimals,
+    symbol: poolInfo.token1.symbol
+  }
+  const userBalance = useCurrencyBalance(account || undefined, currencyAmountTotal1 as Currency, ChainId.GÖRLI)
+  console.log('userBalance>>>', userBalance)
+  const currencySlicedBidAmount = useMemo(() => {
+    const currencyAmountTotal = {
+      chainId: ChainId.GÖRLI, // random selection only support GORLI
+      address: poolInfo.token1.address,
+      decimals: poolInfo.token1.decimals,
+      symbol: poolInfo.token1.symbol
+    }
+    return CurrencyAmount.fromAmount(currencyAmountTotal as Currency, slicedBidAmount)
+  }, [poolInfo.token1.address, poolInfo.token1.decimals, poolInfo.token1.symbol, slicedBidAmount])
 
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true
@@ -95,7 +107,7 @@ const BidButtonBlock = ({
           onCancel={handleCancelButtonClick}
         >
           <Button variant="contained" fullWidth disabled>
-            {!currencySlicedBidAmount ? 'Input Amount' : !userBalance ? 'Loading' : 'Insufficient balance'}
+            {!userBalance ? 'Loading' : 'Insufficient balance'}
           </Button>
         </BidButtonGroup>
         <GetFundBackAlert />
