@@ -119,7 +119,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       ret
         .then(() => {
           hideDialogConfirmation()
-          // TOTD ?
           setAction('BID_OR_REGRET')
           show(DialogTips, {
             iconType: 'success',
@@ -245,17 +244,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     }
     setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
   }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
-
-  useEffect(() => {
-    if (action === 'BID_OR_REGRET') {
-      setRegretAmount('')
-    }
-    if (action === 'INPUT_REGRET_AMOUNT' || action === 'CONFIRM_REGRET') {
-    }
-    if (action === 'GO_TO_CHECK' || action === 'CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') {
-      setRegretAmount('')
-    }
-  }, [action])
 
   return (
     <Box sx={{ mt: 32 }}>

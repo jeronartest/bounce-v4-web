@@ -2,7 +2,7 @@ import { Box, Container, Stack } from '@mui/material'
 
 import CreatorMainBlock from 'bounceComponents/randomSelection/MainBlock/CreatorMainBlock'
 import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
-import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'
+// import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'
 import Header from 'bounceComponents/randomSelection/Header'
 import UserMainBlock from 'bounceComponents/randomSelection/MainBlock/UserMainBlock'
 import useRandomSelectionPoolInfo from 'bounceHooks/auction/useRandomSelectionPoolInfo'
@@ -11,7 +11,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import { useEffect } from 'react'
-import { PoolStatus } from 'api/pool/type'
+// import { PoolStatus } from 'api/pool/type'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
@@ -44,7 +44,7 @@ const FixedSwapPoolPageContent = () => {
             ) : (
               <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
             )}
-            {poolInfo.status === PoolStatus.Closed && <AuctionWinnerList />}
+            {/* {poolInfo.status === PoolStatus.Closed && <AuctionWinnerList />} */}
           </Stack>
         </Box>
       </Box>
