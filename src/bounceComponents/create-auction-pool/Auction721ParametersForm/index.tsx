@@ -6,11 +6,10 @@ import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 
-import ShowNFTCard from '../TokenERC1155InforationForm/components/NFTCard/showCard'
+import ShowNFTCard from '../TokenERC1155InforationForm/components/NFTCard/ShowNFTCard'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import { UserNFTCollection } from 'api/user/type'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -121,7 +120,10 @@ const Auction721ParametersForm = (): JSX.Element => {
                   <ShowNFTCard
                     hideClose
                     key={item.tokenId}
-                    nft={item as UserNFTCollection}
+                    balance={item.balance}
+                    name={item.name || item.contractName || ''}
+                    tokenId={item.tokenId || ''}
+                    image={item.image}
                     boxH={isOneNft ? 286 : 220}
                     imgH={isOneNft ? 220 : 170}
                     style={{

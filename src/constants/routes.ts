@@ -4,7 +4,8 @@ export const routes = {
     createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName/:tokenType',
 
     fixedSwapNft: '/auction/fixed-swap-1155/:chainShortName/:poolId',
-    fixedPrice: '/auction/fixed-price/:chainShortName/:poolId'
+    fixedPrice: '/auction/fixed-price/:chainShortName/:poolId',
+    englishAuction: '/auction/english-auction/:chainShortName/:poolId'
   },
   login: '/login',
   market: {

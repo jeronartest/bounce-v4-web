@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { show } from '@ebay/nice-modal-react'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import ShowNFTCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/showCard'
+import ShowNFTCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/ShowNFTCard'
 import Token721Dialog from './components/Token721Dialog/index'
 import { UserNFTCollection } from 'api/user/type'
 import { useActiveWeb3React } from 'hooks'
@@ -95,7 +95,10 @@ const TokenInformationForm = (): JSX.Element => {
                   {resultNft.map((item, idx) => (
                     <ShowNFTCard
                       key={item.tokenId}
-                      nft={item}
+                      balance={item.balance}
+                      name={item.name || item.contractName || ''}
+                      tokenId={item.tokenId || ''}
+                      image={item.image}
                       handleClear={() => {
                         const _list = [...resultNft]
                         _list.splice(idx, 1)

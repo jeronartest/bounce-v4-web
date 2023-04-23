@@ -3,19 +3,20 @@ import { Box, Typography } from '@mui/material'
 import EmptyNFTIcon from './emptyNFTIcon.png'
 import Image from 'components/Image'
 import { ReactComponent as CloseIcon } from 'assets/imgs/components/nft-close.svg'
-import { UserNFTCollection } from 'api/user/type'
 
 interface NftCardProps {
-  nft: UserNFTCollection
   handleClear?: () => void
   style?: React.CSSProperties
   hideClose?: boolean
   imgH?: number
   boxH?: number
+  balance?: string
+  name: string
+  tokenId: string
+  image?: string
 }
 const ShowCard = (props: NftCardProps) => {
-  const { balance, name, contractName, tokenId, image } = props.nft
-  const { handleClear, style, hideClose = false, imgH = 220, boxH = 286 } = props
+  const { handleClear, style, hideClose = false, imgH = 220, boxH = 286, balance, name, tokenId, image } = props
   return (
     <Box
       sx={{
@@ -40,23 +41,25 @@ const ShowCard = (props: NftCardProps) => {
         src={image || EmptyNFTIcon}
         alt={'nft'}
       />
-      <Box
-        sx={{
-          position: 'absolute',
-          left: 8,
-          top: 8,
-          height: 22,
-          lineHeight: '22px',
-          textAlign: 'center',
-          padding: '0 8px',
-          background: '#2B51DA',
-          borderRadius: '100px',
-          fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-          color: '#fff'
-        }}
-      >
-        x{balance}
-      </Box>
+      {balance && (
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 8,
+            top: 8,
+            height: 22,
+            lineHeight: '22px',
+            textAlign: 'center',
+            padding: '0 8px',
+            background: '#2B51DA',
+            borderRadius: '100px',
+            fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+            color: '#fff'
+          }}
+        >
+          x{balance}
+        </Box>
+      )}
       <Box
         sx={{
           height: boxH - imgH,
@@ -80,7 +83,7 @@ const ShowCard = (props: NftCardProps) => {
             width: '100%'
           }}
         >
-          {contractName || name}
+          {name}
         </Typography>
         <Typography
           component="h1"

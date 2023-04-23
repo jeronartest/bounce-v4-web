@@ -6,14 +6,13 @@ import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 
-import ShowNFTCard from '../TokenERC1155InforationForm/components/NFTCard/showCard'
+import ShowNFTCard from '../TokenERC1155InforationForm/components/NFTCard/ShowNFTCard'
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
-import { UserNFTCollection } from 'api/user/type'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -190,7 +189,13 @@ const Auction1155ParametersForm = (): JSX.Element => {
                 flexFlow: 'row nowrap'
               }}
             >
-              <ShowNFTCard nft={valuesState.nftTokenFrom as unknown as UserNFTCollection} hideClose={true} />
+              <ShowNFTCard
+                balance={valuesState.nftTokenFrom.balance}
+                name={valuesState.nftTokenFrom.name || valuesState.nftTokenFrom.contractName || ''}
+                tokenId={valuesState.nftTokenFrom.tokenId || ''}
+                image={valuesState.nftTokenFrom.image}
+                hideClose={true}
+              />
               <Box
                 sx={{
                   flex: 1,

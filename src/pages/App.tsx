@@ -23,6 +23,7 @@ import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType
 
 import AuctionFixedPricePoolId from 'pages/auction/fixed-price/poolId'
 import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
+import EnglishAuctionNFTPoolId from 'pages/auction/englishAuctionNFT/poolId'
 
 import Login from 'pages/login'
 
@@ -90,8 +91,10 @@ export default function App() {
                   <Routes>
                     <Route path={routes.auction.createAuctionPool} element={<CreateAuctionPool />} />
                     <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
+
                     <Route path={routes.auction.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
+                    <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
 

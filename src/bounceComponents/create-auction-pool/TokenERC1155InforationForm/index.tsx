@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { show } from '@ebay/nice-modal-react'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import ShowNFTCard from './components/NFTCard/showCard'
+import ShowNFTCard from './components/NFTCard/ShowNFTCard'
 import TokenDialog from './components/TokenDialog/index'
 import { UserNFTCollection } from 'api/user/type'
 // import { ReactComponent as ChainIcon } from 'assets/imgs/auction/chain.svg'
@@ -100,7 +100,10 @@ const TokenInformationForm = (): JSX.Element => {
               <Stack component={Form} spacing={20} noValidate>
                 {resultNft ? (
                   <ShowNFTCard
-                    nft={resultNft}
+                    balance={resultNft.balance}
+                    name={resultNft.name || resultNft.contractName || ''}
+                    tokenId={resultNft.tokenId || ''}
+                    image={resultNft.image}
                     handleClear={() => {
                       setResultNft(null)
                     }}
