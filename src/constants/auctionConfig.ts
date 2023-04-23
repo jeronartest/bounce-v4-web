@@ -22,7 +22,6 @@ export const AuctionConfig: {
   },
   [ChainId.BSC]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
-    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.OKEX]: {
@@ -75,7 +74,8 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.SEPOLIA]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
   },
   [ChainId.AUROEA]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]

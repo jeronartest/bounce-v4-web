@@ -12,6 +12,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { useEnglishAuctionNftContract } from './useContract'
 import { getEventLog } from './useCreateFixedSwapPool'
+import { useERC721MultiOwner } from 'hooks/useNFTTokenBalance'
 
 interface Params {
   amountTotal0: number
@@ -23,7 +24,7 @@ interface Params {
   tokenToAddress: string
   tokenIds: string[]
   priceFloor: string
-  pricesEachTime: string
+  amountMinIncr1: string
 }
 
 export function useCreateEnglishAuctionPool() {
@@ -36,6 +37,12 @@ export function useCreateEnglishAuctionPool() {
 
   // !TOTD checkout ownerOf
 
+  const { ownerIds } = useERC721MultiOwner(
+    values.nft721TokenFrom?.[0].contractAddr,
+    account || undefined,
+    values.nft721TokenFrom.map(item => item.tokenId || '')
+  )
+
   return useCallback(async (): Promise<{
     hash: string
     transactionReceipt: Promise<TransactionReceipt>
@@ -44,7 +51,7 @@ export function useCreateEnglishAuctionPool() {
     const params: Params = {
       amountTotal0: values.nft721TokenFrom.length,
       priceFloor: values.priceFloor || '',
-      pricesEachTime: values.pricesEachTime || '',
+      amountMinIncr1: values.amountMinIncr1 || '',
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
@@ -58,7 +65,11 @@ export function useCreateEnglishAuctionPool() {
       return Promise.reject('currencyTo error')
     }
     const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.priceFloor)
-    const amountEach = CurrencyAmount.fromAmount(currencyTo, params.pricesEachTime)
+    const amountEach = CurrencyAmount.fromAmount(currencyTo, params.amountMinIncr1)
+
+    if (ownerIds.length !== values.nft721TokenFrom.length) {
+      return Promise.reject('NFT owner error')
+    }
 
     if (!amountTotal1 || !amountEach) {
       return Promise.reject('amountTotal1 or amountEach error')
@@ -86,6 +97,7 @@ export function useCreateEnglishAuctionPool() {
     }
 
     const signatureParams: GetPoolCreationSignatureParams = {
+      amountMin1: amountTotal1.raw.toString(),
       amountTotal0: params.amountTotal0.toString(),
       amountTotal1: amountTotal1.raw.toString(),
       category: PoolType.ENGLISH_AUCTION_NFT,
@@ -93,6 +105,7 @@ export function useCreateEnglishAuctionPool() {
       claimAt: 0,
       closeAt: params.endTime,
       creator: account,
+      is721: true,
       maxAmount1PerWallet: '0',
       merkleroot: merkleroot,
       name: params.poolName,
@@ -147,5 +160,21 @@ export function useCreateEnglishAuctionPool() {
           getPoolId: (logs: Log[]) => getEventLog(englishAuctionNftContract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, englishAuctionNftContract, values])
+  }, [
+    account,
+    addTransaction,
+    chainConfigInBackend?.id,
+    currencyTo,
+    englishAuctionNftContract,
+    ownerIds.length,
+    values.amountMinIncr1,
+    values.endTime,
+    values.nft721TokenFrom,
+    values.participantStatus,
+    values.poolName,
+    values.priceFloor,
+    values.startTime,
+    values.tokenTo.address,
+    values.whitelist
+  ])
 }

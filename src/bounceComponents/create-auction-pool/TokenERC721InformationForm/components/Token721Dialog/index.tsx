@@ -3,7 +3,6 @@ import { useModal, create, muiDialogV5 } from '@ebay/nice-modal-react'
 import { Box, Stack, Grid, Button } from '@mui/material'
 import { UserNFTCollection } from 'api/user/type'
 import Dialog from 'bounceComponents/common/DialogBase'
-import { use721TokenList } from 'bounceHooks/auction/use721TokenList'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { toast } from 'react-toastify'
@@ -11,6 +10,7 @@ import { useERC721MultiOwner } from 'hooks/useNFTTokenBalance'
 import { useActiveWeb3React } from 'hooks'
 import NFTCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard'
 import CollectionSelect from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/CollectionSelect'
+import use1155TokenList from 'bounceHooks/auction/use1155TokenList'
 
 interface TokenDialogProps {
   enableEth?: boolean
@@ -26,7 +26,7 @@ const Token721Dialog = create(({ chainId, singleSelection, maximumSelection }: T
   const backedChainId = options.chainInfoOpt?.find(i => i.ethChainId === chainId)?.id
 
   const { account } = useActiveWeb3React()
-  const { data: tokenList, loading } = use721TokenList(backedChainId || '')
+  const { data: tokenList, loading } = use1155TokenList(backedChainId || '', true)
   const [curNftList, setCurNftList] = useState<UserNFTCollection[]>([])
   const [resultNft, setResultNft] = useState<UserNFTCollection[]>([])
 

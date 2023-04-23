@@ -25,7 +25,7 @@ interface FormValues {
   tokenToLogoURI?: string
   tokenToDecimals: string | number
   priceFloor: string
-  pricesEachTime: string
+  amountMinIncr1: string
 }
 
 const Auction721ParametersForm = (): JSX.Element => {
@@ -40,7 +40,7 @@ const Auction721ParametersForm = (): JSX.Element => {
     tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
     priceFloor: valuesState.priceFloor || '',
-    pricesEachTime: valuesState.pricesEachTime || ''
+    amountMinIncr1: valuesState.amountMinIncr1 || ''
   }
 
   const validationSchema = Yup.object({
@@ -48,9 +48,13 @@ const Auction721ParametersForm = (): JSX.Element => {
     priceFloor: Yup.string()
       .required('Price floor is required')
       .test('PRICE_FLOOR_CHECK', 'Price floor is required', value => !!value && new BigNumber(value).gt(0)),
-    pricesEachTime: Yup.string()
-      .required('Prices each time is required')
-      .test('PRICES_EACH_TIME_CHECK', 'Prices each time is required', value => !!value && new BigNumber(value).gt(0))
+    amountMinIncr1: Yup.string()
+      .required('The minimum price increase is required')
+      .test(
+        'PRICES_EACH_TIME_CHECK',
+        'The minimum price increase is required',
+        value => !!value && new BigNumber(value).gt(0)
+      )
   })
 
   const showTokenDialog = (
@@ -100,7 +104,7 @@ const Auction721ParametersForm = (): JSX.Element => {
                 decimals: values.tokenToDecimals
               },
               priceFloor: values.priceFloor,
-              pricesEachTime: values.pricesEachTime
+              amountMinIncr1: values.amountMinIncr1
             }
           })
         }}
@@ -199,16 +203,16 @@ const Auction721ParametersForm = (): JSX.Element => {
 
                   <Box>
                     <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
-                      Prices each time
+                      The minimum price increase
                     </Typography>
 
                     <Stack direction="row" alignItems="center" spacing={15}>
-                      <FormItem name="pricesEachTime" placeholder="0.00" required sx={{ flex: 1 }}>
+                      <FormItem name="amountMinIncr1" placeholder="0.00" required sx={{ flex: 1 }}>
                         <NumberInput
                           placeholder="0.00"
-                          value={values.pricesEachTime}
+                          value={values.amountMinIncr1}
                           onUserInput={value => {
-                            setFieldValue('pricesEachTime', value)
+                            setFieldValue('amountMinIncr1', value)
                           }}
                           endAdornment={
                             <>

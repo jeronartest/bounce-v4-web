@@ -192,7 +192,7 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '',
+  [ChainId.SEPOLIA]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.PALM]: ''

@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 import { useMemo } from 'react'
 import NotStartedAlert from 'bounceComponents/fixed-swap/Alerts/NotStartedAlert'
@@ -7,9 +7,10 @@ import ClaimBackAlert from 'bounceComponents/fixed-swap/Alerts/ClaimBackAlert'
 import AllTokenAuctionedAlert from 'bounceComponents/fixed-swap/Alerts/AllTokenAuctionedAlert'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import TopInfoBox from '../TopInfoBox'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
 const CreatorMainBlock = (): JSX.Element => {
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
   const isAllTokenSwapped = useMemo(
     () => Number(poolInfo?.swappedAmount0) >= Number(poolInfo?.amountTotal0),
     [poolInfo]
@@ -26,6 +27,16 @@ const CreatorMainBlock = (): JSX.Element => {
         <AllTokenAuctionedAlert />
       )}
       <TopInfoBox />
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 20 }}>
+        <Typography variant="h2">My Pool</Typography>
+        <PoolStatusBox
+          status={poolInfo.status}
+          openTime={poolInfo.openAt}
+          closeTime={poolInfo.closeAt}
+          claimAt={poolInfo.claimAt}
+          onEnd={getPoolInfo}
+        />
+      </Box>
     </Stack>
   )
 }

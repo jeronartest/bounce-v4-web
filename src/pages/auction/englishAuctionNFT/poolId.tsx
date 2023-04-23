@@ -9,6 +9,7 @@ import NoService from 'components/NoService'
 import ActionHistory from 'bounceComponents/fixed-swap-nft/ActionHistory'
 import ValuesProvider, { useEnglishAuctionPoolInfo } from './ValuesProvider'
 import CreatorMainBlock from 'bounceComponents/englishAuction/CreatorMainBlock'
+import UserMainBlock from 'bounceComponents/englishAuction/UserMainBlock'
 
 function EnglishAuctionNFTContent() {
   const { account } = useActiveWeb3React()
@@ -42,7 +43,7 @@ function EnglishAuctionNFTContent() {
             />
 
             <Stack sx={{ flex: 1 }} spacing={20}>
-              {account === poolInfo.creator ? <CreatorMainBlock /> : 2}
+              {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />}
 
               <ActionHistory />
             </Stack>

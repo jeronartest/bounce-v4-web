@@ -145,5 +145,5 @@ export const updateUserBanner = async (params: IUserUpdateBannerParams) => {
  * Get nfts of login user
  */
 export const getUserNFTsInfo = (params: GetUserNFTsParams) => {
-  return ApiInstance.post('/user/nfts ', params)
+  return ApiInstance.post('/user/nfts', params)
 }

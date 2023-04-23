@@ -343,8 +343,8 @@ const CreationConfirmation = () => {
                   <Typography>{values.priceFloor}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Prices each time">
-                  <Typography>{values.pricesEachTime}</Typography>
+                <ConfirmationInfoItem title="The minimum price increase">
+                  <Typography>{values.amountMinIncr1}</Typography>
                 </ConfirmationInfoItem>
               </Stack>
             </Box>

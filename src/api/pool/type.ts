@@ -29,6 +29,8 @@ export interface GetPoolCreationSignatureParams {
   tokenId?: string
   tokenIds?: string[]
   amountMinIncr1?: string
+  amountMin1?: string
+  is721?: boolean
 }
 
 export interface GetPoolCreationSignatureResponse {

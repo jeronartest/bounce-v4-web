@@ -70,5 +70,5 @@ export interface AuctionPool {
   completed: CompletedSteps
   participantStatus: ParticipantStatus
   priceFloor?: string
-  pricesEachTime?: string
+  amountMinIncr1?: string
 }
