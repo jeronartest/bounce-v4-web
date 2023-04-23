@@ -14,9 +14,9 @@ import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
-import { PoolEvent } from 'api/pool/type'
+// import { PoolEvent } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
+// import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { shortenAddress } from 'utils'
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -49,13 +49,13 @@ const StyledTableRow = styled(TableRow)(() => ({
   }
 }))
 
-const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
-const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
+// const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
+// const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
 
-const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
-  Swapped: SaleTypography,
-  Reversed: RegretTypography
-}
+// const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
+//   Swapped: SaleTypography,
+//   Reversed: RegretTypography
+// }
 
 const AuctionWinnerList = () => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory()

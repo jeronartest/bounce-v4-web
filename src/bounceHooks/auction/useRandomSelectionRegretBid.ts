@@ -56,13 +56,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
           }
         })
     },
-    [
-      account,
-      addTransaction,
-      randomSelectionERC20Contract,
-      poolInfo.currencyAmountTotal1.currency.symbol,
-      poolInfo.poolId
-    ]
+    [account, randomSelectionERC20Contract, poolInfo.poolId, poolInfo.token1.symbol, addTransaction]
   )
 
   return { run, submitted }
