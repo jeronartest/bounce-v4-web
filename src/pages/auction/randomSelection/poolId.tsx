@@ -11,11 +11,14 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import { useEffect } from 'react'
+// import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
 // import { PoolStatus } from 'api/pool/type'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
   const isBlock = useCurrentRegionBlock()
+  //   const isWinnerSeedDone = useIsWinnerSeedDone(Number(poolInfo?.id))
+  //   console.log('poolid page IsWinnerSeedDone >>>', isWinnerSeedDone)
   if (isBlock) {
     return <NoService />
   }

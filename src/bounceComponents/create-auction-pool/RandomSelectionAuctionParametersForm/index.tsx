@@ -287,7 +287,7 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                   <Typography variant="h3" sx={{ fontSize: 16 }}>
                     Max Participant Allowed (Max 10,000)
                   </Typography>
-                  <Tooltip title="The maximum nubmer is 10.000 participants">
+                  <Tooltip title="The maximum nubmer is 10.000 participants and must more than nunber of winners ">
                     <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                   </Tooltip>
                 </Stack>
@@ -296,7 +296,13 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                     <NumberInput
                       value={values.maxParticipantAllowed + ''}
                       onUserInput={value => {
-                        setFieldValue('maxParticipantAllowed', value)
+                        if (value <= values.winnerNumber) {
+                          setFieldValue('maxParticipantAllowed', values.winnerNumber)
+                        } else if (Number(value) >= 10000) {
+                          setFieldValue('maxParticipantAllowed', 10000)
+                        } else {
+                          setFieldValue('maxParticipantAllowed', value)
+                        }
                       }}
                     />
                   </FormItem>

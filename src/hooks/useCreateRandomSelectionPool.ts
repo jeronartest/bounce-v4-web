@@ -213,6 +213,16 @@ export function useIsJoinedRandomSelectionPool(poolId: string | number, address:
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [address, Number(poolId)]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'betNo', args)
+  console.log('betNo > 0 = isJoined result>>>', result?.toString())
+  // betNo more that 0 means joined
+  return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
+}
+// winnerSeed more than 0 means winners list is ready
+export function useIsWinnerSeedDone(poolId: number) {
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const args = [Number(poolId)]
+  const { result } = useSingleCallResult(randomSelectionERC20Contract, 'winnerSeed', args)
+  console.log('winnerSeed === 0 means winners list not ready result>>>', result)
   // betNo more that 0 means joined
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }
