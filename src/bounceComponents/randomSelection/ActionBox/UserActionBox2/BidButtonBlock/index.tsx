@@ -9,7 +9,6 @@ import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsRandomSelectionLimitExceeded'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
-import { fixToDecimals } from 'utils/number'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
@@ -36,18 +35,12 @@ const BidButtonBlock = ({
 }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-
-  const slicedBidAmount = useMemo(
-    () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
-    [bidAmount, poolInfo.token1.decimals]
-  )
-
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyMaxAmount1PerWallet.currency)
   const currencySlicedBidAmount = useMemo(
-    () => CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount),
-    [poolInfo.currencyAmountTotal1.currency, slicedBidAmount]
+    () => CurrencyAmount.fromRawAmount(poolInfo.currencyAmountTotal1.currency, bidAmount),
+    [bidAmount, poolInfo.currencyAmountTotal1.currency]
   )
-
+  console.log('userBalance111>>', userBalance)
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true
     return userBalance.lessThan(currencySlicedBidAmount)
@@ -95,7 +88,7 @@ const BidButtonBlock = ({
           onCancel={handleCancelButtonClick}
         >
           <Button variant="contained" fullWidth disabled>
-            {!currencySlicedBidAmount ? 'Input Amount' : !userBalance ? 'Loading' : 'Insufficient balance'}
+            {!userBalance ? 'Loading' : 'Insufficient balance'}
           </Button>
         </BidButtonGroup>
         <GetFundBackAlert />

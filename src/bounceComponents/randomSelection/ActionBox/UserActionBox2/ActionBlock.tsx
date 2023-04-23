@@ -8,17 +8,16 @@ import ConfirmRegret from './ConfirmRegret'
 import Bid from './Bid'
 import useRandomSelectionPlaceBid from 'bounceHooks/auction/useRandomSelectionPlaceBid'
 import useRegretBid from 'bounceHooks/auction/useRandomSelectionRegretBid'
-import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
+import { useIsJoinedRandomSelectionPool } from 'hooks/useCreateRandomSelectionPool'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useUserClaim from 'bounceHooks/auction/useRandomSelectionUserClaim'
 import { fixToDecimals, formatNumber } from 'utils/number'
 import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
-import { Currency, CurrencyAmount } from 'constants/token'
+import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
-import { ChainId } from 'constants/chain'
 import Upcoming from './RandomSelectionStatusCard/Upcoming'
 import Closed from './RandomSelectionStatusCard/Closed'
 import LiveCard from './RandomSelectionStatusCard/Live'
@@ -75,11 +74,12 @@ const getInitialAction = (
 export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
 const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
-  const isJoined = useIsUserJoinedPool(poolInfo)
+  const isJoined = useIsJoinedRandomSelectionPool(Number(poolInfo.id), account || undefined)
+  console.log('isJoined>>>', isJoined)
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
 
   const [action, setAction] = useState<UserAction>()
@@ -91,14 +91,16 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     setBidAmount(poolInfo.maxAmount1PerWallet)
     setRegretAmount(poolInfo.maxAmount1PerWallet)
   }, [poolInfo])
-  const currencyAmountTotal1 = {
-    chainId: ChainId.GÖRLI, // random selection only support GORLI
-    address: poolInfo.token1.address,
-    decimals: poolInfo.token1.decimals,
-    symbol: poolInfo.token1.symbol
-  }
-  const currencyBidAmount = CurrencyAmount.fromAmount(currencyAmountTotal1 as Currency, slicedBidAmount)
-  const currencyRegretAmount = CurrencyAmount.fromAmount(currencyAmountTotal1 as Currency, slicedRegretAmount)
+  const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
+    unit: poolInfo.token1.decimals,
+    decimalPlaces: 6
+  })
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
+  console.log('betAmound, currencyBidAmount>>>', betAmound, currencyBidAmount)
+  const currencyRegretAmount = CurrencyAmount.fromAmount(
+    poolInfo.currencyMaxAmount1PerWallet.currency,
+    slicedRegretAmount
+  )
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
 
@@ -119,7 +121,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       ret
         .then(() => {
           hideDialogConfirmation()
-          // TOTD ?
           setAction('BID_OR_REGRET')
           show(DialogTips, {
             iconType: 'success',
@@ -245,17 +246,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     }
     setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
   }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
-
-  useEffect(() => {
-    if (action === 'BID_OR_REGRET') {
-      setRegretAmount('')
-    }
-    if (action === 'INPUT_REGRET_AMOUNT' || action === 'CONFIRM_REGRET') {
-    }
-    if (action === 'GO_TO_CHECK' || action === 'CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') {
-      setRegretAmount('')
-    }
-  }, [action])
 
   return (
     <Box sx={{ mt: 32 }}>

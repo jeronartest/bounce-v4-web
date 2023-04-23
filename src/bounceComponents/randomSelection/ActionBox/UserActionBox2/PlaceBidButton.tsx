@@ -5,7 +5,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import { Dots } from 'themes'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
@@ -22,10 +22,8 @@ export interface PlaceBidButtonProps {
 
 const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo, action }: PlaceBidButtonProps): JSX.Element => {
   const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
-
-  // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
-  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, bidAmount)
+  const fixedSwapERC20Contract = useRandomSelectionERC20Contract()
+  const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, bidAmount)
   const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address, true)
 
   const toApprove = useCallback(async () => {
