@@ -68,6 +68,17 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
       .required('Number of winners is required'),
     maxParticipantAllowed: Yup.number()
       .max(10000, 'max participant allowed must be less than or equal to 10000')
+      .test(
+        'MORE_THAN_WINNERS',
+        'max participant allowed must be more than or equal to number of winners',
+        (val, ctx) => {
+          const winnerNumber = ctx.parent.winnerNumber
+          if (val && Number(val) < Number(winnerNumber)) {
+            return false
+          }
+          return true
+        }
+      )
       .integer('max participant allowed must be an integer')
       .positive('max participant allowed must be positive')
       .typeError('Please input valid number')
@@ -296,13 +307,7 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
                     <NumberInput
                       value={values.maxParticipantAllowed + ''}
                       onUserInput={value => {
-                        if (value <= values.winnerNumber) {
-                          setFieldValue('maxParticipantAllowed', values.winnerNumber)
-                        } else if (Number(value) >= 10000) {
-                          setFieldValue('maxParticipantAllowed', 10000)
-                        } else {
-                          setFieldValue('maxParticipantAllowed', value)
-                        }
+                        setFieldValue('maxParticipantAllowed', value)
                       }}
                     />
                   </FormItem>
