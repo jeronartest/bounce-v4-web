@@ -9,12 +9,10 @@ import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsRandomSelectionLimitExceeded'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
-import { fixToDecimals } from 'utils/number'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { Currency, CurrencyAmount } from 'constants/token'
-import { ChainId } from 'constants/chain'
+import { CurrencyAmount } from 'constants/token'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -37,29 +35,12 @@ const BidButtonBlock = ({
 }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-
-  const slicedBidAmount = useMemo(
-    () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
-    [bidAmount, poolInfo.token1.decimals]
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo.currencyMaxAmount1PerWallet.currency)
+  const currencySlicedBidAmount = useMemo(
+    () => CurrencyAmount.fromRawAmount(poolInfo.currencyAmountTotal1.currency, bidAmount),
+    [bidAmount, poolInfo.currencyAmountTotal1.currency]
   )
-  const currencyAmountTotal1 = {
-    chainId: ChainId.GÖRLI, // random selection only support GORLI
-    address: poolInfo.token1.address,
-    decimals: poolInfo.token1.decimals,
-    symbol: poolInfo.token1.symbol
-  }
-  const userBalance = useCurrencyBalance(account || undefined, currencyAmountTotal1 as Currency, ChainId.GÖRLI)
-  console.log('userBalance>>>', userBalance)
-  const currencySlicedBidAmount = useMemo(() => {
-    const currencyAmountTotal = {
-      chainId: ChainId.GÖRLI, // random selection only support GORLI
-      address: poolInfo.token1.address,
-      decimals: poolInfo.token1.decimals,
-      symbol: poolInfo.token1.symbol
-    }
-    return CurrencyAmount.fromAmount(currencyAmountTotal as Currency, slicedBidAmount)
-  }, [poolInfo.token1.address, poolInfo.token1.decimals, poolInfo.token1.symbol, slicedBidAmount])
-
+  console.log('userBalance111>>', userBalance)
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true
     return userBalance.lessThan(currencySlicedBidAmount)

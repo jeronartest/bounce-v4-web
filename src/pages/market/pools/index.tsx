@@ -415,10 +415,15 @@ const Pools: React.FC = ({}) => {
                                     />
                                   }
                                   progress={{
-                                    symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                                    decimals: fixedSwaptem.token0.decimals,
-                                    sold: fixedSwaptem.swappedAmount0,
-                                    supply: fixedSwaptem.amountTotal0
+                                    symbol:
+                                      fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.symbol?.toUpperCase(),
+                                    decimals: fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.decimals,
+                                    sold:
+                                      fixedSwaptem.category === 3
+                                        ? fixedSwaptem.curPlayer
+                                        : fixedSwaptem.swappedAmount0,
+                                    supply:
+                                      fixedSwaptem.category === 3 ? fixedSwaptem.maxPlayere : fixedSwaptem.amountTotal0
                                   }}
                                   listItems={
                                     <>

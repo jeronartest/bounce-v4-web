@@ -205,8 +205,13 @@ export function useIsWinnerForRandomSelectionPool(
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [Number(poolId), address]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'isWinner', args)
-  console.log('result>>>', result)
   return {
     isWinner: !!result
   }
+}
+export function useIsJoinedRandomSelectionPool(poolId: string | number, address: string | undefined) {
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const args = [address, Number(poolId)]
+  const { result } = useSingleCallResult(randomSelectionERC20Contract, 'betNo', args)
+  return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }

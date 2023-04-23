@@ -122,7 +122,7 @@ export function useCurrencyBalances(
   const tokenBalances = useTokenBalancesWithLoadingIndicator(account, tokens, chainId)[0]
 
   const ethBalance = useETHBalance(eths ? account : undefined, chainId)
-
+  console.log('ethBalance>>>', ethBalance)
   return useMemo(
     () =>
       currencies?.map(currency => {
