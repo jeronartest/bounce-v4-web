@@ -12,7 +12,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_swap', poolInfo.poolId)
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_swap', poolInfo.poolId)
 
   // const isNotInWhitelist = useIsNotInWhitelist()
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'

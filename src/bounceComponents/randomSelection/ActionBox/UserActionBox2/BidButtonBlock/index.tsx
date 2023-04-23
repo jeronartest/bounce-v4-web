@@ -7,7 +7,7 @@ import BidButtonGroup from './BidButtonGroup'
 import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
-import useIsLimitExceeded from 'bounceHooks/auction/useIsLimitExceeded'
+import useIsLimitExceeded from 'bounceHooks/auction/useIsRandomSelectionLimitExceeded'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { fixToDecimals } from 'utils/number'
 import { useMemo } from 'react'
@@ -53,7 +53,8 @@ const BidButtonBlock = ({
     return userBalance.lessThan(currencySlicedBidAmount)
   }, [currencySlicedBidAmount, userBalance])
 
-  const isLimitExceeded = useIsLimitExceeded(slicedBidAmount, poolInfo)
+  // limit when curPlayer === maxPlayere
+  const isLimitExceeded = useIsLimitExceeded(poolInfo)
 
   if (poolInfo.status === PoolStatus.Upcoming) {
     return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />

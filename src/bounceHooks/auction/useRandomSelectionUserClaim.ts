@@ -10,7 +10,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_user_claim', poolInfo.poolId)
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_user_claim', poolInfo.poolId)
 
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
 

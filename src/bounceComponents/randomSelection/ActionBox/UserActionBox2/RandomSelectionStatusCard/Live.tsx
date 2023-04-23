@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import Image from 'components/Image'
 import { FixedSwapPoolProp } from 'api/pool/type'
-import Logo from 'assets/imgs/randomSelection/logoGray.png'
-import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
+import Logo from 'assets/imgs/randomSelection/logo.png'
+import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
 
 import BigNumber from 'bignumber.js'
 import { formatNumber } from 'utils/number'
@@ -52,7 +52,7 @@ const LiveCard = ({
               position: 'relative',
               width: 122,
               height: 216,
-              background: '#f5f5f5',
+              background: '#2B51DA',
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
@@ -74,7 +74,7 @@ const LiveCard = ({
                 fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                 fontWeight: 400,
                 fontSize: 12,
-                color: '#DFDFDF',
+                color: '#E8E8E8',
                 transform: 'scale(0.8)'
               }}
             >
@@ -120,7 +120,7 @@ const LiveCard = ({
               position: 'relative',
               width: 322,
               height: 216,
-              background: '#f5f5f5',
+              background: '#2B51DA',
               display: 'flex',
               flexFlow: 'row nowrap',
               justifyContent: 'center',
@@ -159,7 +159,7 @@ const LiveCard = ({
                     fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                     fontWeight: 400,
                     fontSize: 12,
-                    color: '#DFDFDF',
+                    color: '#E8E8E8',
                     marginBottom: 10
                   }}
                 >
@@ -170,7 +170,7 @@ const LiveCard = ({
                     fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                     fontWeight: 400,
                     fontSize: 28,
-                    color: '#DFDFDF'
+                    color: '#fff'
                   }}
                 >
                   {poolInfo.totalShare}
@@ -193,7 +193,7 @@ const LiveCard = ({
                     fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                     fontWeight: 400,
                     fontSize: 12,
-                    color: '#DFDFDF',
+                    color: '#E8E8E8',
                     marginBottom: 10
                   }}
                 >
@@ -204,7 +204,7 @@ const LiveCard = ({
                     fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                     fontWeight: 400,
                     fontSize: 28,
-                    color: '#DFDFDF'
+                    color: '#fff'
                   }}
                 >
                   {singleShare}
@@ -224,7 +224,7 @@ const LiveCard = ({
               sx={{
                 width: 113,
                 height: 186,
-                background: '#FDFDFD',
+                background: '#4568E4',
                 borderRadius: '6px',
                 paddingTop: 12,
                 display: 'flex',
@@ -238,7 +238,7 @@ const LiveCard = ({
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#DFDFDF',
+                  color: '#fff',
                   textAlign: 'center',
                   marginBottom: 20
                 }}
@@ -258,7 +258,7 @@ const LiveCard = ({
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
                   fontSize: 28,
-                  color: '#DFDFDF',
+                  color: '#fff',
                   marginBottom: 5
                 }}
               >
@@ -271,7 +271,7 @@ const LiveCard = ({
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#DFDFDF'
+                  color: '#E8E8E8'
                 }}
               >
                 {poolInfo.token1.symbol}
@@ -301,18 +301,6 @@ const LiveCard = ({
             ></Box>
           </Box>
         </Box>
-        <Typography
-          sx={{
-            color: '#171717',
-            fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-            fontWeight: 500,
-            fontSize: 22,
-            textAlign: 'center',
-            margin: '27px 0 24px'
-          }}
-        >
-          Lottery Completed
-        </Typography>
       </>
     )
   }
