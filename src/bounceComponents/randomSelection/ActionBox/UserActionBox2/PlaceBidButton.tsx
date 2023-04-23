@@ -17,9 +17,10 @@ export interface PlaceBidButtonProps {
   onClick: () => void
   loading?: boolean
   poolInfo: FixedSwapPoolProp
+  action?: string
 }
 
-const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidButtonProps): JSX.Element => {
+const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo, action }: PlaceBidButtonProps): JSX.Element => {
   const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
 
@@ -92,7 +93,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
       sx={{ ...sx }}
       loadingPosition="start"
       loading={loading}
-      disabled={!bidAmount || (!isUserInWhitelist && !isCheckingWhitelist)}
+      disabled={!bidAmount || (!isUserInWhitelist && !isCheckingWhitelist) || action === 'MORE_BID'}
       onClick={onClick}
     >
       {loading ? (
@@ -100,6 +101,8 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
           Place a Bid
           <Dots />
         </>
+      ) : action === 'MORE_BID' ? (
+        'only can buy once'
       ) : (
         'Place a Bid'
       )}

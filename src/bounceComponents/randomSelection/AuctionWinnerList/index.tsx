@@ -57,13 +57,13 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Reversed: RegretTypography
 }
 
-const ActionHistory = () => {
+const AuctionWinnerList = () => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory()
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
-        Auction History
+        Winner list
       </Typography>
 
       {data && data?.list.length > 0 && !isGettingPoolHistory ? (
@@ -73,6 +73,7 @@ const ActionHistory = () => {
               <StyledTableRow>
                 <StyledTableCell>Event</StyledTableCell>
                 <StyledTableCell>Amount</StyledTableCell>
+                <StyledTableCell>Price</StyledTableCell>
                 <StyledTableCell>Address</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
               </StyledTableRow>
@@ -80,14 +81,8 @@ const ActionHistory = () => {
             <TableBody>
               {data.list.map(record => (
                 <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
-                  <StyledTableCell>
-                    {removeRedundantZeroOfFloat(
-                      formatNumber(record.token0Amount, { unit: record.token0Decimals, decimalPlaces: 4 })
-                    )}
-                    &nbsp;
-                    {record.token0Symbol}
-                  </StyledTableCell>
+                  <StyledTableCell>Win</StyledTableCell>
+                  <StyledTableCell>1 Ticket</StyledTableCell>
                   <StyledTableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography>{shortenAddress(record.requestor)}</Typography>
@@ -95,6 +90,7 @@ const ActionHistory = () => {
                     </Box>
                   </StyledTableCell>
                   <StyledTableCell>{moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}</StyledTableCell>
+                  <StyledTableCell>2022/11/16 12:19</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -109,4 +105,4 @@ const ActionHistory = () => {
   )
 }
 
-export default ActionHistory
+export default AuctionWinnerList

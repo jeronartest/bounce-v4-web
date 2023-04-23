@@ -106,7 +106,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
         loading={submitted.complete || submitted.submitted}
         onClick={() => toClaim(true)}
       >
-        Cancel & Claim tokens only after pool is closed
+        Claim tokens only after pool is closed
       </LoadingButton>
     )
   }

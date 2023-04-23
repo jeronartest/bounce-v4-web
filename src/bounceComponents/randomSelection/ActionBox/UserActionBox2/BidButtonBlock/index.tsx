@@ -137,6 +137,7 @@ const BidButtonBlock = ({
           onCancel={handleCancelButtonClick}
         >
           <PlaceBidButton
+            action={action}
             poolInfo={poolInfo}
             bidAmount={bidAmount}
             onClick={() => {

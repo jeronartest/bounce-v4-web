@@ -1,7 +1,7 @@
 import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
-import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
@@ -18,7 +18,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
 
   const run = useCallback(
     async (
@@ -30,7 +30,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
       if (!account) {
         return Promise.reject('no account')
       }
-      if (!fixedSwapERC20Contract) {
+      if (!randomSelectionERC20Contract) {
         return Promise.reject('no contract')
       }
       let proofArr: string[] = []
@@ -52,16 +52,16 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
         }
       }
 
-      const args = [poolInfo.poolId, bidAmount.raw.toString(), proofArr]
+      const args = [poolInfo.poolId, proofArr]
 
-      const estimatedGas = await fixedSwapERC20Contract.estimateGas
-        .swap(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
+      const estimatedGas = await randomSelectionERC20Contract.estimateGas
+        .bet(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
         .catch((error: Error) => {
           console.debug('Failed to swap', error)
           throw error
         })
-      return fixedSwapERC20Contract
-        .swap(...args, {
+      return randomSelectionERC20Contract
+        .bet(...args, {
           gasLimit: calculateGasMargin(estimatedGas),
           value: isToken1Native ? bidAmount.raw.toString() : undefined
         })
@@ -83,7 +83,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
     [
       account,
       addTransaction,
-      fixedSwapERC20Contract,
+      randomSelectionERC20Contract,
       isToken1Native,
       poolInfo.chainId,
       poolInfo.enableWhiteList,

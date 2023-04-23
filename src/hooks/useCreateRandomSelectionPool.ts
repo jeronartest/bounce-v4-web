@@ -13,6 +13,7 @@ import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/pro
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
+import { useSingleCallResult } from '../state/multicall/hooks'
 
 interface Params {
   whitelist: string[]
@@ -196,4 +197,16 @@ export function getEventLog(contract: Contract, logs: Log[], eventName: string, 
     }
   }
   return undefined
+}
+export function useIsWinnerForRandomSelectionPool(
+  poolId: string | number,
+  address: string | undefined
+): { isWinner: boolean } {
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const args = [Number(poolId), address]
+  const { result } = useSingleCallResult(randomSelectionERC20Contract, 'isWinner', args)
+  console.log('result>>>', result)
+  return {
+    isWinner: !!result
+  }
 }

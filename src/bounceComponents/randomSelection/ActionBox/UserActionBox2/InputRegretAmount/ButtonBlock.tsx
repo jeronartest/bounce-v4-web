@@ -13,7 +13,7 @@ export interface ButtonBlockProps {
 }
 
 const ButtonBlock = ({ regretAmount, isRegretting, onCancel, onConfirm, poolInfo }: ButtonBlockProps) => {
-  const regretUnits = new BigNumber(regretAmount ? parseUnits(regretAmount, poolInfo.token0.decimals).toString() : '0')
+  const regretUnits = new BigNumber(regretAmount ? parseUnits(regretAmount, poolInfo.token1.decimals).toString() : '0')
   const isRegretBalanceSufficient = regretUnits.lte(poolInfo?.participant.swappedAmount0 || 0)
 
   return (

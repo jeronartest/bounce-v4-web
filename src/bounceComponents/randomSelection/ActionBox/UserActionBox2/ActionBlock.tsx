@@ -1,19 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Box } from '@mui/material'
 import moment from 'moment'
-import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import BidOrRegret from './BidOrRegret'
 import Check from './Check'
 import InputRegretAmount from './InputRegretAmount'
 import ConfirmRegret from './ConfirmRegret'
 import Bid from './Bid'
-import ClaimingCountdownButton from './ClaimingCountdownButton'
-import ClaimButton from './ClaimButton'
 import useRandomSelectionPlaceBid from 'bounceHooks/auction/useRandomSelectionPlaceBid'
 import useRegretBid from 'bounceHooks/auction/useRandomSelectionRegretBid'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
-import useUserClaim from 'bounceHooks/auction/useUserClaim'
+import useUserClaim from 'bounceHooks/auction/useRandomSelectionUserClaim'
 import { fixToDecimals, formatNumber } from 'utils/number'
 import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
@@ -22,6 +19,9 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
 import { ChainId } from 'constants/chain'
+import Upcoming from './RandomSelectionStatusCard/Upcoming'
+import Closed from './RandomSelectionStatusCard/Closed'
+import LiveCard from './RandomSelectionStatusCard/Live'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -83,11 +83,14 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
 
   const [action, setAction] = useState<UserAction>()
-  const [bidAmount, setBidAmount] = useState('')
-  const [regretAmount, setRegretAmount] = useState('')
-
+  const [bidAmount, setBidAmount] = useState(poolInfo.maxAmount1PerWallet || '')
+  const [regretAmount, setRegretAmount] = useState(poolInfo.maxAmount1PerWallet || '')
   const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
   const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token1.decimals).toString() : ''
+  useEffect(() => {
+    setBidAmount(poolInfo.maxAmount1PerWallet)
+    setRegretAmount(poolInfo.maxAmount1PerWallet)
+  }, [poolInfo])
   const currencyAmountTotal1 = {
     chainId: ChainId.GÖRLI, // random selection only support GORLI
     address: poolInfo.token1.address,
@@ -104,7 +107,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     showRequestConfirmDialog()
     try {
       const { transactionReceipt } = await bid(currencyBidAmount)
-      setBidAmount('')
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -211,7 +213,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         .then(() => {
           hideDialogConfirmation()
           setAction('CLAIMED')
-
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Close',
@@ -242,17 +243,14 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       setAction('GO_TO_CHECK')
       return
     }
-
     setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
   }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
 
   useEffect(() => {
     if (action === 'BID_OR_REGRET') {
-      setBidAmount('')
       setRegretAmount('')
     }
     if (action === 'INPUT_REGRET_AMOUNT' || action === 'CONFIRM_REGRET') {
-      setBidAmount('')
     }
     if (action === 'GO_TO_CHECK' || action === 'CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') {
       setRegretAmount('')
@@ -262,20 +260,26 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   return (
     <Box sx={{ mt: 32 }}>
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
-        <Bid
-          action={action}
-          bidAmount={bidAmount}
-          setBidAmount={setBidAmount}
-          handleGoToCheck={() => {
-            setAction('CHECK')
-          }}
-          handleCancelButtonClick={() => {
-            setAction('BID_OR_REGRET')
-          }}
-          handlePlaceBid={toBid}
-          poolInfo={poolInfo}
-          isBidding={placeBidSubmitted.submitted}
-        />
+        <>
+          {poolInfo.status === PoolStatus.Upcoming && <Upcoming poolInfo={poolInfo} />}
+          {poolInfo.status === PoolStatus.Live && (
+            <LiveCard poolInfo={poolInfo} action={action} isJoined={!!isJoined} />
+          )}
+          {/* Bid component has set disable to button when action is MORE_BID because of the random-selection auction only can bet once */}
+          <Bid
+            action={action}
+            bidAmount={bidAmount}
+            handleGoToCheck={() => {
+              setAction('CHECK')
+            }}
+            handleCancelButtonClick={() => {
+              setAction('BID_OR_REGRET')
+            }}
+            handlePlaceBid={toBid}
+            poolInfo={poolInfo}
+            isBidding={placeBidSubmitted.submitted}
+          />
+        </>
       )}
 
       {action === 'CHECK' && (
@@ -287,21 +291,24 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       )}
 
       {action === 'BID_OR_REGRET' && (
-        <BidOrRegret
-          onBidButtonClick={() => {
-            setAction('MORE_BID')
-          }}
-          onRegretButtonClick={() => {
-            setAction('INPUT_REGRET_AMOUNT')
-          }}
-        />
+        <>
+          {poolInfo.status === PoolStatus.Live && (
+            <LiveCard poolInfo={poolInfo} action={action} isJoined={!!isJoined} />
+          )}
+          <BidOrRegret
+            onBidButtonClick={() => {
+              setAction('MORE_BID')
+            }}
+            onRegretButtonClick={() => {
+              setAction('INPUT_REGRET_AMOUNT')
+            }}
+          />
+        </>
       )}
 
       {action === 'INPUT_REGRET_AMOUNT' && (
+        // random-selection don`t need to input regret amount.just use maxAmount1PerWallet
         <InputRegretAmount
-          regretAmount={regretAmount}
-          slicedRegretAmount={slicedRegretAmount}
-          setRegretAmount={setRegretAmount}
           poolInfo={poolInfo}
           isRegretting={regretBidSubmitted.submitted}
           onCancel={() => {
@@ -327,13 +334,21 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         />
       )}
 
-      {action === 'POOL_CLOSED_AND_NOT_JOINED' && <></>}
-
-      {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
-
-      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
-
-      {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />}
+      {(action === 'POOL_CLOSED_AND_NOT_JOINED' ||
+        action === 'CLAIMED' ||
+        action === 'NEED_TO_CLAIM' ||
+        action === 'WAIT_FOR_DELAY') && (
+        <>
+          <Closed
+            poolInfo={poolInfo}
+            isJoined={!!isJoined}
+            action={action}
+            toClaim={toClaim}
+            submitted={claimBidSubmitted.submitted}
+            getPoolInfo={getPoolInfo}
+          />
+        </>
+      )}
     </Box>
   )
 }

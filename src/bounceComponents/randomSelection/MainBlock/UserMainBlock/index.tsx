@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
-
-import LeftBox from '../../LeftBox'
+import LeftBox from './LeftBox'
 import UserActionBox2 from '../../ActionBox/UserActionBox2'
 import Alert from './Alert'
 import { FixedSwapPoolProp } from 'api/pool/type'

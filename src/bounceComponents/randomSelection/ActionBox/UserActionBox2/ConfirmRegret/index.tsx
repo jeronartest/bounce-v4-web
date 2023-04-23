@@ -28,7 +28,7 @@ const ConfirmRegret = ({
     : '0'
 
   const token1RegretAmount = regretAmount
-    ? formatNumber(new BigNumber(regretAmount).times(poolInfo.ratio).toString(), {
+    ? formatNumber(new BigNumber(regretAmount).toString(), {
         unit: 0,
         decimalPlaces: poolInfo.token1.decimals
       })

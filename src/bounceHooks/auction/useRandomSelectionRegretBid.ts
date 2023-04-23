@@ -1,6 +1,6 @@
 import { FixedSwapPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
-import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
@@ -11,11 +11,11 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_reverse', poolInfo.poolId)
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_reverse', poolInfo.poolId)
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
 
   const run = useCallback(
     async (
@@ -27,26 +27,26 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
       if (!account) {
         return Promise.reject('no account')
       }
-      if (!fixedSwapERC20Contract) {
+      if (!randomSelectionERC20Contract) {
         return Promise.reject('no contract')
       }
 
       const args = [poolInfo.poolId, token0AmountToRegret.raw.toString()]
 
-      const estimatedGas = await fixedSwapERC20Contract.estimateGas.reverse(...args).catch((error: Error) => {
+      const estimatedGas = await randomSelectionERC20Contract.estimateGas.reverse(...args).catch((error: Error) => {
         console.debug('Failed to regret', error)
         throw error
       })
-      return fixedSwapERC20Contract
+      return randomSelectionERC20Contract
         .reverse(...args, {
           gasLimit: calculateGasMargin(estimatedGas)
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Regret & reverse ${poolInfo.currencyAmountTotal1.currency.symbol}`,
+            summary: `Regret & reverse ${poolInfo.token1.symbol}`,
             userSubmitted: {
               account,
-              action: `fixed_price_reverse`,
+              action: `random_selection_reverse`,
               key: poolInfo.poolId
             }
           })
@@ -56,7 +56,13 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
           }
         })
     },
-    [account, addTransaction, fixedSwapERC20Contract, poolInfo.currencyAmountTotal1.currency.symbol, poolInfo.poolId]
+    [
+      account,
+      addTransaction,
+      randomSelectionERC20Contract,
+      poolInfo.currencyAmountTotal1.currency.symbol,
+      poolInfo.poolId
+    ]
   )
 
   return { run, submitted }
