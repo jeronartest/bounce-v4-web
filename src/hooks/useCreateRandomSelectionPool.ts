@@ -213,5 +213,6 @@ export function useIsJoinedRandomSelectionPool(poolId: string | number, address:
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [address, Number(poolId)]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'betNo', args)
+  // betNo more that 0 means joined
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }
