@@ -119,23 +119,35 @@ const Auction721ParametersForm = (): JSX.Element => {
                 gap: 50
               }}
             >
-              <Box display={'grid'} gridTemplateColumns={'1fr 1fr 1fr 1fr'} gap={10}>
-                {valuesState.nft721TokenFrom.map(item => (
-                  <ShowNFTCard
-                    hideClose
-                    key={item.tokenId}
-                    balance={item.balance}
-                    name={item.name || item.contractName || ''}
-                    tokenId={item.tokenId || ''}
-                    image={item.image}
-                    boxH={isOneNft ? 286 : 220}
-                    imgH={isOneNft ? 220 : 170}
-                    style={{
-                      width: isOneNft ? 220 : '100%',
-                      maxWidth: '100%'
-                    }}
-                  />
-                ))}
+              <Box>
+                <Typography variant="h3" sx={{ fontSize: 16, mb: 8, display: 'flex', alignItems: 'flex-start' }}>
+                  Auction Assets ({valuesState.nft721TokenFrom.length})
+                  <Tooltip
+                    title={
+                      'If you choose multiple NFTs, it will be considered as a combination and will be auctioned together.'
+                    }
+                  >
+                    <HelpOutlineIcon sx={{ ml: 4, color: '#878A8E' }} />
+                  </Tooltip>
+                </Typography>
+                <Box display={'grid'} gridTemplateColumns={'1fr 1fr 1fr 1fr'} gap={10}>
+                  {valuesState.nft721TokenFrom.map(item => (
+                    <ShowNFTCard
+                      hideClose
+                      key={item.tokenId}
+                      balance={item.balance}
+                      name={item.name || item.contractName || ''}
+                      tokenId={item.tokenId || ''}
+                      image={item.image}
+                      boxH={isOneNft ? 286 : 220}
+                      imgH={isOneNft ? 220 : 170}
+                      style={{
+                        width: isOneNft ? 220 : '100%',
+                        maxWidth: '100%'
+                      }}
+                    />
+                  ))}
+                </Box>
               </Box>
 
               <Box>
