@@ -222,29 +222,9 @@ export function useIsJoinedRandomSelectionPool(poolId: string | number, address:
 export function useIsWinnerSeedDone(poolId: number | string) {
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [Number(poolId)]
-  const { result } = useSingleCallResult(randomSelectionERC20Contract, 'winnerSeed', args)
-  console.log('winnerSeed === 0 means winners list not ready result>>>', result && result?.toString())
+  const res = useSingleCallResult(randomSelectionERC20Contract, 'winnerSeed', args)
+  const { result } = res
+  console.log('winnerSeed === 0 means winners list not ready result>>>', res, result && result?.toString())
   // load winners list if isWinnerSeedDone is more that 0
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
-}
-export const useGetWinnersList = (poolId: string, chainId: number) => {
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
-  return useRequest(
-    async () => {
-      if (typeof poolId !== 'string') {
-        return Promise.reject(new Error('Invalid poolId'))
-      }
-      const response = await getWinnersList({
-        poolId,
-        chainId: chainConfigInBackend?.id || 0
-      })
-      return response.data || []
-    },
-    {
-      // cacheKey: `POOL_HISTORY_${account}`,
-      ready: !!poolId && !!chainId && !!chainConfigInBackend?.id,
-      pollingInterval: 20000,
-      refreshDeps: [poolId, chainId, chainConfigInBackend?.id]
-    }
-  )
 }

@@ -184,6 +184,8 @@ export interface GetPoolHistoryParams {
   poolId: string
 }
 export interface GetWinnersListParams {
+  limit: number
+  offset: number
   chainId: number
   poolId: string
 }
@@ -235,6 +237,7 @@ export interface GetPoolHistoryResponse {
 }
 
 export interface GetWinnersListResponse {
+  dealt: boolean
   list: string[]
   total: number
 }

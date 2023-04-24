@@ -10,7 +10,6 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
-import { useGetWinnersList } from 'hooks/useCreateRandomSelectionPool'
 import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
 import { PoolStatus } from 'api/pool/type'
 const FixedSwapPoolPageContent = () => {
@@ -18,8 +17,6 @@ const FixedSwapPoolPageContent = () => {
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
   const isBlock = useCurrentRegionBlock()
   console.log('poolInfo?.id, chainId>>', poolInfo?.poolId, chainId)
-  const winnerList = useGetWinnersList(poolInfo?.poolId || '', chainId || 0)
-  console.log('winnerList>>', winnerList)
   // load winners list if isWinnerSeedDone is true
   const isWinnerSeedDone = useIsWinnerSeedDone(poolInfo?.poolId ? Number(poolInfo?.poolId) : '')
   console.log('poolid page IsWinnerSeedDone >>>', isWinnerSeedDone)
