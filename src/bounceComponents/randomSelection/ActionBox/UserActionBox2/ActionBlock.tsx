@@ -241,7 +241,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
 
   return (
     <Box sx={{ mt: 32 }}>
-      {action}
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
         <>
           {poolInfo.status === PoolStatus.Upcoming && <Upcoming poolInfo={poolInfo} />}
@@ -283,6 +282,8 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
               setAction('MORE_BID')
             }}
             onRegretButtonClick={() => {
+              // change continue step to CONFIRM_REGRET
+              //   setAction('INPUT_REGRET_AMOUNT')
               setAction('CONFIRM_REGRET')
             }}
           />
