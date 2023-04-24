@@ -14,7 +14,8 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 import { useSingleCallResult } from '../state/multicall/hooks'
-
+import { getWinnersList } from 'api/pool/index'
+import { useRequest } from 'ahooks'
 interface Params {
   whitelist: string[]
   swapRatio: string
@@ -225,4 +226,24 @@ export function useIsWinnerSeedDone(poolId: number) {
   console.log('winnerSeed === 0 means winners list not ready result>>>', result)
   // betNo more that 0 means joined
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
+}
+export const useGetWinnersList = (poolId: string, chainId: number) => {
+  return useRequest(
+    async () => {
+      if (typeof poolId !== 'string') {
+        return Promise.reject(new Error('Invalid poolId'))
+      }
+      const response = await getWinnersList({
+        poolId,
+        chainId: chainId || 0
+      })
+      return response.data
+    },
+    {
+      // cacheKey: `POOL_HISTORY_${account}`,
+      ready: !!poolId && !!chainId,
+      pollingInterval: 30000,
+      refreshDeps: [poolId]
+    }
+  )
 }

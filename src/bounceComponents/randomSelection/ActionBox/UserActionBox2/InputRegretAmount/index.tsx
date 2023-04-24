@@ -14,7 +14,6 @@ const InputRegretAmount = ({ poolInfo, onCancel, isRegretting, onConfirm }: Inpu
     <Box>
       <ButtonBlock
         isRegretting={isRegretting}
-        poolInfo={poolInfo}
         regretAmount={poolInfo.maxAmount1PerWallet}
         onCancel={onCancel}
         onConfirm={onConfirm}

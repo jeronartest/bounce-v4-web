@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material'
+import CheckImg from 'assets/imgs/randomSelection/check.png'
+import Image from 'components/Image'
 
 interface CheckProps {
   onConfirm: () => void
@@ -23,6 +25,15 @@ const Check = ({ onConfirm }: CheckProps) => {
 
   return (
     <Box sx={{ mt: 32 }}>
+      <Image
+        src={CheckImg}
+        width={443}
+        height={100}
+        style={{
+          marginBottom: 30
+        }}
+      />
+
       <Typography variant="h5">Please check the following information before your participation</Typography>
 
       <FormGroup>

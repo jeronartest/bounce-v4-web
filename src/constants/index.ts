@@ -171,7 +171,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
 export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
-  [ChainId.GÖRLI]: process.env.REACT_APP_RANDOM_SELECTION_ADDRESS || '',
+  [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
   [ChainId.BSC]: '',
@@ -192,7 +192,7 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '',
+  [ChainId.SEPOLIA]: process.env.REACT_APP_RANDOM_SELECTION_ADDRESS || '',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.PALM]: ''

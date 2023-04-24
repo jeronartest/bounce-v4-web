@@ -183,7 +183,10 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
 }
-
+export interface GetWinnersListParams {
+  chainId: number
+  poolId: string
+}
 export type PoolEvent = 'Swapped' | 'Reversed'
 
 export interface PoolHistory {
@@ -231,6 +234,10 @@ export interface GetPoolHistoryResponse {
   total: number
 }
 
+export interface GetWinnersListResponse {
+  list: string[]
+  total: number
+}
 export interface UpdateAuctionBackgroundParams {
   id: number
   description?: string

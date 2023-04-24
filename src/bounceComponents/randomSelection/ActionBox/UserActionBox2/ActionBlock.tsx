@@ -75,13 +75,10 @@ export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
 const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
   const { account, chainId } = useActiveWeb3React()
-
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
-
-  const isJoined = useIsJoinedRandomSelectionPool(Number(poolInfo.id), account || undefined)
+  const isJoined = useIsJoinedRandomSelectionPool(Number(poolInfo.poolId), account || undefined)
   console.log('isJoined>>>', isJoined)
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
-
   const [action, setAction] = useState<UserAction>()
   const [bidAmount, setBidAmount] = useState(poolInfo.maxAmount1PerWallet || '')
   const [regretAmount, setRegretAmount] = useState(poolInfo.maxAmount1PerWallet || '')
@@ -97,10 +94,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   })
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
   console.log('betAmound, currencyBidAmount>>>', betAmound, currencyBidAmount)
-  const currencyRegretAmount = CurrencyAmount.fromAmount(
-    poolInfo.currencyMaxAmount1PerWallet.currency,
-    slicedRegretAmount
-  )
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
 
@@ -152,10 +145,9 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 
   const toRegret = useCallback(async () => {
-    if (!currencyRegretAmount) return
     showRequestConfirmDialog()
     try {
-      const { transactionReceipt } = await regret(currencyRegretAmount)
+      const { transactionReceipt } = await regret()
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -193,7 +185,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         onAgain: toRegret
       })
     }
-  }, [currencyRegretAmount, regret])
+  }, [regret])
 
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
 
@@ -249,6 +241,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
 
   return (
     <Box sx={{ mt: 32 }}>
+      {action}
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
         <>
           {poolInfo.status === PoolStatus.Upcoming && <Upcoming poolInfo={poolInfo} />}
@@ -290,7 +283,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
               setAction('MORE_BID')
             }}
             onRegretButtonClick={() => {
-              setAction('INPUT_REGRET_AMOUNT')
+              setAction('CONFIRM_REGRET')
             }}
           />
         </>
@@ -313,7 +306,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       {action === 'CONFIRM_REGRET' && (
         <ConfirmRegret
           poolInfo={poolInfo}
-          regretAmount={regretAmount}
+          regretAmount={betAmound}
           onCancel={() => {
             setAction('BID_OR_REGRET')
           }}
