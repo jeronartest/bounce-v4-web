@@ -35,8 +35,6 @@ export function useCreateEnglishAuctionPool() {
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
 
-  // !TOTD checkout ownerOf
-
   const { ownerIds } = useERC721MultiOwner(
     values.nft721TokenFrom?.[0].contractAddr,
     account || undefined,
@@ -102,7 +100,7 @@ export function useCreateEnglishAuctionPool() {
       amountTotal1: amountTotal1.raw.toString(),
       category: PoolType.ENGLISH_AUCTION_NFT,
       chainId: chainConfigInBackend.id,
-      claimAt: 0,
+      claimAt: params.endTime,
       closeAt: params.endTime,
       creator: account,
       is721: true,
@@ -127,12 +125,12 @@ export function useCreateEnglishAuctionPool() {
       token1: signatureParams.token1,
       tokenIds: signatureParams.tokenIds,
       amountTotal0: signatureParams.amountTotal0,
-      amountMin1: signatureParams.amountTotal1,
+      amountMin1: signatureParams.amountMin1,
       amountMinIncr1: signatureParams.amountMinIncr1,
       openAt: signatureParams.openAt,
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
-      isERC721: true,
+      isERC721: signatureParams.is721,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
