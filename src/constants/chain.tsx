@@ -196,7 +196,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ZKSYNC_ERA]: {
     id: ChainId.ZKSYNC_ERA,
     hexChainId: numberToHex(ChainId.ZKSYNC_ERA),
-    chainName: 'Zksync Era',
+    chainName: 'zkSync Era',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
@@ -209,7 +209,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ZKSYNC_ERA_TESTNET]: {
     id: ChainId.ZKSYNC_ERA_TESTNET,
     hexChainId: numberToHex(ChainId.ZKSYNC_ERA_TESTNET),
-    chainName: 'Zksync Era Testnet',
+    chainName: 'zkSync Era Testnet',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
