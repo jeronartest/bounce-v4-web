@@ -2,7 +2,6 @@ import { toast } from 'react-toastify'
 import { IResponse } from './type'
 import store from 'state'
 import { removeLoginInfo, removeUserInfo } from 'state/users/reducer'
-import { CurrentAddressToLocalItem } from 'state/users/hooks'
 
 const request = (url: string, options?: any) => {
   // TODO: add request/response interceptors
@@ -26,9 +25,9 @@ const request = (url: string, options?: any) => {
 
 const initSignature = (): { token: string | undefined } => {
   const { token, address } = store.getState().users
-  const currentAddress = window.localStorage.getItem(CurrentAddressToLocalItem)
+  const { currentConnectedAccount } = store.getState().application
   return {
-    token: currentAddress === address ? token || '' : ''
+    token: currentConnectedAccount === address ? token || '' : ''
   }
 }
 

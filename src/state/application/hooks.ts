@@ -1,9 +1,17 @@
 import { ChainId } from 'constants/chain'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useActiveWeb3React } from '../../hooks'
 import { AppDispatch, AppState } from '../index'
-import { addPopup, ApplicationModal, PopupContent, removePopup, setCurrentRegion, setOpenModal } from './actions'
+import {
+  addPopup,
+  ApplicationModal,
+  PopupContent,
+  removePopup,
+  setCurrentConnectedAccount,
+  setCurrentRegion,
+  setOpenModal
+} from './actions'
 
 export function useBlockNumber(chainId?: ChainId): number | undefined {
   const { chainId: curChainId } = useActiveWeb3React()
@@ -88,4 +96,13 @@ export function useRemovePopup(): (key: string) => void {
 export function useActivePopups(): AppState['application']['popupList'] {
   const list = useSelector((state: AppState) => state.application.popupList)
   return useMemo(() => list.filter(item => item.show), [list])
+}
+
+export function useSetCurrentConnectedAddress() {
+  const { account } = useActiveWeb3React()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setCurrentConnectedAccount({ account: account || null }))
+  }, [account, dispatch])
 }

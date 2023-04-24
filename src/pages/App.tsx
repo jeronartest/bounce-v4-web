@@ -52,13 +52,12 @@ import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
-import { useRefreshUserInfoByFirstLoad, useSetCurrentAddressToLocal } from 'state/users/hooks'
+import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
   useRefreshUserInfoByFirstLoad()
-  useSetCurrentAddressToLocal()
   return null
 }
 

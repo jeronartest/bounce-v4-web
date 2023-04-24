@@ -6,7 +6,8 @@ import {
   updateBlockNumber,
   ApplicationModal,
   setOpenModal,
-  setCurrentRegion
+  setCurrentRegion,
+  setCurrentConnectedAccount
 } from './actions'
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
@@ -16,13 +17,15 @@ export interface ApplicationState {
   readonly popupList: PopupList
   readonly openModal: ApplicationModal | null
   readonly currentRegion: 'US' | string | null
+  readonly currentConnectedAccount: string | null
 }
 
 const initialState: ApplicationState = {
   blockNumber: {},
   popupList: [],
   openModal: null,
-  currentRegion: null
+  currentRegion: null,
+  currentConnectedAccount: null
 }
 
 export default createReducer(initialState, builder =>
@@ -57,5 +60,8 @@ export default createReducer(initialState, builder =>
     })
     .addCase(setCurrentRegion, (state, { payload }) => {
       state.currentRegion = payload.val
+    })
+    .addCase(setCurrentConnectedAccount, (state, { payload }) => {
+      state.currentConnectedAccount = payload.account
     })
 )
