@@ -22,3 +22,6 @@ export const addPopup = createAction<{ key?: string; removeAfterMs?: number | nu
 )
 export const removePopup = createAction<{ key: string }>('application/removePopup')
 export const setCurrentRegion = createAction<{ val: string | null }>('application/setCurrentRegion')
+export const setCurrentConnectedAccount = createAction<{ account: string | null }>(
+  'application/setCurrentConnectedAccount'
+)
