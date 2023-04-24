@@ -435,7 +435,6 @@ const ClosedCard = ({
       </Box>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <AuctionCloseBtn />}
       {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={submitted} />}
-      {/* <ClaimButton onClick={toClaim} loading={submitted} /> */}
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
       {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
     </>

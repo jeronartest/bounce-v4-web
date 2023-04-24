@@ -155,7 +155,6 @@ const ActionBlock = ({
           hideDialogConfirmation()
           rpt()
           setAction('INPUT_REGRET_AMOUNT')
-          setRegretAmount('')
         })
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
@@ -164,7 +163,6 @@ const ActionBlock = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          setRegretAmount('')
           setAction('INPUT_REGRET_AMOUNT')
           show(DialogTips, {
             iconType: 'success',
@@ -212,9 +210,7 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${poolInfo.participant.currencySwappedAmount0?.toSignificant()} ${
-              poolInfo.token0.symbol
-            }`
+            content: `You have successfully claimed ${bidAmount} ${poolInfo.token1.symbol}`
           })
         })
         .catch()
@@ -231,7 +227,7 @@ const ActionBlock = ({
         onAgain: toClaim
       })
     }
-  }, [claim, poolInfo.participant.currencySwappedAmount0, poolInfo.token0.symbol])
+  }, [bidAmount, claim, poolInfo.token1.symbol])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
