@@ -249,12 +249,3 @@ export function useRefreshUserInfoByFirstLoad() {
     )
   }, [dispatch, first, token, userId])
 }
-
-export const CurrentAddressToLocalItem = 'CurrentAddressToLocalItem'
-export function useSetCurrentAddressToLocal() {
-  const { account } = useActiveWeb3React()
-
-  useEffect(() => {
-    window.localStorage.setItem(CurrentAddressToLocalItem, account || '')
-  }, [account])
-}

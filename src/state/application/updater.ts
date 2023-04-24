@@ -6,10 +6,12 @@ import { updateBlockNumber } from './actions'
 import { useDispatch } from 'react-redux'
 import { SUPPORT_NETWORK_CHAIN_IDS } from 'constants/chain'
 import { getOtherNetworkLibrary } from 'connectors/MultiNetworkConnector'
+import { useSetCurrentConnectedAddress } from './hooks'
 
 export default function Updater(): null {
   const { library, chainId } = useActiveWeb3React()
   const dispatch = useDispatch()
+  useSetCurrentConnectedAddress()
 
   const windowVisible = useIsWindowVisible()
 
