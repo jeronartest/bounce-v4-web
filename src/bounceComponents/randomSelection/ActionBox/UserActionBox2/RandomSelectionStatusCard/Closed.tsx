@@ -412,7 +412,7 @@ const ClosedCard = ({
       </>
     )
   }
-  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.id, account || undefined)
+  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
   return (
     <>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <NoJoinedCard />}

@@ -2,15 +2,18 @@ import { Box, Typography } from '@mui/material'
 
 import PoolStatusBox from '../PoolStatus'
 import { FixedSwapPoolProp } from 'api/pool/type'
-import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
-
-const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
-  const isUserJoinedPool = useIsUserJoinedPool(poolInfo)
-
+const Header = ({
+  poolInfo,
+  getPoolInfo,
+  isJoined
+}: {
+  poolInfo: FixedSwapPoolProp
+  getPoolInfo: () => void
+  isJoined: boolean
+}) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography variant="h2">{isUserJoinedPool ? 'You Joined' : 'Join The Pool'}</Typography>
-
+      <Typography variant="h2">{!!isJoined ? 'You Joined' : 'Join The Pool'}</Typography>
       {poolInfo && (
         <PoolStatusBox
           status={poolInfo.status}

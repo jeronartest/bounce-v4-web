@@ -206,28 +206,29 @@ export function useIsWinnerForRandomSelectionPool(
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [Number(poolId), address]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'isWinner', args)
+  const isWinner = Array.isArray(result) && result[0]
   return {
-    isWinner: !!result
+    isWinner: !!isWinner
   }
 }
 export function useIsJoinedRandomSelectionPool(poolId: string | number, address: string | undefined) {
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [address, Number(poolId)]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'betNo', args)
-  console.log('betNo > 0 = isJoined result>>>', result?.toString())
   // betNo more that 0 means joined
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }
 // winnerSeed more than 0 means winners list is ready
-export function useIsWinnerSeedDone(poolId: number) {
+export function useIsWinnerSeedDone(poolId: number | string) {
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
   const args = [Number(poolId)]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'winnerSeed', args)
-  console.log('winnerSeed === 0 means winners list not ready result>>>', result)
-  // betNo more that 0 means joined
+  console.log('winnerSeed === 0 means winners list not ready result>>>', result && result?.toString())
+  // load winners list if isWinnerSeedDone is more that 0
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }
 export const useGetWinnersList = (poolId: string, chainId: number) => {
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   return useRequest(
     async () => {
       if (typeof poolId !== 'string') {
@@ -235,15 +236,15 @@ export const useGetWinnersList = (poolId: string, chainId: number) => {
       }
       const response = await getWinnersList({
         poolId,
-        chainId: chainId || 0
+        chainId: chainConfigInBackend?.id || 0
       })
-      return response.data
+      return response.data || []
     },
     {
       // cacheKey: `POOL_HISTORY_${account}`,
-      ready: !!poolId && !!chainId,
-      pollingInterval: 30000,
-      refreshDeps: [poolId]
+      ready: !!poolId && !!chainId && !!chainConfigInBackend?.id,
+      pollingInterval: 20000,
+      refreshDeps: [poolId, chainId, chainConfigInBackend?.id]
     }
   )
 }

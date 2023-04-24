@@ -13,11 +13,13 @@ import {
 import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
-import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 // import { PoolEvent } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 // import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { shortenAddress } from 'utils'
+import { useGetWinnersList } from 'hooks/useCreateRandomSelectionPool'
+import { FixedSwapPoolProp } from 'api/pool/type'
+import { useActiveWeb3React } from 'hooks'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,16 +59,17 @@ const StyledTableRow = styled(TableRow)(() => ({
 //   Reversed: RegretTypography
 // }
 
-const AuctionWinnerList = () => {
-  const { data, loading: isGettingPoolHistory } = usePoolHistory()
-
+const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+  const { chainId } = useActiveWeb3React()
+  const { data, loading: isGettingWinnersList } = useGetWinnersList(poolInfo.poolId, chainId || 0)
+  console.log('data>>>', data)
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
         Winner list
       </Typography>
 
-      {data && data?.list.length > 0 && !isGettingPoolHistory ? (
+      {data && data?.list && data?.list.length > 0 && !isGettingWinnersList ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

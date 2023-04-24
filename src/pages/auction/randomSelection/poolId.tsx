@@ -2,7 +2,7 @@ import { Box, Container, Stack } from '@mui/material'
 
 import CreatorMainBlock from 'bounceComponents/randomSelection/MainBlock/CreatorMainBlock'
 import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
-// import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'
+import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'
 import Header from 'bounceComponents/randomSelection/Header'
 import UserMainBlock from 'bounceComponents/randomSelection/MainBlock/UserMainBlock'
 import useRandomSelectionPoolInfo from 'bounceHooks/auction/useRandomSelectionPoolInfo'
@@ -11,8 +11,8 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import { useGetWinnersList } from 'hooks/useCreateRandomSelectionPool'
-// import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
-// import { PoolStatus } from 'api/pool/type'
+import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
+import { PoolStatus } from 'api/pool/type'
 const FixedSwapPoolPageContent = () => {
   const { account, chainId } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
@@ -20,8 +20,9 @@ const FixedSwapPoolPageContent = () => {
   console.log('poolInfo?.id, chainId>>', poolInfo?.poolId, chainId)
   const winnerList = useGetWinnersList(poolInfo?.poolId || '', chainId || 0)
   console.log('winnerList>>', winnerList)
-  //   const isWinnerSeedDone = useIsWinnerSeedDone(Number(poolInfo?.id))
-  //   console.log('poolid page IsWinnerSeedDone >>>', isWinnerSeedDone)
+  // load winners list if isWinnerSeedDone is true
+  const isWinnerSeedDone = useIsWinnerSeedDone(poolInfo?.poolId ? Number(poolInfo?.poolId) : '')
+  console.log('poolid page IsWinnerSeedDone >>>', isWinnerSeedDone)
   if (isBlock) {
     return <NoService />
   }
@@ -50,7 +51,7 @@ const FixedSwapPoolPageContent = () => {
             ) : (
               <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
             )}
-            {/* {poolInfo.status === PoolStatus.Closed && <AuctionWinnerList />} */}
+            {poolInfo.status === PoolStatus.Closed && isWinnerSeedDone && <AuctionWinnerList poolInfo={poolInfo} />}
           </Stack>
         </Box>
       </Box>

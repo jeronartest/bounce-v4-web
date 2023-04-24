@@ -73,20 +73,23 @@ const getInitialAction = (
 
 export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 
-const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
-  const { account, chainId } = useActiveWeb3React()
+const ActionBlock = ({
+  poolInfo,
+  getPoolInfo,
+  isJoined
+}: {
+  poolInfo: FixedSwapPoolProp
+  getPoolInfo: () => void
+  isJoined: boolean
+}) => {
+  const { chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
-  const isJoined = useIsJoinedRandomSelectionPool(Number(poolInfo.poolId), account || undefined)
-  console.log('isJoined>>>', isJoined)
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
   const [action, setAction] = useState<UserAction>()
   const [bidAmount, setBidAmount] = useState(poolInfo.maxAmount1PerWallet || '')
-  const [regretAmount, setRegretAmount] = useState(poolInfo.maxAmount1PerWallet || '')
   const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
-  const slicedRegretAmount = regretAmount ? fixToDecimals(regretAmount, poolInfo.token1.decimals).toString() : ''
   useEffect(() => {
     setBidAmount(poolInfo.maxAmount1PerWallet)
-    setRegretAmount(poolInfo.maxAmount1PerWallet)
   }, [poolInfo])
   const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
     unit: poolInfo.token1.decimals,
@@ -94,7 +97,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   })
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
   console.log('betAmound, currencyBidAmount>>>', betAmound, currencyBidAmount)
-
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
 
   const toBid = useCallback(async () => {
@@ -267,7 +269,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       {action === 'CHECK' && (
         <Check
           onConfirm={() => {
-            setAction(isJoined ? 'MORE_BID' : 'FIRST_BID')
+            setAction(isJoined ? 'BID_OR_REGRET' : 'FIRST_BID')
           }}
         />
       )}
@@ -279,6 +281,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
           )}
           <BidOrRegret
             onBidButtonClick={() => {
+              /* bid button set disable, so this event never trriger */
               setAction('MORE_BID')
             }}
             onRegretButtonClick={() => {
