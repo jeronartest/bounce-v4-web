@@ -1,8 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { BigNumber } from 'bignumber.js'
 import RegretButton from './RegretButton'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import { formatNumber } from 'utils/number'
 import { FixedSwapPoolProp } from 'api/pool/type'
 
 export interface ConfirmRegretProps {

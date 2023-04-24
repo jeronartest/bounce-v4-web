@@ -9,17 +9,8 @@ import { formatNumber } from 'utils/number'
 import PoolInfoItem from '../../../PoolInfoItem'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
-import { UserAction } from '../ActionBlock'
 
-const LiveCard = ({
-  poolInfo,
-  action,
-  isJoined
-}: {
-  poolInfo: FixedSwapPoolProp
-  isJoined: boolean
-  action: UserAction
-}) => {
+const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoined: boolean }) => {
   const singleShare = poolInfo.totalShare
     ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
         unit: poolInfo.token0.decimals,

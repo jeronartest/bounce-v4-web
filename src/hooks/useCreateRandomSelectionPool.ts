@@ -14,8 +14,6 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 import { useSingleCallResult } from '../state/multicall/hooks'
-import { getWinnersList } from 'api/pool/index'
-import { useRequest } from 'ahooks'
 interface Params {
   whitelist: string[]
   swapRatio: string
