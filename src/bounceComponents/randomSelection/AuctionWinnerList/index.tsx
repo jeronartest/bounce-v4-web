@@ -16,6 +16,7 @@ import NoData from 'bounceComponents/common/NoData'
 // import { PoolEvent } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 // import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
+import { formatNumber } from 'utils/number'
 import { shortenAddress } from 'utils'
 import { useGetWinnersList } from 'hooks/useCreateRandomSelectionPool'
 import { FixedSwapPoolProp } from 'api/pool/type'
@@ -63,6 +64,10 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { chainId } = useActiveWeb3React()
   const { data, loading: isGettingWinnersList } = useGetWinnersList(poolInfo.poolId, chainId || 0)
   console.log('data>>>', data)
+  const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
+    unit: poolInfo.token1.decimals,
+    decimalPlaces: 6
+  })
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
@@ -86,14 +91,14 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
                 <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledTableCell>Win</StyledTableCell>
                   <StyledTableCell>1 Ticket</StyledTableCell>
+                  <StyledTableCell>{`${betAmound} ${poolInfo.token1.symbol}`}</StyledTableCell>
                   <StyledTableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>{shortenAddress(record.requestor)}</Typography>
-                      <CopyToClipboard text={record.requestor} />
+                      <Typography>{shortenAddress(record)}</Typography>
+                      <CopyToClipboard text={record} />
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell>{moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}</StyledTableCell>
-                  <StyledTableCell>2022/11/16 12:19</StyledTableCell>
+                  <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D hh:mm')}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
