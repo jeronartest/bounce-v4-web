@@ -55,6 +55,7 @@ export interface GetPoolInfoParams {
   chainId: number
   poolId: string
   address?: string
+  tokenType: 1 | 2
 }
 
 export interface TokenFromApi {

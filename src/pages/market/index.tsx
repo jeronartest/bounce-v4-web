@@ -346,7 +346,7 @@ const Market: React.FC = ({}) => {
                 ))}
               </Grid>
             )}
-            {!nftLoading && !nftPoolData?.list.length ? (
+            {!nftLoading && !nftPoolData?.list?.length ? (
               <NoData />
             ) : (
               <Grid rowSpacing={24} columnSpacing={20} container pt={18}>
