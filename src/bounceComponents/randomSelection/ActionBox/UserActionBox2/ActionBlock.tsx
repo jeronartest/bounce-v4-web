@@ -20,6 +20,7 @@ import { BigNumber } from 'bignumber.js'
 import Upcoming from './RandomSelectionStatusCard/Upcoming'
 import Closed from './RandomSelectionStatusCard/Closed'
 import LiveCard from './RandomSelectionStatusCard/Live'
+import { useIsWinnerForRandomSelectionPool } from 'hooks/useCreateRandomSelectionPool'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -83,12 +84,20 @@ const ActionBlock = ({
   isJoined: boolean
   isWinnerSeedDone?: boolean
 }) => {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
+
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserClaimed = useMemo(() => !!poolInfo.participant.claimed, [poolInfo])
   const [action, setAction] = useState<UserAction>()
   const [bidAmount, setBidAmount] = useState(poolInfo.maxAmount1PerWallet || '')
+  const singleShare = poolInfo.totalShare
+    ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
+        unit: poolInfo.token0.decimals,
+        decimalPlaces: poolInfo.token0.decimals
+      })
+    : undefined
   const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
+  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
   useEffect(() => {
     setBidAmount(poolInfo.maxAmount1PerWallet)
   }, [poolInfo])
@@ -211,7 +220,9 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${slicedBidAmount} ${poolInfo.token1.symbol}`
+            content: `You have successfully claimed ${isWinner ? singleShare : slicedBidAmount} ${
+              isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol
+            }`
           })
         })
         .catch()
@@ -228,7 +239,7 @@ const ActionBlock = ({
         onAgain: toClaim
       })
     }
-  }, [bidAmount, claim, poolInfo.token1.symbol])
+  }, [claim, isWinner, poolInfo.token0.symbol, poolInfo.token1.symbol, singleShare, slicedBidAmount])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
@@ -330,6 +341,7 @@ const ActionBlock = ({
             toClaim={toClaim}
             submitted={claimBidSubmitted.submitted}
             getPoolInfo={getPoolInfo}
+            isWinner={isWinner}
             isWinnerSeedDone={isWinnerSeedDone}
           />
         </>

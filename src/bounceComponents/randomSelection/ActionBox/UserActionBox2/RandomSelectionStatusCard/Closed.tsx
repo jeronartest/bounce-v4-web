@@ -14,8 +14,6 @@ import { formatNumber } from 'utils/number'
 import PoolInfoItem from '../../../PoolInfoItem'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
-import { useIsWinnerForRandomSelectionPool } from 'hooks/useCreateRandomSelectionPool'
-import { useActiveWeb3React } from 'hooks'
 import { UserAction } from '../ActionBlock'
 import ClaimButton from '../ClaimButton'
 
@@ -26,7 +24,8 @@ const ClosedCard = ({
   toClaim,
   submitted,
   getPoolInfo,
-  isWinnerSeedDone
+  isWinnerSeedDone,
+  isWinner
 }: {
   poolInfo: FixedSwapPoolProp
   isJoined: boolean
@@ -35,8 +34,8 @@ const ClosedCard = ({
   submitted: boolean
   getPoolInfo: () => void
   isWinnerSeedDone?: boolean
+  isWinner?: boolean
 }) => {
-  const { account } = useActiveWeb3React()
   const singleShare = poolInfo.totalShare
     ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
         unit: poolInfo.token0.decimals,
@@ -414,7 +413,6 @@ const ClosedCard = ({
       </>
     )
   }
-  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
   return (
     <>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <NoJoinedCard />}
