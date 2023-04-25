@@ -42,9 +42,9 @@ const FixedSwapPoolPageContent = () => {
           />
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
-              <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+              <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
             ) : (
-              <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+              <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
             )}
             {poolInfo.status === PoolStatus.Closed && isWinnerSeedDone && <AuctionWinnerList poolInfo={poolInfo} />}
           </Stack>

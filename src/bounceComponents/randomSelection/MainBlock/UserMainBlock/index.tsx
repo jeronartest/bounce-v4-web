@@ -6,10 +6,12 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 
 const UserMainBlock = ({
   poolInfo,
-  getPoolInfo
+  getPoolInfo,
+  isWinnerSeedDone
 }: {
   poolInfo: FixedSwapPoolProp
   getPoolInfo: () => void
+  isWinnerSeedDone?: boolean
 }): JSX.Element => {
   return (
     <Box
@@ -18,7 +20,7 @@ const UserMainBlock = ({
       <Alert poolInfo={poolInfo} />
       <LeftBox poolInfo={poolInfo} />
       {/* <UserActionBox /> */}
-      <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+      <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
     </Box>
   )
 }

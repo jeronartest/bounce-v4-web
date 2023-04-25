@@ -25,7 +25,8 @@ const ClosedCard = ({
   action,
   toClaim,
   submitted,
-  getPoolInfo
+  getPoolInfo,
+  isWinnerSeedDone
 }: {
   poolInfo: FixedSwapPoolProp
   isJoined: boolean
@@ -33,6 +34,7 @@ const ClosedCard = ({
   toClaim: () => void
   submitted: boolean
   getPoolInfo: () => void
+  isWinnerSeedDone?: boolean
 }) => {
   const { account } = useActiveWeb3React()
   const singleShare = poolInfo.totalShare
@@ -434,7 +436,9 @@ const ClosedCard = ({
         <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status} />
       </Box>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <AuctionCloseBtn />}
-      {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={submitted} />}
+      {action === 'NEED_TO_CLAIM' && (
+        <ClaimButton onClick={toClaim} loading={submitted} isWinnerSeedDone={isWinnerSeedDone} />
+      )}
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
       {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
     </>

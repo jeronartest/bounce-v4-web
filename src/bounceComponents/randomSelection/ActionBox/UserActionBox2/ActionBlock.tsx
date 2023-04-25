@@ -75,11 +75,13 @@ export type UserBidAction = 'GO_TO_CHECK' | 'FIRST_BID' | 'MORE_BID'
 const ActionBlock = ({
   poolInfo,
   getPoolInfo,
-  isJoined
+  isJoined,
+  isWinnerSeedDone
 }: {
   poolInfo: FixedSwapPoolProp
   getPoolInfo: () => void
   isJoined: boolean
+  isWinnerSeedDone?: boolean
 }) => {
   const { chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
@@ -328,6 +330,7 @@ const ActionBlock = ({
             toClaim={toClaim}
             submitted={claimBidSubmitted.submitted}
             getPoolInfo={getPoolInfo}
+            isWinnerSeedDone={isWinnerSeedDone}
           />
         </>
       )}
