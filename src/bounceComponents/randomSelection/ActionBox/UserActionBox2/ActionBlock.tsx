@@ -96,7 +96,10 @@ const ActionBlock = ({
         decimalPlaces: poolInfo.token0.decimals
       })
     : undefined
-  const slicedBidAmount = bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''
+  const slicedBidAmount = formatNumber(poolInfo.maxAmount1PerWallet, {
+    unit: poolInfo.token1.decimals,
+    decimalPlaces: poolInfo.token1.decimals
+  })
   const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
   useEffect(() => {
     setBidAmount(poolInfo.maxAmount1PerWallet)
