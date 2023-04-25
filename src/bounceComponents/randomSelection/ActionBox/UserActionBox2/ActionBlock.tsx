@@ -211,7 +211,7 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${bidAmount} ${poolInfo.token1.symbol}`
+            content: `You have successfully claimed ${slicedBidAmount} ${poolInfo.token1.symbol}`
           })
         })
         .catch()
