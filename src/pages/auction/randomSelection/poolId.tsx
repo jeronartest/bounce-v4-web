@@ -13,13 +13,11 @@ import NoService from 'components/NoService'
 import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
 import { PoolStatus } from 'api/pool/type'
 const FixedSwapPoolPageContent = () => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
   const isBlock = useCurrentRegionBlock()
-  console.log('poolInfo?.id, chainId>>', poolInfo?.poolId, chainId)
   // load winners list if isWinnerSeedDone is true
   const isWinnerSeedDone = useIsWinnerSeedDone(poolInfo?.poolId ? Number(poolInfo?.poolId) : '')
-  console.log('poolid page IsWinnerSeedDone >>>', isWinnerSeedDone)
   if (isBlock) {
     return <NoService />
   }
