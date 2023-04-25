@@ -27,7 +27,9 @@ const useBackedPoolInfo = () => {
         poolId,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend.id,
-        address: account || ''
+        address: account || '',
+        // tokenType erc20:1 , erc1155:2
+        tokenType: 1
       })
 
       const rawPoolInfo = response.data.fixedSwapPool

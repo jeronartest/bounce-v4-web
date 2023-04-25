@@ -38,13 +38,16 @@ export default function ParticipatedTab() {
           list: []
         }
       const category = curPoolType
+      // tokenType erc20:1 , erc1155:2
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const resp: any = await getUserPoolsTokenParticipant({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category,
         address: account,
         chainId: curChain,
-        queryType
+        queryType,
+        tokenType
       })
       if (category === 1) {
         return {

@@ -42,13 +42,17 @@ export default function CreatedTab() {
           list: []
         }
       const category = curPoolType
+      // tokenType erc20:1 , erc1155:2
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
+      console.log('getUserPoolsTokenCreated tokenType>>>', tokenType)
       const resp: any = await getUserPoolsTokenCreated({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         address: account,
         category,
         chainId: curChain,
-        queryType
+        queryType,
+        tokenType
       })
       if (category === 1) {
         return {
