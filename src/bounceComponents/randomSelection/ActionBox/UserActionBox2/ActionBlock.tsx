@@ -254,9 +254,7 @@ const ActionBlock = ({
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
         <>
           {poolInfo.status === PoolStatus.Upcoming && <Upcoming poolInfo={poolInfo} />}
-          {poolInfo.status === PoolStatus.Live && (
-            <LiveCard poolInfo={poolInfo} action={action} isJoined={!!isJoined} />
-          )}
+          {poolInfo.status === PoolStatus.Live && <LiveCard poolInfo={poolInfo} isJoined={!!isJoined} />}
           {/* Bid component has set disable to button when action is MORE_BID because of the random-selection auction only can bet once */}
           <Bid
             action={action}
@@ -284,9 +282,7 @@ const ActionBlock = ({
 
       {action === 'BID_OR_REGRET' && (
         <>
-          {poolInfo.status === PoolStatus.Live && (
-            <LiveCard poolInfo={poolInfo} action={action} isJoined={!!isJoined} />
-          )}
+          {poolInfo.status === PoolStatus.Live && <LiveCard poolInfo={poolInfo} isJoined={!!isJoined} />}
           <BidOrRegret
             onBidButtonClick={() => {
               /* bid button set disable, so this event never trriger */

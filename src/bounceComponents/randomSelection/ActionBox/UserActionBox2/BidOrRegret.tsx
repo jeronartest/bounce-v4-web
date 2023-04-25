@@ -2,10 +2,11 @@ import { Box, Button } from '@mui/material'
 import GetFundBackAlert from './BidButtonBlock/GetFundBackAlert'
 export interface BidOrRegretBlockProps {
   onBidButtonClick: () => void
-  onRegretButtonClick: () => void
+  onRegretButtonClick?: () => void
 }
 
-const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick }: BidOrRegretBlockProps) => {
+// const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick }: BidOrRegretBlockProps) => {
+const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
   return (
     <Box>
       <Box
@@ -31,16 +32,17 @@ const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick }: BidOrRegretBlock
           You are in the draw...
         </Button>
 
-        <Button
+        {/* <Button
           style={{
             width: '218px',
             height: '60px'
           }}
+          disabled
           variant="contained"
           onClick={onRegretButtonClick}
         >
           Get fund back
-        </Button>
+        </Button> */}
       </Box>
       <GetFundBackAlert />
     </Box>

@@ -10,6 +10,7 @@ import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { formatNumber } from 'utils/number'
+import { BigNumber } from 'bignumber.js'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -20,14 +21,38 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
 
   const successDialogContent = useMemo(() => {
-    const amountTotal0 = formatNumber(poolInfo.maxAmount1PerWallet, {
+    const singleShare = new BigNumber(poolInfo?.amountTotal0).div(Number(poolInfo?.totalShare)).toString()
+    const canClaimToken0Amount = new BigNumber(
+      Number(poolInfo.totalShare) - Number(poolInfo.curPlayer) > 0
+        ? Number(poolInfo.totalShare) - Number(poolInfo.curPlayer)
+        : 0
+    )
+      .times(singleShare)
+      .toString()
+    const canClaimToken1Amount = new BigNumber(Number(poolInfo.curPlayer))
+      .times(poolInfo.maxAmount1PerWallet)
+      .toString()
+    const amountTotal0 = formatNumber(canClaimToken0Amount, {
       unit: poolInfo.token0.decimals,
       decimalPlaces: poolInfo.token0.decimals
     })
-    const token1ToClaimText = `${amountTotal0} ${poolInfo.token1.symbol}`
-    return `You have successfully claimed ${token1ToClaimText}`
-  }, [poolInfo.maxAmount1PerWallet, poolInfo.token0.decimals, poolInfo.token1.symbol])
-
+    const amountTotal1 = formatNumber(canClaimToken1Amount, {
+      unit: poolInfo.token1.decimals,
+      decimalPlaces: poolInfo.token1.decimals
+    })
+    const token0ToClaimText = `${amountTotal0} ${poolInfo.token0.symbol}`
+    const token1ToClaimText = ` and ${amountTotal1} ${poolInfo.token1.symbol}`
+    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
+  }, [
+    poolInfo.amountTotal0,
+    poolInfo.curPlayer,
+    poolInfo.maxAmount1PerWallet,
+    poolInfo.token0.decimals,
+    poolInfo.token0.symbol,
+    poolInfo.token1.decimals,
+    poolInfo.token1.symbol,
+    poolInfo.totalShare
+  ])
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog()
