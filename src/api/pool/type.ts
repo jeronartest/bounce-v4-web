@@ -168,18 +168,20 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
 }
 
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
-  currencyAmountTotal1: CurrencyAmount
-  currencySwappedTotal1: CurrencyAmount
+  currencyAmountMin1: CurrencyAmount | undefined
+  currencyAmountMinIncr1: CurrencyAmount | undefined
   ethChainId: ChainId
   participant: {
     address?: string
     claimed?: boolean
-    regreted?: boolean
-    swappedAmount0?: string
-    currencySwappedAmount1: CurrencyAmount | undefined
     is721?: 0 | 1
     tokenId?: string
   }
+  creatorClaimed: boolean
+  currentBidder: string | undefined
+  currentBidderAmount1: CurrencyAmount | undefined
+  currentBidderMinAmount: CurrencyAmount | undefined
+  gasFee: CurrencyAmount | undefined
 }
 
 export interface GetPoolInfoResponse {

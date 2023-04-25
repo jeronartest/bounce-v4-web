@@ -1,11 +1,11 @@
-import { EnglishAuctionNFTPoolProp, FixedSwapNFTPoolProp } from 'api/pool/type'
-import useNftPoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import { EnglishAuctionNFTPoolProp } from 'api/pool/type'
+import { useEnglishAuctionDataPoolInfo } from 'bounceHooks/auction/useEnglishAuctionDataPoolInfo'
 import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
 
 interface IContent {
   loading: boolean
   run: () => void
-  data: FixedSwapNFTPoolProp | undefined
+  data: EnglishAuctionNFTPoolProp | undefined
 }
 
 const ValuesStateContext = createContext<IContent | null>(null)
@@ -82,7 +82,7 @@ export function useEnglishAuctionPoolInfo() {
 
 const ValuesProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const { data, run, loading } = useNftPoolInfo()
+  const { data, run, loading } = useEnglishAuctionDataPoolInfo()
 
   useEffect(() => {
     dispatch({

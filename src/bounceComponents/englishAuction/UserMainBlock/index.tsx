@@ -3,6 +3,9 @@ import Alert from './Alert'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import TopInfoBox from '../TopInfoBox'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import PriceChartView from '../PriceChartView'
 
 const UserMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
@@ -28,6 +31,34 @@ const UserMainBlock = (): JSX.Element => {
             onEnd={getPoolInfo}
           />
         )}
+      </Box>
+
+      <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap="40px">
+        <Stack spacing={10}>
+          <PoolInfoItem title="Current Highest Bid" tip="The current highest bid for the auction">
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Typography>-</Typography>
+              <TokenImage
+                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl}
+                alt={poolInfo.token0.symbol}
+                size={20}
+              />
+              <Typography>{poolInfo.token0.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+
+          <PoolInfoItem title="Price Floor" tip="The minimum bidding price of an auction item">
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Typography>{1}</Typography>
+              <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
+              <Typography>{poolInfo.token1.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+
+          <Box pt={20}>
+            <PriceChartView />
+          </Box>
+        </Stack>
       </Box>
     </Stack>
   )

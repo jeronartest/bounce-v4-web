@@ -3,7 +3,7 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { useActiveWeb3React } from 'hooks'
-import { useFixedSwapNftContract } from 'hooks/useContract'
+import { useEnglishAuctionNftContract, useFixedSwapNftContract } from 'hooks/useContract'
 
 export function useCreatorClaimNFT(poolId: number | string, name: string) {
   const { account } = useActiveWeb3React()
@@ -47,6 +47,51 @@ export function useCreatorClaimNFT(poolId: number | string, name: string) {
       }
     })
   }, [account, addTransaction, fixedSwapNftContract, name, poolId])
+
+  return { submitted, run }
+}
+
+export function useCreatorClaimEnglishAuctionNFT(poolId: number | string, name: string) {
+  const { account } = useActiveWeb3React()
+  const englishAuctionNftContract = useEnglishAuctionNftContract()
+  const addTransaction = useTransactionAdder()
+  const funcName = 'creatorClaim'
+
+  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_EnglishAuction_NFT')
+  const run = useCallback(async (): Promise<{
+    hash: string
+    transactionReceipt: Promise<TransactionReceipt>
+  }> => {
+    if (!account) {
+      return Promise.reject('no account')
+    }
+    if (!englishAuctionNftContract) {
+      return Promise.reject('no contract')
+    }
+
+    const args = [poolId]
+
+    const estimatedGas = await englishAuctionNftContract.estimateGas[funcName](...args).catch((error: Error) => {
+      console.debug('Failed to claim for creator', error)
+      throw error
+    })
+    return englishAuctionNftContract[funcName](...args, {
+      gasLimit: calculateGasMargin(estimatedGas)
+    }).then((response: TransactionResponse) => {
+      addTransaction(response, {
+        summary: `Creator claim assets for ${name}`,
+        userSubmitted: {
+          account,
+          action: funcName,
+          key: poolId + '_EnglishAuction_NFT'
+        }
+      })
+      return {
+        hash: response.hash,
+        transactionReceipt: response.wait(1)
+      }
+    })
+  }, [account, addTransaction, englishAuctionNftContract, name, poolId])
 
   return { submitted, run }
 }

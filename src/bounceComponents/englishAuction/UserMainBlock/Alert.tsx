@@ -1,15 +1,16 @@
-import { FixedSwapNFTPoolProp, PoolStatus, PoolType } from 'api/pool/type'
+import { EnglishAuctionNFTPoolProp, PoolStatus, PoolType } from 'api/pool/type'
 import AuctionClosedAlert from 'bounceComponents/fixed-swap/Alerts/AuctionClosedAlert'
 import ClaimYourTokenAlert from 'bounceComponents/fixed-swap/Alerts/ClaimYourTokenAlert'
 import NotEligibleAlert from 'bounceComponents/fixed-swap/Alerts/NotEligibleAlert'
+import NotStartedAlert from 'bounceComponents/fixed-swap/Alerts/NotStartedAlert'
 import PayAttentionAlert from 'bounceComponents/fixed-swap/Alerts/PayAttentionAlert'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import { useIsUserJoined1155Pool } from 'bounceHooks/auction/useIsUserJoinedPool'
 
-const Alert = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
+const Alert = ({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) => {
   const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
     poolInfo,
-    PoolType.fixedSwapNft
+    PoolType.ENGLISH_AUCTION_NFT
   )
   const isUserJoinedPool = useIsUserJoined1155Pool(poolInfo)
 
@@ -21,7 +22,9 @@ const Alert = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
     return <NotEligibleAlert />
   }
 
-  if (poolInfo.status === PoolStatus.Live || poolInfo.status === PoolStatus.Upcoming) {
+  if (poolInfo.status === PoolStatus.Upcoming) return <NotStartedAlert />
+
+  if (poolInfo.status === PoolStatus.Live) {
     return <PayAttentionAlert />
   }
 

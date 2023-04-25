@@ -5,7 +5,7 @@ import { LIKE_OBJ } from 'api/idea/type'
 import { ChainListMap } from 'constants/chain'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
-import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
+import { PoolInfoProp } from '../type'
 
 const styles = {
   p: '7px 16px',
@@ -16,14 +16,22 @@ const styles = {
   }
 }
 
-const Header = ({ poolInfo, getPoolInfo }: FixedSwapPoolParams): JSX.Element => {
+const Header = ({
+  poolInfo,
+  getPoolInfo,
+  typeName = 'Fixed-Price'
+}: {
+  poolInfo: PoolInfoProp
+  getPoolInfo?: () => void
+  typeName?: string
+}): JSX.Element => {
   const { userId } = useUserInfo()
   if (!poolInfo.ethChainId) return <></>
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Stack direction="row" spacing={20} sx={{ alignItems: 'center' }} maxWidth={'80%'}>
         <Typography variant="h1" sx={{ fontSize: 30 }}>
-          {poolInfo?.name} Fixed-Price Pool
+          {poolInfo?.name} {typeName} Pool
         </Typography>
 
         <LikeUnlike
