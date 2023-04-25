@@ -14,7 +14,7 @@ const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
           width: '100%',
           display: 'flex',
           flexFlow: 'row nowrap',
-          justifyContent: 'space-between'
+          justifyContent: 'center'
         }}
       >
         <Button

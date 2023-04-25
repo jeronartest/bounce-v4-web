@@ -40,7 +40,6 @@ export default function CurrentPoolStatus() {
   )
 
   const curList = useMemo(() => [...(createdData || []), ...(participantData || [])], [createdData, participantData])
-
   useEffect(() => {
     setCurPage(1)
   }, [account, curPoolType, curQueryType])
@@ -115,7 +114,8 @@ export default function CurrentPoolStatus() {
                 .slice((curPage - 1) * defaultPageSize, curPage * defaultPageSize)
                 .map((auctionPoolItem, index) => (
                   <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
-                    {auctionPoolItem.category === PoolType.FixedSwap ? (
+                    {auctionPoolItem.category === PoolType.FixedSwap ||
+                    auctionPoolItem.category === PoolType.Lottery ? (
                       <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                     ) : (
                       <Box

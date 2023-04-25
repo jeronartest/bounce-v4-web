@@ -10,7 +10,7 @@ import useRandomSelectionPlaceBid from 'bounceHooks/auction/useRandomSelectionPl
 import useRegretBid from 'bounceHooks/auction/useRandomSelectionRegretBid'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useUserClaim from 'bounceHooks/auction/useRandomSelectionUserClaim'
-import { fixToDecimals, formatNumber } from 'utils/number'
+import { formatNumber } from 'utils/number'
 import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { CurrencyAmount } from 'constants/token'
