@@ -8,7 +8,9 @@ import {
   GetPoolInfoResponse,
   GetWhitelistMerkleTreeRootParams,
   GetWhitelistMerkleTreeRootResponse,
-  UpdateAuctionBackgroundParams
+  UpdateAuctionBackgroundParams,
+  GetWinnersListParams,
+  GetWinnersListResponse
 } from './type'
 
 /**
@@ -38,7 +40,12 @@ export const getPoolInfo = (params: GetPoolInfoParams) => {
 export const getPoolHistory = (params: GetPoolHistoryParams) => {
   return ApiInstance.post<GetPoolHistoryResponse>('/pools/pool/activities', params)
 }
-
+/**
+ * Get winners list for random selection pool
+ */
+export const getWinnersList = (params: GetWinnersListParams) => {
+  return ApiInstance.post<GetWinnersListResponse>('/pools/pool/lottery/winners', params)
+}
 /**
  * Update auction background.
  * @param {Object} params

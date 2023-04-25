@@ -44,7 +44,6 @@ export default function MyProfile() {
           ) : (
             <>
               <CurrentPoolStatus />
-
               <Box
                 sx={{
                   mt: 40,

@@ -22,10 +22,12 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
       if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
         return Promise.reject(new Error('Invalid poolId'))
       }
-
+      // tokenType erc20:1 , erc1155:2
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const response = await getPoolInfo({
         poolId,
         category,
+        tokenType,
         chainId: chainConfigInBackend.id,
         address: account || '',
         tokenType: category === PoolType.FixedSwap ? 1 : 2

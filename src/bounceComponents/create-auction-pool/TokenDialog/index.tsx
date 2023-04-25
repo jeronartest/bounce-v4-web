@@ -56,7 +56,7 @@ const TokenDialog = create(({ enableEth, chainId }: TokenDialogProps) => {
     isGettingSingleToken
   } = useTokenList(chainId, debouncedFilterInputValue, enableEth)
 
-  // console.log('>>>>> tokenList: ', tokenList)
+  console.log('>>>>> tokenList: ', tokenList)
 
   return (
     <Dialog title="Select a token" fullWidth {...muiDialogV5(modal)} onClose={handleReject}>

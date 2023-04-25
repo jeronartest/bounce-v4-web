@@ -10,10 +10,10 @@ export enum PoolType {
   'SealedBid' = 4,
   'fixedSwapNft' = 5
 }
-
 export interface GetPoolCreationSignatureParams {
+  amountMin1?: string
   amountTotal0: string
-  amountTotal1: string
+  amountTotal1?: string
   category: PoolType
   chainId: number
   claimAt: number
@@ -26,8 +26,11 @@ export interface GetPoolCreationSignatureParams {
   token0: string
   token1: string
   tokenId?: string
+  is721?: boolean
+  maxPlayer?: number
+  totalShare?: string | number
+  nShare?: string | number
 }
-
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string
@@ -146,6 +149,9 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     currencySwappedAmount0: CurrencyAmount | undefined
     currencySwappedAmount1: CurrencyAmount | undefined
   }
+  totalShare?: string | number
+  maxPlayere?: string | number
+  curPlayer?: string | number
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
@@ -177,7 +183,12 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
 }
-
+export interface GetWinnersListParams {
+  limit: number
+  offset: number
+  chainId: number
+  poolId: string
+}
 export type PoolEvent = 'Swapped' | 'Reversed'
 
 export interface PoolHistory {
@@ -225,6 +236,11 @@ export interface GetPoolHistoryResponse {
   total: number
 }
 
+export interface GetWinnersListResponse {
+  dealt: boolean
+  list: string[]
+  total: number
+}
 export interface UpdateAuctionBackgroundParams {
   id: number
   description?: string

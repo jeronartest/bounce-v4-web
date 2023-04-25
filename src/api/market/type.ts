@@ -26,6 +26,7 @@ export interface IPoolsParams {
   CreatorUserId?: number
   poolStatusFrontend?: string
   token0Address?: string
+  tokenType?: number
 }
 
 export enum UserType {

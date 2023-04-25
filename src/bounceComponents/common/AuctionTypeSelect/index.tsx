@@ -18,6 +18,7 @@ export default function AuctionTypeSelect({
       >
         <MenuItem value={PoolType.FixedSwap}>Fixed Price</MenuItem>
         <MenuItem value={PoolType.fixedSwapNft}>Fixed Swap NFT</MenuItem>
+        <MenuItem value={PoolType.Lottery}>Random Selection</MenuItem>
       </Select>
     </FormItem>
   )

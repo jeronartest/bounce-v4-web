@@ -11,6 +11,7 @@ import { routes } from 'constants/routes'
 import BigNumber from 'bignumber.js'
 import { Box, Stack, Typography } from '@mui/material'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import { formatNumber } from 'utils/number'
 
 export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: FixedSwapPool }) {
   const optionDatas = useOptionDatas()
@@ -18,7 +19,7 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
     <Box
       component={'a'}
       target="_blank"
-      href={routes.auction.fixedPrice
+      href={(auctionPoolItem.category === PoolType.Lottery ? routes.auction.randomSelection : routes.auction.fixedPrice)
         .replace(':chainShortName', getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
         .replace(':poolId', auctionPoolItem.poolId)}
     >
@@ -81,19 +82,37 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
                 </Stack>
               }
             />
-            <AuctionListItem
-              label="Fixed price ratio"
-              value={
-                <Stack direction="row" spacing={8}>
-                  <Typography fontSize={12}>1</Typography>
-                  <Typography fontSize={12}>
-                    {auctionPoolItem.token0.symbol.toUpperCase()} ={' '}
-                    {new BigNumber(auctionPoolItem.ratio).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
-                  </Typography>
-                  <Typography fontSize={12}>{auctionPoolItem.token1.symbol.toUpperCase()}</Typography>
-                </Stack>
-              }
-            />
+            {auctionPoolItem.category !== PoolType.Lottery && (
+              <AuctionListItem
+                label="Fixed price ratio"
+                value={
+                  <Stack direction="row" spacing={8}>
+                    <Typography fontSize={12}>1</Typography>
+                    <Typography fontSize={12}>
+                      {auctionPoolItem.token0.symbol.toUpperCase()} ={' '}
+                      {new BigNumber(auctionPoolItem.ratio).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
+                    </Typography>
+                    <Typography fontSize={12}>{auctionPoolItem.token1.symbol.toUpperCase()}</Typography>
+                  </Stack>
+                }
+              />
+            )}
+            {auctionPoolItem.category === PoolType.Lottery && (
+              <AuctionListItem
+                label="Ticket Price"
+                value={
+                  <Stack direction="row" spacing={8}>
+                    <Typography fontSize={12}>
+                      {formatNumber(auctionPoolItem.maxAmount1PerWallet, {
+                        unit: auctionPoolItem.token1.decimals,
+                        decimalPlaces: auctionPoolItem.token1.decimals
+                      })}
+                    </Typography>
+                    <Typography fontSize={12}>{auctionPoolItem.token1.symbol.toUpperCase()}</Typography>
+                  </Stack>
+                }
+              />
+            )}
             <AuctionListItem
               label="Price,$"
               value={

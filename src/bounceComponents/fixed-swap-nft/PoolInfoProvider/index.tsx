@@ -30,12 +30,13 @@ const PoolInfoProvider = ({ children }: { children: ReactNode }): JSX.Element =>
       if (typeof poolId !== 'string') {
         return Promise.reject(new Error('Invalid poolId'))
       }
-
       const response = await getPoolInfo({
         poolId,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend?.id,
-        address: account
+        address: account,
+        // tokenType erc20:1 , erc1155:2
+        tokenType: 2
       })
 
       return response.data.fixedSwapPool || null

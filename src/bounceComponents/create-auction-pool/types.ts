@@ -45,7 +45,8 @@ export enum TokenType {
 }
 
 export enum AuctionType {
-  FIXED_PRICE = 'fixed-price'
+  FIXED_PRICE = 'fixed-price',
+  RANDOM_SELECTION = 'random-selection'
 }
 
 export interface AuctionPool {
@@ -67,4 +68,8 @@ export interface AuctionPool {
   activeStep: CreationStep
   completed: CompletedSteps
   participantStatus: ParticipantStatus
+  auctionType?: AuctionType
+  winnerNumber?: number
+  ticketPrice?: number
+  maxParticipantAllowed?: number
 }
