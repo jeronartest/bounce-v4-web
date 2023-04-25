@@ -20,13 +20,13 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
 
   const successDialogContent = useMemo(() => {
-    const amountTotal0 = formatNumber(poolInfo.amountTotal0, {
+    const amountTotal0 = formatNumber(poolInfo.maxAmount1PerWallet, {
       unit: poolInfo.token0.decimals,
       decimalPlaces: poolInfo.token0.decimals
     })
-    const token1ToClaimText = `${amountTotal0} ${poolInfo.token0.symbol}`
+    const token1ToClaimText = `${amountTotal0} ${poolInfo.token1.symbol}`
     return `You have successfully claimed ${token1ToClaimText}`
-  }, [poolInfo.amountTotal0, poolInfo.token0.decimals, poolInfo.token0.symbol])
+  }, [poolInfo.maxAmount1PerWallet, poolInfo.token0.decimals, poolInfo.token1.symbol])
 
   const toClaim = useCallback(
     async (isCancel: boolean) => {
