@@ -44,7 +44,6 @@ export default function CreatedTab() {
       const category = curPoolType
       // tokenType erc20:1 , erc1155:2
       const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
-      console.log('getUserPoolsTokenCreated tokenType>>>', tokenType)
       const resp: any = await getUserPoolsTokenCreated({
         offset: (current - 1) * pageSize,
         limit: pageSize,
@@ -152,7 +151,7 @@ export default function CreatedTab() {
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
-                  {auctionPoolItem.category === PoolType.FixedSwap ? (
+                  {auctionPoolItem.category === PoolType.FixedSwap || auctionPoolItem.category === PoolType.Lottery ? (
                     <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                   ) : (
                     <Box
