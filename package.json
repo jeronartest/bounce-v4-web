@@ -55,7 +55,6 @@
     "prettier": "^2.7.1",
     "process": "^0.11.10",
     "react": "^18.2.0",
-    "react-app-rewired": "^2.2.1",
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
@@ -79,12 +78,12 @@
     "workbox-strategies": "^6.5.3"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "craco start",
     "start:service-worker": "yarn build && yarn serve -s build",
-    "build": "yarn lint:fix && react-app-rewired build",
+    "build": "yarn lint:fix && craco build",
     "build:test": "env-cmd -f ./.env.test.production yarn build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-app-rewired eject",
+    "test": "craco test --env=jsdom",
+    "eject": "craco eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "lint": "eslint ./src/**/*.{ts,tsx}",
@@ -109,6 +108,7 @@
     ]
   },
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
