@@ -29,7 +29,8 @@ const RegretAmountInput = ({
       placeholder="Enter"
       value={regretAmount}
       onUserInput={value => {
-        setRegretAmount(value)
+        const result = value.replace(/[^\d]/g, '')
+        setRegretAmount(result)
       }}
       endAdornment={
         <>
