@@ -9,7 +9,6 @@ import PriceChartView from '../PriceChartView'
 
 const UserMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
-  const isUserJoinedPool = false
 
   if (!poolInfo) return <></>
 
@@ -20,7 +19,7 @@ const UserMainBlock = (): JSX.Element => {
       <TopInfoBox />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 20 }}>
-        <Typography variant="h2">{isUserJoinedPool ? 'You Joined' : 'Join The Pool'}</Typography>
+        <Typography variant="h2">{poolInfo.isUserJoinedPool ? 'You Joined' : 'Join The Pool'}</Typography>
 
         {poolInfo && (
           <PoolStatusBox
@@ -37,19 +36,19 @@ const UserMainBlock = (): JSX.Element => {
         <Stack spacing={10}>
           <PoolInfoItem title="Current Highest Bid" tip="The current highest bid for the auction">
             <Stack direction="row" spacing={6} alignItems="center">
-              <Typography>-</Typography>
+              <Typography>{poolInfo.currentBidderAmount1?.toSignificant() || '-'}</Typography>
               <TokenImage
-                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl}
-                alt={poolInfo.token0.symbol}
+                src={poolInfo.token1.largeUrl || poolInfo.token1.smallUrl || poolInfo.token1.thumbUrl}
+                alt={poolInfo.token1.symbol}
                 size={20}
               />
-              <Typography>{poolInfo.token0.symbol}</Typography>
+              <Typography>{poolInfo.token1.symbol}</Typography>
             </Stack>
           </PoolInfoItem>
 
           <PoolInfoItem title="Price Floor" tip="The minimum bidding price of an auction item">
             <Stack direction="row" spacing={6} alignItems="center">
-              <Typography>{1}</Typography>
+              <Typography>{poolInfo.currencyAmountMin1?.toSignificant()}</Typography>
               <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
               <Typography>{poolInfo.token1.symbol}</Typography>
             </Stack>

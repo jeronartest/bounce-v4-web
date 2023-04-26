@@ -100,11 +100,14 @@ export function useEnglishAuctionDataPoolInfo() {
       gasFee: CurrencyAmount.fromRawAmount(
         Currency.getNativeCurrency(chainConfigInBackend.ethChainId),
         gasFeeRes?.[0].toString()
-      )
+      ),
+      isWinner: !!account && currentBidderRes?.[0].toString().toLowerCase() === account.toLowerCase(),
+      isUserJoinedPool: false
     }
 
     return result
   }, [
+    account,
     chainConfigInBackend?.ethChainId,
     creatorClaimedRes,
     currentBidderAmount1Res,

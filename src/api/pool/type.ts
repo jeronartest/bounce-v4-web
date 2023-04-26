@@ -182,6 +182,8 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   currentBidderAmount1: CurrencyAmount | undefined
   currentBidderMinAmount: CurrencyAmount | undefined
   gasFee: CurrencyAmount | undefined
+  isWinner: boolean
+  isUserJoinedPool: boolean
 }
 
 export interface GetPoolInfoResponse {
