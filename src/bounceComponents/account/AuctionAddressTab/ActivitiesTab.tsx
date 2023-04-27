@@ -177,6 +177,8 @@ const ActivitiesTab = () => {
                   <StyledTableCell>
                     {record.category === PoolType.fixedSwapNft
                       ? 'NFT Fixed Price Auction'
+                      : record.category === PoolType.Lottery
+                      ? 'Random Selection'
                       : 'Token Fixed Price Auction'}
                   </StyledTableCell>
                   <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>

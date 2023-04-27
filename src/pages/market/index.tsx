@@ -47,6 +47,7 @@ const Market: React.FC = ({}) => {
       offset: 0,
       limit: 6,
       category: 1,
+      tokenType: 1, // erc20:1, nft:2
       chainId: 0,
       creatorAddress: '',
       creatorName: '',
@@ -72,6 +73,7 @@ const Market: React.FC = ({}) => {
       orderBy: 'openTs',
       poolId: '',
       poolName: '',
+      tokenType: 2, // erc20:1, nft:2
       token0Address: ''
     })
     return {

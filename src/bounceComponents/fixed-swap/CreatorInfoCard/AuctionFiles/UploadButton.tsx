@@ -9,6 +9,7 @@ import { ReactComponent as AddCircleOutlineSVG } from 'assets/imgs/icon/add_circ
 import { updateAuctionBackground } from 'api/pool'
 import { UpdateAuctionBackgroundParams } from 'api/pool/type'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
+import { useUserInfo } from 'state/users/hooks'
 
 export interface UploadButtonProps {
   poolInfo: PoolInfoProp
@@ -17,6 +18,7 @@ export interface UploadButtonProps {
 
 const UploadButton = ({ poolInfo, getPoolInfo }: UploadButtonProps) => {
   const [isUploading, setIsUploading] = useState(false)
+  const { token } = useUserInfo()
 
   const { run: update, loading: isUpdating } = useRequest(
     (params: UpdateAuctionBackgroundParams) => updateAuctionBackground(params),
@@ -28,6 +30,10 @@ const UploadButton = ({ poolInfo, getPoolInfo }: UploadButtonProps) => {
       }
     }
   )
+
+  if (!token) {
+    return null
+  }
 
   return (
     <LoadingButton variant="outlined" sx={{ p: 0 }} fullWidth loading={isUploading || isUpdating}>

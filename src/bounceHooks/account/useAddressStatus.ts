@@ -11,11 +11,13 @@ export function useUserPoolsTokenCreated(
   return useRequest(
     async () => {
       if (!address) return []
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const response = await getUserPoolsTokenCreated({
         address,
         chainId: 0,
         queryType,
         category: category || 1,
+        tokenType,
         limit: 100
       })
       return response.data[category === PoolType.fixedSwapNft ? 'fixedSwapNftList' : 'fixedSwapList']
@@ -36,12 +38,15 @@ export function useUserPoolsTokenParticipant(
   return useRequest(
     async () => {
       if (!address) return []
+      // tokenType erc20:1 , erc1155:2
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const response = await getUserPoolsTokenParticipant({
         address,
         chainId: 0,
         queryType,
         category: category || 1,
-        limit: 100
+        limit: 100,
+        tokenType: tokenType
       })
       return response.data[category === PoolType.fixedSwapNft ? 'fixedSwapNftList' : 'fixedSwapList']
         .list as FixedSwapPool[]

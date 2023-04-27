@@ -8,6 +8,7 @@ export interface GetUserPoolsDashboardParams {
   chainId: number
   limit?: number
   offset?: number
+  tokenType?: 1 | 2
   queryType?: DashboardQueryType | 0
 }
 

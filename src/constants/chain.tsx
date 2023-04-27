@@ -21,6 +21,7 @@ export enum ChainId {
   // HECO = 128,
   POLYGON = 137,
   FANTOM = 250,
+  ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
   POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
@@ -195,7 +196,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ZKSYNC_ERA]: {
     id: ChainId.ZKSYNC_ERA,
     hexChainId: numberToHex(ChainId.ZKSYNC_ERA),
-    chainName: 'Zksync Era',
+    chainName: 'zkSync Era',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
@@ -204,6 +205,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://mainnet.era.zksync.io'],
     blockExplorerUrls: ['https://explorer.zksync.io/']
+  },
+  [ChainId.ZKSYNC_ERA_TESTNET]: {
+    id: ChainId.ZKSYNC_ERA_TESTNET,
+    hexChainId: numberToHex(ChainId.ZKSYNC_ERA_TESTNET),
+    chainName: 'zkSync Era Testnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://zksync.io/favicon-32x32.png'
+    },
+    rpcUrls: ['https://zksync2-testnet.zksync.dev'],
+    blockExplorerUrls: ['https://goerli.explorer.zksync.io/']
   },
   [ChainId.POLYGON_ZK_EVM]: {
     id: ChainId.POLYGON_ZK_EVM,

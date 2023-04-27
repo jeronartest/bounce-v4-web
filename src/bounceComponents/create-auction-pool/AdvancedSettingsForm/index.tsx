@@ -165,7 +165,6 @@ export const DateRangePickerDemo = ({
                 <FormItem label="Pool name" name="poolName">
                   <OutlinedInput />
                 </FormItem>
-
                 <Stack direction="row" sx={{ mt: 24, width: '100%' }} spacing={20}>
                   <Field
                     component={DateTimePickerFormItem}

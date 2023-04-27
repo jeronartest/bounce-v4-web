@@ -34,13 +34,16 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
   } = usePagination<IAuctionPoolsItems<FixedSwapPool>, Params>(
     async ({ current, pageSize }) => {
       const category = curPoolType
+      // tokenType erc20:1 , erc1155:2
+      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const resp = await getPools({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         CreatorUserId: userInfo.id,
         category,
         chainId: curChain,
-        orderBy: ''
+        orderBy: '',
+        tokenType
       })
       if (category === PoolType.FixedSwap) {
         return {

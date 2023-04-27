@@ -5,7 +5,15 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { Moment } from 'moment'
 import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react'
 import { isAddress } from 'utils'
-import { AllocationStatus, AuctionPool, CompletedSteps, NFTToken, ParticipantStatus, TokenType } from '../types'
+import {
+  AllocationStatus,
+  AuctionPool,
+  CompletedSteps,
+  NFTToken,
+  ParticipantStatus,
+  TokenType,
+  AuctionType
+} from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -65,6 +73,8 @@ export const useValuesDispatch = () => {
 
 const initialValues: AuctionPool = {
   tokenType: TokenType.ERC20,
+  priceFloor: '',
+  amountMinIncr1: '',
   tokenFrom: {
     chainId: NETWORK_CHAIN_ID,
     address: '',
@@ -102,17 +112,23 @@ const initialValues: AuctionPool = {
   whitelist: [],
   activeStep: 0,
   completed: {},
-  participantStatus: ParticipantStatus.Public
+  participantStatus: ParticipantStatus.Public,
+  auctionType: AuctionType.FIXED_PRICE,
+  winnerNumber: 0,
+  ticketPrice: 0,
+  maxParticipantAllowed: 0
 }
 
 export enum ActionType {
   SetActiveStep = 'SET_ACTIVE_STEP',
   SetTokenFrom = 'SET_TOKEN_FROM',
   SetTokenType = 'SET_TOKEN_TYPE',
+  SetAuctionType = 'SET_AUCTION_TYPE',
   CommitTokenImformation = 'COMMIT_TOKEN_IMFORMATION',
   CommitToken1155Information = 'COMMIT_TOKEN_1155_INFORMATION',
   CommitToken721Information = 'COMMIT_TOKEN_721_INFORMATION',
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
+  CommitRandomSelectionAuctionParameters = 'COMMIT_RANDOM_SELECTION_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
   SetWhitelist = 'SET_WHITELIST'
@@ -122,6 +138,9 @@ type Payload = {
   [ActionType.SetActiveStep]: {
     activeStep: number
     completed: CompletedSteps
+  }
+  [ActionType.SetAuctionType]: {
+    auctionType: AuctionType
   }
   [ActionType.SetTokenType]: {
     tokenType: TokenType
@@ -162,6 +181,15 @@ type Payload = {
     amountMinIncr1?: string
     activeStep: number
     completed: CompletedSteps
+  }
+  [ActionType.CommitRandomSelectionAuctionParameters]: {
+    tokenTo: Token
+    swapRatio: string
+    activeStep: number
+    completed: CompletedSteps
+    ticketPrice: string
+    winnerNumber: string
+    maxParticipantAllowed: string
   }
   [ActionType.CommitAdvancedSettings]: {
     poolName: string
@@ -237,6 +265,12 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
+    case ActionType.SetActiveStep:
+      return {
+        ...state,
+        activeStep: action.payload.activeStep,
+        completed: action.payload.completed
+      }
     case ActionType.CommitAuctionParameters:
       return {
         ...state,
@@ -250,6 +284,20 @@ const reducer = (state: AuctionPool, action: Actions) => {
         priceFloor: action.payload.priceFloor,
         amountMinIncr1: action.payload.amountMinIncr1,
         allocationPerWallet: action.payload.allocationPerWallet,
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true }
+      }
+    case ActionType.CommitRandomSelectionAuctionParameters:
+      return {
+        ...state,
+        tokenTo: {
+          ...state.tokenTo,
+          ...action.payload.tokenTo
+        },
+        swapRatio: action.payload.swapRatio,
+        ticketPrice: action.payload.ticketPrice,
+        winnerNumber: action.payload.winnerNumber,
+        maxParticipantAllowed: action.payload.maxParticipantAllowed,
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
@@ -278,13 +326,18 @@ const reducer = (state: AuctionPool, action: Actions) => {
         ...state,
         whitelist: action.payload.whitelist
       }
+    case ActionType.SetAuctionType:
+      return {
+        ...state,
+        auctionType: action.payload.auctionType
+      }
     default:
       return state
   }
 }
 
 const ValuesProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialValues)
+  const [state, dispatch] = useReducer(reducer, initialValues, initialValues)
 
   return (
     <ValuesStateContext.Provider value={state}>

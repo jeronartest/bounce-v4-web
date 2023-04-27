@@ -31,7 +31,6 @@ import FormItem from 'bounceComponents/common/FormItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
-// import { formatNumber } from '@/utils/web3/number'
 import NoData from 'bounceComponents/common/NoData'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
 import { getPools } from 'api/market'
@@ -42,6 +41,10 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import { useNavigate } from 'react-router-dom'
+import { useActiveWeb3React } from 'hooks'
+import { formatNumber } from 'utils/number'
+
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
@@ -104,6 +107,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(0)
+  const { account } = useActiveWeb3React()
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) })
       .then(res => {
@@ -145,6 +149,7 @@ const Pools: React.FC = ({}) => {
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category: category,
+        tokenType: 1, // erc20:1, nft:2
         chainId: chainId || 0,
         creatorAddress: creatorAddress,
         creatorName: creatorName,
@@ -154,27 +159,27 @@ const Pools: React.FC = ({}) => {
         poolStatusFrontend: poolStatusFrontend === 0 ? null : poolStatusFrontend,
         token0Address: token0Address
       })
-      if (category === 1) {
-        return {
-          list: resp.data.fixedSwapList.list,
-          total: resp.data.fixedSwapList.total
-        }
-      } else if (category === 2) {
-        return {
-          list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total
-        }
-      } else if (category === 3) {
-        return {
-          list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total
-        }
-      } else {
-        return {
-          list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total
-        }
+      //   if (category === 1) {
+      return {
+        list: resp.data.fixedSwapList.list,
+        total: resp.data.fixedSwapList.total
       }
+      //   } else if (category === 2) {
+      //     return {
+      //       list: resp.data.dutchPoolList.list,
+      //       total: resp.data.dutchPoolList.total
+      //     }
+      //   } else if (category === 3) {
+      //     return {
+      //       list: resp.data.lotteryPoolList.list,
+      //       total: resp.data.lotteryPoolList.total
+      //     }
+      //   } else {
+      //     return {
+      //       list: resp.data.sealedBidPoolList.list,
+      //       total: resp.data.sealedBidPoolList.total
+      //     }
+      //   }
     },
     {
       defaultPageSize: defaultIdeaPageSize,
@@ -204,6 +209,22 @@ const Pools: React.FC = ({}) => {
 
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+  }
+  const navigate = useNavigate()
+  const linkToDetail = (item: any) => {
+    if (item.category === 3) {
+      const linkUrl = routes.auction.randomSelection
+        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
+        .replace(':poolId', item.poolId)
+      console.log('randomSelection>>>', linkUrl)
+      navigate(linkUrl)
+    } else {
+      const linkUrl = routes.auction.fixedPrice
+        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
+        .replace(':poolId', item.poolId)
+      console.log('fixedPrice>>>', linkUrl)
+      navigate(linkUrl)
+    }
   }
   return (
     <section>
@@ -335,6 +356,7 @@ const Pools: React.FC = ({}) => {
                         <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
                           <Select defaultValue={1}>
                             <MenuItem value={1}>Fixed Price</MenuItem>
+                            <MenuItem value={3}>Random Selection</MenuItem>
                           </Select>
                         </FormItem>
                       </Stack>
@@ -362,16 +384,7 @@ const Pools: React.FC = ({}) => {
                         <Grid container spacing={18}>
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                              <Box
-                                component={'a'}
-                                target="_blank"
-                                href={routes.auction.fixedPrice
-                                  .replace(
-                                    ':chainShortName',
-                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                                  )
-                                  .replace(':poolId', fixedSwaptem.poolId)}
-                              >
+                              <Box onClick={() => linkToDetail(fixedSwaptem)}>
                                 <AuctionCard
                                   style={{ minWidth: 'unset' }}
                                   poolId={fixedSwaptem.poolId}
@@ -379,6 +392,9 @@ const Pools: React.FC = ({}) => {
                                   status={fixedSwaptem.status}
                                   claimAt={fixedSwaptem.claimAt}
                                   closeAt={fixedSwaptem.closeAt}
+                                  isCreator={fixedSwaptem.creator === account}
+                                  creatorClaimed={fixedSwaptem.creatorClaimed}
+                                  participantClaimed={fixedSwaptem.participant.claimed}
                                   dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
                                   holder={
                                     <AuctionHolder
@@ -405,10 +421,15 @@ const Pools: React.FC = ({}) => {
                                     />
                                   }
                                   progress={{
-                                    symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                                    decimals: fixedSwaptem.token0.decimals,
-                                    sold: fixedSwaptem.swappedAmount0,
-                                    supply: fixedSwaptem.amountTotal0
+                                    symbol:
+                                      fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.symbol?.toUpperCase(),
+                                    decimals: fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.decimals,
+                                    sold:
+                                      fixedSwaptem.category === 3
+                                        ? fixedSwaptem.curPlayer
+                                        : fixedSwaptem.swappedAmount0,
+                                    supply:
+                                      fixedSwaptem.category === 3 ? fixedSwaptem.maxPlayere : fixedSwaptem.amountTotal0
                                   }}
                                   listItems={
                                     <>
@@ -439,23 +460,43 @@ const Pools: React.FC = ({}) => {
                                           </Stack>
                                         }
                                       />
-                                      <AuctionListItem
-                                        label="Fixed price ratio"
-                                        value={
-                                          <Stack direction="row" spacing={8}>
-                                            <Typography fontSize={12}>1</Typography>
-                                            <Typography fontSize={12}>
-                                              {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                              {new BigNumber(fixedSwaptem.ratio)
-                                                .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                                .toFormat()}
-                                            </Typography>
-                                            <Typography fontSize={12}>
-                                              {fixedSwaptem.token1.symbol.toUpperCase()}
-                                            </Typography>
-                                          </Stack>
-                                        }
-                                      />
+                                      {fixedSwaptem.category !== PoolType.Lottery && (
+                                        <AuctionListItem
+                                          label="Fixed price ratio"
+                                          value={
+                                            <Stack direction="row" spacing={8}>
+                                              <Typography fontSize={12}>1</Typography>
+                                              <Typography fontSize={12}>
+                                                {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
+                                                {new BigNumber(fixedSwaptem.ratio)
+                                                  .decimalPlaces(6, BigNumber.ROUND_DOWN)
+                                                  .toFormat()}
+                                              </Typography>
+                                              <Typography fontSize={12}>
+                                                {fixedSwaptem.token1.symbol.toUpperCase()}
+                                              </Typography>
+                                            </Stack>
+                                          }
+                                        />
+                                      )}
+                                      {fixedSwaptem.category === PoolType.Lottery && (
+                                        <AuctionListItem
+                                          label="Ticket Price"
+                                          value={
+                                            <Stack direction="row" spacing={8}>
+                                              <Typography fontSize={12}>
+                                                {formatNumber(fixedSwaptem.maxAmount1PerWallet, {
+                                                  unit: fixedSwaptem.token1.decimals,
+                                                  decimalPlaces: fixedSwaptem.token1.decimals
+                                                })}
+                                              </Typography>
+                                              <Typography fontSize={12}>
+                                                {fixedSwaptem.token1.symbol.toUpperCase()}
+                                              </Typography>
+                                            </Stack>
+                                          }
+                                        />
+                                      )}
                                       <AuctionListItem
                                         label="Price,$"
                                         value={

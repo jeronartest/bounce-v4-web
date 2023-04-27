@@ -157,6 +157,10 @@ export function DashboardToPoolButton({
           ? routes.auction.fixedSwapNft
               .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
               .replace(':poolId', poolId.toString())
+          : category === PoolType.Lottery
+          ? routes.auction.randomSelection
+              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
+              .replace(':poolId', poolId.toString())
           : routes.auction.fixedPrice
               .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
               .replace(':poolId', poolId.toString())
@@ -184,6 +188,8 @@ export function DashboardShowCategoryName({ category, backedChainId }: { categor
           ? 'ERC20 Fixed Price'
           : category === PoolType.fixedSwapNft
           ? 'NFT Fixed Price'
+          : category === PoolType.Lottery
+          ? 'Random Selection'
           : '-'}
       </Typography>
     </Box>
