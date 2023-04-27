@@ -7,7 +7,7 @@ export const AuctionConfig: {
   }
 } = {
   [ChainId.MAINNET]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
     // [TokenType.ERC721]: [],
     // [TokenType.ERC1155]: []
   },
@@ -21,7 +21,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.BSC]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.OKEX]: {
@@ -32,10 +32,10 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.FANTOM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.ZKSYNC_ERA_TESTNET]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
@@ -74,7 +74,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.AVALANCHE]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.SEPOLIA]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
