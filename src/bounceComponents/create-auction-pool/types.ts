@@ -74,6 +74,6 @@ export interface AuctionPool {
   amountMinIncr1?: string
   auctionType?: AuctionType
   winnerNumber?: number
-  ticketPrice?: number
+  ticketPrice?: string
   maxParticipantAllowed?: number
 }

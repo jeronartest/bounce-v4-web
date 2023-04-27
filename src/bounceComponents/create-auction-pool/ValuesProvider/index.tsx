@@ -115,7 +115,7 @@ const initialValues: AuctionPool = {
   participantStatus: ParticipantStatus.Public,
   auctionType: AuctionType.FIXED_PRICE,
   winnerNumber: 0,
-  ticketPrice: 0,
+  ticketPrice: '',
   maxParticipantAllowed: 0
 }
 
@@ -135,10 +135,10 @@ export enum ActionType {
 }
 
 type Payload = {
-  [ActionType.SetActiveStep]: {
-    activeStep: number
-    completed: CompletedSteps
-  }
+  // [ActionType.SetActiveStep]: {
+  //   activeStep: number
+  //   completed: CompletedSteps
+  // }
   [ActionType.SetAuctionType]: {
     auctionType: AuctionType
   }
@@ -188,8 +188,8 @@ type Payload = {
     activeStep: number
     completed: CompletedSteps
     ticketPrice: string
-    winnerNumber: string
-    maxParticipantAllowed: string
+    winnerNumber: number
+    maxParticipantAllowed: number
   }
   [ActionType.CommitAdvancedSettings]: {
     poolName: string
@@ -265,12 +265,6 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
-    case ActionType.SetActiveStep:
-      return {
-        ...state,
-        activeStep: action.payload.activeStep,
-        completed: action.payload.completed
-      }
     case ActionType.CommitAuctionParameters:
       return {
         ...state,
@@ -337,7 +331,7 @@ const reducer = (state: AuctionPool, action: Actions) => {
 }
 
 const ValuesProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialValues, initialValues)
+  const [state, dispatch] = useReducer(reducer, initialValues)
 
   return (
     <ValuesStateContext.Provider value={state}>
