@@ -24,10 +24,20 @@ export const ColorOptions = {
 
     // Green
     green: '#73D491',
+    'green-1': '#20994B',
     // Blue
     blue: '#2663FF',
     'blue-50': '#245AE7',
-    'blue-100': '#2150CC'
+    'blue-100': '#2150CC',
+    // yellow
+    'yeelow-1': '#E1F25C',
+    'yeelow-2': '#C8F056',
+    // text-color or bg-color
+    'text-1': '#626262',
+    'text-2': '#959595',
+    'text-3': '#121212',
+    'text-4': '#20201E',
+    'text-5': '#D7D6D9'
   },
   dark: {
     white: '#000',
@@ -52,10 +62,20 @@ export const ColorOptions = {
 
     // Green
     green: '#73D491',
+    'green-1': '#20994B',
     // Blue
     blue: '#2663FF',
     'blue-50': '#245AE7',
-    'blue-100': '#2150CC'
+    'blue-100': '#2150CC',
+    // yellow
+    'yeelow-1': '#E1F25C',
+    'yeelow-2': '#C8F056',
+    // text-color or bg-color
+    'text-1': '#626262',
+    'text-2': '#959595',
+    'text-3': '#121212',
+    'text-4': '#20201E',
+    'text-5': '#D7D6D9'
   }
 }
 
