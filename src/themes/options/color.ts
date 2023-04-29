@@ -37,7 +37,9 @@ export const ColorOptions = {
     'text-2': '#959595',
     'text-3': '#121212',
     'text-4': '#20201E',
-    'text-5': '#D7D6D9'
+    'text-5': '#D7D6D9',
+    'text-6': '#58595B',
+    'text-7': '#2B51DA'
   },
   dark: {
     white: '#000',
@@ -75,7 +77,9 @@ export const ColorOptions = {
     'text-2': '#959595',
     'text-3': '#121212',
     'text-4': '#20201E',
-    'text-5': '#D7D6D9'
+    'text-5': '#D7D6D9',
+    'text-6': '#58595B',
+    'text-7': '#2B51DA'
   }
 }
 
