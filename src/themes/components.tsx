@@ -223,10 +223,10 @@ export const ComponentOptions = {
           background: 'var(--ps-gray-900)',
           color: 'var(--ps-white)',
           '&:hover': {
-            background: 'var(--ps-gray-800)'
+            background: 'var(--ps-yellow-1)'
           },
           '&:active': {
-            background: 'var(--ps-gray-200)',
+            background: 'var(--ps-yellow-1)',
             color: 'var(--ps-gray-900)'
           },
           '&:disabled': {
