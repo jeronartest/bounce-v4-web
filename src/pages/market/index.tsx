@@ -29,7 +29,7 @@ import { routes } from 'constants/routes'
 import Image from 'components/Image'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import NoData from 'bounceComponents/common/NoData'
-
+import FooterPc from 'components/Footer/FooterPc.tsx'
 // export type IMarketProps = {}
 
 const poolType: Record<PoolType, string> = {
@@ -37,7 +37,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
   [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft'
+  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
+  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
 const Market: React.FC = ({}) => {
   const navigate = useNavigate()
@@ -371,6 +372,7 @@ const Market: React.FC = ({}) => {
             )}
           </Box>
         </Box>
+        <FooterPc />
       </Container>
     </>
   )
