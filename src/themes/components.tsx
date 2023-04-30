@@ -239,11 +239,12 @@ export const ComponentOptions = {
           background: 'var(--ps-primary)',
           color: 'var(--ps-gray-900)',
           '&:hover': {
-            background: 'var(--ps-gray-200)',
-            border: '1px solid var(--ps-gray-800)'
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)'
           },
           '&:active': {
-            background: 'var(--ps-gray-900)',
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)',
             color: 'var(--ps-primary)'
           },
           '&:disabled': {
@@ -262,9 +263,12 @@ export const ComponentOptions = {
             sx: {
               marginTop: 16,
               border: '1px solid #D7D6D9',
-              borderRadius: 20,
+              borderRadius: 8,
               maxHeight: 350,
               boxShadow: 'none',
+              '&:focus': {
+                border: '1px solid var(--ps-yellow-1)'
+              },
               '& .MuiMenu-list .MuiListSubheader-sticky': {
                 color: '#878A8E',
                 fontSize: 12,
@@ -276,14 +280,24 @@ export const ComponentOptions = {
           },
           MenuListProps: {
             sx: {
+              padding: '6px !important',
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
+                background: 'var(--ps-yellow-1)',
+                borderRadius: '8px',
                 '&::after': {
                   content: `' '`,
                   width: 20,
                   height: 20,
                   background: `url(${CheckedSVG}) no-repeat center`
+                },
+                '&:hover': {
+                  background: 'var(--ps-yellow-1)'
                 }
+              },
+              '& .MuiMenuItem-root:hover': {
+                background: 'var(--ps-yellow-1)',
+                borderRadius: '8px'
               }
             }
           }
@@ -291,7 +305,7 @@ export const ComponentOptions = {
       },
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: 8,
           background: 'var(--ps-white)',
           '&:before': {
             border: 0
@@ -301,27 +315,25 @@ export const ComponentOptions = {
           },
           '&:hover': {
             background: 'var(--ps-white)',
+            border: '1px solid var(--ps-yellow-1)',
             '&:not(.Mui-disabled):before': {
-              border: 0
+              border: 'none'
             }
           },
-
           '&.Mui-focused': {
             background: 'var(--ps-white)',
-
+            border: '1px solide var(--ps-yellow-1)',
             fieldset: { borderColor: 'var(--ps-gray-900)' }
           },
           '&.Mui-disabled': {
             background: 'var(--ps-white)'
           }
         },
-
         select: {
           '&:focus': {
             background: 'none'
           }
         },
-
         icon: {
           right: 14
         }
