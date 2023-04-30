@@ -29,7 +29,7 @@ import { routes } from 'constants/routes'
 import Image from 'components/Image'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import NoData from 'bounceComponents/common/NoData'
-import FooterPc from 'components/Footer/FooterPc.tsx'
+import FooterPc from 'components/Footer/FooterPc'
 // export type IMarketProps = {}
 
 const poolType: Record<PoolType, string> = {
@@ -372,8 +372,8 @@ const Market: React.FC = ({}) => {
             )}
           </Box>
         </Box>
-        <FooterPc />
       </Container>
+      <FooterPc />
     </>
   )
 }

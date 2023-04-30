@@ -296,7 +296,7 @@ const FooterPc: React.FC = () => {
       {
         label: 'Community',
         isExternal: true,
-        href: 'https://www.bounce.finance/joinCommunity',
+        href: 'https://community.bounce.finance/',
         isDisabled: false,
         extraIcon: '',
         className: ''
@@ -325,7 +325,9 @@ const FooterPc: React.FC = () => {
       style={{
         position: 'relative',
         background: 'var(--ps-gray-20)',
-        borderRadius: 30
+        borderRadius: 30,
+        width: 'calc(100% - 40px)',
+        margin: '0 auto 20px'
       }}
     >
       <Container
