@@ -30,6 +30,7 @@ import Image from 'components/Image'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import NoData from 'bounceComponents/common/NoData'
 import FooterPc from 'components/Footer/FooterPc'
+import TokenAuction from 'components/TokenAuction'
 // export type IMarketProps = {}
 
 const poolType: Record<PoolType, string> = {
@@ -115,6 +116,9 @@ const Market: React.FC = ({}) => {
         <Box mt={60}>
           <CompanyBanner list={bannerList} />
         </Box>
+      </Container>
+      <TokenAuction />
+      <Container maxWidth="lg">
         <Box mt={32}>
           <Stack spacing={26} direction="row">
             <Marketcard

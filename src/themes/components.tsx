@@ -198,24 +198,24 @@ export const ComponentOptions = {
         },
         sizeLarge: {
           height: 72,
-          borderRadius: 36
+          borderRadius: 8
         },
         sizeMedium: {
           height: 60,
-          borderRadius: 30
+          borderRadius: 8
         },
         sizeSmall: {
           height: 36,
-          borderRadius: 18
+          borderRadius: 8
         },
         textPrimary: {
           background: 'var(--ps-gray-50)',
           color: '#000000',
           '&:hover': {
-            background: 'var(--ps-gray-50)'
+            background: 'var(--ps-yellow-1)'
           },
           '&:active': {
-            background: '#DFDFDF',
+            background: 'var(--ps-yellow-1)',
             color: '#000000'
           }
         },
