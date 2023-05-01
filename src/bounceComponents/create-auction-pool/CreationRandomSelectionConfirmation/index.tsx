@@ -21,7 +21,6 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useActiveWeb3React } from 'hooks'
 import { shortenAddress } from 'utils'
-import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainListMap } from 'constants/chain'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCurrencyBalance } from 'state/wallet/hooks'
@@ -35,6 +34,7 @@ import {
   showWaitingTxDialog
 } from 'utils/auction'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { useShowLoginModal } from 'state/users/hooks'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -52,7 +52,7 @@ const CreatePoolButton = () => {
   const navigate = useNavigate()
 
   const { account, chainId } = useActiveWeb3React()
-  const walletModalToggle = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
   const auctionInChainId = useAuctionInChain()
   const switchNetwork = useSwitchNetwork()
   const { currencyFrom } = useAuctionERC20Currency()
@@ -205,7 +205,7 @@ const CreatePoolButton = () => {
     if (!account) {
       return {
         text: 'Connect wallet',
-        run: walletModalToggle
+        run: showLoginModal
       }
     }
     if (chainId !== auctionInChainId) {
@@ -264,10 +264,10 @@ const CreatePoolButton = () => {
     buttonCommitted,
     chainId,
     currencyFrom?.symbol,
+    showLoginModal,
     switchNetwork,
     toApprove,
-    toCreate,
-    walletModalToggle
+    toCreate
   ])
 
   return (

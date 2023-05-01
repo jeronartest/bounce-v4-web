@@ -10,11 +10,12 @@ import { getEtherscanLink, shortenAddress } from '../../utils'
 import WalletModal from 'components/Modal/WalletModal/index'
 import Spinner from 'components/Spinner'
 // import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
+import Web3StatusIconSvg from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 import Image from 'components/Image'
-import { ChainList, ChainListMap } from 'constants/chain'
+import { ChainList } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
-import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, IosShare, SettingsPowerOutlined } from '@mui/icons-material'
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
 import Copy from 'components/essential/Copy'
 import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useETHBalance } from 'state/wallet/hooks'
@@ -29,6 +30,10 @@ import { useDispatch } from 'react-redux'
 import LogoText from 'components/LogoText'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import Tooltip from 'bounceComponents/common/Tooltip'
+import { useLogout, useUserInfo } from 'state/users/hooks'
+import { ReactComponent as DisconnectSvg } from 'assets/svg/account/disconnect.svg'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
@@ -42,15 +47,16 @@ const ActionButton = styled(Button)(({ theme }) => ({
 }))
 
 const StyledBtn = styled('button')(`
-  background-color: rgb(232, 236, 251);
-  border-radius: 12px;
+  background-color: #F6F7F3;
+  padding: 0 !important;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
-  height: 32px;
-  width: 32px;
+  height: 24px;
+  width: 24px;
   min-width: auto !important,
   color: rgb(13, 17, 28);
   border: none;
@@ -85,6 +91,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 function Web3StatusInner() {
   const { account, error } = useWeb3React()
+  const { userInfo } = useUserInfo()
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
   const sortedRecentTransactions = useMemo(() => {
@@ -115,18 +122,18 @@ function Web3StatusInner() {
             onClick={handleClick}
             sx={{
               cursor: 'pointer',
-              borderRadius: 20,
+              borderRadius: 8,
               padding: '0 12px',
               minWidth: 64,
-              border: '1px solid var(--ps-gray-900)',
-              height: 40,
+              border: '1px solid var(--ps-border-1)',
+              height: 44,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: theme.palette.background.paper
             }}
           >
-            <Image height={22} style={{ marginRight: 4 }} src={ChainListMap[chainId]?.logo || ''} />
+            <Image height={32} style={{ marginRight: 4 }} src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg} />
             {pending?.length ? (
               <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
                 <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
@@ -184,6 +191,7 @@ function Web3StatusInner() {
 
 export default function Web3Status() {
   const { active, account } = useWeb3React()
+  const { token } = useUserInfo()
   const contextNetwork = useWeb3React(NetworkContextName)
 
   const { ENSName } = useENSName(account ?? undefined)
@@ -204,7 +212,7 @@ export default function Web3Status() {
 
   return (
     <>
-      <Web3StatusInner />
+      {token && <Web3StatusInner />}
       <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
     </>
   )
@@ -219,6 +227,7 @@ enum WalletView {
 function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close: () => void }) {
   const open = !!anchorEl
   const theme = useTheme()
+  const { userInfo } = useUserInfo()
   const { deactivate, connector } = useWeb3React()
   const { account, chainId } = useActiveWeb3React()
   const { ENSName } = useENSName(account || undefined)
@@ -240,6 +249,8 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
   const clearAllTransactionsCallback = useCallback(() => {
     if (chainId) dispatch(clearAllTransactions({ chainId }))
   }, [dispatch, chainId])
+  const { logout } = useLogout()
+  const navigate = useNavigate()
 
   if (!chainId || !account) return null
   return (
@@ -248,13 +259,13 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
       anchorEl={anchorEl}
       sx={{
         top: '20px !important',
-        width: 320,
+        width: 325,
         zIndex: theme.zIndex.modal
       }}
     >
       <Box
         sx={{
-          border: '1px solid rgb(210, 217, 238)',
+          border: '1px solid rgba(18, 18, 18, 0.06)',
           bgcolor: 'background.paper',
           borderRadius: '12px',
           padding: '16px',
@@ -263,37 +274,37 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
       >
         {WalletView.MAIN === curView && (
           <Box>
-            <Box display={'flex'} justifyContent="space-between">
+            <Box display={'flex'} justifyContent="space-between" alignItems={'center'}>
               <Box display={'flex'} alignItems="center">
-                <Image height={22} style={{ marginRight: 4 }} src={chainId ? ChainListMap[chainId]?.logo || '' : ''} />
+                <Image height={40} style={{ marginRight: 4 }} src={userInfo?.avatar.fileUrl || Web3StatusIconSvg} />
                 <Box>
-                  <Typography fontSize={12}>{shortenAddress(account || '')}</Typography>
+                  <Typography fontSize={12} fontWeight={500}>
+                    {shortenAddress(account || '')}
+                  </Typography>
                   <Typography fontSize={12}>{ENSName}</Typography>
                 </Box>
+                <Tooltip title="Copy address">
+                  <Copy toCopy={account || ''} />
+                </Tooltip>
               </Box>
               <Stack direction={'row'} spacing={8}>
-                <Tooltip title="Copy address">
-                  <StyledBtn>
-                    <Copy toCopy={account || ''} />
-                  </StyledBtn>
-                </Tooltip>
                 <Tooltip title="Explorer">
                   <StyledBtn>
                     <Link target={'_blank'} href={getEtherscanLink(chainId, account, 'address')}>
-                      <IosShare sx={{ color: '#000', height: 18 }} />
+                      <IosShare sx={{ color: '#666', height: 18 }} />
                     </Link>
                   </StyledBtn>
                 </Tooltip>
-                <Tooltip title="Disconnect">
+                <Tooltip title="logout">
                   <StyledBtn>
-                    <SettingsPowerOutlined
+                    <DisconnectSvg
                       onClick={() => {
+                        logout()
                         setInjectedConnected()
                         deactivate()
                         connector?.deactivate()
                         close()
                       }}
-                      sx={{ color: '#000', height: 18 }}
                     />
                   </StyledBtn>
                 </Tooltip>
@@ -308,17 +319,38 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
               </Typography>
             </Box>
 
-            <Divider />
+            <Stack spacing={6}>
+              <Button
+                sx={{ backgroundColor: 'var(--ps-yellow-1)', height: 40 }}
+                onClick={() => {
+                  navigate(routes.account.dashboard)
+                  close()
+                }}
+              >
+                Dashboard
+              </Button>
+              <Button
+                sx={{ height: 40 }}
+                variant="contained"
+                onClick={() => {
+                  navigate(routes.account.myAccount)
+                  close()
+                }}
+              >
+                My account
+              </Button>
+            </Stack>
 
             <Box mt={15}>
-              <StyledMenuItem
+              <Divider />
+              {/* <StyledMenuItem
                 onClick={() => {
                   setCurView(WalletView.SWITCH_NETWORK)
                 }}
               >
                 <Typography>Switch Network</Typography>
                 <ChevronRight />
-              </StyledMenuItem>
+              </StyledMenuItem> */}
               <StyledMenuItem onClick={() => setCurView(WalletView.TRANSACTIONS)}>
                 <Typography>Transactions</Typography>
                 <ChevronRight />

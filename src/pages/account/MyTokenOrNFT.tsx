@@ -6,9 +6,9 @@ import ActivitiesTab from 'bounceComponents/account/AuctionAddressTab/Activities
 import NoData from 'bounceComponents/common/NoData'
 import { useActiveWeb3React } from 'hooks'
 import { useState } from 'react'
-import { useWalletModalToggle } from 'state/application/hooks'
 import styles from './styles'
 import CurrentPoolStatus from 'bounceComponents/account/CurrentPoolStatus'
+import { useShowLoginModal } from 'state/users/hooks'
 
 enum TabListProp {
   'Auction_Created' = 'Auction Created',
@@ -20,7 +20,7 @@ const tabsList = [TabListProp.Auction_Created, TabListProp.Auction_Participated,
 export default function MyProfile() {
   const [curTab, setCurTab] = useState(TabListProp.Auction_Created)
   const { account } = useActiveWeb3React()
-  const toggleWalletModal = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
 
   return (
     <AccountLayout>
@@ -33,7 +33,7 @@ export default function MyProfile() {
           {!account ? (
             <NoData>
               <Box display={'grid'} gap="10px" justifyItems="center">
-                <Button variant="contained" onClick={toggleWalletModal}>
+                <Button variant="contained" onClick={showLoginModal}>
                   Connect Wallet
                 </Button>
                 <Typography color={'var(--ps-gray-600)'}>

@@ -202,11 +202,11 @@ export const ComponentOptions = {
         },
         sizeMedium: {
           height: 60,
-          borderRadius: 30
+          borderRadius: 8
         },
         sizeSmall: {
           height: 36,
-          borderRadius: 18
+          borderRadius: 8
         },
         textPrimary: {
           background: 'var(--ps-gray-50)',

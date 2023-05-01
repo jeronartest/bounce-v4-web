@@ -41,8 +41,9 @@ export default function Option({
         key={id}
         fullWidth
         sx={{
-          color: active ? 'transparent' : undefined,
-          fontWeight: 500
+          borderColor: 'var(--ps-border-1)',
+          fontSize: 14,
+          color: active ? 'transparent' : undefined
         }}
         onClick={onClick ?? undefined}
         disabled={!clickable || active}

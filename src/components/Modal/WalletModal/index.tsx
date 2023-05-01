@@ -10,7 +10,7 @@ import { /*fortmatic,*/ injected, portis } from 'connectors'
 import { SUPPORTED_WALLETS } from 'constants/index'
 import usePrevious from 'hooks/usePrevious'
 import { ApplicationModal } from 'state/application/actions'
-import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
+import { useModalOpen, useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
 import AccountDetails from 'components/Modal/WalletModal/AccountDetails'
 
 import Modal from '../index'
@@ -68,6 +68,7 @@ export default function WalletModal({
   // close modal when a connection is successful
   const activePrevious = usePrevious(active)
   const connectorPrevious = usePrevious(connector)
+  const signLoginModalToggle = useSignLoginModalToggle()
   useEffect(() => {
     if (walletModalOpen && ((active && !activePrevious) || (connector && connector !== connectorPrevious && !error))) {
       setWalletView(WALLET_VIEWS.OPTIONS)
@@ -90,6 +91,7 @@ export default function WalletModal({
         activate(conn, undefined, true)
           .then(() => {
             setInjectedConnected(conn)
+            signLoginModalToggle()
           })
           .catch(error => {
             if (error instanceof UnsupportedChainIdError) {
@@ -100,7 +102,7 @@ export default function WalletModal({
             setInjectedConnected()
           })
     },
-    [activate]
+    [activate, signLoginModalToggle]
   )
 
   // close wallet modal if fortmatic modal is active
@@ -284,7 +286,7 @@ export default function WalletModal({
             </Button>
           </PendingView>
         ) : (
-          <Box display="grid" gap="10px" width="100%">
+          <Box display="grid" gap="16px" width="100%" gridTemplateColumns={'1fr 1fr'}>
             {getOptions()}
           </Box>
         )}
@@ -293,8 +295,8 @@ export default function WalletModal({
   }
 
   return (
-    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="480px" closeIcon={true}>
-      <Box width={'100%'} padding="32px" display="flex" flexDirection="column" alignItems="center" gap={20}>
+    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="772px" closeIcon={true}>
+      <Box width={'100%'} padding="48px" display="flex" flexDirection="column" alignItems="center" gap={20}>
         {getModalContent()}
       </Box>
     </Modal>

@@ -7,7 +7,7 @@ import { UpdateAuctionBackgroundParams } from 'api/pool/type'
 
 import { ReactComponent as EditSVG } from 'assets/imgs/icon/edit.svg'
 import { PoolInfoProp } from '../type'
-import { useUserInfo, useWeb3Login } from 'state/users/hooks'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 
 export interface AuctionDescriptionProps {
   poolInfo: PoolInfoProp
@@ -36,7 +36,7 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionD
     setInputValue(poolInfo?.description || 'No description')
   }, [poolInfo?.description])
   const { token } = useUserInfo()
-  const { run: web3Login } = useWeb3Login()
+  const showLoginModal = useShowLoginModal()
 
   return (
     <Box sx={{ mt: 26, width: '100%' }}>
@@ -57,7 +57,7 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionD
               disabled={isUpdating}
               onClick={() => {
                 if (!token) {
-                  web3Login()
+                  showLoginModal()
                   return
                 }
                 update({ id: poolInfo.id, description: inputValue, posts: poolInfo?.posts || undefined })
