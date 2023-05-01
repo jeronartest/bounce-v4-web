@@ -198,7 +198,7 @@ export const ComponentOptions = {
         },
         sizeLarge: {
           height: 72,
-          borderRadius: 36
+          borderRadius: 8
         },
         sizeMedium: {
           height: 60,
@@ -212,10 +212,10 @@ export const ComponentOptions = {
           background: 'var(--ps-gray-50)',
           color: '#000000',
           '&:hover': {
-            background: 'var(--ps-gray-50)'
+            background: 'var(--ps-yellow-1)'
           },
           '&:active': {
-            background: '#DFDFDF',
+            background: 'var(--ps-yellow-1)',
             color: '#000000'
           }
         },
@@ -223,10 +223,10 @@ export const ComponentOptions = {
           background: 'var(--ps-gray-900)',
           color: 'var(--ps-white)',
           '&:hover': {
-            background: 'var(--ps-gray-800)'
+            background: 'var(--ps-yellow-1)'
           },
           '&:active': {
-            background: 'var(--ps-gray-200)',
+            background: 'var(--ps-yellow-1)',
             color: 'var(--ps-gray-900)'
           },
           '&:disabled': {
@@ -235,7 +235,7 @@ export const ComponentOptions = {
           }
         },
         outlinedPrimary: {
-          border: '1px solid var(--ps-gray-900)',
+          border: '1px solid var(--ps-yellow-1)',
           background: 'var(--ps-primary)',
           color: 'var(--ps-gray-900)',
           '&:hover': {

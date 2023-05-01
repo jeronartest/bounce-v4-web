@@ -55,6 +55,7 @@ import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
+import Test from './test'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -98,6 +99,7 @@ export default function App() {
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
+                    <Route path={routes.test} element={<Test />} />
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />
