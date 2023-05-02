@@ -97,7 +97,7 @@ interface PaginationParams {
   index: number
   total: number
   style?: React.CSSProperties
-  setCurrent?: (index: number) => void
+  setCurrent: (index: number) => void
 }
 const PaginationBox = (props: PaginationParams) => {
   const { index, total, style, setCurrent } = props
@@ -126,7 +126,6 @@ const PaginationBox = (props: PaginationParams) => {
         }}
         onClick={() => {
           const value = index - 1 <= 0 ? 0 : index - 1
-          console.log('value>>>', value)
           setCurrent && setCurrent(value)
         }}
       >
@@ -253,27 +252,27 @@ const TokenAuction: React.FC = () => {
         trendingTokenAuction: '56r',
         auctionImg: NFTAuctionImg,
         checkAllLink: routes.market.nftPools
+      },
+      {
+        title: AuctionType.AdSpaceAuction,
+        subTitle:
+          'Explore our innovative approach to auctioning ad spaces on websites and digital platforms, fostering a transparent, decentralized marketplace that empowers advertisers and publishers to connect and transact directly, optimizing value and efficiency.',
+        totalValue: '$56,025',
+        totalAuction: '560,230',
+        trendingTokenAuction: '56r',
+        auctionImg: AdSpaceAuctionImg,
+        checkAllLink: routes.adsAuction.index
+      },
+      {
+        title: AuctionType.RealWorldCollectibleAuction,
+        subTitle:
+          'Discover our groundbreaking solution for auctioning real-world assets on blockchain, bridging the gap between physical and digital domains, and unlocking unprecedented opportunities for decentralized auctions of collectibles, memorabilia, and beyond.',
+        totalValue: '$56,025',
+        totalAuction: '560,230',
+        trendingTokenAuction: '56r',
+        auctionImg: RealWorldImg,
+        checkAllLink: routes.realAuction.index
       }
-      //   {
-      //     title: AuctionType.AdSpaceAuction,
-      //     subTitle:
-      //       'Explore our innovative approach to auctioning ad spaces on websites and digital platforms, fostering a transparent, decentralized marketplace that empowers advertisers and publishers to connect and transact directly, optimizing value and efficiency.',
-      //     totalValue: '$56,025',
-      //     totalAuction: '560,230',
-      //     trendingTokenAuction: '56r',
-      //     auctionImg: AdSpaceAuctionImg,
-      //     checkAllLink: routes.adsAuction.index
-      //   },
-      //   {
-      //     title: AuctionType.RealWorldCollectibleAuction,
-      //     subTitle:
-      //       'Discover our groundbreaking solution for auctioning real-world assets on blockchain, bridging the gap between physical and digital domains, and unlocking unprecedented opportunities for decentralized auctions of collectibles, memorabilia, and beyond.',
-      //     totalValue: '$56,025',
-      //     totalAuction: '560,230',
-      //     trendingTokenAuction: '56r',
-      //     auctionImg: RealWorldImg,
-      //     checkAllLink: routes.realAuction.index
-      //   }
     ],
     []
   )
@@ -288,14 +287,14 @@ const TokenAuction: React.FC = () => {
       sx={{
         position: 'relative',
         width: '100%',
-        height: 1188,
+        height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1188 : 622,
         margin: '120px 0 100px'
       }}
     >
       <Box
         sx={{
           width: '100%',
-          height: 865,
+          height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 865 : 622,
           background: 'var(--ps-text-4)',
           borderRadius: 30
         }}
@@ -408,6 +407,7 @@ const TokenAuction: React.FC = () => {
               opacity: 0.6
             }}
           ></Box>
+          {/* Token Auction */}
           <Box
             sx={{
               position: 'absolute',
@@ -418,7 +418,7 @@ const TokenAuction: React.FC = () => {
               transform:
                 currentIndex === 0
                   ? 'translateX(-50%) translateY(-100%) rotateZ(0)'
-                  : 'translateX(-50%) translateY(-100%) rotateZ(-180deg)',
+                  : `translateX(-50%) translateY(-100%) rotateZ(-180deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -435,6 +435,7 @@ const TokenAuction: React.FC = () => {
               alt=""
             />
           </Box>
+          {/* NFT Auctioin */}
           <Box
             sx={{
               position: 'absolute',
@@ -442,10 +443,9 @@ const TokenAuction: React.FC = () => {
               height: 622,
               top: 622,
               left: '50%',
-              transform:
-                currentIndex === 1
-                  ? 'translateX(-50%) translateY(-100%) rotateZ(0)'
-                  : 'translateX(-50%) translateY(-100%) rotateZ(180deg)',
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${
+                currentIndex < 1 ? 180 : currentIndex > 1 ? -180 : 0
+              }deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -462,211 +462,273 @@ const TokenAuction: React.FC = () => {
               alt=""
             />
           </Box>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          width: 1296,
-          minHeight: 496,
-          top: 622,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          borderRadius: 30,
-          margin: '0 auto',
-          background: '#fff',
-          padding: 24
-        }}
-      >
-        <Box
-          sx={{
-            minHeight: 368,
-            marginBottom: 24
-          }}
-        >
-          {showData.title === AuctionType.NFTAuction && (
-            <>
-              {nftLoading && (
-                <Grid container spacing={18}>
-                  {Array.from(new Array(6)).map((_, index) => (
-                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
-                      <Box>
-                        <Skeleton
-                          variant="rounded"
-                          height={400}
-                          sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
-                        />
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-              <Grid container spacing={18}>
-                {optionDatas?.chainInfoOpt &&
-                  nftPoolData?.list.map((nft: any, i: number) => (
-                    <Grid key={i} xs={3} item>
-                      <Link
-                        to={routes.auction.fixedSwapNft
-                          .replace(
-                            ':chainShortName',
-                            getLabelById(nft.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                          )
-                          .replace(':poolId', nft.poolId)}
-                      >
-                        <NFTCard nft={nft} hiddenStatus={true} />
-                      </Link>
-                    </Grid>
-                  ))}
-              </Grid>
-            </>
-          )}
-          {showData.title === AuctionType.TokenAuction && (
-            <>
-              {loading ? (
-                <Grid container spacing={18}>
-                  {Array.from(new Array(8)).map((lodingItem, index) => (
-                    <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                      <Box>
-                        <Skeleton
-                          variant="rounded"
-                          height={400}
-                          sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
-                        />
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              ) : (
-                <Grid container spacing={18}>
-                  {data?.list?.map((fixedSwaptem: any, index: number) => (
-                    <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                      <Link
-                        to={routes.auction.fixedPrice
-                          .replace(
-                            ':chainShortName',
-                            getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                          )
-                          .replace(':poolId', fixedSwaptem.poolId)}
-                      >
-                        <AuctionCard
-                          style={{ minWidth: 'unset' }}
-                          poolId={fixedSwaptem.poolId}
-                          title={fixedSwaptem.name}
-                          status={fixedSwaptem.status}
-                          claimAt={fixedSwaptem.claimAt}
-                          closeAt={fixedSwaptem.closeAt}
-                          dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
-                          holder={
-                            <AuctionHolder
-                              href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                              avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                              name={fixedSwaptem.creatorUserInfo?.name}
-                              description={
-                                fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                  ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
-                                      return (
-                                        getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                        `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''}`
-                                      )
-                                    })
-                                  : 'Individual account'
-                              }
-                              isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                            />
-                          }
-                          progress={{
-                            symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                            decimals: fixedSwaptem.token0.decimals,
-                            sold: fixedSwaptem.swappedAmount0,
-                            supply: fixedSwaptem.amountTotal0
-                          }}
-                          listItems={
-                            <>
-                              <AuctionListItem
-                                label="Token symbol"
-                                value={
-                                  <Stack direction="row" alignItems="center" spacing={4}>
-                                    <TokenImage
-                                      src={fixedSwaptem.token0.largeUrl}
-                                      alt={fixedSwaptem.token0.symbol}
-                                      size={20}
-                                    />
-                                    <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
-                                  </Stack>
-                                }
-                              />
-                              <AuctionListItem
-                                label="Contract address"
-                                value={
-                                  <Stack direction="row" alignItems="center" spacing={4}>
-                                    {fixedSwaptem.token0.coingeckoId ? (
-                                      <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
-                                    ) : (
-                                      <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                    )}
-                                    <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
-                                    <CopyToClipboard text={fixedSwaptem.token0.address} />
-                                  </Stack>
-                                }
-                              />
-                              <AuctionListItem
-                                label="Fixed price ratio"
-                                value={
-                                  <Stack direction="row" spacing={8}>
-                                    <Typography fontSize={12}>1</Typography>
-                                    <Typography fontSize={12}>
-                                      {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                      {new BigNumber(fixedSwaptem.ratio)
-                                        .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                        .toFormat()}
-                                    </Typography>
-                                    <Typography fontSize={12}>{fixedSwaptem.token1.symbol.toUpperCase()}</Typography>
-                                  </Stack>
-                                }
-                              />
-                              <AuctionListItem
-                                label="Price,$"
-                                value={
-                                  <span>
-                                    {new BigNumber(fixedSwaptem.poolPrice)
-                                      .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                      .toFormat()}
-                                  </span>
-                                }
-                              />
-                            </>
-                          }
-                          categoryName={poolType[fixedSwaptem.category as PoolType]}
-                          whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
-                          chainId={fixedSwaptem.chainId}
-                        />
-                      </Link>
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </>
-          )}
-        </Box>
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: 'center'
-          }}
-        >
-          <Button
-            href={AuctionList[currentIndex].checkAllLink}
+          {/* Real World Auction */}
+          <Box
             sx={{
-              background: 'var(--ps-yellow-1)',
-              padding: '16px 20px'
+              position: 'absolute',
+              width: 763,
+              height: 622,
+              top: 622,
+              left: '50%',
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${
+                currentIndex < 2 ? 180 : currentIndex > 2 ? -180 : 0
+              }deg)`,
+              transformOrigin: 'bottom center',
+              transition: 'all 1s',
+              animationTimingFunction: 'ease-in-out'
             }}
           >
-            View all auctions
-          </Button>
+            <img
+              style={{
+                position: 'absolute',
+                top: 100,
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
+              src={AuctionList[2].auctionImg}
+              alt=""
+            />
+          </Box>
+          {/* Ad Space Auction */}
+          <Box
+            sx={{
+              position: 'absolute',
+              width: 763,
+              height: 622,
+              top: 622,
+              left: '50%',
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${
+                currentIndex < 3 ? 180 : currentIndex > 3 ? -180 : 0
+              }deg)`,
+              transformOrigin: 'bottom center',
+              transition: 'all 1s',
+              animationTimingFunction: 'ease-in-out'
+            }}
+          >
+            <img
+              style={{
+                position: 'absolute',
+                top: 100,
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
+              src={AuctionList[3].auctionImg}
+              alt=""
+            />
+          </Box>
         </Box>
       </Box>
+      {(showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction) && (
+        <>
+          <Box
+            sx={{
+              position: 'absolute',
+              width: 1296,
+              minHeight: 496,
+              top: 622,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              borderRadius: 30,
+              margin: '0 auto',
+              background: '#fff',
+              padding: 24
+            }}
+          >
+            <Box
+              sx={{
+                minHeight: 368,
+                marginBottom: 24
+              }}
+            >
+              {showData.title === AuctionType.NFTAuction && (
+                <>
+                  {nftLoading && (
+                    <Grid container spacing={18}>
+                      {Array.from(new Array(6)).map((_, index) => (
+                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
+                          <Box>
+                            <Skeleton
+                              variant="rounded"
+                              height={400}
+                              sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
+                            />
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                  <Grid container spacing={18}>
+                    {optionDatas?.chainInfoOpt &&
+                      nftPoolData?.list.map((nft: any, i: number) => (
+                        <Grid key={i} xs={3} item>
+                          <Link
+                            to={routes.auction.fixedSwapNft
+                              .replace(
+                                ':chainShortName',
+                                getLabelById(nft.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                              )
+                              .replace(':poolId', nft.poolId)}
+                          >
+                            <NFTCard nft={nft} hiddenStatus={true} />
+                          </Link>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </>
+              )}
+              {showData.title === AuctionType.TokenAuction && (
+                <>
+                  {loading ? (
+                    <Grid container spacing={18}>
+                      {Array.from(new Array(8)).map((lodingItem, index) => (
+                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+                          <Box>
+                            <Skeleton
+                              variant="rounded"
+                              height={400}
+                              sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
+                            />
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  ) : (
+                    <Grid container spacing={18}>
+                      {data?.list?.map((fixedSwaptem: any, index: number) => (
+                        <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
+                          <Link
+                            to={routes.auction.fixedPrice
+                              .replace(
+                                ':chainShortName',
+                                getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
+                              )
+                              .replace(':poolId', fixedSwaptem.poolId)}
+                          >
+                            <AuctionCard
+                              style={{ minWidth: 'unset' }}
+                              poolId={fixedSwaptem.poolId}
+                              title={fixedSwaptem.name}
+                              status={fixedSwaptem.status}
+                              claimAt={fixedSwaptem.claimAt}
+                              closeAt={fixedSwaptem.closeAt}
+                              dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
+                              holder={
+                                <AuctionHolder
+                                  href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                  avatar={fixedSwaptem.creatorUserInfo?.avatar}
+                                  name={fixedSwaptem.creatorUserInfo?.name}
+                                  description={
+                                    fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
+                                      ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
+                                          return (
+                                            getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
+                                            `${
+                                              index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''
+                                            }`
+                                          )
+                                        })
+                                      : 'Individual account'
+                                  }
+                                  isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
+                                />
+                              }
+                              progress={{
+                                symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
+                                decimals: fixedSwaptem.token0.decimals,
+                                sold: fixedSwaptem.swappedAmount0,
+                                supply: fixedSwaptem.amountTotal0
+                              }}
+                              listItems={
+                                <>
+                                  <AuctionListItem
+                                    label="Token symbol"
+                                    value={
+                                      <Stack direction="row" alignItems="center" spacing={4}>
+                                        <TokenImage
+                                          src={fixedSwaptem.token0.largeUrl}
+                                          alt={fixedSwaptem.token0.symbol}
+                                          size={20}
+                                        />
+                                        <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
+                                      </Stack>
+                                    }
+                                  />
+                                  <AuctionListItem
+                                    label="Contract address"
+                                    value={
+                                      <Stack direction="row" alignItems="center" spacing={4}>
+                                        {fixedSwaptem.token0.coingeckoId ? (
+                                          <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
+                                        ) : (
+                                          <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
+                                        )}
+                                        <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
+                                        <CopyToClipboard text={fixedSwaptem.token0.address} />
+                                      </Stack>
+                                    }
+                                  />
+                                  <AuctionListItem
+                                    label="Fixed price ratio"
+                                    value={
+                                      <Stack direction="row" spacing={8}>
+                                        <Typography fontSize={12}>1</Typography>
+                                        <Typography fontSize={12}>
+                                          {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
+                                          {new BigNumber(fixedSwaptem.ratio)
+                                            .decimalPlaces(6, BigNumber.ROUND_DOWN)
+                                            .toFormat()}
+                                        </Typography>
+                                        <Typography fontSize={12}>
+                                          {fixedSwaptem.token1.symbol.toUpperCase()}
+                                        </Typography>
+                                      </Stack>
+                                    }
+                                  />
+                                  <AuctionListItem
+                                    label="Price,$"
+                                    value={
+                                      <span>
+                                        {new BigNumber(fixedSwaptem.poolPrice)
+                                          .decimalPlaces(6, BigNumber.ROUND_DOWN)
+                                          .toFormat()}
+                                      </span>
+                                    }
+                                  />
+                                </>
+                              }
+                              categoryName={poolType[fixedSwaptem.category as PoolType]}
+                              whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
+                              chainId={fixedSwaptem.chainId}
+                            />
+                          </Link>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </>
+              )}
+            </Box>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'center'
+              }}
+            >
+              <Button
+                href={AuctionList[currentIndex].checkAllLink}
+                sx={{
+                  background: 'var(--ps-yellow-1)',
+                  padding: '16px 20px'
+                }}
+              >
+                View all auctions
+              </Button>
+            </Box>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }

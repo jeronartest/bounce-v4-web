@@ -31,7 +31,8 @@ import Login from 'pages/login'
 import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
 import MarketNFTPools from 'pages/market/nftAuctionPool'
-
+import NFTAuction from 'pages/nftAuction'
+import TokenAuctionPage from 'pages/tokenAuction'
 // import AccountSettings from 'pages/profile/account/settings'
 // import ProfileActivities from 'pages/profile/activities'
 // import ProfileBasic from 'pages/profile/basic'
@@ -102,6 +103,8 @@ export default function App() {
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />
                     <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
+                    <Route path={routes.nftAuction.index} element={<NFTAuction />} />
+                    <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
 
                     <Route path={routes.realAuction.index} element={<ComingSoon />} />
                     <Route path={routes.adsAuction.index} element={<ComingSoon />} />
