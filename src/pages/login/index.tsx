@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { LoadingButton } from '@mui/lab'
-// import { useUserInfo } from 'state/users/hooks'
+import { useUserInfo } from 'state/users/hooks'
 // import { useQueryParams } from 'hooks/useQueryParams'
 import { Box, Container, Typography, useTheme } from '@mui/material'
 // import { toast } from 'react-toastify'
@@ -9,10 +9,13 @@ import { Box, Container, Typography, useTheme } from '@mui/material'
 import loginIllustration from 'assets/images/login-cover.png'
 import Footer from 'bounceComponents/common/Footer'
 import { useGetWalletOptions } from 'components/Modal/WalletModal'
+import { useActiveWeb3React } from 'hooks'
+import { useOpenModal } from 'state/application/hooks'
+import { ApplicationModal } from 'state/application/actions'
 
 const illustrationWidth = 500
 
-export function LoginLayout({ children }: { children: JSX.Element }) {
+export function LoginLayout({ image, children }: { image: string; children: JSX.Element }) {
   const theme = useTheme()
   return (
     <Box display={'grid'} gridTemplateColumns={`1fr ${illustrationWidth}px`}>
@@ -28,7 +31,7 @@ export function LoginLayout({ children }: { children: JSX.Element }) {
           top: theme => theme.height.header,
           bottom: 0,
           backgroundColor: 'var(--ps-yellow-1)',
-          backgroundImage: `url(${loginIllustration})`,
+          backgroundImage: `url(${image})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'contain',
           backgroundPosition: 'center center'
@@ -40,13 +43,21 @@ export function LoginLayout({ children }: { children: JSX.Element }) {
 
 const Login: React.FC = () => {
   // const {redirect} = useQueryParams()
-  // const { token } = useUserInfo()
+  const { token } = useUserInfo()
   // const navigate = useNavigate()
   const getWalletOptions = useGetWalletOptions()
+  const { account } = useActiveWeb3React()
+  const openSignLoginModal = useOpenModal(ApplicationModal.SIGN_LOGIN)
+
+  useEffect(() => {
+    if (account && !token) {
+      openSignLoginModal()
+    }
+  }, [account, openSignLoginModal, token])
 
   return (
     <section>
-      <LoginLayout>
+      <LoginLayout image={loginIllustration}>
         <Container
           sx={{
             maxWidth: '676px !important',

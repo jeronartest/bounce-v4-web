@@ -19,9 +19,9 @@ export default function Copy(props: Props) {
       sx={{
         display: 'flex',
         cursor: 'pointer',
-        width: width || 16,
+        width: width || 20,
         '& svg': {
-          width: width || 16
+          width: width || 20
         }
       }}
       onClick={() => setCopied(toCopy)}

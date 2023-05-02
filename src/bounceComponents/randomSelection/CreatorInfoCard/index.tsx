@@ -1,8 +1,5 @@
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import SocialMediaButtonGroup from './SocialMediaButtonGroup'
-import AuctionDescription from './AuctionDescription'
-import AuctionFiles from './AuctionFiles'
 import { getCompanyInfo } from 'api/company'
 import { getUserInfo } from 'api/user'
 import { USER_TYPE } from 'api/user/type'
@@ -22,6 +19,9 @@ import { routes } from 'constants/routes'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { useActiveWeb3React } from 'hooks'
 import { PoolInfoProp } from '../type'
+import AuctionDescription from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionDescription'
+import AuctionFiles from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionFiles'
+import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/SocialMediaButtonGroup'
 
 interface ICreatorInfoCardProps {
   creatorUserInfo: CreatorUserInfo

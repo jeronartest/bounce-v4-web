@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { styled, Button, Box, useTheme, Typography, Popper, Stack, Link, MenuItem } from '@mui/material'
+import { styled, Button, Box, useTheme, Typography, Popper, Stack, Link, MenuItem, Avatar } from '@mui/material'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
@@ -12,7 +12,6 @@ import Spinner from 'components/Spinner'
 // import { ReactComponent as Web3StatusIconSvg } from 'assets/imgs/profile/yellow_avatar.svg'
 import Web3StatusIconSvg from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
-import Image from 'components/Image'
 import { ChainList } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
@@ -133,7 +132,17 @@ function Web3StatusInner() {
               backgroundColor: theme.palette.background.paper
             }}
           >
-            <Image height={32} style={{ marginRight: 4 }} src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg} />
+            <Avatar
+              sx={{ marginRight: 10, width: 24, height: 24 }}
+              src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
+            />
+            <Box
+              sx={{
+                borderRight: '1px solid var(--ps-border-1)',
+                mr: 10,
+                height: '100%'
+              }}
+            />
             {pending?.length ? (
               <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
                 <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
@@ -276,7 +285,10 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
           <Box>
             <Box display={'flex'} justifyContent="space-between" alignItems={'center'}>
               <Box display={'flex'} alignItems="center">
-                <Image height={40} style={{ marginRight: 4 }} src={userInfo?.avatar.fileUrl || Web3StatusIconSvg} />
+                <Avatar
+                  sx={{ marginRight: 18, width: 40, height: 40 }}
+                  src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
+                />
                 <Box>
                   <Typography fontSize={12} fontWeight={500}>
                     {shortenAddress(account || '')}

@@ -42,16 +42,18 @@ import ProfileHome from 'pages/profile/home'
 
 // import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 
-import SignupAccount from 'pages/signup/account'
+// import SignupAccount from 'pages/signup/account'
 import ComingSoon from './ComingSoon'
 
 import AccountDashboard from 'pages/account/Dashboard'
 import AccountMyProfile from 'pages/account/MyProfile'
 import AccountMyAccount from 'pages/account/MyAccount'
+import AccountMyCredentials from 'pages/account/AccountMyCredentials'
 import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
+import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -117,15 +119,18 @@ export default function App() {
 
                     <Route path={routes.profile.summary} element={<ProfileHome />} />
 
-                    <Route path={routes.signup.account} element={<SignupAccount />} />
+                    {/* <Route path={routes.signup.account} element={<SignupAccount />} /> */}
                     {/* <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} /> */}
 
                     <Route path={routes.account.dashboard} element={<AccountDashboard />} />
                     <Route path={routes.account.myProfile} element={<AccountMyProfile />} />
                     <Route path={routes.account.myAccount} element={<AccountMyAccount />} />
-                    <Route path={routes.account.tokenOrNFT} element={<MyTokenOrNFT />} />
+                    <Route path={routes.account.myCredentials} element={<AccountMyCredentials />} />
+                    <Route path={routes.account.tokenAuction} element={<MyTokenOrNFT />} />
+                    <Route path={routes.account.nftAuction} element={<MyTokenOrNFT />} />
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
+                    <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
