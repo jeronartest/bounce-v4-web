@@ -7,8 +7,8 @@ import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner
 import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
-import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/AuctionRankCard'
-import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
+import { Notable1155 } from '../../bounceComponents/auction/Notable1155'
+import { Notable721 } from '../../bounceComponents/auction/Notable721'
 
 const NFTAcution: React.FC = ({}) => {
   const testBanner: IBanner[] = [
@@ -32,11 +32,11 @@ const NFTAcution: React.FC = ({}) => {
         <Box mt={16}>
           <ArrowBanner list={testBanner} />
         </Box>
-        <AuctionRankCard />
       </Container>
       <TokenAuction />
       <TypesOfAuction />
-      <ActiveUser />
+      <Notable1155 />
+      <Notable721 />
       <FooterPc />
     </>
   )

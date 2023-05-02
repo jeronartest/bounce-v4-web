@@ -7,6 +7,8 @@ import TypesOfAuction from 'components/TypesOfAuction'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
 import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
+import { NotableAuction } from '../../bounceComponents/auction/NotableAuction'
+import { UpcomingAuction } from '../../bounceComponents/auction/UpcomingAuction'
 
 const TokenAuctionPage: React.FC = ({}) => {
   const testBanner: IBanner[] = [
@@ -33,6 +35,8 @@ const TokenAuctionPage: React.FC = ({}) => {
       </Container>
       <TokenAuction />
       <TypesOfAuction />
+      <NotableAuction />
+      <UpcomingAuction />
       <FooterPc />
     </>
   )

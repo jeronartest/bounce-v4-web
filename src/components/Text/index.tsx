@@ -10,6 +10,26 @@ export const H2 = styled(Typography)`
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: #121212;
 `
+export const H3 = styled(Typography)`
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 130%;
+  display: flex;
+  letter-spacing: -0.02em;
+  color: #c8f056;
+`
+export const H4 = styled(Typography)`
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 130%;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: #121212;
+`
 export const H5 = styled(Typography)`
   font-family: 'Public Sans';
   font-style: normal;
