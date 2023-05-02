@@ -22,7 +22,14 @@ import HoldToCompeteBlack from 'assets/imgs/home/TypeOfAuction/Hold-to-compete-b
 import HoldToCompeteWhite from 'assets/imgs/home/TypeOfAuction/Hold-to-compete-white.svg'
 import { keyframes } from '@mui/system'
 import { styled } from '@mui/material/styles'
-
+import Icon1 from 'assets/imgs/home/TypeOfAuction/icon1.svg'
+import Icon2 from 'assets/imgs/home/TypeOfAuction/icon2.svg'
+import Icon3 from 'assets/imgs/home/TypeOfAuction/icon3.svg'
+import Icon4 from 'assets/imgs/home/TypeOfAuction/icon4.svg'
+import Icon5 from 'assets/imgs/home/TypeOfAuction/icon5.svg'
+import Icon6 from 'assets/imgs/home/TypeOfAuction/icon6.svg'
+import Icon7 from 'assets/imgs/home/TypeOfAuction/icon7.svg'
+import Icon8 from 'assets/imgs/home/TypeOfAuction/icon8.svg'
 interface AuctionItemParams {
   title: string
   defaultImg: string
@@ -151,9 +158,22 @@ const logoDown = keyframes`
   50% { transform: translateY(0); }
   75% { transform: translateY(3px); }
 `
+const scrollX = keyframes`
+from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - calc(clamp(10rem, 1rem + 40vmin, 30rem) / 8)));
+  }
+`
 const LogoDown = styled('img')(() => ({
   width: 90,
   animation: `${logoDown} 1.2s infinite`
+}))
+const SlideBox = styled(Box)(() => ({
+  '.marqueeGroup': {
+    animation: `${scrollX} 60s linear infinite`
+  }
 }))
 const TypesOfAuction: React.FC = () => {
   const leftAuctioinList = [
@@ -216,6 +236,7 @@ const TypesOfAuction: React.FC = () => {
       link: ''
     }
   ]
+  const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
@@ -346,24 +367,46 @@ const TypesOfAuction: React.FC = () => {
         </Box>
       </Box>
       {/* slide */}
-      <Box
+      <SlideBox
         sx={{
           width: '100%',
           height: 90,
           maxWidth: 1400,
           margin: '0 auto 20px',
           background: 'var(--ps-yellow-1)',
-          borderRadius: 90
+          borderRadius: 90,
+          overflow: 'hidden'
+          //   maskImage: `linear-gradient( var(--mask-direction, to right), hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0) )`
         }}
       >
         <Box
           sx={{
             width: '100%',
+            height: 90,
             maxWidth: '1100px',
-            margin: '0 auto'
+            margin: '0 auto',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
           }}
-        ></Box>
-      </Box>
+          className={'marqueeGroup'}
+          gap={100}
+        >
+          {[...slideImgList, ...slideImgList].map((item, index) => {
+            return (
+              <img
+                key={index}
+                src={item}
+                style={{
+                  width: 50
+                }}
+                alt="logo"
+              />
+            )
+          })}
+        </Box>
+      </SlideBox>
     </>
   )
 }
