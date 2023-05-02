@@ -14,6 +14,7 @@ import 'swiper/swiper-bundle.css'
 interface ISlideProgress {
   swiperStyle: React.RefAttributes<SwiperRef> & SwiperProps
   children: ReactJSXElement[]
+  grayArrow?: boolean
 }
 
 const ArrowBg = styled(Box)`
@@ -30,6 +31,10 @@ const ArrowBg = styled(Box)`
     background: #626262;
     color: white;
     cursor: pointer;
+  }
+
+  &.gray {
+    background: #f6f6f3;
   }
 `
 const ProgressLight = styled(Box)`
@@ -48,7 +53,7 @@ export function SlideProgress(props: ISlideProgress) {
   const totalSlides = swiper?.slides.length ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
   return (
-    <Box>
+    <Box width={'100%'}>
       <Swiper
         onSlideChange={s => {
           const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)
@@ -60,10 +65,10 @@ export function SlideProgress(props: ISlideProgress) {
         {children}
       </Swiper>
       <Box display={'flex'} alignItems={'center'} mt={34}>
-        <ArrowBg onClick={() => swiper?.slidePrev(1)}>
+        <ArrowBg className={props.grayArrow ? 'gray' : ''} onClick={() => swiper?.slidePrev(1)}>
           <ArrowBackIcon />
         </ArrowBg>
-        <ArrowBg ml={8} mr={16} onClick={() => swiper?.slideNext(1)}>
+        <ArrowBg className={props.grayArrow ? 'gray' : ''} ml={8} mr={16} onClick={() => swiper?.slideNext(1)}>
           <ArrowForwardIcon />
         </ArrowBg>
         <Box display={'flex'} width={'100%'}>

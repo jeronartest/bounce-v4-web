@@ -19,7 +19,13 @@ const StyledTab = styled(Button)(({}) => ({
   }
 }))
 const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ onTabChange }) => {
-  const [currentTab, setCurrentTab] = useState('All')
+  const path =
+    location.pathname === '/NFTAuction'
+      ? 'NFT Auction'
+      : location.pathname === '/TokenAuction'
+      ? 'Token Auction'
+      : 'All'
+  const [currentTab, setCurrentTab] = useState(path)
 
   const tabs = [
     'All',
@@ -32,6 +38,7 @@ const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ on
   return (
     <Box
       sx={{
+        marginTop: '32px',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

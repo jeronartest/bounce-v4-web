@@ -15,11 +15,11 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
 // import { formatNumber } from '@/utils/web3/number'
 // import { UserType } from 'api/market/type'
-import CompanyBanner from 'bounceComponents/company/CompanyBanner'
-import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
-import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
-import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
-import Banner28 from 'assets/imgs/company/banner/photo_28_banner.jpg'
+// import CompanyBanner from 'bounceComponents/company/CompanyBanner'
+// import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
+// import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
+// import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
+// import Banner28 from 'assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Marketcard from 'bounceComponents/investment/marketcard/Marketcard'
@@ -31,6 +31,12 @@ import { NFTCard } from 'pages/market/nftAuctionPool'
 import NoData from 'bounceComponents/common/NoData'
 import FooterPc from 'components/Footer/FooterPc'
 import TokenAuction from 'components/TokenAuction'
+import TypesOfAuction from 'components/TypesOfAuction'
+import HeaderTab from '../../bounceComponents/auction/HeaderTab'
+import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
+import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
+import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/AuctionRankCard'
+import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
 // export type IMarketProps = {}
 
 const poolType: Record<PoolType, string> = {
@@ -84,40 +90,32 @@ const Market: React.FC = ({}) => {
     }
   })
 
-  const bannerList = [
+  const testBanner: IBanner[] = [
     {
-      img: Banner28,
-      title: 'Bounce Finance Supports Polygon zkEVM for On-Chain Auctions'
+      title: 'Austin McBroom: Lover and Fighter',
+      tag: ['NFT', 'English auction', '23.00 BNB'],
+      countDown: '1682833200',
+      pic: MarketPNG
     },
     {
-      img: MarketPNG,
-      title: 'Explore the market place & participate in Auctions'
-    },
-    // {
-    //   img: CompanyBanner2,
-    //   title: 'Explore everything about  companies and investors in one place',
-    // },
-    {
-      img: CompanyBanner3,
-      title: 'Build any type of auction with any tokens permissionlessly'
-    },
-    {
-      img: CompanyBanner4,
-      title: 'Launch your NFT through Bounce and activate differernt auction tools'
-    },
-    {
-      img: CompanyBanner5,
-      title: 'Bounce Token to boost your market'
+      title: 'Austin McBroom: Lover and Fighter',
+      tag: ['NFT', 'English auction', '23.00 BNB'],
+      countDown: '1682833200',
+      pic: Photo28
     }
   ]
   return (
     <>
       <Container maxWidth="lg">
-        <Box mt={60}>
-          <CompanyBanner list={bannerList} />
+        <HeaderTab onTabChange={tab => console.log(tab)} />
+        <Box mt={16}>
+          <ArrowBanner list={testBanner} />
         </Box>
+        <AuctionRankCard />
       </Container>
       <TokenAuction />
+      <ActiveUser />
+      <TypesOfAuction />
       <Container maxWidth="lg">
         <Box mt={32}>
           <Stack spacing={26} direction="row">

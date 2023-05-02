@@ -14,6 +14,12 @@ export const routes = {
     pools: '/market/pools',
     nftPools: '/market/nft-pools'
   },
+  nftAuction: {
+    index: '/NFTAuction'
+  },
+  tokenAuction: {
+    index: '/TokenAuction'
+  },
   realAuction: {
     index: '/real-auction'
   },
