@@ -1,22 +1,19 @@
 import { useState, useCallback } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, Stack, styled as muiStyled, styled } from '@mui/material'
-import { ExternalLink } from 'themes/components'
+import { Link } from 'react-router-dom'
+import { AppBar, Box, Button, IconButton, Stack, styled } from '@mui/material'
+// import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
-import { HideOnMobile, ShowOnMobile } from 'themes/index'
-import PlainSelect from 'components/Select/PlainSelect'
+import { ShowOnMobile } from 'themes/index'
+// import PlainSelect from 'components/Select/PlainSelect'
 import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
-// import NetworkSelect from './NetworkSelect'
+import NetworkSelect from './NetworkSelect'
 import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
-import { USER_TYPE } from 'api/user/type'
-import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
-import { useLogout, useUserInfo, useWeb3Login } from 'state/users/hooks'
-import { LoadingButton } from '@mui/lab'
-import { useActiveWeb3React } from 'hooks'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
+import LoginModal from './LoginModal'
 
 interface TabContent {
   title: string
@@ -46,18 +43,18 @@ export const Tabs: Tab[] = [
   { title: 'Token', link: 'https://token.bounce.finance/staking' }
 ]
 
-const navLinkSX = ({ theme }: any) => ({
-  textDecoration: 'none',
-  fontSize: 16,
-  fontWeight: 500,
-  color: theme.palette.text.primary,
-  opacity: 1,
-  '&:hover': {
-    opacity: 0.5
-  }
-})
+// const navLinkSX = ({ theme }: any) => ({
+//   textDecoration: 'none',
+//   fontSize: 16,
+//   fontWeight: 500,
+//   color: theme.palette.text.primary,
+//   opacity: 1,
+//   '&:hover': {
+//     opacity: 0.5
+//   }
+// })
 
-const StyledNavLink = styled(Link)(navLinkSX)
+// const StyledNavLink = styled(Link)(navLinkSX)
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   position: 'fixed',
@@ -123,95 +120,30 @@ const MainLogo = styled(Link)(({ theme }) => ({
   }
 }))
 
-const LinksWrapper = muiStyled('div')(({ theme }) => ({
-  marginLeft: 24,
-  [theme.breakpoints.down('lg')]: {
-    marginLeft: 10
-  }
-}))
+// const LinksWrapper = muiStyled('div')(({ theme }) => ({
+//   marginLeft: 24,
+//   [theme.breakpoints.down('lg')]: {
+//     marginLeft: 10
+//   }
+// }))
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { pathname } = useLocation()
-  const { account } = useActiveWeb3React()
+  // const { pathname } = useLocation()
+  // const { account } = useActiveWeb3React()
 
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
 
-  const navigate = useNavigate()
+  const { token } = useUserInfo()
 
-  const { userType, userInfo, companyInfo, token } = useUserInfo()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const userOpen = Boolean(anchorEl)
-  const handleUserMenuClose = () => {
-    setAnchorEl(null)
-  }
-  const { logout } = useLogout()
-  const UserDialog = () => (
-    <Menu
-      open={userOpen}
-      anchorEl={anchorEl}
-      onClose={handleUserMenuClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left'
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center'
-      }}
-      sx={{
-        mt: 4,
-        '& .MuiPopover-paper': {
-          borderRadius: 20,
-          padding: '10px 0px'
-        },
-        '& .MuiList-padding': {
-          padding: '0px 0px 0px 0px',
-          background: '#FFFFFF',
-          boxShadow: 'none',
-          borderRadius: 20
-        },
-        '& .MuiMenuItem-gutters': {
-          padding: '10px 20px'
-        }
-      }}
-    >
-      <MenuItem
-        onClick={() => {
-          navigate(routes.account.dashboard)
-          setAnchorEl(null)
-        }}
-      >
-        My Dashboard
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          navigate(routes.account.myProfile)
-          setAnchorEl(null)
-        }}
-      >
-        My Profile
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          logout()
-          setAnchorEl(null)
-        }}
-      >
-        Logout
-      </MenuItem>
-    </Menu>
-  )
-  const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const { run: runLogin, loading: loginLoading } = useWeb3Login()
+  // const navigate = useNavigate()
+  const showLoginModal = useShowLoginModal()
 
   return (
     <>
+      <LoginModal />
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       <StyledAppBar>
@@ -219,7 +151,7 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image src={logo} alt={'logo'} />
           </MainLogo>
-          <HideOnMobile breakpoint="lg">
+          {/* <HideOnMobile breakpoint="lg">
             <LinksWrapper>
               {Tabs.map(({ title, route, subTab, link, titleContent }, idx) =>
                 subTab ? (
@@ -302,58 +234,31 @@ export default function Header() {
                 )
               )}
             </LinksWrapper>
-          </HideOnMobile>
+          </HideOnMobile> */}
         </Box>
 
         <Stack direction={'row'} alignItems="center" spacing={15}>
           <Search />
           <CreateBtn />
+          <NetworkSelect />
           <Web3Status />
 
-          {account && (
-            <Stack direction="row" alignItems="center" spacing={20}>
-              {token ? (
-                <>
-                  <div>
-                    <Avatar
-                      component={'button'}
-                      id="userAvatar"
-                      src={
-                        (Number(userType) === USER_TYPE.USER
-                          ? userInfo?.avatar?.fileUrl
-                          : companyInfo?.avatar?.fileUrl) || DefaultAvatarSVG
-                      }
-                      sx={{
-                        width: 52,
-                        height: 52,
-                        padding: 0,
-                        cursor: 'pointer',
-                        border: 0
-                      }}
-                      onClick={handleUserClick}
-                    />
-                    <UserDialog />
-                  </div>
-                </>
-              ) : (
-                <LoadingButton
-                  variant="outlined"
-                  loadingPosition="start"
-                  loading={loginLoading}
-                  size="small"
-                  sx={{ width: 120, height: 40, borderRadius: 20 }}
-                  onClick={runLogin}
-                >
-                  Login
-                </LoadingButton>
-              )}
-            </Stack>
-          )}
+          <Stack direction="row" alignItems="center" spacing={20}>
+            {!token && (
+              <Button
+                variant="outlined"
+                sx={{ width: 81, height: 44, borderRadius: 8 }}
+                // onClick={() => navigate(routes.login)}
+                onClick={showLoginModal}
+              >
+                Login
+              </Button>
+            )}
+          </Stack>
         </Stack>
 
         <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
-          {/* <NetworkSelect />
-          <Web3Status /> */}
+          {/* <Web3Status /> */}
           <ShowOnMobile breakpoint="md">
             <IconButton
               sx={{

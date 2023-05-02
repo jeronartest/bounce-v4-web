@@ -26,10 +26,10 @@ export type ISearchProps = {
 }
 
 const noFocusStyle: SxProps = {
-  width: 40,
-  height: 40,
-  border: '1px solid #171717',
-  borderRadius: 20,
+  width: 44,
+  height: 44,
+  border: '1px solid var(--ps-border-1)',
+  borderRadius: 8,
   fontSize: 0
 }
 
@@ -86,7 +86,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             placeholder={focus ? placeholder : ''}
-            sx={focus ? { fontSize: 14 } : noFocusStyle}
+            sx={focus ? { fontSize: 14, borderRadius: 8 } : noFocusStyle}
             onChange={ev => {
               onChange?.(ev, ev.target.value)
               setSelect(null)
@@ -101,7 +101,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
             startAdornment={
               startIcon && (
                 <IconButton
-                  sx={{ width: 40, height: 40 }}
+                  sx={{ width: 44, height: 44, borderRadius: 8 }}
                   onClick={() => {
                     handleSearch()
                   }}

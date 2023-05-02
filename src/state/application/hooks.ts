@@ -65,6 +65,10 @@ export function useSwitchNetworkModalToggle(): () => void {
   return useToggleModal(ApplicationModal.SWITCH_NETWORK)
 }
 
+export function useSignLoginModalToggle(): () => void {
+  return useToggleModal(ApplicationModal.SIGN_LOGIN)
+}
+
 export function useSettingsModalToggle(): () => void {
   return useToggleModal(ApplicationModal.SETTINGS)
 }

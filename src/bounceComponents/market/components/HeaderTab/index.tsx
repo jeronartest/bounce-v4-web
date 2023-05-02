@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
 
-const StyledTab = styled(Button)(({ theme }) => ({
+const StyledTab = styled(Button)(({}) => ({
   padding: '8px 12px',
   color: 'white',
   borderRadius: '8px',
