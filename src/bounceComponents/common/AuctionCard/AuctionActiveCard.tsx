@@ -1,24 +1,6 @@
-import { Box, styled, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
-
-const H5 = styled(Typography)`
-  font-family: 'Public Sans';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 140%;
-  letter-spacing: -0.02em;
-  color: #121212;
-`
-
-const SmallText = styled(Typography)`
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 140%;
-  color: rgba(27, 27, 27, 0.4);
-`
+import { H5, SmallText } from '../../../components/Text'
 
 interface IAuctionActiveCard {
   img: string
