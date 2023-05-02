@@ -65,6 +65,9 @@ export const ColorOptions = {
     'gray-50': '#F5F5F5',
     'gray-30': '#EDEDED',
     'gray-20': '#E8E9E4',
+
+    'border-1': 'rgba(18, 18, 18, 0.2)',
+
     // Green
     green: '#73D491',
     'green-1': '#20994B',
