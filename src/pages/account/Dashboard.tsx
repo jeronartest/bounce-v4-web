@@ -227,7 +227,7 @@ function FavoritesAuctionsList() {
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>
@@ -273,7 +273,7 @@ function CreateAuctionsList({ title, queryType }: { title: string; queryType: Da
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>
@@ -320,7 +320,7 @@ function PendingClaimAuctionsList() {
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>

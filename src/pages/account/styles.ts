@@ -2,19 +2,17 @@ import { SxProps } from '@mui/material'
 
 export default {
   tabsBox: {
-    marginTop: 40,
-    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
     display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0px 20px'
+    justifyContent: 'space-between'
   },
   menu: {
-    paddingBottom: 9,
+    borderRadius: '8px',
     cursor: 'pointer',
-    color: 'rgba(23, 23, 23, 0.5)'
+    color: 'rgba(23, 23, 23, 0.5)',
+    padding: '16px 32px 30px'
   },
   menuActive: {
-    borderBottom: '2px solid #000',
+    background: '#F5F5F5',
     color: 'var(--ps-gray-900)'
   }
 } as Record<string, SxProps>

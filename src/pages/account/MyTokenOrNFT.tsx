@@ -44,14 +44,9 @@ export default function MyProfile() {
           ) : (
             <>
               <CurrentPoolStatus />
-              <Box
-                sx={{
-                  mt: 40,
-                  borderRadius: '20px'
-                }}
-              >
-                <Stack direction={'row'} justifyContent="space-between" sx={styles.tabsBox}>
-                  <Stack direction="row" spacing={36} alignItems="center">
+              <Box mt={40}>
+                <Stack direction={'row'} sx={styles.tabsBox}>
+                  <Stack direction="row" alignItems="center">
                     {tabsList?.map(item => {
                       return (
                         <Typography
@@ -67,7 +62,14 @@ export default function MyProfile() {
                   </Stack>
                 </Stack>
 
-                <Box padding="40px 20px">
+                <Box
+                  padding="40px"
+                  sx={{
+                    background: '#F5F5F5',
+                    borderRadius: '8px',
+                    mt: -10
+                  }}
+                >
                   <>
                     {curTab === TabListProp.Auction_Created && <AuctionCreatedTab />}
                     {curTab === TabListProp.Auction_Participated && <AuctionParticipatedTab />}

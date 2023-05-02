@@ -1,11 +1,8 @@
-import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
+import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { ReactComponent as AddIcon } from 'assets/svg/add.svg'
-import { Link } from 'react-router-dom'
 import { routes } from 'constants/routes'
-import { useUserInfo } from 'state/users/hooks'
 import { usePagination } from 'ahooks'
 import NoData from 'bounceComponents/common/NoData'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
@@ -26,7 +23,6 @@ export default function CreatedTab() {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
-  const { userId } = useUserInfo()
   const { account } = useActiveWeb3React()
   const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
 
@@ -124,13 +120,6 @@ export default function CreatedTab() {
           </FormItem>
           <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
-        {userId && (
-          <Link to={routes.auction.createAuctionPool}>
-            <Button variant="contained">
-              Create a pool <AddIcon style={{ marginLeft: 6 }} />
-            </Button>
-          </Link>
-        )}
       </Box>
 
       {loading ? (
@@ -146,7 +135,7 @@ export default function CreatedTab() {
           </Box>
         </NoData>
       ) : (
-        <Box mt={20}>
+        <Box mt={40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
