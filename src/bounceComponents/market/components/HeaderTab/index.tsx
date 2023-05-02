@@ -32,6 +32,7 @@ const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ on
   return (
     <Box
       sx={{
+        marginTop: '32px',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

@@ -19,14 +19,7 @@ export interface IBanner {
 function ArrowBanner({ list }: { list: IBanner[] }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   return (
-    <Box
-      position={'relative'}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      width={'fit-content'}
-      style={{ width: 'fit-content' }}
-    >
+    <Box position={'relative'} display={'flex'} justifyContent={'center'} alignItems={'center'} width={'100%'}>
       <ArrowBg
         onClick={() => {
           swiper?.slidePrev()

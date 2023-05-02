@@ -260,7 +260,7 @@ const TokenAuction: React.FC = () => {
         totalValue: '$56,025',
         totalAuction: '560,230',
         trendingTokenAuction: '56r',
-        auctionImg: AdSpaceAuctionImg,
+        auctionImg: '',
         checkAllLink: routes.adsAuction.index
       },
       {
@@ -270,7 +270,7 @@ const TokenAuction: React.FC = () => {
         totalValue: '$56,025',
         totalAuction: '560,230',
         trendingTokenAuction: '56r',
-        auctionImg: RealWorldImg,
+        auctionImg: '',
         checkAllLink: routes.realAuction.index
       }
     ],
