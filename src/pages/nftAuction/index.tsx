@@ -8,6 +8,7 @@ import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import HeaderTab from '../../bounceComponents/market/components/HeaderTab'
 import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/AuctionRankCard'
+import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
 
 const NFTAcution: React.FC = ({}) => {
   const testBanner: IBanner[] = [
@@ -28,13 +29,14 @@ const NFTAcution: React.FC = ({}) => {
     <>
       <Container maxWidth="lg">
         <HeaderTab onTabChange={tab => console.log(tab)} />
-        <Box mt={60}>
+        <Box mt={16}>
           <ArrowBanner list={testBanner} />
         </Box>
         <AuctionRankCard />
       </Container>
       <TokenAuction />
       <TypesOfAuction />
+      <ActiveUser />
       <FooterPc />
     </>
   )

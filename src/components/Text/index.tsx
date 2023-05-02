@@ -1,5 +1,15 @@
 import { styled, Typography } from '@mui/material'
 
+export const H2 = styled(Typography)`
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 130%;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: #121212;
+`
 export const H5 = styled(Typography)`
   font-family: 'Public Sans';
   font-style: normal;
