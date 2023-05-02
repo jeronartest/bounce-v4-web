@@ -12,6 +12,7 @@ export enum ApplicationModal {
   WALLET,
   SETTINGS,
   MENU,
+  SIGN_LOGIN,
   SWITCH_NETWORK
 }
 

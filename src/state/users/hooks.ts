@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
+import { useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -121,6 +122,9 @@ export const useWeb3Login = (path?: string) => {
             userId: data?.userId
           })
         )
+        if (data?.isLogin === false) {
+          // ! TOTD Improve user information
+        }
         if (path) {
           return navigate(path)
         }
@@ -178,8 +182,59 @@ export const useLinkedInOauth = (onChange: (accessToken: string, oauthType: ACCO
   return { linkedInLogin }
 }
 
+interface IUserInfoData {
+  id: number
+  email: string
+  passwordSet: boolean
+  fullName: string
+  fullNameId: number
+  avatar: {
+    id: number
+    type: number
+    userId: number
+    fileName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    fileThumbnailUrl: string
+  }
+  banner: string
+  location: string
+  timezone: string
+  publicRole: string[]
+  companyRole: number
+  company: { name: string; avatar: string; link: string }
+  companyId: number
+  thirdpartId: number
+  university: { name: string; avatar: string; link: string }
+  description: string
+  contactEmail: string
+  website: string
+  github: string
+  instagram: string
+  googleEmail: string
+  twitter: string
+  twitterName: string
+  linkedin: string
+  linkedinName: string
+  userType: number
+  isMember: number
+  primaryRole: number
+  years: number
+  skills: string
+  currentState: string
+  jobTypes: any[]
+  ifRemotely: 0
+  desiredSalary: string
+  desiredCompanySize: number
+  desiredMarket: any[]
+  careJobs: any[]
+  resumes: any[]
+  isVerify: number
+}
+
 export function useUserInfo(): ICacheLoginInfo & {
-  userInfo: any
+  userInfo?: IUserInfoData
   companyInfo: any
 } {
   const { account } = useActiveWeb3React()
@@ -248,4 +303,12 @@ export function useRefreshUserInfoByFirstLoad() {
       })
     )
   }, [dispatch, first, token, userId])
+}
+
+export function useShowLoginModal() {
+  const walletModalToggle = useWalletModalToggle()
+  const signLoginModalToggle = useSignLoginModalToggle()
+  const { account } = useActiveWeb3React()
+
+  return !account ? walletModalToggle : signLoginModalToggle
 }

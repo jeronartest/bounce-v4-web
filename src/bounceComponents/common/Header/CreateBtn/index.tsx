@@ -82,7 +82,17 @@ const CreateBtn: React.FC = () => {
       <Button
         variant="outlined"
         size="small"
-        sx={{ width: 100, height: 40, borderRadius: 8, background: 'var(--ps-yellow-1)' }}
+        sx={{
+          width: 109,
+          height: 44,
+          borderRadius: 8,
+          border: 'none',
+          background: 'var(--ps-yellow-1)',
+          '&: hover': {
+            backgroundColor: '#000',
+            color: '#fff'
+          }
+        }}
         onClick={handleMenuOpen}
         startIcon={<AddSvg />}
       >

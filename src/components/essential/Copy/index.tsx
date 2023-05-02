@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import useCopyClipboard from 'hooks/useCopyClipboard'
-import { ContentCopy } from '@mui/icons-material'
+import { ReactComponent as CopySvg } from 'assets/svg/account/copy-icon.svg'
 
 interface Props {
   toCopy: string
@@ -21,13 +21,12 @@ export default function Copy(props: Props) {
         cursor: 'pointer',
         width: width || 16,
         '& svg': {
-          width: width || 16,
-          mr: '10px'
+          width: width || 16
         }
       }}
       onClick={() => setCopied(toCopy)}
     >
-      {isCopied ? <CheckIcon sx={{ opacity: 0.6, fontSize: 16 }} /> : <ContentCopy />}
+      {isCopied ? <CheckIcon sx={{ opacity: 0.6, fontSize: 16 }} /> : <CopySvg />}
       {children}
     </Box>
   )

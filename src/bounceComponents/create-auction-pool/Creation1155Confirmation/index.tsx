@@ -16,7 +16,6 @@ import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
 import { shortenAddress } from 'utils'
 import { formatNumber } from 'utils/number'
-import { useWalletModalToggle } from 'state/application/hooks'
 import { useCreateFixedSwap1155Pool } from 'hooks/useCreateFixedSwap1155Pool'
 import {
   hideDialogConfirmation,
@@ -33,6 +32,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
 import JSBI from 'jsbi'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import { useShowLoginModal } from 'state/users/hooks'
 
 export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
@@ -55,7 +55,8 @@ const CreatePoolButton = () => {
   const values = useValuesState()
   const createFixedSwap1155Pool = useCreateFixedSwap1155Pool()
   const auctionInChainId = useAuctionInChain()
-  const walletModalToggle = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
+
   const switchNetwork = useSwitchNetwork()
   const auctionAccountBalance = useERC1155Balance(
     values.nftTokenFrom.contractAddr,
@@ -194,7 +195,7 @@ const CreatePoolButton = () => {
     if (!account) {
       return {
         text: 'Connect wallet',
-        run: walletModalToggle
+        run: showLoginModal
       }
     }
     if (chainId !== auctionInChainId) {
@@ -260,7 +261,7 @@ const CreatePoolButton = () => {
     toCreate,
     values.nftTokenFrom.contractName,
     values.poolSize,
-    walletModalToggle
+    showLoginModal
   ])
 
   return (
@@ -281,7 +282,7 @@ const CreationConfirmation = () => {
   const { account } = useActiveWeb3React()
 
   const auctionChainId = useAuctionInChain()
-  const toggleWalletModal = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
 
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
@@ -435,7 +436,7 @@ const CreationConfirmation = () => {
           {account ? (
             <CreatePoolButton />
           ) : (
-            <LoadingButton fullWidth variant="contained" onClick={toggleWalletModal}>
+            <LoadingButton fullWidth variant="contained" onClick={showLoginModal}>
               Connect Wallet
             </LoadingButton>
           )}

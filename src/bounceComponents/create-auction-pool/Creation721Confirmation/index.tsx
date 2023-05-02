@@ -14,7 +14,6 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
 import { shortenAddress } from 'utils'
-import { useWalletModalToggle } from 'state/application/hooks'
 import { useCreateEnglishAuctionPool } from 'hooks/useCreateEnglishAuctionPool'
 import {
   hideDialogConfirmation,
@@ -30,6 +29,7 @@ import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
+import { useShowLoginModal } from 'state/users/hooks'
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
@@ -40,7 +40,7 @@ const CreatePoolButton = () => {
   const values = useValuesState()
   const createEnglishAuctionPool = useCreateEnglishAuctionPool()
   const auctionInChainId = useAuctionInChain()
-  const walletModalToggle = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
 
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
@@ -173,7 +173,7 @@ const CreatePoolButton = () => {
     if (!account) {
       return {
         text: 'Connect wallet',
-        run: walletModalToggle
+        run: showLoginModal
       }
     }
     if (chainId !== auctionInChainId) {
@@ -223,11 +223,11 @@ const CreatePoolButton = () => {
     auctionInChainId,
     buttonCommitted,
     chainId,
+    showLoginModal,
     switchNetwork,
     toApprove,
     toCreate,
-    values.nft721TokenFrom,
-    walletModalToggle
+    values.nft721TokenFrom
   ])
 
   return (
@@ -248,7 +248,7 @@ const CreationConfirmation = () => {
   const { account } = useActiveWeb3React()
 
   const auctionChainId = useAuctionInChain()
-  const toggleWalletModal = useWalletModalToggle()
+  const showLoginModal = useShowLoginModal()
 
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
@@ -375,7 +375,7 @@ const CreationConfirmation = () => {
           {account ? (
             <CreatePoolButton />
           ) : (
-            <LoadingButton fullWidth variant="contained" onClick={toggleWalletModal}>
+            <LoadingButton fullWidth variant="contained" onClick={showLoginModal}>
               Connect Wallet
             </LoadingButton>
           )}

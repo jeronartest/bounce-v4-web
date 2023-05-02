@@ -8,6 +8,7 @@ export const routes = {
     randomSelection: '/auction/random-selection/:chainShortName/:poolId'
   },
   login: '/login',
+  test: '/test',
   market: {
     index: '/market',
     pools: '/market/pools',
