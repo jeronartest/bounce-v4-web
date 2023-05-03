@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppBar, Box, Button, IconButton, Stack, styled } from '@mui/material'
 // import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
@@ -12,7 +12,7 @@ import MobileMenu from './MobileMenu'
 import NetworkSelect from './NetworkSelect'
 import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
-import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
+import { useUserInfo } from 'state/users/hooks'
 import LoginModal from './LoginModal'
 
 interface TabContent {
@@ -138,8 +138,7 @@ export default function Header() {
 
   const { token } = useUserInfo()
 
-  // const navigate = useNavigate()
-  const showLoginModal = useShowLoginModal()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -248,8 +247,7 @@ export default function Header() {
               <Button
                 variant="outlined"
                 sx={{ width: 81, height: 44, borderRadius: 8 }}
-                // onClick={() => navigate(routes.login)}
-                onClick={showLoginModal}
+                onClick={() => navigate(routes.login)}
               >
                 Login
               </Button>

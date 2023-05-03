@@ -1,15 +1,17 @@
 import { Box, Container } from '@mui/material'
 import React, { useState } from 'react'
 import FooterPc from 'components/Footer/FooterPc'
-import TokenAuction from 'components/TokenAuction'
 import TypesOfAuction from 'components/TypesOfAuction'
-import ArrowBanner, { IBanner } from '../../bounceComponents/market/ArrowBanner'
+import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
 import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
-import HeaderTab from '../../bounceComponents/market/components/HeaderTab'
-import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/AuctionRankCard'
-import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
+import HeaderTab from 'bounceComponents/auction/HeaderTab'
+// import { AuctionRankCard } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
+// import { ActiveUser } from 'bounceComponents/common/AuctionCard/AuctionActiveCard'
 import NftListDialog from './components/listDialog'
+import { Notable1155 } from '../../bounceComponents/auction/Notable1155'
+import { Notable721 } from '../../bounceComponents/auction/Notable721'
+
 const NFTAcution: React.FC = ({}) => {
   const testBanner: IBanner[] = [
     {
@@ -29,26 +31,20 @@ const NFTAcution: React.FC = ({}) => {
   const handleClose = () => {
     setOpen(false)
   }
+  const handleOpen = () => {
+    setOpen(true)
+  }
   return (
     <>
       <Container maxWidth="lg">
         <HeaderTab onTabChange={tab => console.log(tab)} />
         <Box mt={16}>
-          <Box
-            onClick={() => {
-              const result = !open
-              setOpen(result)
-            }}
-          >
-            test dialog
-          </Box>
           <ArrowBanner list={testBanner} />
         </Box>
-        <AuctionRankCard />
       </Container>
-      <TokenAuction />
       <TypesOfAuction />
-      <ActiveUser />
+      <Notable1155 />
+      <Notable721 handleViewAll={handleOpen} />
       <FooterPc />
       <NftListDialog open={open} handleClose={handleClose} />
     </>

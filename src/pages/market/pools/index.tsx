@@ -53,7 +53,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
   [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft'
+  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
+  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
 const initialValues = {
   searchText: '',
@@ -67,7 +68,7 @@ const initialValues = {
   auctionType: 1,
   chain: 0
 }
-const defaultIdeaPageSize = 12
+const defaultIdeaPageSize = 16
 const searchOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Address']
 
 export interface IFormObserverProps {

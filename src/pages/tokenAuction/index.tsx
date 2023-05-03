@@ -1,52 +1,50 @@
 import { Box, Container } from '@mui/material'
-import React from 'react'
-import CompanyBanner from 'bounceComponents/company/CompanyBanner'
-import CompanyBanner3 from 'assets/imgs/company/banner/banner1.png'
-import CompanyBanner4 from 'assets/imgs/company/banner/banner2.png'
-import CompanyBanner5 from 'assets/imgs/company/banner/banner3.png'
-import Banner28 from 'assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import FooterPc from 'components/Footer/FooterPc'
-import TokenAuction from 'components/TokenAuction'
 import TypesOfAuction from 'components/TypesOfAuction'
+import HeaderTab from '../../bounceComponents/auction/HeaderTab'
+import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
+import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
+import { NotableAuction } from '../../bounceComponents/auction/NotableAuction'
+import { UpcomingAuction } from '../../bounceComponents/auction/UpcomingAuction'
+import PoolListDialog from './components/listDialog'
+import React, { useState } from 'react'
 
 const TokenAuctionPage: React.FC = ({}) => {
-  const bannerList = [
+  const testBanner: IBanner[] = [
     {
-      img: Banner28,
-      title: 'Bounce Finance Supports Polygon zkEVM for On-Chain Auctions'
+      title: 'Austin McBroom: Lover and Fighter',
+      tag: ['NFT', 'English auction', '23.00 BNB'],
+      countDown: '1682833200',
+      pic: MarketPNG
     },
     {
-      img: MarketPNG,
-      title: 'Explore the market place & participate in Auctions'
-    },
-    // {
-    //   img: CompanyBanner2,
-    //   title: 'Explore everything about  companies and investors in one place',
-    // },
-    {
-      img: CompanyBanner3,
-      title: 'Build any type of auction with any tokens permissionlessly'
-    },
-    {
-      img: CompanyBanner4,
-      title: 'Launch your NFT through Bounce and activate differernt auction tools'
-    },
-    {
-      img: CompanyBanner5,
-      title: 'Bounce Token to boost your market'
+      title: 'Austin McBroom: Lover and Fighter',
+      tag: ['NFT', 'English auction', '23.00 BNB'],
+      countDown: '1682833200',
+      pic: Photo28
     }
   ]
+  const [open, setOpen] = useState(false)
+  const handleClose = () => {
+    setOpen(false)
+  }
+  const handleOpen = () => {
+    setOpen(true)
+  }
   return (
     <>
       <Container maxWidth="lg">
-        <Box mt={60}>
-          <CompanyBanner list={bannerList} />
+        <HeaderTab onTabChange={tab => console.log(tab)} />
+        <Box mt={16}>
+          <ArrowBanner list={testBanner} />
         </Box>
       </Container>
-      <TokenAuction />
       <TypesOfAuction />
+      <NotableAuction />
+      <UpcomingAuction handleViewAll={handleOpen} />
       <FooterPc />
+      <PoolListDialog open={open} handleClose={handleClose} />
     </>
   )
 }

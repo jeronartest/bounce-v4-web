@@ -135,7 +135,7 @@ export default function ParticipatedTab() {
           </Box>
         </NoData>
       ) : (
-        <Box mt={20}>
+        <Box mt={40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (

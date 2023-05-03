@@ -1,7 +1,7 @@
 import { Box, Container, styled } from '@mui/material'
 import React from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
-import { SlideProgress } from '../../market/components/SlideProgress'
+import { SlideProgress } from '../../auction/SlideProgress'
 import { SwiperSlide } from 'swiper/react'
 import EmptyImg from 'assets/imgs/auction/empty-avatar.svg'
 

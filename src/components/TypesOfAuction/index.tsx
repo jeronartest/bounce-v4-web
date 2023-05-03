@@ -243,7 +243,7 @@ const TypesOfAuction: React.FC = () => {
       <Box
         sx={{
           width: 'calc(100% - 40px)',
-          margin: '0 auto 20px',
+          margin: '60px auto 20px',
           background: `var(--ps-text-4)`,
           borderRadius: 30,
           padding: '60px 0 0',

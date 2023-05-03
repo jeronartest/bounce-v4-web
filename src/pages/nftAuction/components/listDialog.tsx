@@ -39,7 +39,7 @@ const NFTDialog = styled(Dialog)(({ theme }) => ({
   '.MuiPaper-root': {
     position: 'relative',
     top: theme.height.header,
-    height: `calc(100% - 60px)`
+    height: `calc(100%)`
   },
   '.MuiDialog-paper': {
     borderRadius: '30px 30px 0 0',

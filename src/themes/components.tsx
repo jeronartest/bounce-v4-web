@@ -223,7 +223,8 @@ export const ComponentOptions = {
           background: 'var(--ps-gray-900)',
           color: 'var(--ps-white)',
           '&:hover': {
-            background: 'var(--ps-yellow-1)'
+            background: 'var(--ps-yellow-1)',
+            color: 'var(--ps-black)'
           },
           '&:active': {
             background: 'var(--ps-yellow-1)',
