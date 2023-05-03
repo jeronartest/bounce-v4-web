@@ -1,5 +1,5 @@
 import { Box, Container } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import FooterPc from 'components/Footer/FooterPc'
 import TokenAuction from 'components/TokenAuction'
 import TypesOfAuction from 'components/TypesOfAuction'
@@ -9,7 +9,7 @@ import MarketPNG from 'assets/imgs/company/banner/market.png'
 import HeaderTab from '../../bounceComponents/market/components/HeaderTab'
 import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/AuctionRankCard'
 import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
-
+import NftListDialog from './components/listDialog'
 const NFTAcution: React.FC = ({}) => {
   const testBanner: IBanner[] = [
     {
@@ -25,11 +25,23 @@ const NFTAcution: React.FC = ({}) => {
       pic: Photo28
     }
   ]
+  const [open, setOpen] = useState(false)
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <>
       <Container maxWidth="lg">
         <HeaderTab onTabChange={tab => console.log(tab)} />
         <Box mt={16}>
+          <Box
+            onClick={() => {
+              const result = !open
+              setOpen(result)
+            }}
+          >
+            test dialog
+          </Box>
           <ArrowBanner list={testBanner} />
         </Box>
         <AuctionRankCard />
@@ -38,6 +50,7 @@ const NFTAcution: React.FC = ({}) => {
       <TypesOfAuction />
       <ActiveUser />
       <FooterPc />
+      <NftListDialog open={open} handleClose={handleClose} />
     </>
   )
 }

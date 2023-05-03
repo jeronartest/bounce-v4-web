@@ -42,7 +42,8 @@ export const ColorOptions = {
     'text-4': '#20201E',
     'text-5': '#D7D6D9',
     'text-6': '#58595B',
-    'text-7': '#2B51DA'
+    'text-7': '#2B51DA',
+    'text-8': '#f6f7f3'
   },
   dark: {
     white: '#000',
@@ -65,6 +66,7 @@ export const ColorOptions = {
     'gray-50': '#F5F5F5',
     'gray-30': '#EDEDED',
     'gray-20': '#E8E9E4',
+
     // Green
     green: '#73D491',
     'green-1': '#20994B',
@@ -82,7 +84,8 @@ export const ColorOptions = {
     'text-4': '#20201E',
     'text-5': '#D7D6D9',
     'text-6': '#58595B',
-    'text-7': '#2B51DA'
+    'text-7': '#2B51DA',
+    'text-8': '#f6f7f3'
   }
 }
 
