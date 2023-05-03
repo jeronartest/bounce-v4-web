@@ -1,9 +1,9 @@
-import { Box, Container, Grid, Skeleton, Typography } from '@mui/material'
+import { Box, Container, Grid, MenuItem, Select, Skeleton, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
 import { SwiperSlide } from 'swiper/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
 import { routes } from '../../../constants/routes'
@@ -18,6 +18,7 @@ import { BigNumber } from 'bignumber.js'
 import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Image from 'components/Image'
+import { CenterRow, Row } from '../../../components/Layout'
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
@@ -27,8 +28,12 @@ const poolType: Record<PoolType, string> = {
   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
   [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
+export const AuctionOptions = ['All auction', 'Fixed-priced Auction', 'English Auction', 'Dutch Auction']
 export const NotableAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
+  const [auction, setAuction] = useState(AuctionOptions[0])
+  const [chainFilter, setChainFilter] = useState<number | string>(0)
+
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -51,7 +56,43 @@ export const NotableAuction: React.FC = () => {
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
-        <H4 mb={33}>Notable Auctions</H4>
+        <CenterRow justifyContent={'space-between'}>
+          <H4 mb={33}>Notable Auctions</H4>
+          <Row gap={8}>
+            <Select
+              sx={{
+                width: '200px',
+                height: '38px'
+              }}
+              value={auction}
+              onChange={e => setAuction(e.target.value)}
+            >
+              {AuctionOptions.map((opt, idx) => (
+                <MenuItem key={idx} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
+            </Select>
+            <Select
+              sx={{
+                width: '200px',
+                height: '38px'
+              }}
+              value={chainFilter}
+              onChange={e => setChainFilter(e.target.value)}
+            >
+              <MenuItem key={0} value={0}>
+                All Chains
+              </MenuItem>
+              {optionDatas?.chainInfoOpt?.map((item, index) => (
+                <MenuItem key={index} value={item.id}>
+                  {item.chainName}
+                </MenuItem>
+              ))}
+            </Select>
+          </Row>
+        </CenterRow>
+
         {loading ? (
           <Grid container spacing={18}>
             {Array.from(new Array(4)).map((lodingItem, index) => (

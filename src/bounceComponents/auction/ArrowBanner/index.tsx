@@ -24,8 +24,9 @@ function ArrowBanner({ list }: { list: IBanner[] }) {
       display={'flex'}
       justifyContent={'center'}
       alignItems={'center'}
-      width={'100%'}
+      width={'calc(100% + 60px)'}
       marginLeft={-30}
+      marginRight={-30}
     >
       <ArrowBg
         onClick={() => {

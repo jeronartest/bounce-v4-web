@@ -3,11 +3,11 @@ import React from 'react'
 import FooterPc from 'components/Footer/FooterPc'
 import TokenAuction from 'components/TokenAuction'
 import TypesOfAuction from 'components/TypesOfAuction'
-import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
 import Photo28 from '../../assets/imgs/company/banner/photo_28_banner.jpg'
 import MarketPNG from 'assets/imgs/company/banner/market.png'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import { Notable1155 } from '../../bounceComponents/auction/Notable1155'
+import ArrowBanner, { IBanner } from '../../bounceComponents/auction/ArrowBanner'
 import { Notable721 } from '../../bounceComponents/auction/Notable721'
 
 const NFTAcution: React.FC = ({}) => {

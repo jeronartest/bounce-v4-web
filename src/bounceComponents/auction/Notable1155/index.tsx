@@ -1,6 +1,6 @@
 import { H3, H4 } from '../../../components/Text'
-import { Box, Container, Grid, Skeleton } from '@mui/material'
-import React from 'react'
+import { Box, Container, Grid, MenuItem, Select, Skeleton } from '@mui/material'
+import React, { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { routes } from '../../../constants/routes'
 import { getLabelById } from '../../../utils'
@@ -11,9 +11,13 @@ import { getPools } from '../../../api/market'
 import { FixedSwapPool } from '../../../api/pool/type'
 import { SwiperSlide } from 'swiper/react'
 import { Link } from 'react-router-dom'
+import { CenterRow, Row } from '../../../components/Layout'
+import { AuctionOptions } from '../NotableAuction'
 
 export const Notable1155: React.FC = () => {
   const optionDatas = useOptionDatas()
+  const [auction, setAuction] = useState(AuctionOptions[0])
+  const [chainFilter, setChainFilter] = useState<string | number>(0)
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -37,7 +41,42 @@ export const Notable1155: React.FC = () => {
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
         <H3 justifyContent={'center'}>Notable Auctions</H3>
-        <H4 mb={33}>ERC1155</H4>
+        <CenterRow justifyContent={'space-between'} mt={40}>
+          <H4 mb={33}>ERC1155</H4>
+          <Row gap={8}>
+            <Select
+              sx={{
+                width: '200px',
+                height: '38px'
+              }}
+              value={auction}
+              onChange={e => setAuction(e.target.value)}
+            >
+              {AuctionOptions.map((opt, idx) => (
+                <MenuItem key={idx} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
+            </Select>
+            <Select
+              sx={{
+                width: '200px',
+                height: '38px'
+              }}
+              value={chainFilter}
+              onChange={e => setChainFilter(e.target.value)}
+            >
+              <MenuItem key={0} value={0}>
+                All Chains
+              </MenuItem>
+              {optionDatas?.chainInfoOpt?.map((item, index) => (
+                <MenuItem key={index} value={item.id}>
+                  {item.chainName}
+                </MenuItem>
+              ))}
+            </Select>
+          </Row>
+        </CenterRow>
         {loading ? (
           <Grid container spacing={18}>
             {Array.from(new Array(4)).map((lodingItem, index) => (
