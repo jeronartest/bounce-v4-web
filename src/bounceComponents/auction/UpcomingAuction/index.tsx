@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
 import { SwiperSlide } from 'swiper/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
 import { routes } from '../../../constants/routes'
@@ -29,7 +29,13 @@ const poolType: Record<PoolType, string> = {
   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
   [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
-export const UpcomingAuction: React.FC = () => {
+
+interface Notable1155Props {
+  handleViewAll?: () => void
+}
+
+export const UpcomingAuction = (props: Notable1155Props) => {
+  const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(AuctionOptions[0])
   const [chainFilter, setChainFilter] = useState<string | number>(0)
@@ -225,6 +231,9 @@ export const UpcomingAuction: React.FC = () => {
           }}
         >
           <Button
+            onClick={() => {
+              handleViewAll && handleViewAll()
+            }}
             // href={AuctionList[currentIndex].checkAllLink}
             sx={{
               background: 'var(--ps-yellow-1)',

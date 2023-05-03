@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import { routes } from 'constants/routes'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +7,7 @@ import LeftMenu from './LeftMenu'
 
 export default function AccountLayout({ children }: { children: JSX.Element | string }) {
   const { token } = useUserInfo()
+  const theme = useTheme()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,7 +24,14 @@ export default function AccountLayout({ children }: { children: JSX.Element | st
       }}
     >
       <LeftMenu />
-      {children}
+      <Box
+        sx={{
+          minHeight: `calc(100vh - ${theme.height.header})`,
+          backgroundColor: '#fff'
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   )
 }

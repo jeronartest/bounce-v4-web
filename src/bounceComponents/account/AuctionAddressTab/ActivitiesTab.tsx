@@ -39,7 +39,6 @@ import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: '#908E96',
-    backgroundColor: '#FFFFFF',
     paddingTop: '4px',
     paddingBottom: '4px'
   },
@@ -50,15 +49,15 @@ const StyledTableCell = styled(TableCell)(() => ({
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:nth-of-type(even)': {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
 
     'td:first-of-type': {
-      borderTopLeftRadius: 20,
-      borderBottomLeftRadius: 20
+      borderTopLeftRadius: 8,
+      borderBottomLeftRadius: 8
     },
     'td:last-child': {
-      borderTopRightRadius: 20,
-      borderBottomRightRadius: 20
+      borderTopRightRadius: 8,
+      borderBottomRightRadius: 8
     }
   },
   td: {
@@ -154,7 +153,7 @@ const ActivitiesTab = () => {
           <BounceAnime />
         </Box>
       ) : data && data?.list.length > 0 && !loading ? (
-        <TableContainer sx={{ mt: 20 }}>
+        <TableContainer sx={{ mt: 40 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <StyledTableRow>

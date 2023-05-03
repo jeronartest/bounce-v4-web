@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
-
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 const StyledTab = styled(Button)(({}) => ({
   padding: '8px 12px',
   color: 'white',
@@ -18,7 +19,9 @@ const StyledTab = styled(Button)(({}) => ({
     color: '#121212'
   }
 }))
-const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ onTabChange }) => {
+
+const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ onTabChange }) => {
+  const navigate = useNavigate()
   const path =
     location.pathname === '/NFTAuction'
       ? 'NFT Auction'
@@ -35,6 +38,28 @@ const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ on
     'Ads Auction',
     'Private Launchpad'
   ]
+  const linkTo = (route: string) => {
+    switch (route) {
+      case 'All':
+        navigate(routes.market.index)
+        break
+      case 'Token Auction':
+        navigate(routes.tokenAuction.index)
+        break
+      case 'NFT Auction':
+        navigate(routes.nftAuction.index)
+        break
+      case 'Real World collectibles Auction':
+        navigate(routes.realAuction.index)
+        break
+      case 'Ads Auction':
+        navigate(routes.adsAuction.index)
+        break
+      case 'Private Launchpad':
+        navigate(routes.market.index)
+        break
+    }
+  }
   return (
     <Box
       sx={{
@@ -50,13 +75,14 @@ const HeaderTab: React.FC<{ onTabChange: (currentTab: string) => void }> = ({ on
         borderRadius: '10px'
       }}
     >
-      {tabs.map(tab => (
+      {tabs.map((tab: string) => (
         <StyledTab
           key={tab}
           className={tab === currentTab ? 'selected' : ''}
           onClick={() => {
             setCurrentTab(tab)
-            onTabChange(tab)
+            onTabChange && onTabChange(tab)
+            linkTo(tab)
           }}
         >
           {tab}

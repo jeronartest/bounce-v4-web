@@ -1,6 +1,6 @@
 import { H4 } from '../../../components/Text'
 import { Box, Button, Container, Grid, MenuItem, Select, Skeleton } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { routes } from '../../../constants/routes'
 import { getLabelById } from '../../../utils'
@@ -13,8 +13,11 @@ import { SwiperSlide } from 'swiper/react'
 import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
 import { AuctionOptions } from '../NotableAuction'
-
-export const Notable721: React.FC = () => {
+interface Notable721Props {
+  handleViewAll?: () => void
+}
+export const Notable721 = (props: Notable721Props) => {
+  const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(AuctionOptions[0])
   const [chainFilter, setChainFilter] = useState<string | number>(0)
@@ -119,14 +122,18 @@ export const Notable721: React.FC = () => {
         )}
         <Box
           sx={{
-            marginTop: '40px',
             width: '100%',
             display: 'flex',
             flexFlow: 'row nowrap',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '40px 0 160px'
           }}
         >
           <Button
+            onClick={() => {
+              handleViewAll && handleViewAll()
+            }}
             // href={AuctionList[currentIndex].checkAllLink}
             sx={{
               background: 'var(--ps-yellow-1)',

@@ -6,7 +6,7 @@ import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { addressRegisterOrLogin, login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
 import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo } from 'state/users/reducer'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
@@ -15,6 +15,7 @@ import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
 import { useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -72,6 +73,9 @@ export const useLogin = (path?: string) => {
 export const useWeb3Login = (path?: string) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { redirect } = useQueryParams()
+  const location = useLocation()
+
   const { account } = useActiveWeb3React()
   const signMessage = useSignMessage()
   return useRequest(
@@ -124,9 +128,17 @@ export const useWeb3Login = (path?: string) => {
         )
         if (data?.isLogin === false) {
           // ! TOTD Improve user information
+
+          return
         }
         if (path) {
           return navigate(path)
+        }
+        if (redirect) {
+          return navigate(redirect)
+        }
+        if (location.pathname === routes.login) {
+          return navigate(routes.market.index)
         }
       }
     }

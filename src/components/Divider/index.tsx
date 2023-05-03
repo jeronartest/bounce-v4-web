@@ -1,4 +1,4 @@
-import { Divider as MuiDivider, DividerProps, useTheme } from '@mui/material'
+import { Divider as MuiDivider, DividerProps } from '@mui/material'
 
 interface Props {
   orientation?: 'horizontal' | 'vertical'
@@ -7,8 +7,6 @@ interface Props {
 }
 
 export default function Divider({ extension, orientation, ...props }: Props & DividerProps) {
-  const theme = useTheme()
-
   return (
     <MuiDivider
       {...props}
@@ -16,7 +14,7 @@ export default function Divider({ extension, orientation, ...props }: Props & Di
         width: extension ? `calc(100% + ${extension * 2}px` : orientation === 'vertical' ? 1 : '100%',
         border: 'none',
         height: orientation === 'vertical' ? '100%' : '1px',
-        backgroundColor: theme.palette.text.disabled,
+        backgroundColor: 'var(--ps-text-5)',
         margin: extension ? `0 -${extension}px` : '0'
       }}
     />
