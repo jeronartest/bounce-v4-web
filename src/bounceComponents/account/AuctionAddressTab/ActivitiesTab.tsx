@@ -35,6 +35,7 @@ import Image from 'components/Image'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ZERO_ADDRESS } from '../../../constants'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -75,11 +76,11 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
 
 const defaultPageSize = 10
 
-const ActivitiesTab = () => {
+const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }) => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const { account } = useActiveWeb3React()
-  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
 
   const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
     async ({ current, pageSize }) => {
@@ -94,7 +95,8 @@ const ActivitiesTab = () => {
         limit: pageSize,
         category,
         chainId: curChain,
-        address: account
+        address: account,
+        tokenType: backedTokenType
       })
       return {
         list: resp.data.list.map(i => {
@@ -105,8 +107,7 @@ const ActivitiesTab = () => {
             currency0Amount: CurrencyAmount.fromRawAmount(
               new Currency(ethChainId, ZERO_ADDRESS, i.token0Decimals, i.token0Symbol),
               i.token0Amount
-            ),
-            category
+            )
           }
         }),
         total: resp.data.total
@@ -115,7 +116,7 @@ const ActivitiesTab = () => {
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain, curPoolType],
+      refreshDeps: [account, curChain, curPoolType, backedTokenType],
       debounceWait: 100
     }
   )
@@ -123,7 +124,7 @@ const ActivitiesTab = () => {
   useEffect(() => {
     pagination.changeCurrent(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, curPoolType])
+  }, [account, curPoolType, curPoolType, backedTokenType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)

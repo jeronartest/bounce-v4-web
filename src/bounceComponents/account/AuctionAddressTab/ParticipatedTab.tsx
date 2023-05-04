@@ -9,22 +9,31 @@ import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull
 import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { FixedSwapPool, PoolType } from 'api/pool/type'
-import { getUserPoolsTokenParticipant } from 'api/account'
+import { getUserPoolsTokenCollect, getUserPoolsTokenCreated, getUserPoolsTokenParticipant } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
 import { useActiveWeb3React } from 'hooks'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { routes } from 'constants/routes'
 import { getLabelById } from 'utils'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 const defaultPageSize = 6
 
-export default function ParticipatedTab() {
+type IType = 'created' | 'collect' | 'participated'
+
+export default function ParticipatedTab({
+  backedTokenType,
+  type = 'created'
+}: {
+  backedTokenType: BackedTokenType
+  type?: IType
+}) {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
   const { account } = useActiveWeb3React()
-  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
 
   const {
     pagination,
@@ -38,56 +47,46 @@ export default function ParticipatedTab() {
           list: []
         }
       const category = curPoolType
-      // tokenType erc20:1 , erc1155:2
-      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
-      const resp: any = await getUserPoolsTokenParticipant({
+      const func =
+        type === 'created'
+          ? getUserPoolsTokenCreated
+          : type === 'participated'
+          ? getUserPoolsTokenParticipant
+          : getUserPoolsTokenCollect
+      const resp: any = await func({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category,
         address: account,
         chainId: curChain,
         queryType,
-        tokenType
+        tokenType: backedTokenType
       })
-      if (category === 1) {
+      if (backedTokenType === BackedTokenType.TOKEN) {
         return {
           list: resp.data.fixedSwapList.list,
           total: resp.data.fixedSwapList.total
         }
-      } else if (category === 2) {
-        return {
-          list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total
-        }
-      } else if (category === PoolType.fixedSwapNft) {
-        return {
-          list: resp.data.fixedSwapNftList.list,
-          total: resp.data.fixedSwapNftList.total
-        }
-      } else if (category === 3) {
-        return {
-          list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total
-        }
-      } else {
-        return {
-          list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total
-        }
+      }
+
+      return {
+        list: resp.data.fixedSwapNftList.list,
+        total: resp.data.fixedSwapNftList.total
       }
     },
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain, curPoolType, queryType],
+      refreshDeps: [account, curChain, curPoolType, queryType, backedTokenType],
       debounceWait: 100
     }
   )
+  console.log('🚀 ~ file: ParticipatedTab.tsx:43 ~ loading:', loading, !auctionPoolData)
 
   useEffect(() => {
     pagination.changeCurrent(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, queryType])
+  }, [account, curPoolType, queryType, backedTokenType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -130,7 +129,9 @@ export default function ParticipatedTab() {
         <NoData sx={{ padding: 40 }}>
           <Box display={'grid'} justifyItems="center">
             <Typography fontWeight={500} fontSize={20} mt={10}>
-              {'Hasn’t participated Auction'}{' '}
+              {`Hasn’t ${
+                type === 'created' ? 'created' : type === 'participated' ? 'participated' : 'collect'
+              } Auction`}{' '}
             </Typography>
           </Box>
         </NoData>

@@ -6,10 +6,10 @@ export default {
     justifyContent: 'space-between'
   },
   menu: {
-    borderRadius: '8px',
+    borderRadius: '20px',
     cursor: 'pointer',
     color: 'rgba(23, 23, 23, 0.5)',
-    padding: '16px 32px 30px'
+    padding: '16px 32px 40px'
   },
   menuActive: {
     background: '#F5F5F5',

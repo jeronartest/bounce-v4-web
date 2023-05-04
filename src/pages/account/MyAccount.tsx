@@ -7,7 +7,7 @@ import ComingSoon from 'pages/ComingSoon'
 import { useState } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import { Dots } from 'themes'
-import styles from './styles'
+import styles from './tabStyles'
 
 enum TabListProp {
   'Account_Settings' = 'Account Settings',
