@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
+import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -17,6 +17,8 @@ import { NFTCard } from 'pages/market/nftAuctionPool'
 import { routes } from 'constants/routes'
 import { getLabelById } from 'utils'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import { Add } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
 const defaultPageSize = 6
 
@@ -34,6 +36,7 @@ export default function ParticipatedTab({
   const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
   const { account } = useActiveWeb3React()
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
+  const navigate = useNavigate()
 
   const {
     pagination,
@@ -81,7 +84,6 @@ export default function ParticipatedTab({
       debounceWait: 100
     }
   )
-  console.log('🚀 ~ file: ParticipatedTab.tsx:43 ~ loading:', loading, !auctionPoolData)
 
   useEffect(() => {
     pagination.changeCurrent(1)
@@ -119,6 +121,12 @@ export default function ParticipatedTab({
           </FormItem>
           <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
+
+        {type === 'created' && (
+          <Button sx={{ height: 44 }} variant="contained" onClick={() => navigate(routes.auction.createAuctionPool)}>
+            <Add /> Create a pool
+          </Button>
+        )}
       </Box>
 
       {loading ? (
