@@ -1,5 +1,4 @@
 import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
-import FormItem from 'bounceComponents/common/FormItem'
 import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { usePagination } from 'ahooks'
@@ -19,6 +18,7 @@ import { getLabelById } from 'utils'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import ChainSelect from 'bounceComponents/common/ChainSelect'
 
 const defaultPageSize = 6
 
@@ -98,28 +98,23 @@ export default function ParticipatedTab({
     <Box>
       <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
         <Stack spacing={10} direction="row">
-          <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-            <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All Chains
-              </MenuItem>
-              {optionDatas?.chainInfoOpt?.map((item, index) => (
-                <MenuItem key={index} value={item.id}>
-                  {item.chainName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem name="status" label="Status" sx={{ width: 190 }}>
-            <Select value={queryType} onChange={e => setQueryType(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All
-              </MenuItem>
-              <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
-              <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
-            </Select>
-          </FormItem>
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
+          <Select
+            value={queryType}
+            sx={{ width: 200, height: 38 }}
+            onChange={e => setQueryType(Number(e.target?.value) || 0)}
+          >
+            <MenuItem key={0} value={0}>
+              All
+            </MenuItem>
+            <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
+            <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
+          </Select>
+          <AuctionTypeSelect
+            tokenType={backedTokenType}
+            curPoolType={curPoolType}
+            setCurPoolType={t => setCurPoolType(t)}
+          />
         </Stack>
 
         {type === 'created' && (

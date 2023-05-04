@@ -80,10 +80,14 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
           alignItems={'center'}
           gap="10px"
           sx={{
-            transform: 'translateY(-10px)'
+            transform: 'translateY(-5px)'
           }}
         >
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+          <AuctionTypeSelect
+            tokenType={backedTokenType}
+            curPoolType={curPoolType}
+            setCurPoolType={t => setCurPoolType(t)}
+          />
 
           <Pagination
             onChange={(_, p) => handlePageChange(p)}

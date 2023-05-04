@@ -1,8 +1,6 @@
 import {
   Box,
-  MenuItem,
   Pagination,
-  Select,
   Stack,
   styled,
   Table,
@@ -22,7 +20,6 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useEffect, useState } from 'react'
-import FormItem from 'bounceComponents/common/FormItem'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { usePagination } from 'ahooks'
 import { getAddressActivities } from 'api/account'
@@ -36,6 +33,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 import { ZERO_ADDRESS } from '../../../constants'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import ChainSelect from 'bounceComponents/common/ChainSelect'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -134,19 +132,12 @@ const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }
     <Box>
       <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
         <Stack spacing={10} direction="row">
-          <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-            <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All Chains
-              </MenuItem>
-              {optionDatas?.chainInfoOpt?.map((item, index) => (
-                <MenuItem key={index} value={item.id}>
-                  {item.chainName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormItem>
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
+          <AuctionTypeSelect
+            tokenType={backedTokenType}
+            curPoolType={curPoolType}
+            setCurPoolType={t => setCurPoolType(t)}
+          />
         </Stack>
       </Box>
       {loading ? (
