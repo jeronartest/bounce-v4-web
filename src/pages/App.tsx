@@ -42,7 +42,6 @@ import TokenAuctionPage from 'pages/tokenAuction'
 import ProfileHome from 'pages/profile/home'
 
 // import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
-
 // import SignupAccount from 'pages/signup/account'
 import ComingSoon from './ComingSoon'
 
@@ -58,7 +57,6 @@ import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
-import Test from './test'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -102,7 +100,6 @@ export default function App() {
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
-                    <Route path={routes.test} element={<Test />} />
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />

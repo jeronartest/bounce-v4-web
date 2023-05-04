@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, styled } from '@mui/material'
+import { Box, MenuItem, Select, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
 import Table from '../../../components/Table'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
+import { useRequest } from 'ahooks'
+import { getPoolsFilter } from '../../../api/market'
+import { useOptionDatas } from '../../../state/configOptions/hooks'
 
 enum StatusE {
   'live',
@@ -98,6 +101,21 @@ const Tab = styled(Box)`
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
   const [currentTab, setTab] = useState(Tabs[0])
+  const optionDatas = useOptionDatas()
+  const action = Tabs.indexOf(currentTab) + 1
+  const [chainFilter, setChainFilter] = useState<number>(0)
+  const { data, loading } = useRequest(async () => {
+    const resp = await getPoolsFilter({
+      action: action,
+      chainId: chainFilter
+    })
+    return {
+      list: resp.data.list,
+      total: resp.data
+    }
+  })
+  console.log('AuctionRankCard', data)
+  console.log('AuctionRankCard', loading)
   const fakeData: IAuctionRank[] = [
     {
       index: '1',
@@ -183,13 +201,32 @@ export const AuctionRankCard: React.FC = () => {
 
   return (
     <Box mt={40}>
-      <Row>
-        {Tabs.map((tab, idx) => (
-          <Tab key={idx} onClick={() => setTab(tab)} className={tab === currentTab ? 'active' : ''}>
-            <H5>{tab}</H5>
-          </Tab>
-        ))}
-      </Row>
+      <CenterRow justifyContent={'space-between'}>
+        <Row>
+          {Tabs.map((tab, idx) => (
+            <Tab key={idx} onClick={() => setTab(tab)} className={tab === currentTab ? 'active' : ''}>
+              <H5>{tab}</H5>
+            </Tab>
+          ))}
+        </Row>
+        <Select
+          sx={{
+            width: '200px',
+            height: '38px'
+          }}
+          value={chainFilter}
+          onChange={e => setChainFilter(Number(e.target.value))}
+        >
+          <MenuItem key={0} value={0}>
+            All Chains
+          </MenuItem>
+          {optionDatas?.chainInfoOpt?.map((item, index) => (
+            <MenuItem key={index} value={item.id}>
+              {item.chainName}
+            </MenuItem>
+          ))}
+        </Select>
+      </CenterRow>
       <Box
         sx={{
           padding: '12px',

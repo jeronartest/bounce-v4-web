@@ -6,6 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { timestampToCountdown } from '../../../utils/TimeUtil'
 import { useState } from 'react'
+import { useRequest } from 'ahooks'
+import { getBanner } from '../../../api/market'
+import { BannerType } from '../../../api/market/type'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -16,8 +19,17 @@ export interface IBanner {
   countDown: string
 }
 
-function ArrowBanner({ list }: { list: IBanner[] }) {
+function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const { data, loading } = useRequest(async () => {
+    const resp = await getBanner(type)
+    return {
+      list: resp.data,
+      total: resp.data
+    }
+  })
+  console.log(data)
+  console.log(loading)
   return (
     <Box
       position={'relative'}
@@ -48,7 +60,7 @@ function ArrowBanner({ list }: { list: IBanner[] }) {
           width: '100%'
         }}
       >
-        {list?.map((item, index) => (
+        {data?.list?.map((item: BannerType, index: number) => (
           <SwiperSlide key={index}>
             <Banner banner={item} />
           </SwiperSlide>
@@ -131,8 +143,8 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 `
 
-function Banner({ banner }: { banner: IBanner }) {
-  const countDown = timestampToCountdown(banner.countDown)
+function Banner({ banner }: { banner: BannerType }) {
+  const countDown = timestampToCountdown(banner.openAt)
   return (
     <Box
       sx={{
@@ -143,7 +155,7 @@ function Banner({ banner }: { banner: IBanner }) {
       }}
     >
       <img
-        src={banner.pic}
+        src={banner.avatar}
         alt=""
         style={{
           position: 'absolute',
@@ -162,8 +174,8 @@ function Banner({ banner }: { banner: IBanner }) {
           left: '40px'
         }}
       >
-        <BannerH3>{banner.title}</BannerH3>
-        <BannerH6>{banner.tag.join(' | ')}</BannerH6>
+        <BannerH3>{banner.name}</BannerH3>
+        <BannerH6>{banner.types}</BannerH6>
       </Box>
       <Box
         sx={{

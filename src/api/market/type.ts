@@ -13,6 +13,7 @@ export interface ICompanyInformationParams {
   offset: number
   startup: number
 }
+
 export interface IPoolsParams {
   category: number
   chainId: number
@@ -32,4 +33,21 @@ export interface IPoolsParams {
 export enum UserType {
   Profile = 1,
   Company = 0
+}
+
+export interface BannerType {
+  avatar: string
+  category: number
+  chainId: number
+  name: string
+  openAt: number
+  token0: string
+  tokenAmount0: string
+  types: string
+  url: string
+}
+
+export interface IPoolFilterParams {
+  action: number
+  chainId: number
 }
