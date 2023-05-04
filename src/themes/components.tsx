@@ -360,23 +360,24 @@ export const ComponentOptions = {
           },
           ' .MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
             border: 0,
-            color: '#908E96',
-            fontFamily: `"Sharp Grotesk DB Cyr Medium 22"`,
-            fontSize: 14,
+            color: 'var(--ps-text-3)',
+            fontFamily: `'Inter'`,
+            fontWight: 400,
+            fontSize: 16,
             '&.Mui-selected': {
-              color: '#171717',
-              background: 'none'
+              color: 'var(--ps-text-3)',
+              background: 'var(--ps-yellow-1)'
             },
             '&:hover': {
-              backgroundColor: 'white',
-              color: '#171717'
+              backgroundColor: 'var(--ps-text-1)',
+              color: '#fff'
             }
           },
 
           '& .MuiPaginationItem-root': {
-            height: 48,
-            borderRadius: 100,
-            width: 48,
+            height: 32,
+            borderRadius: 6,
+            width: 32,
             margin: '0 12px'
           }
         }
