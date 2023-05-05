@@ -19,26 +19,31 @@ export const Notable1155: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
-  const { data, loading } = useRequest(async () => {
-    const resp = await getPools({
-      offset: 0,
-      limit: 10,
-      category: auction,
-      chainId: chainFilter,
-      creatorAddress: '',
-      creatorName: '',
-      isERC721: false,
-      orderBy: 'openTs',
-      poolId: '',
-      poolName: '',
-      tokenType: 2, // erc20:1, nft:2
-      token0Address: ''
-    })
-    return {
-      list: resp.data.fixedSwapNftList.list,
-      total: resp.data.fixedSwapNftList.total
+  const { data, loading } = useRequest(
+    async () => {
+      const resp = await getPools({
+        offset: 0,
+        limit: 10,
+        category: auction,
+        chainId: chainFilter,
+        creatorAddress: '',
+        creatorName: '',
+        isERC721: false,
+        orderBy: 'openTs',
+        poolId: '',
+        poolName: '',
+        tokenType: 2, // erc20:1, nft:2
+        token0Address: ''
+      })
+      return {
+        list: resp.data.fixedSwapNftList.list,
+        total: resp.data.fixedSwapNftList.total
+      }
+    },
+    {
+      refreshDeps: [auction, chainFilter]
     }
-  })
+  )
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>

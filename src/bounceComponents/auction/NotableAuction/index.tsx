@@ -33,27 +33,31 @@ const poolType: Record<PoolType, string> = {
 export const NotableAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
-  const [chainFilter, setChainFilter] = useState<number | string>(0)
-
-  const { data, loading } = useRequest(async () => {
-    const resp = await getPools({
-      offset: 0,
-      limit: 10,
-      category: 1,
-      tokenType: 1, // erc20:1, nft:2
-      chainId: 0,
-      creatorAddress: '',
-      creatorName: '',
-      orderBy: 'trending',
-      poolId: '',
-      poolName: '',
-      token0Address: ''
-    })
-    return {
-      list: resp.data.fixedSwapList.list,
-      total: resp.data.fixedSwapList.total
+  const [chainFilter, setChainFilter] = useState<number>(0)
+  const { data, loading } = useRequest(
+    async () => {
+      const resp = await getPools({
+        offset: 0,
+        limit: 10,
+        category: auction,
+        tokenType: 1, // erc20:1, nft:2
+        chainId: chainFilter,
+        creatorAddress: '',
+        creatorName: '',
+        orderBy: 'trending',
+        poolId: '',
+        poolName: '',
+        token0Address: ''
+      })
+      return {
+        list: resp.data.fixedSwapList.list,
+        total: resp.data.fixedSwapList.total
+      }
+    },
+    {
+      refreshDeps: [auction, chainFilter]
     }
-  })
+  )
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
@@ -67,7 +71,7 @@ export const NotableAuction: React.FC = () => {
                 height: '38px'
               }}
               value={chainFilter}
-              onChange={e => setChainFilter(e.target.value)}
+              onChange={e => setChainFilter(Number(e.target.value))}
             >
               <MenuItem key={0} value={0}>
                 All Chains

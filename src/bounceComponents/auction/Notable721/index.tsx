@@ -18,31 +18,37 @@ import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 interface Notable721Props {
   handleViewAll?: () => void
 }
+
 export const Notable721 = (props: Notable721Props) => {
   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
-  const [chainFilter, setChainFilter] = useState<string | number>(0)
-  const { data, loading } = useRequest(async () => {
-    const resp = await getPools({
-      offset: 0,
-      limit: 4,
-      category: 5,
-      chainId: 2,
-      creatorAddress: '',
-      creatorName: '',
-      orderBy: 'openTs',
-      poolId: '',
-      isERC721: true,
-      poolName: '',
-      tokenType: 2, // erc20:1, nft:2
-      token0Address: ''
-    })
-    return {
-      list: resp.data.fixedSwapNftList.list,
-      total: resp.data.fixedSwapNftList.total
+  const [chainFilter, setChainFilter] = useState<number>(0)
+  const { data, loading } = useRequest(
+    async () => {
+      const resp = await getPools({
+        offset: 0,
+        limit: 4,
+        category: auction,
+        chainId: chainFilter,
+        creatorAddress: '',
+        creatorName: '',
+        orderBy: 'openTs',
+        poolId: '',
+        isERC721: true,
+        poolName: '',
+        tokenType: 2, // erc20:1, nft:2
+        token0Address: ''
+      })
+      return {
+        list: resp.data.fixedSwapNftList.list,
+        total: resp.data.fixedSwapNftList.total
+      }
+    },
+    {
+      refreshDeps: [auction, chainFilter]
     }
-  })
+  )
   return (
     <Box sx={{ padding: '80px 0 100px' }}>
       <Container>
@@ -56,7 +62,7 @@ export const Notable721 = (props: Notable721Props) => {
                 height: '38px'
               }}
               value={chainFilter}
-              onChange={e => setChainFilter(e.target.value)}
+              onChange={e => setChainFilter(Number(e.target.value))}
             >
               <MenuItem key={0} value={0}>
                 All Chains
