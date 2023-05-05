@@ -19,7 +19,8 @@ import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Image from 'components/Image'
 import { CenterRow, Row } from '../../../components/Layout'
-import { AuctionOptions } from '../NotableAuction'
+import AuctionTypeSelect from '../../common/AuctionTypeSelect'
+import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
@@ -37,20 +38,21 @@ interface Notable1155Props {
 export const UpcomingAuction = (props: Notable1155Props) => {
   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
-  const [auction, setAuction] = useState(AuctionOptions[0])
+  const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<string | number>(0)
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
-      limit: 4,
+      limit: 10,
       category: 1,
       tokenType: 1, // erc20:1, nft:2
       chainId: 0,
       creatorAddress: '',
       creatorName: '',
-      orderBy: 'trending',
+      orderBy: '',
       poolId: '',
       poolName: '',
+      poolStatusFrontend: 'upcoming',
       token0Address: ''
     })
     return {
@@ -64,20 +66,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
         <CenterRow justifyContent={'space-between'}>
           <H4 mb={33}>Upcoming Auctions</H4>
           <Row gap={8}>
-            <Select
-              sx={{
-                width: '200px',
-                height: '38px'
-              }}
-              value={auction}
-              onChange={e => setAuction(e.target.value)}
-            >
-              {AuctionOptions.map((opt, idx) => (
-                <MenuItem key={idx} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
+            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
             <Select
               sx={{
                 width: '200px',

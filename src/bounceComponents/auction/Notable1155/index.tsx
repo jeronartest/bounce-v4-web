@@ -12,20 +12,22 @@ import { FixedSwapPool } from '../../../api/pool/type'
 import { SwiperSlide } from 'swiper/react'
 import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
-import { AuctionOptions } from '../NotableAuction'
+import AuctionTypeSelect from '../../common/AuctionTypeSelect'
+import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 
 export const Notable1155: React.FC = () => {
   const optionDatas = useOptionDatas()
-  const [auction, setAuction] = useState(AuctionOptions[0])
-  const [chainFilter, setChainFilter] = useState<string | number>(0)
+  const [auction, setAuction] = useState(0)
+  const [chainFilter, setChainFilter] = useState<number>(0)
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
-      limit: 4,
-      category: 5,
-      chainId: 2,
+      limit: 10,
+      category: auction,
+      chainId: chainFilter,
       creatorAddress: '',
       creatorName: '',
+      isERC721: false,
       orderBy: 'openTs',
       poolId: '',
       poolName: '',
@@ -44,27 +46,14 @@ export const Notable1155: React.FC = () => {
         <CenterRow justifyContent={'space-between'} mt={40}>
           <H4 mb={33}>ERC1155</H4>
           <Row gap={8}>
-            <Select
-              sx={{
-                width: '200px',
-                height: '38px'
-              }}
-              value={auction}
-              onChange={e => setAuction(e.target.value)}
-            >
-              {AuctionOptions.map((opt, idx) => (
-                <MenuItem key={idx} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
+            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
             <Select
               sx={{
                 width: '200px',
                 height: '38px'
               }}
               value={chainFilter}
-              onChange={e => setChainFilter(e.target.value)}
+              onChange={e => setChainFilter(Number(e.target.value))}
             >
               <MenuItem key={0} value={0}>
                 All Chains

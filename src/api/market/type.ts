@@ -28,6 +28,7 @@ export interface IPoolsParams {
   poolStatusFrontend?: string
   token0Address?: string
   tokenType?: number
+  isERC721?: boolean
 }
 
 export enum UserType {

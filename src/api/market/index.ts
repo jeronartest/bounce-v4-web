@@ -19,3 +19,7 @@ export const getPoolsFilter = (body: IPoolFilterParams) => {
 export const getBanner = (type?: string) => {
   return ApiInstance.get('/banner', { type: type })
 }
+
+export const getActiveUsers = () => {
+  return ApiInstance.post('/pools/stat/count', { limit: 10, offset: 0 })
+}
