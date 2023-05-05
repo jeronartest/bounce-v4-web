@@ -69,6 +69,7 @@ const searchOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Address'
 export interface IFormObserverProps {
   handleSubmit: any
 }
+
 const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   const { values }: any = useFormikContext()
   const refPoolStatus = useRef(0)
@@ -98,10 +99,12 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
   }, [handleSubmit, values])
   return null
 }
+
 interface NFTPrams {
   nft: FixedSwapPool
   hiddenStatus?: boolean
 }
+
 export const NFTCard = (props: NFTPrams) => {
   const optionDatas = useOptionDatas()
   const {
@@ -128,82 +131,14 @@ export const NFTCard = (props: NFTPrams) => {
         background: '#fff',
         // border: `1px solid rgba(0, 0, 0, 0.1)`,
         boxShadow: `0px 5px 20px rgba(0, 0, 0, 0.08)`,
-        borderRadius: '20px',
-        padding: '16px 16px 0'
+        borderRadius: '20px'
       }}
     >
       <Box
         sx={{
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          background: '#F5F5F5',
-          borderRadius: '12px',
-          padding: '8px 12px'
-        }}
-        onClick={e => {
-          e.preventDefault()
-          navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
-        }}
-        mb={12}
-      >
-        <Avatar src={creatorUserInfo.avatar || DefaultAvatarSVG} sx={{ width: 48, height: 48, marginRight: '12px' }} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: 'column nowrap',
-            justifyContent: 'space-between',
-            flex: 1,
-            overflow: 'hidden',
-            padding: '4px 0'
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-              fontWeight: 400,
-              fontSize: 14,
-              color: '#171717',
-              width: '100%',
-              height: '20px',
-              lineHeight: '20px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {(creatorUserInfo?.userType === UserType.Profile ? creatorUserInfo.name : creatorUserInfo.companyName) ||
-              '--'}
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-              fontWeight: 400,
-              fontSize: 12,
-              color: '#908E96',
-              width: '100%',
-              height: '18px',
-              lineHeight: '18px',
-              display: 'block',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {creatorUserInfo?.publicRole?.length > 0
-              ? creatorUserInfo?.publicRole
-                  ?.map((item: string | number) => {
-                    return getLabelById(item, 'role', optionDatas?.publicRoleOpt)
-                  })
-                  .join(', ')
-              : 'Individual account'}
-          </Typography>
-        </Box>
-      </Box>
-      <Box
-        sx={{
           position: 'relative',
           paddingTop: '86%',
-          borderRadius: '20px',
+          borderRadius: '20px 20px 0 0',
           overflow: 'hidden'
         }}
         mb={16}
@@ -229,76 +164,142 @@ export const NFTCard = (props: NFTPrams) => {
             left: 0,
             width: '100%',
             height: '100%',
-            padding: '14px 20px',
+            padding: '12px',
             display: 'flex',
             flexFlow: 'column nowrap',
             justifyContent: 'space-between'
           }}
         >
-          <Box>
-            <NftPoolStatus openTime={openAt} closeTime={closeAt} claimAt={claimAt} status={status} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'row nowrap',
+              background: '#12121233',
+              borderRadius: '12px',
+              padding: '8px 12px'
+            }}
+            onClick={e => {
+              e.preventDefault()
+              navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
+            }}
+            mb={12}
+          >
+            <Avatar
+              src={creatorUserInfo.avatar || DefaultAvatarSVG}
+              sx={{ width: 32, height: 32, marginRight: '12px' }}
+            />
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                justifyContent: 'space-between',
+                flex: 1,
+                overflow: 'hidden',
+                padding: '4px 0'
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  fontSize: '13px',
+                  lineHeight: '140%',
+                  color: '#FFFFFF'
+                }}
+              >
+                {(creatorUserInfo?.userType === UserType.Profile
+                  ? creatorUserInfo.name
+                  : creatorUserInfo.companyName) || '--'}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  fontSize: '12px',
+                  lineHeight: '140%',
+                  color: '#D7D6D9'
+                }}
+              >
+                {creatorUserInfo?.publicRole?.length > 0
+                  ? creatorUserInfo?.publicRole
+                      ?.map((item: string | number) => {
+                        return getLabelById(item, 'role', optionDatas?.publicRoleOpt)
+                      })
+                      .join(', ')
+                  : 'Individual account'}
+              </Typography>
+            </Box>
           </Box>
           <Box
             sx={{
               position: 'absolute',
               bottom: 12,
-              left: 16,
-              right: 16,
-              width: '100%',
-              display: 'flex',
-              flexFlow: 'row nowrap',
-              justifyContent: 'flex-start'
+              left: 12,
+              right: 12
             }}
           >
+            <NftPoolStatus openTime={openAt} closeTime={closeAt} claimAt={claimAt} status={status} />
             <Box
               sx={{
-                height: 24,
-                lineHeight: '24px',
-                padding: '0 8px',
-                background: `rgba(255, 255, 255, 0.6)`,
-                borderRadius: 20,
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12
+                marginTop: '6px',
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start'
               }}
-              mr={4}
             >
-              Fixed Price
-            </Box>
-            <Box
-              sx={{
-                height: 24,
-                lineHeight: '24px',
-                padding: '0 8px',
-                background: `rgba(255, 255, 255, 0.6)`,
-                borderRadius: 20,
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12
-              }}
-              mr={4}
-            >
-              {Number(is721) === 2 ? 'ERC721' : 'ERC1155'}
-            </Box>
-            <Box
-              sx={{
-                height: 24,
-                lineHeight: '24px',
-                padding: '0 8px',
-                background: `rgba(255, 255, 255, 0.6)`,
-                borderRadius: 20,
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12
-              }}
-              mr={4}
-            >
-              {enableWhiteList ? 'Whitelist' : 'Public'}
+              <Box
+                sx={{
+                  height: 24,
+                  lineHeight: '24px',
+                  padding: '0 8px',
+                  background: `rgba(255, 255, 255, 0.6)`,
+                  borderRadius: 20,
+                  fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+                  fontWeight: 400,
+                  fontSize: 12
+                }}
+                mr={4}
+              >
+                Fixed Price
+              </Box>
+              <Box
+                sx={{
+                  height: 24,
+                  lineHeight: '24px',
+                  padding: '0 8px',
+                  background: `rgba(255, 255, 255, 0.6)`,
+                  borderRadius: 20,
+                  fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+                  fontWeight: 400,
+                  fontSize: 12
+                }}
+                mr={4}
+              >
+                {Number(is721) === 2 ? 'ERC721' : 'ERC1155'}
+              </Box>
+              <Box
+                sx={{
+                  height: 24,
+                  lineHeight: '24px',
+                  padding: '0 8px',
+                  background: `rgba(255, 255, 255, 0.6)`,
+                  borderRadius: 20,
+                  fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+                  fontWeight: 400,
+                  fontSize: 12
+                }}
+                mr={4}
+              >
+                {enableWhiteList ? 'Whitelist' : 'Public'}
+              </Box>
             </Box>
           </Box>
         </Box>
       </Box>
-      <Box>
+      <Box m={'16px 12px 22px'}>
         <Typography
           sx={{
             fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
