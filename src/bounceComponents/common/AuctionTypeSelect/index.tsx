@@ -1,25 +1,46 @@
 import { MenuItem, Select } from '@mui/material'
-import FormItem from '../FormItem'
 import { PoolType } from 'api/pool/type'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import { useMemo } from 'react'
 
 export default function AuctionTypeSelect({
   curPoolType,
-  setCurPoolType
+  setCurPoolType,
+  tokenType
 }: {
-  curPoolType: PoolType
+  curPoolType: PoolType | 0
   setCurPoolType: (type: PoolType) => void
+  tokenType?: BackedTokenType
 }) {
+  const list = useMemo(() => {
+    if (tokenType === BackedTokenType.TOKEN) {
+      return [
+        { label: 'Fixed Price', value: PoolType.FixedSwap },
+        { label: 'Random Selection', value: PoolType.Lottery }
+      ]
+    } else if (tokenType === BackedTokenType.NFT) {
+      return [{ label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }]
+    }
+    return [
+      { label: 'Fixed Price', value: PoolType.FixedSwap },
+      { label: 'Random Selection', value: PoolType.Lottery },
+      { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
+    ]
+  }, [tokenType])
+
   return (
-    <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
-      <Select
-        defaultValue={PoolType.FixedSwap}
-        value={curPoolType}
-        onChange={e => setCurPoolType(e.target.value as PoolType)}
-      >
-        <MenuItem value={PoolType.FixedSwap}>Fixed Price</MenuItem>
-        <MenuItem value={PoolType.fixedSwapNft}>Fixed Swap NFT</MenuItem>
-        <MenuItem value={PoolType.Lottery}>Random Selection</MenuItem>
-      </Select>
-    </FormItem>
+    <Select
+      sx={{ width: 200, height: 38 }}
+      defaultValue={PoolType.FixedSwap}
+      value={curPoolType}
+      onChange={e => setCurPoolType(e.target.value as PoolType)}
+    >
+      <MenuItem value={0}>Auction Type</MenuItem>
+      {list.map(({ label, value }) => (
+        <MenuItem key={value} value={value}>
+          {label}
+        </MenuItem>
+      ))}
+    </Select>
   )
 }

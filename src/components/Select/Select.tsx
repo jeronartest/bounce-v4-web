@@ -113,6 +113,7 @@ export default function Select(props: Props) {
             '& .MuiPaper-root': {
               width: width ?? 'unset',
               borderRadius: '10px',
+              maxHeight: 400,
               mt: '10px',
               boxShadow: theme => theme.shadows[4],
               transform: width ? 'translateX(-12px)!important' : 'none',

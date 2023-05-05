@@ -1,8 +1,6 @@
 import {
   Box,
-  MenuItem,
   Pagination,
-  Select,
   Stack,
   styled,
   Table,
@@ -22,7 +20,6 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useEffect, useState } from 'react'
-import FormItem from 'bounceComponents/common/FormItem'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { usePagination } from 'ahooks'
 import { getAddressActivities } from 'api/account'
@@ -35,6 +32,8 @@ import Image from 'components/Image'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ZERO_ADDRESS } from '../../../constants'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import ChainSelect from 'bounceComponents/common/ChainSelect'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -75,11 +74,11 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
 
 const defaultPageSize = 10
 
-const ActivitiesTab = () => {
+const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }) => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const { account } = useActiveWeb3React()
-  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
 
   const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
     async ({ current, pageSize }) => {
@@ -94,7 +93,8 @@ const ActivitiesTab = () => {
         limit: pageSize,
         category,
         chainId: curChain,
-        address: account
+        address: account,
+        tokenType: backedTokenType
       })
       return {
         list: resp.data.list.map(i => {
@@ -105,8 +105,7 @@ const ActivitiesTab = () => {
             currency0Amount: CurrencyAmount.fromRawAmount(
               new Currency(ethChainId, ZERO_ADDRESS, i.token0Decimals, i.token0Symbol),
               i.token0Amount
-            ),
-            category
+            )
           }
         }),
         total: resp.data.total
@@ -115,7 +114,7 @@ const ActivitiesTab = () => {
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain, curPoolType],
+      refreshDeps: [account, curChain, curPoolType, backedTokenType],
       debounceWait: 100
     }
   )
@@ -123,7 +122,7 @@ const ActivitiesTab = () => {
   useEffect(() => {
     pagination.changeCurrent(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, curPoolType])
+  }, [account, curPoolType, curPoolType, backedTokenType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -133,19 +132,12 @@ const ActivitiesTab = () => {
     <Box>
       <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
         <Stack spacing={10} direction="row">
-          <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-            <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All Chains
-              </MenuItem>
-              {optionDatas?.chainInfoOpt?.map((item, index) => (
-                <MenuItem key={index} value={item.id}>
-                  {item.chainName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormItem>
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
+          <AuctionTypeSelect
+            tokenType={backedTokenType}
+            curPoolType={curPoolType}
+            setCurPoolType={t => setCurPoolType(t)}
+          />
         </Stack>
       </Box>
       {loading ? (

@@ -126,8 +126,8 @@ export default function App() {
                     <Route path={routes.account.myProfile} element={<AccountMyProfile />} />
                     <Route path={routes.account.myAccount} element={<AccountMyAccount />} />
                     <Route path={routes.account.myCredentials} element={<AccountMyCredentials />} />
-                    <Route path={routes.account.tokenAuction} element={<MyTokenOrNFT />} />
-                    <Route path={routes.account.nftAuction} element={<MyTokenOrNFT />} />
+                    <Route path={routes.account.tokenAuction} element={<MyTokenOrNFT backedTokenType={1} />} />
+                    <Route path={routes.account.nftAuction} element={<MyTokenOrNFT backedTokenType={2} />} />
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
