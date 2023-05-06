@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
+import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -21,15 +22,13 @@ export interface IBanner {
 
 function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
-  const { data, loading } = useRequest(async () => {
+  const { data } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
       list: resp.data,
       total: resp.data
     }
   })
-  console.log(data)
-  console.log(loading)
   return (
     <Box
       position={'relative'}
@@ -143,6 +142,18 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 `
 
+const ChainBg = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(18, 18, 18, 0.2);
+  backdrop-filter: blur(2px);
+  border-radius: 100px;
+  color: white;
+  font-size: 13px;
+  line-height: 140%;
+`
+
 function Banner({ banner }: { banner: BannerType }) {
   const countDown = timestampToCountdown(banner.openAt)
   return (
@@ -174,6 +185,12 @@ function Banner({ banner }: { banner: BannerType }) {
           left: '40px'
         }}
       >
+        <Box display={'flex'} gap={4}>
+          <ChainBg width={32} height={32}>
+            <img src={EthIcon} />
+          </ChainBg>
+          <ChainBg padding={'0 12px'}>Coming soon</ChainBg>
+        </Box>
         <BannerH3>{banner.name}</BannerH3>
         <BannerH6>{banner.types}</BannerH6>
       </Box>
