@@ -118,7 +118,12 @@ export default function ParticipatedTab({
         </Stack>
 
         {type === 'created' && (
-          <Button sx={{ height: 44 }} variant="contained" onClick={() => navigate(routes.auction.createAuctionPool)}>
+          <Button
+            sx={{ height: 44 }}
+            variant="contained"
+            className="black-button"
+            onClick={() => navigate(routes.auction.createAuctionPool)}
+          >
             <Add /> Create a pool
           </Button>
         )}

@@ -1,19 +1,18 @@
 import { Stack } from '@mui/system'
 import React from 'react'
-import SettingsBox from '../../SettingsBox'
 // import { ReactComponent as LinkedInSVG } from '../../../../signup/assets/linkedIn.svg'
 import { ReactComponent as TwitterSVG } from '../../../../signup/assets/twitter.svg'
-import { ReactComponent as GoogleSVG } from './BoxLayout/googleLog.svg'
+// import { ReactComponent as GoogleSVG } from './BoxLayout/googleLog.svg'
 import BoxLayout from './BoxLayout/BoxLayout'
 import { ACCOUNT_TYPE } from 'api/user/type'
 import { useBindThirdPart } from 'bounceHooks/user/useBindThirdPart'
 import { useOauth } from 'state/users/hooks'
 export type ILoginOptonProps = {
-  googleEmail: string
+  // googleEmail: string
   twitter: string
 }
 
-const LoginOpton: React.FC<ILoginOptonProps> = ({ googleEmail, twitter }) => {
+const LoginOpton: React.FC<ILoginOptonProps> = ({ twitter }) => {
   const { handleOauth } = useOauth()
   const { run } = useBindThirdPart()
   const handleThirdBind = async (oauthName: string, oauthType: ACCOUNT_TYPE) => {
@@ -34,22 +33,20 @@ const LoginOpton: React.FC<ILoginOptonProps> = ({ googleEmail, twitter }) => {
   // }
 
   return (
-    <SettingsBox title="Other Login Options">
-      <Stack spacing={20} mt={20} mb={40}>
-        <BoxLayout
+    <Stack>
+      {/* <BoxLayout
           email={googleEmail}
           title={'Google account'}
           emailSvg={<GoogleSVG />}
           onBind={() => handleThirdBind('google', ACCOUNT_TYPE.GMAIL)}
-        />
-        <BoxLayout
-          email={twitter}
-          title={'Twitter account'}
-          emailSvg={<TwitterSVG />}
-          onBind={() => handleThirdBind('twitter', ACCOUNT_TYPE.TWITTER)}
-        />
-      </Stack>
-    </SettingsBox>
+        /> */}
+      <BoxLayout
+        link={twitter}
+        title={'Twitter'}
+        image={<TwitterSVG />}
+        onBind={() => handleThirdBind('twitter', ACCOUNT_TYPE.TWITTER)}
+      />
+    </Stack>
   )
 }
 

@@ -220,20 +220,18 @@ export const ComponentOptions = {
           }
         },
         containedPrimary: {
-          background: 'var(--ps-gray-900)',
-          color: 'var(--ps-white)',
+          background: 'var(--ps-yellow-1)',
+          color: 'var(--ps-text-3)',
+          boxShadow: 'none',
           '&:hover': {
-            background: 'var(--ps-yellow-1)',
-            color: 'var(--ps-black)'
+            background: 'var(--ps-gray-900)',
+            color: 'var(--ps-white)'
           },
           '&:active': {
-            background: 'var(--ps-yellow-1)',
-            color: 'var(--ps-gray-900)'
+            background: 'var(--ps-gray-900)',
+            color: 'var(--ps-white)'
           },
-          '&:disabled': {
-            background: 'var(--ps-gray-400)',
-            color: 'var(--ps-primary)'
-          }
+          '&:disabled': {}
         },
         outlinedPrimary: {
           border: '1px solid var(--ps-yellow-1)',

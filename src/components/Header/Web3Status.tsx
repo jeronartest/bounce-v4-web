@@ -344,6 +344,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
               <Button
                 sx={{ height: 40 }}
                 variant="contained"
+                className="black-button"
                 onClick={() => {
                   navigate(routes.account.myAccount)
                   close()

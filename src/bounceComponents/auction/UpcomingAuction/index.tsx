@@ -228,9 +228,10 @@ export const UpcomingAuction = (props: Notable1155Props) => {
             onClick={() => {
               handleViewAll && handleViewAll()
             }}
+            variant="contained"
             // href={AuctionList[currentIndex].checkAllLink}
             sx={{
-              background: 'var(--ps-yellow-1)',
+              // background: 'var(--ps-yellow-1)',
               padding: '16px 20px'
             }}
           >
