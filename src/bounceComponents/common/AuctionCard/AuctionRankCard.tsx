@@ -120,7 +120,12 @@ export const AuctionRankCard: React.FC = () => {
       <CenterRow justifyContent={'space-between'}>
         <Row>
           {Tabs.map((tab, idx) => (
-            <Tab key={idx} onClick={() => setTab(tab)} className={tab === currentTab ? 'active' : ''}>
+            <Tab
+              sx={{ cursor: tab === currentTab ? 'auto' : 'pointer' }}
+              key={idx}
+              onClick={() => setTab(tab)}
+              className={tab === currentTab ? 'active' : ''}
+            >
               <H5>{tab}</H5>
             </Tab>
           ))}
