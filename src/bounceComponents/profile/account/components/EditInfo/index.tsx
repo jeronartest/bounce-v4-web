@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { Cancel } from '@mui/icons-material'
 import FormItem from 'bounceComponents/common/FormItem'
 import { LoadingButton } from '@mui/lab'
+import { ReactComponent as SuccessSvg } from 'assets/svg/success_small.svg'
 
 export type IEditInfoProps = {
   userInfoEmail: string
@@ -22,6 +23,7 @@ export type IEditInfoProps = {
 
 const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
   const [mode, setMode] = useState<'unset' | 'set' | 'input'>(!!userInfoEmail ? 'set' : 'unset')
+  const [showUpdateSuccess, setShowUpdateSuccess] = useState(false)
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
   const [showCountDown, setShowCountDown] = useState<number>()
   const dispatch = useDispatch()
@@ -63,7 +65,11 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
             userId
           })
         )
-        setMode('set')
+        setShowUpdateSuccess(true)
+        setTimeout(() => {
+          setMode('set')
+          setShowUpdateSuccess(false)
+        }, 2000)
       } else if (code === 10501) {
         return toast.error('Incorrect verification code')
       } else if (code === 10400) {
@@ -192,7 +198,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
                           height: 32
                         }}
                       >
-                        Verify
+                        {showUpdateSuccess ? <SuccessSvg /> : 'Verify'}
                       </LoadingButton>
                     }
                     sx={{
