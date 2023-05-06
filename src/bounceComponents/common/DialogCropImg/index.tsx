@@ -78,13 +78,13 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
   setProfileBg
 }) => {
   const [profileBgBeforeSave, setProfileBgBeforeSave] = useState<ArrayBuffer | string>('')
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<ICropParams>(null)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<ICropParams | null>(null)
   const refFile = useRef<HTMLInputElement>(null)
   const clearBgimg = () => {
     setShowBgEditCropDialog(false)
-    setShowBgEditDialog(false)
+    setShowBgEditDialog && setShowBgEditDialog(false)
     setProfileBgBeforeSave('')
-    setShowBgEditBtn(false)
+    setShowBgEditBtn && setShowBgEditBtn(false)
   }
   const saveBgImg = () => {
     getBase64(profileBgBeforeSave, async (fileData: File) => {
@@ -110,9 +110,9 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
       }
     })
   }
-  const dataURLtoBlob = dataurl => {
+  const dataURLtoBlob = (dataurl: string) => {
     const arr = dataurl.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1],
+    const mime = arr[0]?.match(/:(.*?);/)?.[1] || '',
       bstr = atob(arr[1])
     let n = bstr.length
     const u8arr = new Uint8Array(n)
@@ -121,21 +121,22 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
     }
     return new Blob([u8arr], { type: mime })
   }
-  const blobToFile = (theBlob, fileName) => {
+  const blobToFile = (theBlob: any, fileName: string) => {
     theBlob.lastModifiedDate = new Date()
     theBlob.name = fileName
     return new File([theBlob], fileName, { type: theBlob.type, lastModified: Date.now() })
   }
-  const getBase64 = (url: any, callback: { (fileData: File) }) => {
+  const getBase64 = (url: any, callback: (fileData: File) => any) => {
     const Img = new Image()
     Img.src = url
     Img.onload = function () {
+      if (!croppedAreaPixels) return
       const canvas = document.createElement('canvas')
       canvas.width = croppedAreaPixels.width
       canvas.height = croppedAreaPixels.height
       canvas
-        .getContext('2d')
-        .drawImage(
+        ?.getContext('2d')
+        ?.drawImage(
           Img,
           croppedAreaPixels.x,
           croppedAreaPixels.y,
@@ -152,7 +153,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
       callback && callback(result)
     }
   }
-  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels) => {
+  const onCropComplete = useCallback((_: any, croppedAreaPixels: React.SetStateAction<ICropParams | null>) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
   const handleBgImgChange = async (e: any) => {
@@ -163,7 +164,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = function (result) {
-      setProfileBgBeforeSave?.(result.target.result)
+      setProfileBgBeforeSave?.(result.target?.result || '')
       e.target.value = ''
     }
   }
@@ -290,7 +291,7 @@ const DialogCropImg: React.FC<IDialogCropImg> = ({
                     textAlign: 'center'
                   }}
                 >
-                  The recommended resolution is 1920 x 640. Format - JPG, WEBP, or PNG.
+                  The recommended resolution is 1200 x 300. Format - JPG, WEBP, or PNG.
                 </Typography>
               </Box>
             </>

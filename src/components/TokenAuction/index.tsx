@@ -718,8 +718,9 @@ const TokenAuction: React.FC = () => {
             >
               <Button
                 href={AuctionList[currentIndex].checkAllLink}
+                variant="contained"
                 sx={{
-                  background: 'var(--ps-yellow-1)',
+                  // background: 'var(--ps-yellow-1)',
                   padding: '16px 20px'
                 }}
               >

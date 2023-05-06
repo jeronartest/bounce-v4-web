@@ -213,7 +213,7 @@ interface IUserInfoData {
   banner: string
   location: string
   timezone: string
-  publicRole: string[]
+  publicRole: number[]
   companyRole: number
   company: { name: string; avatar: string; link: string }
   companyId: number
@@ -223,6 +223,7 @@ interface IUserInfoData {
   contactEmail: string
   website: string
   github: string
+  discord: string
   instagram: string
   googleEmail: string
   twitter: string

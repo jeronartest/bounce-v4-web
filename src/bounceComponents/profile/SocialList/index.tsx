@@ -10,6 +10,7 @@ import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
 import { useUserInfo } from 'state/users/hooks'
+import Divider from 'components/Divider'
 
 export interface ILinksItem {
   name: string
@@ -24,19 +25,22 @@ export interface ISocialLinksProps {
 
 export const SocialLinks: React.FC<ISocialLinksProps> = ({ links }) => {
   return (
-    <>
-      {links.map(item => (
-        <FormItem
-          key={item.name}
-          name={item.name}
-          label={item.label}
-          required={item.required}
-          startAdornment={<IconButton sx={styles.iconBtn}>{item.icon}</IconButton>}
-        >
-          <OutlinedInput />
-        </FormItem>
+    <Stack spacing={20}>
+      {links.map((item, index) => (
+        <>
+          <FormItem
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            startAdornment={<IconButton sx={styles.iconBtn}>{item.icon}</IconButton>}
+          >
+            <OutlinedInput />
+          </FormItem>
+          <Divider key={index} />
+        </>
       ))}
-    </>
+    </Stack>
   )
 }
 
