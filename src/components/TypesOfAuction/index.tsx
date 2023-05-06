@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
@@ -30,6 +30,10 @@ import Icon5 from 'assets/imgs/home/TypeOfAuction/icon5.svg'
 import Icon6 from 'assets/imgs/home/TypeOfAuction/icon6.svg'
 import Icon7 from 'assets/imgs/home/TypeOfAuction/icon7.svg'
 import Icon8 from 'assets/imgs/home/TypeOfAuction/icon8.svg'
+import { getAuctionVolumeCountData } from 'api/market'
+import { useRequest } from 'ahooks'
+import { PoolType } from 'api/pool/type'
+
 interface AuctionItemParams {
   title: string
   defaultImg: string
@@ -176,67 +180,97 @@ const SlideBox = styled(Box)(() => ({
   }
 }))
 const TypesOfAuction: React.FC = () => {
-  const leftAuctioinList = [
-    {
-      title: 'Fixed-priced Auction',
-      defaultImg: FixedPriceWhite,
-      hoverImg: FixedPriceBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/fixed-price-auction'
-    },
-    {
-      title: 'English Auction',
-      defaultImg: EnglishAuctionWhite,
-      hoverImg: EnglishAuctionBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/english-auction'
-    },
-    {
-      title: 'Dutch Auction',
-      defaultImg: DutchAuctionWhite,
-      hoverImg: DutchAuctionBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/dutch-auction'
-    },
-    {
-      title: 'Sealed-Bid Auction',
-      defaultImg: SealedBidAuctionWhite,
-      hoverImg: SealedBidAuctionBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/sealed-bid-auction'
-    }
-  ]
-  const rightAuctioinList = [
-    {
-      title: 'Random Selection Auction',
-      defaultImg: RandomSelectWhite,
-      hoverImg: RandomSelectBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/random-selection-auction'
-    },
-    {
-      title: 'Playable Auction',
-      defaultImg: PlayableWhite,
-      hoverImg: PlayableBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/playable-auction'
-    },
-    {
-      title: 'Order Book Auction',
-      defaultImg: OrderBookWhite,
-      hoverImg: OrderBookBlack,
-      totalValue: 5000,
-      link: 'https://docs.bounce.finance/bounce-auctions/orderbook-auction'
-    },
-    {
-      title: 'Hold-to-compete Auction',
-      defaultImg: HoldToCompeteWhite,
-      hoverImg: HoldToCompeteBlack,
-      totalValue: 5000,
-      link: ''
-    }
-  ]
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
+  const { data: volumnCountData } = useRequest(async () => {
+    const resp = await getAuctionVolumeCountData()
+    return {
+      data: resp?.data || {}
+    }
+  })
+  const leftAuctioinList = useMemo(() => {
+    const result = [
+      {
+        title: 'Fixed-priced Auction',
+        defaultImg: FixedPriceWhite,
+        hoverImg: FixedPriceBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/fixed-price-auction',
+        poolType: PoolType.FixedSwap
+      },
+      {
+        title: 'English Auction',
+        defaultImg: EnglishAuctionWhite,
+        hoverImg: EnglishAuctionBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/english-auction',
+        poolType: PoolType.ENGLISH_AUCTION_NFT
+      },
+      {
+        title: 'Dutch Auction',
+        defaultImg: DutchAuctionWhite,
+        hoverImg: DutchAuctionBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/dutch-auction',
+        poolType: PoolType.Duch
+      },
+      {
+        title: 'Sealed-Bid Auction',
+        defaultImg: SealedBidAuctionWhite,
+        hoverImg: SealedBidAuctionBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/sealed-bid-auction',
+        poolType: PoolType.SealedBid
+      }
+    ]
+    result.map(item => {
+      if (volumnCountData?.data && volumnCountData?.data[item.poolType]) {
+        item.totalValue = volumnCountData.data[item.poolType]
+      }
+    })
+    return result
+  }, [volumnCountData])
+  const rightAuctioinList = useMemo(() => {
+    const result = [
+      {
+        title: 'Random Selection Auction',
+        defaultImg: RandomSelectWhite,
+        hoverImg: RandomSelectBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/random-selection-auction',
+        poolType: PoolType.Lottery
+      },
+      {
+        title: 'Playable Auction',
+        defaultImg: PlayableWhite,
+        hoverImg: PlayableBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/playable-auction',
+        poolType: ''
+      },
+      {
+        title: 'Order Book Auction',
+        defaultImg: OrderBookWhite,
+        hoverImg: OrderBookBlack,
+        totalValue: 0,
+        link: 'https://docs.bounce.finance/bounce-auctions/orderbook-auction',
+        poolType: ''
+      },
+      {
+        title: 'Hold-to-compete Auction',
+        defaultImg: HoldToCompeteWhite,
+        hoverImg: HoldToCompeteBlack,
+        totalValue: 0,
+        link: '',
+        poolType: ''
+      }
+    ]
+    result.map(item => {
+      if (volumnCountData?.data && volumnCountData?.data[item.poolType]) {
+        item.totalValue = volumnCountData.data[item.poolType]
+      }
+    })
+    return result
+  }, [volumnCountData])
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
