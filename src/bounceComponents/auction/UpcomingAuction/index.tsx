@@ -48,7 +48,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
       chainId: 0,
       creatorAddress: '',
       creatorName: '',
-      orderBy: 'trending',
+      orderBy: '',
       poolId: '',
       poolName: '',
       token0Address: ''

@@ -455,27 +455,6 @@ const Pools: React.FC = ({}) => {
         poolStatusFrontend: poolStatusFrontend === 0 ? null : poolStatusFrontend,
         token0Address: token0Address
       })
-      //   if (category === 1) {
-      //     return {
-      //       list: resp.data.fixedSwapList.list,
-      //       total: resp.data.fixedSwapList.total
-      //     }
-      //   } else if (category === 2) {
-      //     return {
-      //       list: resp.data.dutchPoolList.list,
-      //       total: resp.data.dutchPoolList.total
-      //     }
-      //   } else if (category === 3) {
-      //     return {
-      //       list: resp.data.lotteryPoolList.list,
-      //       total: resp.data.lotteryPoolList.total
-      //     }
-      //   } else if (category === 4) {
-      //     return {
-      //       list: resp.data.sealedBidPoolList.list,
-      //       total: resp.data.sealedBidPoolList.total
-      //     }
-      //   } else {
       return {
         list: resp.data.fixedSwapNftList.list,
         total: resp.data.fixedSwapNftList.total
