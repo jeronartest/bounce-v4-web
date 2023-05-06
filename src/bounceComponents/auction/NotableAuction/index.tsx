@@ -44,7 +44,7 @@ export const NotableAuction: React.FC = () => {
         chainId: chainFilter,
         creatorAddress: '',
         creatorName: '',
-        orderBy: 'trending',
+        orderBy: '',
         poolId: '',
         poolName: '',
         token0Address: ''
