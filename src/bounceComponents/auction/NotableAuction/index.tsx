@@ -19,6 +19,8 @@ import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import Image from 'components/Image'
 import { CenterRow, Row } from '../../../components/Layout'
+import AuctionTypeSelect from '../../common/AuctionTypeSelect'
+import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
@@ -28,58 +30,48 @@ const poolType: Record<PoolType, string> = {
   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
   [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
-export const AuctionOptions = ['All auction', 'Fixed-priced Auction', 'English Auction', 'Dutch Auction']
 export const NotableAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
-  const [auction, setAuction] = useState(AuctionOptions[0])
-  const [chainFilter, setChainFilter] = useState<number | string>(0)
-
-  const { data, loading } = useRequest(async () => {
-    const resp = await getPools({
-      offset: 0,
-      limit: 4,
-      category: 1,
-      tokenType: 1, // erc20:1, nft:2
-      chainId: 0,
-      creatorAddress: '',
-      creatorName: '',
-      orderBy: '',
-      poolId: '',
-      poolName: '',
-      token0Address: ''
-    })
-    return {
-      list: resp.data.fixedSwapList.list,
-      total: resp.data.fixedSwapList.total
+  const [auction, setAuction] = useState(0)
+  const [chainFilter, setChainFilter] = useState<number>(0)
+  const { data, loading } = useRequest(
+    async () => {
+      const resp = await getPools({
+        offset: 0,
+        limit: 10,
+        category: auction,
+        tokenType: 1, // erc20:1, nft:2
+        chainId: chainFilter,
+        creatorAddress: '',
+        creatorName: '',
+        orderBy: '',
+        poolId: '',
+        poolName: '',
+        token0Address: ''
+      })
+      return {
+        list: resp.data.fixedSwapList.list,
+        total: resp.data.fixedSwapList.total
+      }
+    },
+    {
+      refreshDeps: [auction, chainFilter]
     }
-  })
+  )
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
         <CenterRow justifyContent={'space-between'}>
           <H4 mb={33}>Notable Auctions</H4>
           <Row gap={8}>
-            <Select
-              sx={{
-                width: '200px',
-                height: '38px'
-              }}
-              value={auction}
-              onChange={e => setAuction(e.target.value)}
-            >
-              {AuctionOptions.map((opt, idx) => (
-                <MenuItem key={idx} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
+            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
             <Select
               sx={{
                 width: '200px',
                 height: '38px'
               }}
               value={chainFilter}
-              onChange={e => setChainFilter(e.target.value)}
+              onChange={e => setChainFilter(Number(e.target.value))}
             >
               <MenuItem key={0} value={0}>
                 All Chains

@@ -6,6 +6,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { timestampToCountdown } from '../../../utils/TimeUtil'
 import { useState } from 'react'
+import { useRequest } from 'ahooks'
+import { getBanner } from '../../../api/market'
+import { BannerType } from '../../../api/market/type'
+import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -16,8 +20,15 @@ export interface IBanner {
   countDown: string
 }
 
-function ArrowBanner({ list }: { list: IBanner[] }) {
+function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const { data } = useRequest(async () => {
+    const resp = await getBanner(type)
+    return {
+      list: resp.data,
+      total: resp.data
+    }
+  })
   return (
     <Box
       position={'relative'}
@@ -48,7 +59,7 @@ function ArrowBanner({ list }: { list: IBanner[] }) {
           width: '100%'
         }}
       >
-        {list?.map((item, index) => (
+        {data?.list?.map((item: BannerType, index: number) => (
           <SwiperSlide key={index}>
             <Banner banner={item} />
           </SwiperSlide>
@@ -131,8 +142,20 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 `
 
-function Banner({ banner }: { banner: IBanner }) {
-  const countDown = timestampToCountdown(banner.countDown)
+const ChainBg = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(18, 18, 18, 0.2);
+  backdrop-filter: blur(2px);
+  border-radius: 100px;
+  color: white;
+  font-size: 13px;
+  line-height: 140%;
+`
+
+function Banner({ banner }: { banner: BannerType }) {
+  const countDown = timestampToCountdown(banner.openAt)
   return (
     <Box
       sx={{
@@ -143,7 +166,7 @@ function Banner({ banner }: { banner: IBanner }) {
       }}
     >
       <img
-        src={banner.pic}
+        src={banner.avatar}
         alt=""
         style={{
           position: 'absolute',
@@ -162,8 +185,14 @@ function Banner({ banner }: { banner: IBanner }) {
           left: '40px'
         }}
       >
-        <BannerH3>{banner.title}</BannerH3>
-        <BannerH6>{banner.tag.join(' | ')}</BannerH6>
+        <Box display={'flex'} gap={4}>
+          <ChainBg width={32} height={32}>
+            <img src={EthIcon} />
+          </ChainBg>
+          <ChainBg padding={'0 12px'}>Coming soon</ChainBg>
+        </Box>
+        <BannerH3>{banner.name}</BannerH3>
+        <BannerH6>{banner.types}</BannerH6>
       </Box>
       <Box
         sx={{

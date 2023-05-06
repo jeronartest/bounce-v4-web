@@ -11,6 +11,24 @@ export enum PoolType {
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6
 }
+
+export function getTextFromPoolType(type: PoolType) {
+  switch (type) {
+    case PoolType.Duch:
+      return 'Dutch Auction'
+    case PoolType.ENGLISH_AUCTION_NFT:
+      return 'English Auction'
+    case PoolType.FixedSwap:
+      return 'Fix-Swap Auction'
+    case PoolType.fixedSwapNft:
+      return 'Fix-Swap NFT'
+    case PoolType.Lottery:
+      return 'Lottery'
+    case PoolType.SealedBid:
+      return 'Sealed Bid'
+  }
+}
+
 export interface GetPoolCreationSignatureParams {
   amountTotal0: string
   amountTotal1?: string
@@ -34,6 +52,7 @@ export interface GetPoolCreationSignatureParams {
   totalShare?: string | number
   nShare?: string | number
 }
+
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string
@@ -94,6 +113,7 @@ export interface LikeInfo {
   myDislike: number
   myLike: number
 }
+
 export interface FixedSwapPool {
   amountTotal0: string
   amountTotal1: string
@@ -205,12 +225,14 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
 }
+
 export interface GetWinnersListParams {
   limit: number
   offset: number
   chainId: number
   poolId: string
 }
+
 export type PoolEvent = 'Swapped' | 'Reversed'
 
 export interface PoolHistory {
@@ -263,6 +285,7 @@ export interface GetWinnersListResponse {
   list: string[]
   total: number
 }
+
 export interface UpdateAuctionBackgroundParams {
   id: number
   description?: string

@@ -4,6 +4,8 @@ import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
 import { SwiperSlide } from 'swiper/react'
 import EmptyImg from 'assets/imgs/auction/empty-avatar.svg'
+import { useRequest } from 'ahooks'
+import { getActiveUsers } from '../../../api/market'
 
 interface IAuctionActiveCard {
   img: string
@@ -70,64 +72,13 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
 }
 
 export const ActiveUser: React.FC = () => {
-  const fakeData: IAuctionActiveCard[] = [
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
-    },
-    {
-      img: '',
-      name: 'Elon Must',
-      desc: 'Individual Investor, Defi Player',
-      createdCount: '25',
-      participated: '12'
+  const { data } = useRequest(async () => {
+    const resp = await getActiveUsers()
+    return {
+      list: resp.data.list,
+      total: resp.data.total
     }
-  ]
+  })
   return (
     <Container
       style={{
@@ -144,14 +95,14 @@ export const ActiveUser: React.FC = () => {
           loop: false
         }}
       >
-        {fakeData.map((data, idx) => (
+        {data?.list.map((data: any, idx: number) => (
           <SwiperSlide key={idx}>
             <AuctionActiveCard
-              img={data.img}
-              name={data.name}
-              desc={data.desc}
-              createdCount={data.createdCount}
-              participated={data.participated}
+              img={data.creatorUserInfo.avatar}
+              name={data.creatorUserInfo.name}
+              desc={data.creatorUserInfo.companyIntroduction}
+              createdCount={data.totalCreated}
+              participated={data.totalPart}
             />
           </SwiperSlide>
         ))}

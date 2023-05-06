@@ -1,24 +1,20 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, styled } from '@mui/material'
+import { Box, MenuItem, Select, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
-import Table from '../../../components/Table'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
+import { useRequest } from 'ahooks'
+import { getPoolsFilter } from '../../../api/market'
+import { useOptionDatas } from '../../../state/configOptions/hooks'
+import Table from '../../../components/Table'
+import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
+import { getTextFromPoolType } from '../../../api/pool/type'
 
 enum StatusE {
   'live',
   'upcoming',
   'close'
-}
-
-interface IAuctionRank {
-  index: string
-  avatar: string
-  name: string
-  asset: string
-  type: string
-  status: StatusE
 }
 
 const Avatar = styled('img')`
@@ -65,16 +61,21 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
   }
 }
 
-function AuctionRow(props: IAuctionRank): ReactJSXElement[] {
+export function AuctionRow(props: any): ReactJSXElement[] {
+  const nowTimestamp = Date.now() / 1000
+  const status =
+    props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
   return [
     <CenterRow key={0}>
       <H7Gray mr={12}>{props.index}</H7Gray>
-      <Avatar src={props.avatar ? props.avatar : EmptyAvatar} />
+      <Avatar src={props.token0.largeUrl ? props.token0.largeUrl : EmptyAvatar} />
       <H7>{props.name}</H7>
     </CenterRow>,
-    <SmallText key={1}>{props.asset}</SmallText>,
-    <SmallText key={2}>{props.type}</SmallText>,
-    <Status key={3} status={props.status} />
+    <SmallText maxWidth={164} key={1}>
+      {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
+    </SmallText>,
+    <SmallText key={2}>{getTextFromPoolType(props.category)}</SmallText>,
+    <Status key={3} status={status} />
   ]
 }
 
@@ -98,98 +99,50 @@ const Tab = styled(Box)`
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
   const [currentTab, setTab] = useState(Tabs[0])
-  const fakeData: IAuctionRank[] = [
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
+  const optionDatas = useOptionDatas()
+  const action = Tabs.indexOf(currentTab) + 1
+  const [chainFilter, setChainFilter] = useState<number>(0)
+  const { data } = useRequest(
+    async () => {
+      const resp = await getPoolsFilter({
+        action: action,
+        chainId: chainFilter
+      })
+      return {
+        list: resp.data
+      }
     },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.live,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.close,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    },
-    {
-      index: '1',
-      avatar: '',
-      name: 'Austin McBroom: Lover...',
-      asset: 'NFT',
-      status: StatusE.upcoming,
-      type: 'English Auction'
-    }
-  ]
+    { refreshDeps: [action, chainFilter] }
+  )
 
   return (
     <Box mt={40}>
-      <Row>
-        {Tabs.map((tab, idx) => (
-          <Tab key={idx} onClick={() => setTab(tab)} className={tab === currentTab ? 'active' : ''}>
-            <H5>{tab}</H5>
-          </Tab>
-        ))}
-      </Row>
+      <CenterRow justifyContent={'space-between'}>
+        <Row>
+          {Tabs.map((tab, idx) => (
+            <Tab key={idx} onClick={() => setTab(tab)} className={tab === currentTab ? 'active' : ''}>
+              <H5>{tab}</H5>
+            </Tab>
+          ))}
+        </Row>
+        <Select
+          sx={{
+            width: '200px',
+            height: '38px'
+          }}
+          value={chainFilter}
+          onChange={e => setChainFilter(Number(e.target.value))}
+        >
+          <MenuItem key={0} value={0}>
+            All Chains
+          </MenuItem>
+          {optionDatas?.chainInfoOpt?.map((item, index) => (
+            <MenuItem key={index} value={item.id}>
+              {item.chainName}
+            </MenuItem>
+          ))}
+        </Select>
+      </CenterRow>
       <Box
         sx={{
           padding: '12px',
@@ -199,8 +152,14 @@ export const AuctionRankCard: React.FC = () => {
           borderRadius: '0px 30px 30px 30px'
         }}
       >
-        <Table header={['Auction', 'Asset', 'Auction', 'Status']} rows={fakeData.slice(0, 5).map(d => AuctionRow(d))} />
-        <Table header={['Auction', 'Asset', 'Auction', 'Status']} rows={fakeData.slice(5).map(d => AuctionRow(d))} />
+        <Table
+          header={['Auction', 'Asset', 'Auction', 'Status']}
+          rows={data ? data.list?.slice(0, 5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 1 })) : []}
+        />
+        <Table
+          header={['Auction', 'Asset', 'Auction', 'Status']}
+          rows={data ? data.list?.slice(5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 6 })) : []}
+        />
       </Box>
     </Box>
   )
