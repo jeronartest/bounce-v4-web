@@ -294,7 +294,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         result.sortBy = item.value
         break
     }
-    console.log('searchTypeIndex>>>', searchTypeIndex, typeof searchTypeIndex, searchValue)
     if (typeof searchTypeIndex === 'number' && searchTypeIndex !== 99) {
       const seatchValue = {
         searchType: searchTypeIndex,

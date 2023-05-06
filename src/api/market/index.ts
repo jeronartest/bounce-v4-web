@@ -23,3 +23,10 @@ export const getBanner = (type?: string) => {
 export const getActiveUsers = () => {
   return ApiInstance.post('/pools/stat/count', { limit: 10, offset: 0 })
 }
+
+export const getAuctionTypeCountData = () => {
+  return ApiInstance.get('/pools/stat/total', {})
+}
+export const getAuctionVolumeCountData = () => {
+  return ApiInstance.get('/pools/stat/volume', {})
+}

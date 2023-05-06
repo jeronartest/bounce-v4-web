@@ -99,6 +99,7 @@ export const initialValues = {
   searchText: '',
   searchType: 0,
   sortBy: 0,
+  offset: 0,
   tokenFromAddress: '',
   tokenFromSymbol: '',
   tokenFromLogoURI: '',
@@ -111,6 +112,7 @@ export interface InitialValuesPros {
   searchText?: string
   searchType?: number
   sortBy?: number
+  offset?: number
   tokenFromAddress?: string
   tokenFromSymbol?: string
   tokenFromLogoURI?: string
