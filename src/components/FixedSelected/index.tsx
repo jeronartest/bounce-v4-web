@@ -545,7 +545,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
           alignItems: 'center',
           background: 'var(--ps-text-3)',
           borderRadius: 8,
-          transition: 'opacity 0.3s width 0.1s left 12s',
+          transition: 'width 0.1s left 12s',
           zIndex: 2,
           opacity: open ? 1 : 0
         }}

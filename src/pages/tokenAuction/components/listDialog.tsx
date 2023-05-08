@@ -249,7 +249,8 @@ const NFTAuctionListDialog = (props: DialogParams) => {
         <DialogTitle title={'Token  Auction Space'} handleClose={handleClose} />
         <Box
           sx={{
-            width: '100%'
+            width: '100%',
+            paddingBottom: 100
           }}
         >
           <Box mb={160}>

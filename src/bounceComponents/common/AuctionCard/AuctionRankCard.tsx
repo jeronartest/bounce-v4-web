@@ -10,7 +10,7 @@ import { useOptionDatas } from '../../../state/configOptions/hooks'
 import Table from '../../../components/Table'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getTextFromPoolType } from '../../../api/pool/type'
-
+import EmptyData from '../EmptyData'
 enum StatusE {
   'live',
   'upcoming',
@@ -116,7 +116,13 @@ export const AuctionRankCard: React.FC = () => {
   )
 
   return (
-    <Box mt={40}>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: '1296px',
+        margin: '40px auto 0'
+      }}
+    >
       <CenterRow justifyContent={'space-between'}>
         <Row>
           {Tabs.map((tab, idx) => (
@@ -148,24 +154,41 @@ export const AuctionRankCard: React.FC = () => {
           ))}
         </Select>
       </CenterRow>
-      <Box
-        sx={{
-          padding: '12px',
-          display: 'flex',
-          background: 'white',
-          overflow: 'hidden',
-          borderRadius: '0px 30px 30px 30px'
-        }}
-      >
-        <Table
-          header={['Auction', 'Asset', 'Auction', 'Status']}
-          rows={data ? data.list?.slice(0, 5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 1 })) : []}
-        />
-        <Table
-          header={['Auction', 'Asset', 'Auction', 'Status']}
-          rows={data ? data.list?.slice(5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 6 })) : []}
-        />
-      </Box>
+      {data && Array.isArray(data.list) && data.list.length > 0 && (
+        <Box
+          sx={{
+            padding: '12px',
+            display: 'flex',
+            background: 'white',
+            overflow: 'hidden',
+            borderRadius: '0px 30px 30px 30px'
+          }}
+        >
+          <Table
+            header={['Auction', 'Asset', 'Auction', 'Status']}
+            rows={
+              data ? data.list?.slice(0, 5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 1 })) : []
+            }
+          />
+          <Table
+            header={['Auction', 'Asset', 'Auction', 'Status']}
+            rows={data ? data.list?.slice(5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 6 })) : []}
+          />
+        </Box>
+      )}
+      {data?.list && data?.list?.length === 0 && (
+        <Box
+          sx={{
+            padding: '12px',
+            display: 'flex',
+            background: 'white',
+            overflow: 'hidden',
+            borderRadius: '0px 30px 30px 30px'
+          }}
+        >
+          <EmptyData />
+        </Box>
+      )}
     </Box>
   )
 }

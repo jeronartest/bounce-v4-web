@@ -86,14 +86,21 @@ export const ActiveUser: React.FC = () => {
     }
   })
   return (
-    <Container
+    <Box
       style={{
+        width: '100%',
         padding: '100px 0 140px'
       }}
     >
-      <H2 mb={80}>
-        Most active <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
-      </H2>
+      <Container
+        sx={{
+          maxWidth: '1296px !important'
+        }}
+      >
+        <H2 mb={80}>
+          Most active <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
+        </H2>
+      </Container>
       <SlideProgress
         swiperStyle={{
           spaceBetween: 20,
@@ -114,6 +121,6 @@ export const ActiveUser: React.FC = () => {
           </SwiperSlide>
         ))}
       </SlideProgress>
-    </Container>
+    </Box>
   )
 }

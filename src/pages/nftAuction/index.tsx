@@ -18,12 +18,8 @@ const NFTAcution: React.FC = ({}) => {
   }
   return (
     <>
-      <Container maxWidth="lg">
-        <HeaderTab onTabChange={tab => console.log(tab)} />
-        <Box mt={16}>
-          <ArrowBanner type={'NFT'} />
-        </Box>
-      </Container>
+      <HeaderTab />
+      <ArrowBanner type={'NFT'} />
       <TypesOfAuction />
       <Notable1155 />
       <Notable721 handleViewAll={handleOpen} />

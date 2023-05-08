@@ -59,14 +59,14 @@ export const Tabs: Tab[] = [
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   position: 'fixed',
   height: theme.height.header,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: 'var(--ps-gray-50)',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
   padding: '0 36px 0 36px!important',
   zIndex: theme.zIndex.drawer,
-  borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+  //   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
     textDecoration: 'none',
     fontSize: 16,
@@ -150,92 +150,7 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image src={logo} alt={'logo'} />
           </MainLogo>
-          {/* <HideOnMobile breakpoint="lg">
-            <LinksWrapper>
-              {Tabs.map(({ title, route, subTab, link, titleContent }, idx) =>
-                subTab ? (
-                  <Box
-                    sx={{
-                      marginRight: {
-                        xs: 15
-                      },
-                      height: 'auto',
-                      paddingBottom: '30px',
-                      borderBottom: '2px solid transparent',
-                      borderColor: theme =>
-                        subTab.some(tab => tab.route && pathname.includes(tab.route))
-                          ? theme.palette.text.primary
-                          : 'transparnet',
-                      display: 'inline'
-                    }}
-                    key={title + idx}
-                  >
-                    <PlainSelect
-                      key={title + idx}
-                      placeholder={title}
-                      autoFocus={false}
-                      width={title === 'Test' ? '70px' : undefined}
-                      style={{
-                        height: '16px'
-                      }}
-                    >
-                      {subTab.map((sub, idx) =>
-                        sub.link ? (
-                          <MenuItem
-                            key={sub.link + idx}
-                            sx={{ backgroundColor: 'transparent!important', background: 'transparent!important' }}
-                            selected={false}
-                          >
-                            <ExternalLink
-                              href={sub.link}
-                              className={'link'}
-                              color="#00000050"
-                              sx={{
-                                '&:hover': {
-                                  color: '#232323!important'
-                                }
-                              }}
-                            >
-                              {sub.titleContent ?? sub.title}
-                            </ExternalLink>
-                          </MenuItem>
-                        ) : (
-                          <MenuItem key={sub.title + idx}>
-                            <StyledNavLink to={sub.route ?? ''}>{sub.titleContent ?? sub.title}</StyledNavLink>
-                          </MenuItem>
-                        )
-                      )}
-                    </PlainSelect>
-                  </Box>
-                ) : link ? (
-                  <ExternalLink href={link} className={'link'} key={link + idx} style={{ fontSize: 16 }}>
-                    {titleContent ?? title}
-                  </ExternalLink>
-                ) : (
-                  <Link
-                    key={title + idx}
-                    id={`${route}-nav-link`}
-                    to={route ?? ''}
-                    className={
-                      (route
-                        ? pathname.includes(route)
-                          ? 'active'
-                          : pathname.includes('account')
-                          ? route.includes('account')
-                            ? 'active'
-                            : ''
-                          : ''
-                        : '') + ' link'
-                    }
-                  >
-                    {titleContent ?? title}
-                  </Link>
-                )
-              )}
-            </LinksWrapper>
-          </HideOnMobile> */}
         </Box>
-
         <Stack direction={'row'} alignItems="center" spacing={15}>
           <Search />
           <CreateBtn />

@@ -247,7 +247,7 @@ const TokenAuction: React.FC = () => {
         totalAuction: '',
         trendingTokenAuction: '',
         auctionImg: TokenAuctionImg,
-        checkAllLink: routes.market.pools
+        checkAllLink: routes.tokenAuction.index
       },
       {
         title: AuctionType.NFTAuction,
@@ -257,7 +257,7 @@ const TokenAuction: React.FC = () => {
         totalAuction: '',
         trendingTokenAuction: '',
         auctionImg: NFTAuctionImg,
-        checkAllLink: routes.market.nftPools
+        checkAllLink: routes.nftAuction.index
       },
       {
         title: AuctionType.AdSpaceAuction,
@@ -287,7 +287,7 @@ const TokenAuction: React.FC = () => {
         result[index].trendingTokenAuction = `${typeof item.totalLivePools === 'number' ? item.totalLivePools : 0}`
       })
     }
-    return result
+    return result || []
   }, [countData])
   const showData = useMemo(() => {
     return AuctionList[currentIndex]

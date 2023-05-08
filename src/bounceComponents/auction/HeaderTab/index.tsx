@@ -27,6 +27,10 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
       ? 'NFT Auction'
       : location.pathname === '/TokenAuction'
       ? 'Token Auction'
+      : location.pathname === '/real-auction'
+      ? 'Real World collectibles Auction'
+      : location.pathname === '/ads-auction'
+      ? 'Ads Auction'
       : 'All'
   const [currentTab, setCurrentTab] = useState(path)
 
@@ -69,10 +73,12 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         alignItems: 'center',
         padding: '6px',
         gap: '6px',
-        width: 'fit-content',
         background: '#20201E',
         backdropFilter: 'blur(4px)',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        width: '100%',
+        maxWidth: 1296,
+        margin: '0 auto'
       }}
     >
       {tabs.map((tab: string) => (

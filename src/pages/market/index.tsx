@@ -10,13 +10,9 @@ import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionAct
 const Market: React.FC = ({}) => {
   return (
     <>
-      <Container maxWidth="lg">
-        <HeaderTab onTabChange={tab => console.log(tab)} />
-        <Box mt={16}>
-          <ArrowBanner />
-        </Box>
-        <AuctionRankCard />
-      </Container>
+      <HeaderTab onTabChange={tab => console.log(tab)} />
+      <ArrowBanner />
+      <AuctionRankCard />
       <TokenAuction />
       <ActiveUser />
       <FooterPc />
