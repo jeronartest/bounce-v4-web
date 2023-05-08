@@ -3,6 +3,7 @@ import React from 'react'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
+
 export interface PoolStatusBoxProps {
   status: PoolStatus
   openTime: number
@@ -12,7 +13,14 @@ export interface PoolStatusBoxProps {
   style?: React.CSSProperties
 }
 
-const PoolStatusBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: PoolStatusBoxProps): JSX.Element => {
+export const PoolStatusBox = ({
+  status,
+  openTime,
+  closeTime,
+  claimAt,
+  onEnd,
+  style
+}: PoolStatusBoxProps): JSX.Element => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming

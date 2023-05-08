@@ -57,6 +57,7 @@ import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
+import { Launchpad } from './launchpad'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -106,6 +107,7 @@ export default function App() {
                     <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
+                    <Route path={routes.launchpad.index} element={<Launchpad />} />
 
                     <Route path={routes.realAuction.index} element={<ComingSoon />} />
                     <Route path={routes.adsAuction.index} element={<ComingSoon />} />
