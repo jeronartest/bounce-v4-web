@@ -235,7 +235,7 @@ export const ComponentOptions = {
           '&:disabled': {}
         },
         outlinedPrimary: {
-          border: '1px solid var(--ps-yellow-1)',
+          border: '0px solid var(--ps-yellow-1)',
           background: 'var(--ps-primary)',
           color: 'var(--ps-gray-900)',
           '&:hover': {

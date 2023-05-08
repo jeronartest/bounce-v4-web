@@ -14,7 +14,7 @@ import Web3StatusIconSvg from 'assets/imgs/profile/yellow_avatar.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ChainList } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
-import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
+import { ChevronLeft, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
 import Copy from 'components/essential/Copy'
 import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useETHBalance } from 'state/wallet/hooks'
@@ -31,6 +31,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { useLogout, useUserInfo } from 'state/users/hooks'
 import { ReactComponent as DisconnectSvg } from 'assets/svg/account/disconnect.svg'
+import { ReactComponent as TransactionsSvg } from 'assets/svg/account/transactions.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 
@@ -126,10 +127,10 @@ function Web3StatusInner() {
               minWidth: 64,
               border: '1px solid var(--ps-gray-20)',
               height: 44,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: theme.palette.background.paper
+              backgroundColor: theme.palette.background.paper,
+              '&:hover .line': {
+                borderColor: 'var(--ps-text-4)'
+              }
             }}
           >
             <Avatar
@@ -137,6 +138,7 @@ function Web3StatusInner() {
               src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
             />
             <Box
+              className={'line'}
               sx={{
                 borderRight: '1px solid var(--ps-gray-20)',
                 mr: 10,
@@ -268,7 +270,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
       anchorEl={anchorEl}
       sx={{
         top: '20px !important',
-        width: 325,
+        width: 360,
         zIndex: theme.zIndex.modal
       }}
     >
@@ -300,6 +302,11 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                 </Tooltip>
               </Box>
               <Stack direction={'row'} spacing={8}>
+                <Tooltip title="Transactions">
+                  <StyledBtn onClick={() => setCurView(WalletView.TRANSACTIONS)}>
+                    <TransactionsSvg />
+                  </StyledBtn>
+                </Tooltip>
                 <Tooltip title="Explorer">
                   <StyledBtn>
                     <Link target={'_blank'} href={getEtherscanLink(chainId, account, 'address')}>
@@ -307,7 +314,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                     </Link>
                   </StyledBtn>
                 </Tooltip>
-                <Tooltip title="logout">
+                <Tooltip title="Disconnect">
                   <StyledBtn>
                     <DisconnectSvg
                       onClick={() => {
@@ -354,22 +361,6 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                 My account
               </Button>
             </Stack>
-
-            <Box mt={15}>
-              <Divider />
-              {/* <StyledMenuItem
-                onClick={() => {
-                  setCurView(WalletView.SWITCH_NETWORK)
-                }}
-              >
-                <Typography>Switch Network</Typography>
-                <ChevronRight />
-              </StyledMenuItem> */}
-              <StyledMenuItem onClick={() => setCurView(WalletView.TRANSACTIONS)}>
-                <Typography>Transactions</Typography>
-                <ChevronRight />
-              </StyledMenuItem>
-            </Box>
           </Box>
         )}
         {curView === WalletView.TRANSACTIONS && (
@@ -378,7 +369,10 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
               <StyledBtn>
                 <ChevronLeft onClick={() => setCurView(WalletView.MAIN)} />
               </StyledBtn>
-              <Typography>Transactions</Typography>
+              <Box display={'flex'} alignItems={'center'}>
+                <TransactionsSvg />
+                <Typography ml={5}>Transactions</Typography>
+              </Box>
             </Box>
             <Divider />
             <OutlinedCard style={{ border: 'none', marginTop: 15 }}>
