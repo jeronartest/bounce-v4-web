@@ -102,6 +102,7 @@ export interface IProfileUserInfo {
   fullName: string
   fullNameId: number
   github: string
+  discord: string
   googleEmail: string
   id: number
   ifRemotely: number
@@ -110,10 +111,10 @@ export interface IProfileUserInfo {
   jobTypes: number[]
   linkedin: string
   location: string
-  passwordSet: true
+  passwordSet: boolean
   primaryRole: number
   publicRole: number[]
-  resumes: []
+  resumes: any[]
   skills: string
   timezone: string
   twitter: string

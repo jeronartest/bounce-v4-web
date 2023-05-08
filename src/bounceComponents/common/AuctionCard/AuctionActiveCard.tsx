@@ -6,8 +6,11 @@ import { SwiperSlide } from 'swiper/react'
 import EmptyImg from 'assets/imgs/auction/empty-avatar.svg'
 import { useRequest } from 'ahooks'
 import { getActiveUsers } from '../../../api/market'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 interface IAuctionActiveCard {
+  userId: number
   img: string
   name: string
   desc: string
@@ -20,11 +23,14 @@ const YellowSpan = styled('span')`
 `
 
 const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
+  const navigate = useNavigate()
   return (
     <Box
+      onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
       sx={{
         display: 'flex',
         padding: '16px',
+        cursor: 'pointer',
         width: 'fit-content',
         gap: '20px',
         background: '#FFFFFF',
@@ -98,6 +104,7 @@ export const ActiveUser: React.FC = () => {
         {data?.list.map((data: any, idx: number) => (
           <SwiperSlide key={idx}>
             <AuctionActiveCard
+              userId={data.creatorUserInfo.userId}
               img={data.creatorUserInfo.avatar}
               name={data.creatorUserInfo.name}
               desc={data.creatorUserInfo.companyIntroduction}

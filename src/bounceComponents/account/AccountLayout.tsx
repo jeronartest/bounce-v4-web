@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import LeftMenu from './LeftMenu'
 
-export default function AccountLayout({ children }: { children: JSX.Element | string }) {
+export default function AccountLayout({ children, bgColor }: { children: JSX.Element | string; bgColor?: string }) {
   const { token } = useUserInfo()
   const theme = useTheme()
   const navigate = useNavigate()
@@ -27,7 +27,7 @@ export default function AccountLayout({ children }: { children: JSX.Element | st
       <Box
         sx={{
           minHeight: `calc(100vh - ${theme.height.header})`,
-          backgroundColor: '#fff'
+          backgroundColor: bgColor || '#fff'
         }}
       >
         {children}

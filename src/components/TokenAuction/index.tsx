@@ -9,7 +9,7 @@ import leftArrowGrayImg from 'assets/imgs/common/leftArrowGray.svg'
 import rightArrayLightImg from 'assets/imgs/common/rightArrayLight.svg'
 import rightArrayGrayImg from 'assets/imgs/common/rightArrayGray.svg'
 import { useRequest } from 'ahooks'
-import { getPools } from 'api/market'
+import { getPools, getAuctionTypeCountData } from 'api/market'
 import { Link } from 'react-router-dom'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -74,7 +74,7 @@ const InfoBox = (props: InfoBoxParams) => {
           letterSpacing: '-0.02em'
         }}
       >
-        {value}
+        {value ? Number(value).toLocaleString() : '--'}
       </Typography>
     </Box>
   )
@@ -212,6 +212,12 @@ const TokenAuction: React.FC = () => {
       total: resp.data.fixedSwapNftList.total
     }
   })
+  const { data: countData } = useRequest(async () => {
+    const resp = await getAuctionTypeCountData()
+    return {
+      data: (resp?.data && resp?.data?.stat) || []
+    }
+  })
   const { data, loading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -231,15 +237,15 @@ const TokenAuction: React.FC = () => {
       total: resp.data.fixedSwapList.total
     }
   })
-  const AuctionList = useMemo(
-    () => [
+  const AuctionList = useMemo(() => {
+    const result = [
       {
         title: AuctionType.TokenAuction,
         subTitle:
           'Experience seamless trading of digital tokens through diverse types of on-chain auctions across various blockchain ecosystems, ensuring a fair and transparent marketplace.',
-        totalValue: '$56,025',
-        totalAuction: '560,230',
-        trendingTokenAuction: '56r',
+        totalValue: '',
+        totalAuction: '',
+        trendingTokenAuction: '',
         auctionImg: TokenAuctionImg,
         checkAllLink: routes.market.pools
       },
@@ -247,9 +253,9 @@ const TokenAuction: React.FC = () => {
         title: AuctionType.NFTAuction,
         subTitle:
           'Dive into the world of Non-Fungible Tokens (NFTs) across multiple blockchains, offering a streamlined and secure way to buy, sell, and trade unique digital art and virtual goods within a decentralized environment.',
-        totalValue: '$56,025',
-        totalAuction: '560,230',
-        trendingTokenAuction: '56r',
+        totalValue: '',
+        totalAuction: '',
+        trendingTokenAuction: '',
         auctionImg: NFTAuctionImg,
         checkAllLink: routes.market.nftPools
       },
@@ -257,9 +263,9 @@ const TokenAuction: React.FC = () => {
         title: AuctionType.AdSpaceAuction,
         subTitle:
           'Explore our innovative approach to auctioning ad spaces on websites and digital platforms, fostering a transparent, decentralized marketplace that empowers advertisers and publishers to connect and transact directly, optimizing value and efficiency.',
-        totalValue: '$56,025',
-        totalAuction: '560,230',
-        trendingTokenAuction: '56r',
+        totalValue: '',
+        totalAuction: '',
+        trendingTokenAuction: '',
         auctionImg: AdSpaceAuctionImg,
         checkAllLink: routes.adsAuction.index
       },
@@ -267,15 +273,22 @@ const TokenAuction: React.FC = () => {
         title: AuctionType.RealWorldCollectibleAuction,
         subTitle:
           'Discover our groundbreaking solution for auctioning real-world assets on blockchain, bridging the gap between physical and digital domains, and unlocking unprecedented opportunities for decentralized auctions of collectibles, memorabilia, and beyond.',
-        totalValue: '$56,025',
-        totalAuction: '560,230',
-        trendingTokenAuction: '56r',
+        totalValue: '',
+        totalAuction: '',
+        trendingTokenAuction: '',
         auctionImg: RealWorldImg,
         checkAllLink: routes.realAuction.index
       }
-    ],
-    []
-  )
+    ]
+    if (countData && countData?.data && Array.isArray(countData?.data) && countData.data.length > 0) {
+      countData.data.map((item, index) => {
+        result[index].totalAuction = `${typeof item.totalPools === 'number' ? item.totalPools : 0}`
+        result[index].totalValue = `${item.totalVolume ? item.totalVolume : 0}`
+        result[index].trendingTokenAuction = `${typeof item.totalLivePools === 'number' ? item.totalLivePools : 0}`
+      })
+    }
+    return result
+  }, [countData])
   const showData = useMemo(() => {
     return AuctionList[currentIndex]
   }, [AuctionList, currentIndex])
@@ -718,8 +731,9 @@ const TokenAuction: React.FC = () => {
             >
               <Button
                 href={AuctionList[currentIndex].checkAllLink}
+                variant="contained"
                 sx={{
-                  background: 'var(--ps-yellow-1)',
+                  // background: 'var(--ps-yellow-1)',
                   padding: '16px 20px'
                 }}
               >

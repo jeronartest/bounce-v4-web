@@ -333,7 +333,8 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
 
             <Stack spacing={6}>
               <Button
-                sx={{ backgroundColor: 'var(--ps-yellow-1)', height: 40 }}
+                variant="contained"
+                sx={{ height: 40 }}
                 onClick={() => {
                   navigate(routes.account.dashboard)
                   close()
@@ -344,6 +345,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
               <Button
                 sx={{ height: 40 }}
                 variant="contained"
+                className="black-button"
                 onClick={() => {
                   navigate(routes.account.myAccount)
                   close()

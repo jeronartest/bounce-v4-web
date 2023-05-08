@@ -126,9 +126,14 @@ export const useWeb3Login = (path?: string) => {
             userId: data?.userId
           })
         )
-        if (data?.isLogin === false) {
-          // ! TOTD Improve user information
 
+        if (data?.ifLogin === false) {
+          const _redirect = redirect
+            ? redirect
+            : location.pathname === routes.login
+            ? routes.market.index
+            : location.pathname + location.search
+          navigate(routes.loginBase + `?redirect=${_redirect}`)
           return
         }
         if (path) {
@@ -213,7 +218,7 @@ interface IUserInfoData {
   banner: string
   location: string
   timezone: string
-  publicRole: string[]
+  publicRole: number[]
   companyRole: number
   company: { name: string; avatar: string; link: string }
   companyId: number
@@ -223,6 +228,7 @@ interface IUserInfoData {
   contactEmail: string
   website: string
   github: string
+  discord: string
   instagram: string
   googleEmail: string
   twitter: string

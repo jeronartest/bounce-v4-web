@@ -130,9 +130,10 @@ export const Notable721 = (props: Notable721Props) => {
             onClick={() => {
               handleViewAll && handleViewAll()
             }}
+            variant="contained"
             // href={AuctionList[currentIndex].checkAllLink}
             sx={{
-              background: 'var(--ps-yellow-1)',
+              // background: 'var(--ps-yellow-1)',
               padding: '16px 20px'
             }}
           >

@@ -14,7 +14,7 @@ export type IFile = {
   fileUrl: string
   fileThumbnailUrl?: string
   fileName: string
-  fileSize: string
+  fileSize: number
   fileType: string
   originFileObj?: File
 }

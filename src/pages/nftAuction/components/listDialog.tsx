@@ -3,7 +3,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { Box, Typography, Grid, Pagination } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 import Slide from '@mui/material/Slide'
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import CloseIcon from 'assets/imgs/common/closeIcon.svg'
 import NoData from 'bounceComponents/common/NoData'
@@ -15,6 +15,8 @@ import { routes } from 'constants/routes'
 import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import FooterPc from 'components/Footer/FooterPc'
+import FixedSelected from 'components/FixedNftSelected'
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>
@@ -93,10 +95,11 @@ const DialogTitle = (props: TitleProps) => {
     </Box>
   )
 }
-const initialValues = {
+export const initialValues = {
   searchText: '',
   searchType: 0,
   sortBy: 0,
+  offset: 0,
   tokenFromAddress: '',
   tokenFromSymbol: '',
   tokenFromLogoURI: '',
@@ -105,10 +108,24 @@ const initialValues = {
   auctionType: 5,
   chain: 2
 }
+export interface InitialValuesPros {
+  searchText?: string
+  searchType?: number
+  sortBy?: number
+  offset?: number
+  tokenFromAddress?: string
+  tokenFromSymbol?: string
+  tokenFromLogoURI?: string
+  tokenFromDecimals?: string
+  poolStatus?: number
+  auctionType?: number
+  chain?: number
+}
 const defaultIdeaPageSize = 16
 const NFTAuctionListDialog = (props: DialogParams) => {
   const { open, handleClose } = props
   const optionDatas = useOptionDatas()
+  const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
 
   const {
     pagination: poolsPagination,
@@ -157,7 +174,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     }
   )
   const handleSubmit = useCallback(
-    (values: typeof initialValues) =>
+    (values: InitialValuesPros) =>
       run({
         current: 1,
         pageSize: 16,
@@ -173,9 +190,13 @@ const NFTAuctionListDialog = (props: DialogParams) => {
       }),
     [run]
   )
+  const filterSubmit = (values: InitialValuesPros) => {
+    setFilterValues(values)
+  }
+
   useEffect(() => {
-    open && handleSubmit(initialValues)
-  }, [handleSubmit, open])
+    open && handleSubmit(filterValues)
+  }, [handleSubmit, open, filterValues])
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
   }
@@ -231,6 +252,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
           </Box>
           <FooterPc />
         </Box>
+        <FixedSelected handleSubmit={filterSubmit} />
       </DialogContent>
     </NFTDialog>
   )
