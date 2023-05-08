@@ -164,7 +164,7 @@ export default function FirstProfileOverview() {
                   loadingPosition="start"
                   startIcon={<></>}
                   variant="contained"
-                  className="black-button"
+                  color="secondary"
                   sx={{ width: '100%', height: 52 }}
                   type="submit"
                 >

@@ -77,7 +77,7 @@ export default function FirstLoginInfo() {
                     onClick={() => setActiveStep(2)}
                     sx={{ width: '100%', height: 52 }}
                     variant="contained"
-                    className="black-button"
+                    color="secondary"
                   >
                     Continue
                   </Button>

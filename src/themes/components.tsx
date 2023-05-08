@@ -224,6 +224,7 @@ export const ComponentOptions = {
           color: 'var(--ps-text-3)',
           boxShadow: 'none',
           '&:hover': {
+            boxShadow: 'none',
             background: 'var(--ps-gray-900)',
             color: 'var(--ps-white)'
           },
@@ -251,7 +252,16 @@ export const ComponentOptions = {
             color: 'var(--ps-gray-700)'
           }
         },
-        containedSecondary: {}
+        containedSecondary: {
+          background: 'var(--ps-gray-900)',
+          color: 'var(--ps-white)',
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: 'none',
+            background: 'var(--ps-yellow-1)',
+            color: 'var(--ps-text-3)'
+          }
+        }
       }
     },
     MuiSelect: {
