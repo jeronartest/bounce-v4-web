@@ -43,30 +43,18 @@ export const Tabs: Tab[] = [
   { title: 'Token', link: 'https://token.bounce.finance/staking' }
 ]
 
-// const navLinkSX = ({ theme }: any) => ({
-//   textDecoration: 'none',
-//   fontSize: 16,
-//   fontWeight: 500,
-//   color: theme.palette.text.primary,
-//   opacity: 1,
-//   '&:hover': {
-//     opacity: 0.5
-//   }
-// })
-
-// const StyledNavLink = styled(Link)(navLinkSX)
-
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   position: 'fixed',
   height: theme.height.header,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: 'transparent',
+  // backgroundColor: theme.palette.background.paper,
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
-  padding: '0 36px 0 36px!important',
+  padding: '0 40px 0 40px!important',
   zIndex: theme.zIndex.drawer,
-  borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+  // borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
     textDecoration: 'none',
     fontSize: 16,
@@ -120,13 +108,6 @@ const MainLogo = styled(Link)(({ theme }) => ({
   }
 }))
 
-// const LinksWrapper = muiStyled('div')(({ theme }) => ({
-//   marginLeft: 24,
-//   [theme.breakpoints.down('lg')]: {
-//     marginLeft: 10
-//   }
-// }))
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -150,112 +131,26 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image src={logo} alt={'logo'} />
           </MainLogo>
-          {/* <HideOnMobile breakpoint="lg">
-            <LinksWrapper>
-              {Tabs.map(({ title, route, subTab, link, titleContent }, idx) =>
-                subTab ? (
-                  <Box
-                    sx={{
-                      marginRight: {
-                        xs: 15
-                      },
-                      height: 'auto',
-                      paddingBottom: '30px',
-                      borderBottom: '2px solid transparent',
-                      borderColor: theme =>
-                        subTab.some(tab => tab.route && pathname.includes(tab.route))
-                          ? theme.palette.text.primary
-                          : 'transparnet',
-                      display: 'inline'
-                    }}
-                    key={title + idx}
-                  >
-                    <PlainSelect
-                      key={title + idx}
-                      placeholder={title}
-                      autoFocus={false}
-                      width={title === 'Test' ? '70px' : undefined}
-                      style={{
-                        height: '16px'
-                      }}
-                    >
-                      {subTab.map((sub, idx) =>
-                        sub.link ? (
-                          <MenuItem
-                            key={sub.link + idx}
-                            sx={{ backgroundColor: 'transparent!important', background: 'transparent!important' }}
-                            selected={false}
-                          >
-                            <ExternalLink
-                              href={sub.link}
-                              className={'link'}
-                              color="#00000050"
-                              sx={{
-                                '&:hover': {
-                                  color: '#232323!important'
-                                }
-                              }}
-                            >
-                              {sub.titleContent ?? sub.title}
-                            </ExternalLink>
-                          </MenuItem>
-                        ) : (
-                          <MenuItem key={sub.title + idx}>
-                            <StyledNavLink to={sub.route ?? ''}>{sub.titleContent ?? sub.title}</StyledNavLink>
-                          </MenuItem>
-                        )
-                      )}
-                    </PlainSelect>
-                  </Box>
-                ) : link ? (
-                  <ExternalLink href={link} className={'link'} key={link + idx} style={{ fontSize: 16 }}>
-                    {titleContent ?? title}
-                  </ExternalLink>
-                ) : (
-                  <Link
-                    key={title + idx}
-                    id={`${route}-nav-link`}
-                    to={route ?? ''}
-                    className={
-                      (route
-                        ? pathname.includes(route)
-                          ? 'active'
-                          : pathname.includes('account')
-                          ? route.includes('account')
-                            ? 'active'
-                            : ''
-                          : ''
-                        : '') + ' link'
-                    }
-                  >
-                    {titleContent ?? title}
-                  </Link>
-                )
-              )}
-            </LinksWrapper>
-          </HideOnMobile> */}
         </Box>
 
-        <Stack direction={'row'} alignItems="center" spacing={15}>
+        <Stack direction={'row'} alignItems="center" spacing={8}>
           <Search />
           <CreateBtn />
           <NetworkSelect />
           <Web3Status />
 
-          <Stack direction="row" alignItems="center" spacing={20}>
-            {!token && (
-              <Button
-                variant="outlined"
-                sx={{ width: 81, height: 44, borderRadius: 8 }}
-                onClick={() => {
-                  const _redirect = location.pathname + location.search
-                  navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
-                }}
-              >
-                Login
-              </Button>
-            )}
-          </Stack>
+          {!token && (
+            <Button
+              variant="outlined"
+              sx={{ width: 81, height: 44, borderRadius: 8 }}
+              onClick={() => {
+                const _redirect = location.pathname + location.search
+                navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Stack>
 
         <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>

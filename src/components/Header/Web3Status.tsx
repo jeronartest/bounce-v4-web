@@ -124,7 +124,7 @@ function Web3StatusInner() {
               borderRadius: 8,
               padding: '0 12px',
               minWidth: 64,
-              border: '1px solid var(--ps-border-1)',
+              border: '1px solid var(--ps-gray-20)',
               height: 44,
               display: 'flex',
               justifyContent: 'center',
@@ -138,7 +138,7 @@ function Web3StatusInner() {
             />
             <Box
               sx={{
-                borderRight: '1px solid var(--ps-border-1)',
+                borderRight: '1px solid var(--ps-gray-20)',
                 mr: 10,
                 height: '100%'
               }}

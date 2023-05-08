@@ -22,15 +22,18 @@ export default function NetworkSelect() {
         width="max-content"
         height={isDownSm ? '24px' : '44px'}
         style={{
-          background: 'transparent',
-          border: '1px solid var(--ps-border-1)',
+          background: '#fff',
+          border: '1px solid var(--ps-gray-20)',
+          '&: hover': {
+            borderColor: 'var(--ps-yellow-1)'
+          },
           '& .Mui-disabled.MuiSelect-select.MuiInputBase-input': {
             paddingRight: isDownSm ? 0 : 10,
             color: theme => theme.palette.text.primary,
             WebkitTextFillColor: theme => theme.palette.text.primary
           },
           '&.Mui-focused': {
-            borderColor: 'var(--ps-border-1)'
+            borderColor: 'var(--ps-yellow-1)'
           }
         }}
         renderValue={() => <Image src={ChainListMap[chainId]?.logo || ''} style={{ marginRight: 6 }} width={24} />}
