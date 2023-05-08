@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AppBar, Box, Button, IconButton, Stack, styled } from '@mui/material'
 // import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
@@ -129,7 +129,7 @@ const MainLogo = styled(Link)(({ theme }) => ({
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  // const { pathname } = useLocation()
+  const location = useLocation()
   // const { account } = useActiveWeb3React()
 
   const handleMobileMenuDismiss = useCallback(() => {
@@ -247,7 +247,10 @@ export default function Header() {
               <Button
                 variant="outlined"
                 sx={{ width: 81, height: 44, borderRadius: 8 }}
-                onClick={() => navigate(routes.login)}
+                onClick={() => {
+                  const _redirect = location.pathname + location.search
+                  navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+                }}
               >
                 Login
               </Button>

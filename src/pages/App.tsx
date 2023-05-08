@@ -27,6 +27,7 @@ import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
 import EnglishAuctionNFTPoolId from 'pages/auction/englishAuctionNFT/poolId'
 
 import Login from 'pages/login'
+import FirstLoginInfo from 'pages/login/FirstLoginInfo'
 
 import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
@@ -100,6 +101,7 @@ export default function App() {
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
+                    <Route path={routes.loginBase} element={<FirstLoginInfo />} />
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />

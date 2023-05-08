@@ -18,7 +18,13 @@ const illustrationWidth = 500
 export function LoginLayout({ image, children }: { image: string; children: JSX.Element }) {
   const theme = useTheme()
   return (
-    <Box display={'grid'} gridTemplateColumns={`1fr ${illustrationWidth}px`}>
+    <Box
+      sx={{
+        backgroundColor: '#fff'
+      }}
+      display={'grid'}
+      gridTemplateColumns={`1fr ${illustrationWidth}px`}
+    >
       <Box>
         <Box minHeight={`calc(100vh - ${theme.height.header} - 60px)`}>{children}</Box>
         <Footer />
