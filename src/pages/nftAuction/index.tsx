@@ -1,4 +1,3 @@
-import { Box, Container } from '@mui/material'
 import React, { useState } from 'react'
 import FooterPc from 'components/Footer/FooterPc'
 import TypesOfAuction from 'components/TypesOfAuction'

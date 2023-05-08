@@ -1,4 +1,4 @@
-import { Box, Container, SxProps, Theme } from '@mui/material'
+import { Box, SxProps, Theme } from '@mui/material'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import ComingSoon from 'pages/ComingSoon'
 

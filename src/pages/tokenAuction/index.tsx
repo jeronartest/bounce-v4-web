@@ -1,4 +1,3 @@
-import { Box, Container } from '@mui/material'
 import FooterPc from 'components/Footer/FooterPc'
 import TypesOfAuction from 'components/TypesOfAuction'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'

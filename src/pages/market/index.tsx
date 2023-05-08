@@ -1,4 +1,3 @@
-import { Box, Container } from '@mui/material'
 import React from 'react'
 import FooterPc from 'components/Footer/FooterPc'
 import TokenAuction from 'components/TokenAuction'
