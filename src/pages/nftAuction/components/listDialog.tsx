@@ -126,7 +126,6 @@ const NFTAuctionListDialog = (props: DialogParams) => {
   const { open, handleClose } = props
   const optionDatas = useOptionDatas()
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
-
   const {
     pagination: poolsPagination,
     data: poolsData,
@@ -190,15 +189,25 @@ const NFTAuctionListDialog = (props: DialogParams) => {
       }),
     [run]
   )
+
+  const handleScrollToTop = () => {
+    const topEl = document.getElementById('topTitle')
+    topEl &&
+      topEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+  }
   const filterSubmit = (values: InitialValuesPros) => {
     setFilterValues(values)
+    handleScrollToTop()
   }
-
   useEffect(() => {
     open && handleSubmit(filterValues)
   }, [handleSubmit, open, filterValues])
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    handleScrollToTop()
   }
   return (
     <NFTDialog
@@ -210,10 +219,13 @@ const NFTAuctionListDialog = (props: DialogParams) => {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogContent>
-        <DialogTitle title={'NFT  Auction Space'} handleClose={handleClose} />
+        <Box id={'topTitle'}>
+          <DialogTitle title={'NFT  Auction Space'} handleClose={handleClose} />
+        </Box>
         <Box
           sx={{
-            width: '100%'
+            width: '100%',
+            paddingBottom: 100
           }}
         >
           <Box mb={160}>

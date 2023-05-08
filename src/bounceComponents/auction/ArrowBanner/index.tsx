@@ -35,20 +35,23 @@ function ArrowBanner({ type }: { type?: string }) {
       display={'flex'}
       justifyContent={'center'}
       alignItems={'center'}
-      width={'calc(100% + 60px)'}
-      marginLeft={-30}
-      marginRight={-30}
+      sx={{
+        maxWidth: '1296px',
+        width: '100%',
+        minHeight: 460,
+        margin: '16px auto 0'
+      }}
     >
-      <ArrowBg
+      <ArrowBgLeft
         onClick={() => {
           swiper?.slidePrev()
         }}
       >
         <ArrowBackIcon />
-      </ArrowBg>
+      </ArrowBgLeft>
       <Swiper
         onSwiper={setSwiper}
-        spaceBetween={20}
+        spaceBetween={0}
         slidesPerView={1}
         loop
         autoplay={{
@@ -78,20 +81,26 @@ const ArrowBg = styled(Box)`
   justify-content: center;
   align-items: center;
   align-self: center;
-  margin-right: -30px;
   padding: 22px;
   width: 60px;
   height: 60px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
-
   &:hover {
     cursor: pointer;
   }
 `
-
+const ArrowBgLeft = styled(ArrowBg)`
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+`
 const ArrowBgRight = styled(ArrowBg)`
-  margin-left: -30px;
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
 `
 
 const BannerH3 = styled(Typography)`

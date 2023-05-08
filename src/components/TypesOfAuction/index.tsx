@@ -47,6 +47,7 @@ const AuctionItem = (props: AuctionItemParams) => {
   return (
     <Box
       sx={{
+        position: 'relative',
         width: 230,
         height: 110,
         cursor: 'pointer'
@@ -61,9 +62,12 @@ const AuctionItem = (props: AuctionItemParams) => {
         link && window.open(link, '_blank')
       }}
     >
-      {!isHover && (
+      {
         <Box
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: 230,
             height: 110,
             background: 'var(--ps-text-3)',
@@ -71,7 +75,9 @@ const AuctionItem = (props: AuctionItemParams) => {
             display: 'flex',
             flexFlow: 'column nowrap',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            transform: !isHover ? 'rotateX(0)' : 'rotateX(90deg)',
+            transition: 'all 0.6s'
           }}
         >
           <img
@@ -93,10 +99,13 @@ const AuctionItem = (props: AuctionItemParams) => {
             {title}
           </Typography>
         </Box>
-      )}
-      {isHover && (
+      }
+      {
         <Box
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: 230,
             height: 110,
             background: 'var(--ps-yellow-1)',
@@ -105,7 +114,9 @@ const AuctionItem = (props: AuctionItemParams) => {
             flexFlow: 'column nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            padding: '12px 16px'
+            padding: '12px 16px',
+            transform: isHover ? 'rotateX(0)' : 'rotateX(90deg)',
+            transition: 'all 0.6s'
           }}
         >
           <Typography
@@ -153,7 +164,7 @@ const AuctionItem = (props: AuctionItemParams) => {
             ${totalValue}
           </Typography>
         </Box>
-      )}
+      }
     </Box>
   )
 }
@@ -276,7 +287,8 @@ const TypesOfAuction: React.FC = () => {
       {/* Types of Auction On Bounce Finance */}
       <Box
         sx={{
-          width: 'calc(100% - 40px)',
+          width: '100%',
+          maxWidth: 1440,
           margin: '60px auto 20px',
           background: `var(--ps-text-4)`,
           borderRadius: 30,
@@ -405,7 +417,7 @@ const TypesOfAuction: React.FC = () => {
         sx={{
           width: '100%',
           height: 90,
-          maxWidth: 1400,
+          maxWidth: 1296,
           margin: '0 auto 20px',
           background: 'var(--ps-yellow-1)',
           borderRadius: 90,

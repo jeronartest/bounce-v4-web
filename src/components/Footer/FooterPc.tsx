@@ -7,7 +7,7 @@ import TelegramIcon from 'assets/imgs/common/Telegram.png'
 import TwitterIcon from 'assets/imgs/common/Twitter.png'
 import FooterLogo from 'assets/imgs/common/LogoBlack.svg'
 import { routes } from 'constants/routes'
-
+import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
 export const FooterSocialLink: React.FC = () => {
   const Links = useMemo(
     () => [
@@ -99,11 +99,10 @@ interface FooterLinksProps {
     isExternal: boolean // 是否是外链
     href: string
     isDisabled: boolean
-    extraIcon: string | React.ReactElement
+    extraIcon: string
     className: string
   }[]
 }
-
 export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
   return (
     <div>
@@ -175,7 +174,19 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                   </a>
                 </ExternalLink>
               )}
-              {item.extraIcon}
+              {item.extraIcon ? (
+                <img
+                  src={item.extraIcon}
+                  style={{
+                    width: 10,
+                    height: 10,
+                    marginLeft: 6
+                  }}
+                  alt=""
+                />
+              ) : (
+                ''
+              )}
             </li>
           )
         })}
@@ -200,7 +211,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/tokenAndnftAuction',
         isDisabled: false,
-        extraIcon: '',
+        extraIcon: ArrowSvg,
         className: ''
       },
       {
@@ -208,7 +219,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/realWorldCollectAuction',
         isDisabled: false,
-        extraIcon: '',
+        extraIcon: ArrowSvg,
         className: ''
       },
       {
@@ -216,7 +227,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/adsAuction',
         isDisabled: false,
-        extraIcon: '',
+        extraIcon: ArrowSvg,
         className: ''
       },
       {
@@ -224,7 +235,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/sdkAndPlugins',
         isDisabled: false,
-        extraIcon: '',
+        extraIcon: ArrowSvg,
         className: ''
       }
     ],
@@ -331,10 +342,11 @@ const FooterPc: React.FC = () => {
       }}
     >
       <Container
-        maxWidth="xl"
         disableGutters
         sx={{
-          padding: 52
+          width: '100%',
+          maxWidth: '1296px !important',
+          padding: '52px 0'
         }}
       >
         <Box
@@ -384,7 +396,9 @@ const FooterPc: React.FC = () => {
           <Typography
             sx={{
               color: 'var(--ps-text-3)',
-              opacity: '0.6'
+              opacity: '0.6',
+              fontFamily: `'Inter'`,
+              fontSize: 13
             }}
           >{`©${new Date().getFullYear()} Bounce dao Ltd. All rights reserved.`}</Typography>
           <Box>
@@ -396,6 +410,8 @@ const FooterPc: React.FC = () => {
               sx={{
                 color: 'var(--ps-text-3)',
                 opacity: '0.6',
+                fontFamily: `'Inter'`,
+                fontSize: 13,
                 marginRight: 40
               }}
             >
@@ -408,6 +424,8 @@ const FooterPc: React.FC = () => {
               target="_blank"
               sx={{
                 color: 'var(--ps-text-3)',
+                fontFamily: `'Inter'`,
+                fontSize: 13,
                 opacity: '0.6'
               }}
             >

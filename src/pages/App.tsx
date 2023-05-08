@@ -33,6 +33,9 @@ import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
 import MarketNFTPools from 'pages/market/nftAuctionPool'
 import NFTAuction from 'pages/nftAuction'
+import RealWorldAuction from 'pages/realWorldAuction'
+import AdsAuction from 'pages/adsAuction'
+
 import TokenAuctionPage from 'pages/tokenAuction'
 // import AccountSettings from 'pages/profile/account/settings'
 // import ProfileActivities from 'pages/profile/activities'
@@ -44,7 +47,6 @@ import ProfileHome from 'pages/profile/home'
 
 // import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
 // import SignupAccount from 'pages/signup/account'
-import ComingSoon from './ComingSoon'
 
 import AccountDashboard from 'pages/account/Dashboard'
 import AccountMyProfile from 'pages/account/MyProfile'
@@ -111,8 +113,8 @@ export default function App() {
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
 
-                    <Route path={routes.realAuction.index} element={<ComingSoon />} />
-                    <Route path={routes.adsAuction.index} element={<ComingSoon />} />
+                    <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
+                    <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                     {/* <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />
