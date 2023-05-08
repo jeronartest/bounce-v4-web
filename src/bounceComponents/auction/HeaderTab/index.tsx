@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+
 const StyledTab = styled(Button)(({}) => ({
   padding: '8px 12px',
   color: 'white',
@@ -22,14 +23,6 @@ const StyledTab = styled(Button)(({}) => ({
 
 const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ onTabChange }) => {
   const navigate = useNavigate()
-  const path =
-    location.pathname === '/NFTAuction'
-      ? 'NFT Auction'
-      : location.pathname === '/TokenAuction'
-      ? 'Token Auction'
-      : 'All'
-  const [currentTab, setCurrentTab] = useState(path)
-
   const tabs = [
     'All',
     'Token Auction',
@@ -38,6 +31,18 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
     'Ads Auction',
     'Private Launchpad'
   ]
+  const path =
+    location.pathname === '/TokenAuction'
+      ? tabs[1]
+      : location.pathname === '/NFTAuction'
+      ? tabs[2]
+      : location.pathname === '/real-auction'
+      ? tabs[3]
+      : location.pathname === '/ads-auction'
+      ? tabs[4]
+      : tabs[0]
+  const [currentTab, setCurrentTab] = useState(path)
+
   const linkTo = (route: string) => {
     switch (route) {
       case 'All':

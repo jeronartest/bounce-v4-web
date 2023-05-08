@@ -7,9 +7,13 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { useState } from 'react'
 import SwiperCore, { Autoplay, Pagination } from 'swiper'
 import * as React from 'react'
+// import 'swiper/modules/autoplay/autoplay.min.css'
+// import 'swiper/modules/autoplay/autoplay.less'
+// import 'swiper/modules/autoplay/autoplay.js'
 
 SwiperCore.use([Autoplay, Pagination])
 import 'swiper/swiper-bundle.css'
+import 'swiper/swiper.min.css'
 
 interface ISlideProgress {
   swiperStyle: React.RefAttributes<SwiperRef> & SwiperProps
@@ -50,7 +54,7 @@ const ProgressGray = styled(ProgressLight)`
 export function SlideProgress(props: ISlideProgress) {
   const { swiperStyle, children } = props
   const [swiper, setSwiper] = useState<SwiperCore>()
-  const totalSlides = swiper?.slides.length ? swiper.slides.length : 1
+  const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
   return (
     <Box width={'100%'}>
