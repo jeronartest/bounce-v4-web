@@ -126,9 +126,14 @@ export const useWeb3Login = (path?: string) => {
             userId: data?.userId
           })
         )
-        if (data?.isLogin === false) {
-          // ! TOTD Improve user information
 
+        if (data?.ifLogin === false) {
+          const _redirect = redirect
+            ? redirect
+            : location.pathname === routes.login
+            ? routes.market.index
+            : location.pathname + location.search
+          navigate(routes.loginBase + `?redirect=${_redirect}`)
           return
         }
         if (path) {

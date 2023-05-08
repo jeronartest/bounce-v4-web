@@ -27,7 +27,7 @@ export interface ILinksItem {
   autoComplete: string
 }
 
-const links: ILinksItem[] = [
+export const ProfileSocialLinks: ILinksItem[] = [
   {
     name: 'website',
     label: 'Website',
@@ -90,7 +90,16 @@ export interface ISocialEditInputProp {
   instagram: string
 }
 
-interface IValue extends ISocialEditInputProp {
+export const sxInputStyle = {
+  '& .MuiInputBase-root': {
+    backgroundColor: '#F6F6F3',
+    '& fieldset': {
+      border: 'none'
+    }
+  }
+}
+
+export interface IProfileOverviewValue extends ISocialEditInputProp {
   avatar:
     | {
         id: number
@@ -120,7 +129,7 @@ export default function ProfileOverview() {
 
   const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
 
-  const initialValues: IValue = {
+  const initialValues: IProfileOverviewValue = {
     avatar: userInfo?.avatar || {
       fileName: '',
       fileSize: 0,
@@ -169,7 +178,7 @@ export default function ProfileOverview() {
                 loadingPosition="start"
                 startIcon={<></>}
                 variant="contained"
-                className="black-button"
+                color="secondary"
                 sx={{ width: 116, height: 52, textAlign: 'right' }}
                 type="submit"
               >
@@ -224,13 +233,13 @@ export default function ProfileOverview() {
                   Profile
                 </Typography>
 
-                <FormItem name="fullName" label="Username" required>
+                <FormItem sx={sxInputStyle} name="fullName" label="Username" required>
                   <OutlinedInput />
                 </FormItem>
-                <FormItem name="location" label="Location (Time Zone)" required fieldType="custom">
+                <FormItem sx={sxInputStyle} name="location" label="Location (Time Zone)" required fieldType="custom">
                   <LocationTimeZone value={values.location} onChange={val => setFieldValue('location', val)} />
                 </FormItem>
-                <FormItem name="description" label=" ">
+                <FormItem sx={sxInputStyle} name="description" label=" ">
                   <OutlinedInput
                     placeholder="Introduce yourself..."
                     multiline
@@ -320,7 +329,7 @@ export function SocialEditLinks({
 }) {
   return (
     <>
-      {links.map((item, index) => (
+      {ProfileSocialLinks.map((item, index) => (
         <>
           <FormItem key={item.name} name={item.name}>
             <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
@@ -336,7 +345,7 @@ export function SocialEditLinks({
               </Box>
             </Box>
           </FormItem>
-          {index !== links.length - 1 && <Divider key={index} />}
+          <Divider key={index} />
         </>
       ))}
     </>

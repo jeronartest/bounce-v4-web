@@ -124,7 +124,7 @@ function Web3StatusInner() {
               borderRadius: 8,
               padding: '0 12px',
               minWidth: 64,
-              border: '1px solid var(--ps-border-1)',
+              border: '1px solid var(--ps-gray-20)',
               height: 44,
               display: 'flex',
               justifyContent: 'center',
@@ -138,7 +138,7 @@ function Web3StatusInner() {
             />
             <Box
               sx={{
-                borderRight: '1px solid var(--ps-border-1)',
+                borderRight: '1px solid var(--ps-gray-20)',
                 mr: 10,
                 height: '100%'
               }}
@@ -333,7 +333,8 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
 
             <Stack spacing={6}>
               <Button
-                sx={{ backgroundColor: 'var(--ps-yellow-1)', height: 40 }}
+                variant="contained"
+                sx={{ height: 40 }}
                 onClick={() => {
                   navigate(routes.account.dashboard)
                   close()
@@ -343,8 +344,8 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
               </Button>
               <Button
                 sx={{ height: 40 }}
+                color="secondary"
                 variant="contained"
-                className="black-button"
                 onClick={() => {
                   navigate(routes.account.myAccount)
                   close()

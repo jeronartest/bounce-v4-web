@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AppBar, Box, Button, IconButton, Stack, styled } from '@mui/material'
 // import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
@@ -43,30 +43,18 @@ export const Tabs: Tab[] = [
   { title: 'Token', link: 'https://token.bounce.finance/staking' }
 ]
 
-// const navLinkSX = ({ theme }: any) => ({
-//   textDecoration: 'none',
-//   fontSize: 16,
-//   fontWeight: 500,
-//   color: theme.palette.text.primary,
-//   opacity: 1,
-//   '&:hover': {
-//     opacity: 0.5
-//   }
-// })
-
-// const StyledNavLink = styled(Link)(navLinkSX)
-
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   position: 'fixed',
   height: theme.height.header,
-  backgroundColor: 'var(--ps-gray-50)',
+  backgroundColor: 'transparent',
+  // backgroundColor: theme.palette.background.paper,
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
   boxShadow: 'none',
-  padding: '0 36px 0 36px!important',
+  padding: '0 40px 0 40px!important',
   zIndex: theme.zIndex.drawer,
-  //   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+  // borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   '& .link': {
     textDecoration: 'none',
     fontSize: 16,
@@ -120,16 +108,9 @@ const MainLogo = styled(Link)(({ theme }) => ({
   }
 }))
 
-// const LinksWrapper = muiStyled('div')(({ theme }) => ({
-//   marginLeft: 24,
-//   [theme.breakpoints.down('lg')]: {
-//     marginLeft: 10
-//   }
-// }))
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  // const { pathname } = useLocation()
+  const location = useLocation()
   // const { account } = useActiveWeb3React()
 
   const handleMobileMenuDismiss = useCallback(() => {
@@ -151,23 +132,25 @@ export default function Header() {
             <Image src={logo} alt={'logo'} />
           </MainLogo>
         </Box>
-        <Stack direction={'row'} alignItems="center" spacing={15}>
+
+        <Stack direction={'row'} alignItems="center" spacing={8}>
           <Search />
           <CreateBtn />
           <NetworkSelect />
           <Web3Status />
 
-          <Stack direction="row" alignItems="center" spacing={20}>
-            {!token && (
-              <Button
-                variant="outlined"
-                sx={{ width: 81, height: 44, borderRadius: 8 }}
-                onClick={() => navigate(routes.login)}
-              >
-                Login
-              </Button>
-            )}
-          </Stack>
+          {!token && (
+            <Button
+              variant="outlined"
+              sx={{ width: 81, height: 44, borderRadius: 8 }}
+              onClick={() => {
+                const _redirect = location.pathname + location.search
+                navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Stack>
 
         <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
