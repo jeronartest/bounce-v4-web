@@ -9,7 +9,9 @@ import { getPoolsFilter } from '../../../api/market'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import Table from '../../../components/Table'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
-import { getTextFromPoolType } from '../../../api/pool/type'
+import { getTextFromPoolType, PoolType } from '../../../api/pool/type'
+import { routes } from '../../../constants/routes'
+import { getLabelById } from '../../../utils'
 
 enum StatusE {
   'live',
@@ -65,8 +67,20 @@ export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
+  const url =
+    props.category === PoolType.Lottery
+      ? routes.auction.randomSelection
+      : routes.auction.fixedPrice
+          .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt || []))
+          .replace(':poolId', props.poolId)
+
   return [
-    <CenterRow key={0}>
+    <CenterRow
+      key={0}
+      onClick={() => {
+        window.open(url)
+      }}
+    >
       <H7Gray mr={12}>{props.index}</H7Gray>
       <Avatar src={props.token0.largeUrl ? props.token0.largeUrl : EmptyAvatar} />
       <H7>{props.name}</H7>
@@ -159,11 +173,31 @@ export const AuctionRankCard: React.FC = () => {
       >
         <Table
           header={['Auction', 'Asset', 'Auction', 'Status']}
-          rows={data ? data.list?.slice(0, 5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 1 })) : []}
+          rows={
+            data
+              ? data.list?.slice(0, 5)?.map((d: any, idx: number) =>
+                  AuctionRow({
+                    ...d,
+                    index: idx + 1,
+                    opt: optionDatas
+                  })
+                )
+              : []
+          }
         />
         <Table
           header={['Auction', 'Asset', 'Auction', 'Status']}
-          rows={data ? data.list?.slice(5)?.map((d: any, idx: number) => AuctionRow({ ...d, index: idx + 6 })) : []}
+          rows={
+            data
+              ? data.list?.slice(5)?.map((d: any, idx: number) =>
+                  AuctionRow({
+                    ...d,
+                    index: idx + 6,
+                    opt: optionDatas
+                  })
+                )
+              : []
+          }
         />
       </Box>
     </Box>
