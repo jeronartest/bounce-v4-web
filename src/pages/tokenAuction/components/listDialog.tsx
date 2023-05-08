@@ -210,11 +210,21 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     },
     [run]
   )
+  const handleScrollToTop = () => {
+    const topEl = document.getElementById('topTitle')
+    topEl &&
+      topEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+  }
   const filterSubmit = (values: InitialValuesPros) => {
     setFilterValues(values)
+    handleScrollToTop()
   }
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    handleScrollToTop()
   }
   useEffect(() => {
     open && handleSubmit(filterValues)
@@ -246,7 +256,9 @@ const NFTAuctionListDialog = (props: DialogParams) => {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogContent>
-        <DialogTitle title={'Token  Auction Space'} handleClose={handleClose} />
+        <Box id={'topTitle'}>
+          <DialogTitle title={'Token  Auction Space'} handleClose={handleClose} />
+        </Box>
         <Box
           sx={{
             width: '100%',
