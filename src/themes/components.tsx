@@ -137,7 +137,7 @@ export const ComponentOptions = {
             fontFamily: `"Sharp Grotesk DB Cyr Book 20"`,
             fontSize: 14,
             color: common.text,
-            background: '#F5F5F5'
+            background: '#F6F7F3'
           },
           a: {
             textDecoration: 'none',

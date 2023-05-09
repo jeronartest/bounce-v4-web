@@ -5,13 +5,13 @@ export default {
     width: 120,
     height: 120,
     padding: 0,
-    background: '#FFFFFF'
+    background: '#F6F7F3'
   },
   defaultAva: {
     width: 120,
     height: 120,
     padding: 0,
-    background: '#FFDC01',
+    background: '#F6F7F3',
     borderRadius: '50%',
     display: 'flex',
     justifyContent: 'center',
