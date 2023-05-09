@@ -66,7 +66,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   BINANCE: {
     connector: undefined,
     name: 'Binance Wallet',
-    iconName: 'coinbaseWalletIcon.svg',
+    iconName: 'BinanceWalletIcon.svg',
     description: '',
     href: null,
     disabled: true,
@@ -75,7 +75,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   TRUST_WALLET: {
     connector: undefined,
     name: 'Trust wallet',
-    iconName: 'coinbaseWalletIcon.svg',
+    iconName: 'trustWalletIcon.svg',
     description: '',
     href: null,
     disabled: true,
@@ -84,7 +84,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   MATH_WALLET: {
     connector: undefined,
     name: 'Math wallet',
-    iconName: 'coinbaseWalletIcon.svg',
+    iconName: 'mathWalletIcon.svg',
     description: '',
     href: null,
     disabled: true,
