@@ -61,8 +61,8 @@ export const NotableAuction: React.FC = () => {
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
-        <CenterRow justifyContent={'space-between'}>
-          <H4 mb={33}>Notable Auctions</H4>
+        <CenterRow mb={33} justifyContent={'space-between'}>
+          <H4>Notable Auctions</H4>
           <Row gap={8}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
             <Select

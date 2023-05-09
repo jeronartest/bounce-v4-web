@@ -52,8 +52,8 @@ export const Notable721 = (props: Notable721Props) => {
   return (
     <Box sx={{ padding: '80px 0 100px' }}>
       <Container>
-        <CenterRow justifyContent={'space-between'}>
-          <H4 mb={33}>ERC721</H4>
+        <CenterRow mb={33} justifyContent={'space-between'}>
+          <H4>ERC721</H4>
           <Row gap={8}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
             <Select

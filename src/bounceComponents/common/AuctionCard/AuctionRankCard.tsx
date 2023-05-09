@@ -68,18 +68,18 @@ export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
-  const url =
-    props.category === PoolType.Lottery
-      ? routes.auction.randomSelection
-      : routes.auction.fixedPrice
-          .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt || []))
-          .replace(':poolId', props.poolId)
+  const url = (props.category === PoolType.Lottery ? routes.auction.randomSelection : routes.auction.fixedPrice)
+    .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
+    .replace(':poolId', props.poolId)
 
   return [
     <CenterRow
       key={0}
       onClick={() => {
         window.open(url)
+      }}
+      sx={{
+        cursor: 'pointer'
       }}
     >
       <H7Gray mr={12}>{props.index}</H7Gray>
