@@ -16,8 +16,10 @@ export default function AccountMyCredentials() {
             My Credentials
           </Typography>
           <ComingSoon
+            bgColor="var(--ps-white)"
+            prompt="This feature will be available soon. Please stay tuned."
             sx={{
-              padding: '40px 0'
+              padding: '20px 0'
             }}
           />
         </Container>
