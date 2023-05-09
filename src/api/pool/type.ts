@@ -71,6 +71,7 @@ export interface GetWhitelistMerkleTreeRootResponse {
 export enum PoolStatus {
   'Upcoming' = 1,
   'Live' = 2,
+  'Finish' = 3,
   'Closed' = 4,
   'Cancelled' = 5
 }

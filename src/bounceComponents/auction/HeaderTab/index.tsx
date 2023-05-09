@@ -40,6 +40,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
       ? tabs[3]
       : location.pathname === '/ads-auction'
       ? tabs[4]
+      : location.pathname === '/launch-pad'
+      ? tabs[5]
       : tabs[0]
   const [currentTab, setCurrentTab] = useState(path)
 
@@ -61,7 +63,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         navigate(routes.adsAuction.index)
         break
       case 'Private Launchpad':
-        navigate(routes.market.index)
+        navigate(routes.launchpad.index)
         break
     }
   }
