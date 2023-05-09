@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
 import { Box, MenuItem, Select, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
+import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
@@ -65,6 +66,7 @@ const Tab = styled(Box)`
     background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
+
   &:hover {
     background: var(--ps-yellow-1);
     border-radius: 20px 20px 0 0;
@@ -97,6 +99,7 @@ const getRoute = (category: PoolType) => {
   }
   return route
 }
+
 export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
@@ -116,7 +119,15 @@ export function AuctionRow(props: any): ReactJSXElement[] {
       }}
     >
       <H7Gray mr={12}>{props.index}</H7Gray>
-      <Avatar src={props.token0.largeUrl ? props.token0.largeUrl : EmptyAvatar} />
+      <Avatar
+        src={
+          props.token0.largeUrl
+            ? props.token0.largeUrl
+            : props.tokenType === BackedTokenType.TOKEN
+            ? EmptyToken
+            : EmptyAvatar
+        }
+      />
       <H7>{props.name}</H7>
     </CenterRow>,
     <SmallText maxWidth={164} key={1}>
