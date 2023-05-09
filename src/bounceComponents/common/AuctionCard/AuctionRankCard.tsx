@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
 import { Box, MenuItem, Select, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
+import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
@@ -50,50 +51,6 @@ const StatusClose = styled(StatusLive)`
   color: #a45e3f;
   background: #f9e3da;
 `
-
-const Status: React.FC<{ status: StatusE }> = ({ status }) => {
-  switch (status) {
-    case StatusE.close:
-      return <StatusClose>Close</StatusClose>
-    case StatusE.live:
-      return <StatusLive>Live</StatusLive>
-    case StatusE.upcoming:
-      return <StatusUpcoming>Upcoming</StatusUpcoming>
-    default:
-      return <></>
-  }
-}
-
-export function AuctionRow(props: any): ReactJSXElement[] {
-  const nowTimestamp = Date.now() / 1000
-  const status =
-    props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
-  const url = (props.category === PoolType.Lottery ? routes.auction.randomSelection : routes.auction.fixedPrice)
-    .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
-    .replace(':poolId', props.poolId)
-
-  return [
-    <CenterRow
-      key={0}
-      onClick={() => {
-        window.open(url)
-      }}
-      sx={{
-        cursor: 'pointer'
-      }}
-    >
-      <H7Gray mr={12}>{props.index}</H7Gray>
-      <Avatar src={props.token0.largeUrl ? props.token0.largeUrl : EmptyAvatar} />
-      <H7>{props.name}</H7>
-    </CenterRow>,
-    <SmallText maxWidth={164} key={1}>
-      {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-    </SmallText>,
-    <SmallText key={2}>{getTextFromPoolType(props.category)}</SmallText>,
-    <Status key={3} status={status} />
-  ]
-}
-
 const Tab = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -109,7 +66,77 @@ const Tab = styled(Box)`
     background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
+
+  &:hover {
+    background: var(--ps-yellow-1);
+    border-radius: 20px 20px 0 0;
+  }
 `
+const Status: React.FC<{ status: StatusE }> = ({ status }) => {
+  switch (status) {
+    case StatusE.close:
+      return <StatusClose>Close</StatusClose>
+    case StatusE.live:
+      return <StatusLive>Live</StatusLive>
+    case StatusE.upcoming:
+      return <StatusUpcoming>Upcoming</StatusUpcoming>
+    default:
+      return <></>
+  }
+}
+const getRoute = (category: PoolType) => {
+  let route = routes.auction.fixedPrice
+  switch (category) {
+    case PoolType.Lottery:
+      route = routes.auction.randomSelection
+      break
+    case PoolType.FixedSwap:
+      route = routes.auction.fixedPrice
+      break
+    case PoolType.fixedSwapNft:
+      route = routes.auction.fixedSwapNft
+      break
+  }
+  return route
+}
+
+export function AuctionRow(props: any): ReactJSXElement[] {
+  const nowTimestamp = Date.now() / 1000
+  const status =
+    props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
+  const url = getRoute(props.category)
+    .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
+    .replace(':poolId', props.poolId)
+
+  return [
+    <CenterRow
+      key={0}
+      onClick={() => {
+        window.open(url)
+      }}
+      sx={{
+        cursor: 'pointer'
+      }}
+    >
+      <H7Gray mr={12}>{props.index}</H7Gray>
+      <Avatar
+        src={
+          props.token0.largeUrl
+            ? props.token0.largeUrl
+            : props.tokenType === BackedTokenType.TOKEN
+            ? EmptyToken
+            : EmptyAvatar
+        }
+      />
+      <H7>{props.name}</H7>
+    </CenterRow>,
+    <SmallText maxWidth={164} key={1}>
+      {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
+    </SmallText>,
+    <SmallText key={2}>{getTextFromPoolType(props.category)}</SmallText>,
+    <Status key={3} status={status} />
+  ]
+}
 
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']

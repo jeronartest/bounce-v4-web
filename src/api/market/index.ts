@@ -17,7 +17,7 @@ export const getPoolsFilter = (body: IPoolFilterParams) => {
 }
 
 export const getBanner = (type?: string) => {
-  return ApiInstance.get('/banner', { type: type })
+  return ApiInstance.get('/banner', { types: type })
 }
 
 export const getActiveUsers = () => {
