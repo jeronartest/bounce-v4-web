@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Container, MenuItem, Pagination, Select, styled } from '@mui/material'
+import { Box, MenuItem, Pagination, Select, styled } from '@mui/material'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
 import { H2 } from '../../components/Text'
@@ -24,16 +24,14 @@ import FooterPc from '../../components/Footer/FooterPc'
 
 export const Launchpad: React.FC = () => {
   return (
-    <>
-      <Container maxWidth="lg">
-        <HeaderTab />
-        <Box mt={16}>
-          <ArrowBanner />
-        </Box>
-      </Container>
+    <Box>
+      <HeaderTab />
+      <Box mt={16}>
+        <ArrowBanner />
+      </Box>
       <PrivatePad />
       <FooterPc />
-    </>
+    </Box>
   )
 }
 
