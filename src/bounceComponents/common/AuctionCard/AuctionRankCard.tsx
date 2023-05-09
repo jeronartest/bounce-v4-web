@@ -50,7 +50,26 @@ const StatusClose = styled(StatusLive)`
   color: #a45e3f;
   background: #f9e3da;
 `
+const Tab = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 10px;
+  width: 240px;
+  height: 76px;
+  background: transparent;
 
+  &.active {
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+  }
+  &:hover {
+    background: var(--ps-yellow-1);
+    border-radius: 20px 20px 0 0;
+  }
+`
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
   switch (status) {
     case StatusE.close:
@@ -63,12 +82,26 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
       return <></>
   }
 }
-
+const getRoute = (category: PoolType) => {
+  let route = routes.auction.fixedPrice
+  switch (category) {
+    case PoolType.Lottery:
+      route = routes.auction.randomSelection
+      break
+    case PoolType.FixedSwap:
+      route = routes.auction.fixedPrice
+      break
+    case PoolType.fixedSwapNft:
+      route = routes.auction.fixedSwapNft
+      break
+  }
+  return route
+}
 export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
-  const url = (props.category === PoolType.Lottery ? routes.auction.randomSelection : routes.auction.fixedPrice)
+  const url = getRoute(props.category)
     .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
     .replace(':poolId', props.poolId)
 
@@ -93,23 +126,6 @@ export function AuctionRow(props: any): ReactJSXElement[] {
     <Status key={3} status={status} />
   ]
 }
-
-const Tab = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 24px;
-  gap: 10px;
-  width: 240px;
-  height: 76px;
-  background: transparent;
-
-  &.active {
-    background: #ffffff;
-    border-radius: 20px 20px 0 0;
-  }
-`
 
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
