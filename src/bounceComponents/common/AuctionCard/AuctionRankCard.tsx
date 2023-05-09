@@ -54,7 +54,7 @@ const Tab = styled(Box)`
   display: flex;
   flex-direction: row;
   justify-content: center;
- }
+  align-items: flex-start;
   padding: 24px;
   gap: 10px;
   width: 240px;
@@ -65,8 +65,11 @@ const Tab = styled(Box)`
     background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
+  &:hover {
+    background: var(--ps-yellow-1);
+    border-radius: 20px 20px 0 0;
+  }
 `
-
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
   switch (status) {
     case StatusE.close:
