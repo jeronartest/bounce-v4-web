@@ -25,7 +25,7 @@ export const PoolStatusBox = ({
     targetDate:
       status === PoolStatus.Upcoming
         ? openTime * 1000
-        : status === PoolStatus.Live
+        : status === PoolStatus.Live || status == PoolStatus.Finish
         ? closeTime * 1000
         : status === PoolStatus.Closed
         ? claimAt * 1000
@@ -49,7 +49,23 @@ export const PoolStatusBox = ({
           <Typography variant="body1">Upcoming</Typography>
         </Box>
       )
-
+    case PoolStatus.Finish:
+      return (
+        <Box
+          sx={{
+            display: 'inline-block',
+            px: 12,
+            py: 4,
+            bgcolor: '#D6DFF6',
+            borderRadius: 20,
+            ...style
+          }}
+        >
+          <Typography variant="body1" sx={{ color: '#2B51DA' }}>
+            Finished
+          </Typography>
+        </Box>
+      )
     case PoolStatus.Live:
       return (
         <Box style={{ display: 'inline-block', padding: '4px 8px', background: '#D4F5DE', borderRadius: 20, ...style }}>

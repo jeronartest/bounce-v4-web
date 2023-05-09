@@ -536,7 +536,7 @@ const TokenAuction: React.FC = () => {
           <Box
             sx={{
               position: 'absolute',
-              width: 1296,
+              width: 1440,
               minHeight: 496,
               top: 622,
               left: '50%',

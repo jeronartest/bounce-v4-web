@@ -1,5 +1,5 @@
 import { Box, Container, styled } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
 import { SwiperSlide } from 'swiper/react'
@@ -85,6 +85,16 @@ export const ActiveUser: React.FC = () => {
       total: resp.data.total
     }
   })
+  const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / 442)
+  useEffect(() => {
+    const resetView = () => {
+      setSlidesPerView(window.innerWidth / 442)
+    }
+    window.addEventListener('resize', resetView)
+    return () => {
+      window.addEventListener('resize', resetView)
+    }
+  }, [])
   return (
     <Box
       style={{
@@ -103,9 +113,10 @@ export const ActiveUser: React.FC = () => {
       </Container>
       <SlideProgress
         swiperStyle={{
-          spaceBetween: 20,
-          slidesPerView: 3.1,
-          loop: false
+          spaceBetween: 16,
+          slidesPerView: slidesPerView,
+          loop: false,
+          freeMode: true
         }}
       >
         {data?.list.map((data: any, idx: number) => (

@@ -69,10 +69,10 @@ export function SlideProgress(props: ISlideProgress) {
         {children}
       </Swiper>
       <Box display={'flex'} alignItems={'center'} mt={34}>
-        <ArrowBg className={props.grayArrow ? 'gray' : ''} onClick={() => swiper?.slidePrev(1)}>
+        <ArrowBg className={props.grayArrow ? 'gray' : ''} onClick={() => swiper?.slidePrev()}>
           <ArrowBackIcon />
         </ArrowBg>
-        <ArrowBg className={props.grayArrow ? 'gray' : ''} ml={8} mr={16} onClick={() => swiper?.slideNext(1)}>
+        <ArrowBg className={props.grayArrow ? 'gray' : ''} ml={8} mr={16} onClick={() => swiper?.slideNext()}>
           <ArrowForwardIcon />
         </ArrowBg>
         <Box display={'flex'} width={'100%'}>
