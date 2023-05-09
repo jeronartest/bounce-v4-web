@@ -84,7 +84,7 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
       return <></>
   }
 }
-const getRoute = (category: PoolType) => {
+export const getRoute = (category: PoolType) => {
   let route = routes.auction.fixedPrice
   switch (category) {
     case PoolType.Lottery:

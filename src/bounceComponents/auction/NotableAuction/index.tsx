@@ -21,7 +21,7 @@ import Image from 'components/Image'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
-
+import { getRoute } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
@@ -110,7 +110,7 @@ export const NotableAuction: React.FC = () => {
             {data?.list?.map((fixedSwaptem: any, index: number) => (
               <SwiperSlide key={index}>
                 <Link
-                  to={routes.auction.fixedPrice
+                  to={getRoute(fixedSwaptem.category)
                     .replace(
                       ':chainShortName',
                       getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])

@@ -288,14 +288,14 @@ const FooterPc: React.FC = () => {
         extraIcon: '',
         className: ''
       },
-      {
-        label: 'Token Authentication',
-        isExternal: true,
-        href: '',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
+      //   {
+      //     label: 'Token Authentication',
+      //     isExternal: true,
+      //     href: '',
+      //     isDisabled: false,
+      //     extraIcon: '',
+      //     className: ''
+      //   },
       {
         label: 'SDKs&Plug-Ins',
         isExternal: true,
