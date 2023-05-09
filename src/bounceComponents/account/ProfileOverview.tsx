@@ -301,7 +301,11 @@ function SocialEditInput({ value, setValue }: { value: string; setValue: (val: s
             </Typography>
           </>
         )}
-        {mode === 'set' && <Typography>{value}</Typography>}
+        {mode === 'set' && (
+          <Typography maxWidth={200} noWrap>
+            {value}
+          </Typography>
+        )}
         <IconButton
           onClick={() => {
             setValue('')

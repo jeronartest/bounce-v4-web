@@ -57,8 +57,8 @@ export function DashboardPoolCard({ title, children }: { title: string; children
 export function DashboardStatCard({ name, value }: { name: string; value: string | number }) {
   return (
     <StyledStatCard>
-      <Typography color={'#908E96'}>{name}</Typography>
-      <Typography fontSize={22} fontWeight={500} color="#2663FF">
+      <Typography color={'var(--ps-text-2)'}>{name}</Typography>
+      <Typography fontSize={28} fontWeight={500} color="#2663FF">
         {value}
       </Typography>
     </StyledStatCard>
@@ -131,7 +131,7 @@ export function DashboardNoData() {
         />
       </svg>
 
-      <Typography mt={10} color={'#D1D4D8'} textAlign={'center'}>
+      <Typography mt={10} color={'var(--ps-text-2)'} textAlign={'center'}>
         No data
       </Typography>
     </Box>

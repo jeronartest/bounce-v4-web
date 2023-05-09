@@ -137,7 +137,7 @@ export const ComponentOptions = {
             fontFamily: `"Sharp Grotesk DB Cyr Book 20"`,
             fontSize: 14,
             color: common.text,
-            background: '#F5F5F5'
+            background: '#F6F7F3'
           },
           a: {
             textDecoration: 'none',
@@ -195,10 +195,21 @@ export const ComponentOptions = {
           textTransform: 'none',
           fontSize: 14,
           lineHeight: '20px',
+          transition:
+            'background-color 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           '&:disabled': {
             border: '1px solid var(--ps-text-5)',
             background: 'var(--ps-text-5)',
             color: 'var(--ps-white)'
+          },
+          '&:hover': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)'
+          },
+          '&:active': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)',
+            color: 'var(--ps-primary)'
           }
         },
         sizeLarge: {
