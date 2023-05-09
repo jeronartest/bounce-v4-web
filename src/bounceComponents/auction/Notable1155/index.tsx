@@ -48,8 +48,8 @@ export const Notable1155: React.FC = () => {
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
         <H3 justifyContent={'center'}>Notable Auctions</H3>
-        <CenterRow justifyContent={'space-between'} mt={40}>
-          <H4 mb={33}>ERC1155</H4>
+        <CenterRow mb={33} justifyContent={'space-between'} mt={40}>
+          <H4>ERC1155</H4>
           <Row gap={8}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
             <Select

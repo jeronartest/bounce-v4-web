@@ -9,7 +9,7 @@ import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
-import NetworkSelect from './NetworkSelect'
+import NetworkPopperSelect from './NetworkPopperSelect'
 import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
@@ -17,6 +17,8 @@ import LoginModal from './LoginModal'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
 import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
 import { useHeaderBgOpacity } from 'hooks/useScroll'
+import Resources from './Resources'
+import HeaderLink from './HeaderLink'
 
 interface TabContent {
   title: string
@@ -115,6 +117,8 @@ const transparentRoutes = [
   routes.market.nftPools,
   routes.nftAuction.index,
   routes.tokenAuction.index,
+  routes.adsAuction.index,
+  routes.realAuction.index,
   routes.launchpad.index
 ]
 
@@ -148,12 +152,15 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image src={logo} alt={'logo'} />
           </MainLogo>
+
+          {!isTransparentRoute && <HeaderLink />}
         </Box>
 
         <Stack direction={'row'} alignItems="center" spacing={8}>
           <Search />
+          <Resources />
           <CreateBtn />
-          <NetworkSelect />
+          <NetworkPopperSelect />
           <Web3Status />
 
           {!token && (

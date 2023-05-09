@@ -28,6 +28,7 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
       <Box
         sx={{
           position: 'fixed',
+          zIndex: 1,
           top: theme => `${theme.height.header}`,
           left: 0,
           right: 0
