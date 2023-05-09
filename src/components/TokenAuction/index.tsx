@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Box, Grid, Typography, Button, Skeleton, Stack } from '@mui/material'
-import TokenAuctionImg from 'assets/imgs/common/TokenAuction.svg'
-import NFTAuctionImg from 'assets/imgs/common/NFTAuction.svg'
-import AdSpaceAuctionImg from 'assets/imgs/common/AdSpaceAuction.svg'
-import RealWorldImg from 'assets/imgs/common/RealWorld.svg'
+import TokenAuctionImg from 'assets/imgs/common/TokenAuction.png'
+import NFTAuctionImg from 'assets/imgs/common/NFTAuction.png'
+import AdSpaceAuctionImg from 'assets/imgs/common/AdSpaceAuction.png'
+import RealWorldImg from 'assets/imgs/common/RealWorld.png'
 import leftArrowLightImg from 'assets/imgs/common/leftArrowLight.svg'
 import leftArrowGrayImg from 'assets/imgs/common/leftArrowGray.svg'
 import rightArrayLightImg from 'assets/imgs/common/rightArrayLight.svg'
@@ -122,7 +122,10 @@ const PaginationBox = (props: PaginationParams) => {
           alignItems: 'center',
           borderRadius: 8,
           cursor: index === 0 ? 'unset' : 'pointer',
-          background: index === 0 ? 'var(--ps-text-1)' : 'var(--ps-text-3)'
+          background: index === 0 ? 'var(--ps-text-1)' : 'var(--ps-text-3)',
+          '&:hover': {
+            background: 'var(--ps-text-1)'
+          }
         }}
         onClick={() => {
           const value = index - 1 <= 0 ? 0 : index - 1
@@ -159,7 +162,10 @@ const PaginationBox = (props: PaginationParams) => {
           alignItems: 'center',
           borderRadius: 8,
           cursor: index === total - 1 ? 'unset' : 'pointer',
-          background: index === total - 1 ? 'var(--ps-text-1)' : 'var(--ps-text-3)'
+          background: index === total - 1 ? 'var(--ps-text-1)' : 'var(--ps-text-3)',
+          '&:hover': {
+            background: 'var(--ps-text-1)'
+          }
         }}
         onClick={() => {
           const value = index >= total - 1 ? total - 1 : index + 1
@@ -441,6 +447,8 @@ const TokenAuction: React.FC = () => {
               style={{
                 position: 'absolute',
                 top: 100,
+                display: 'block',
+                width: 350,
                 left: '50%',
                 transform: 'translateX(-50%)'
               }}
@@ -468,6 +476,8 @@ const TokenAuction: React.FC = () => {
               style={{
                 position: 'absolute',
                 top: 100,
+                display: 'block',
+                width: 350,
                 left: '50%',
                 transform: 'translateX(-50%)'
               }}
@@ -495,6 +505,8 @@ const TokenAuction: React.FC = () => {
               style={{
                 position: 'absolute',
                 top: 100,
+                display: 'block',
+                width: 350,
                 left: '50%',
                 transform: 'translateX(-50%)'
               }}
@@ -522,6 +534,8 @@ const TokenAuction: React.FC = () => {
               style={{
                 position: 'absolute',
                 top: 100,
+                display: 'block',
+                width: 350,
                 left: '50%',
                 transform: 'translateX(-50%)'
               }}
