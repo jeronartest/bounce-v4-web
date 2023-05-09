@@ -30,7 +30,7 @@ export const useMuiThemes = () => {
         gradient1: '#ffffff linear-gradient(154.62deg, #77C803 9.44%, #28A03E 59.25%);'
       },
       height: {
-        header: '86px',
+        header: '76px',
         mobileHeader: '51px',
         footer: '60px'
       },

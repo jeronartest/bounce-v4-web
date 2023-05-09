@@ -178,7 +178,7 @@ export default function ProfileOverview() {
                 loadingPosition="start"
                 startIcon={<></>}
                 variant="contained"
-                className="black-button"
+                color="secondary"
                 sx={{ width: 116, height: 52, textAlign: 'right' }}
                 type="submit"
               >

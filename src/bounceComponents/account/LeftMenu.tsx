@@ -113,13 +113,13 @@ export default function LeftMenu() {
       <Box
         sx={{
           position: 'fixed',
-          top: `${theme.height.header}`,
+          top: `calc(${theme.height.header} + 1px)`,
           left: 0,
           width: 240,
           bottom: 0,
           padding: '16px 8px',
           backgroundColor: '#fff',
-          borderRight: '1px solid rgba(23, 23, 23, 0.1)',
+          borderRight: '1px solid var(--ps-text-5)',
           overflowY: 'auto'
         }}
       >

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import LeftMenu from './LeftMenu'
+import Divider from 'components/Divider'
 
 export default function AccountLayout({ children, bgColor }: { children: JSX.Element | string; bgColor?: string }) {
   const { token } = useUserInfo()
@@ -20,9 +21,20 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
     <Box
       sx={{
         display: 'grid',
+        // borderTop: '1px solid var(--ps-text-5)',
         gridTemplateColumns: '240px 1fr'
       }}
     >
+      <Box
+        sx={{
+          position: 'fixed',
+          top: theme => `${theme.height.header}`,
+          left: 0,
+          right: 0
+        }}
+      >
+        <Divider />
+      </Box>
       <LeftMenu />
       <Box
         sx={{

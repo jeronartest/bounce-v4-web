@@ -1,4 +1,3 @@
-import { Box, Container } from '@mui/material'
 import FooterPc from 'components/Footer/FooterPc'
 import TypesOfAuction from 'components/TypesOfAuction'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
@@ -18,12 +17,8 @@ const TokenAuctionPage: React.FC = ({}) => {
   }
   return (
     <>
-      <Container maxWidth="lg">
-        <HeaderTab onTabChange={tab => console.log(tab)} />
-        <Box mt={16}>
-          <ArrowBanner type={'Token'} />
-        </Box>
-      </Container>
+      <HeaderTab />
+      <ArrowBanner type={'Token'} />
       <TypesOfAuction />
       <NotableAuction />
       <UpcomingAuction handleViewAll={handleOpen} />

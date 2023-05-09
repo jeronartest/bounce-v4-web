@@ -166,7 +166,7 @@ export function DashboardToPoolButton({
               .replace(':poolId', poolId.toString())
       }
     >
-      <Button className="black-button" variant="contained" sx={btnStyle}>
+      <Button color="secondary" variant="contained" sx={btnStyle}>
         {text}
       </Button>
     </Link>

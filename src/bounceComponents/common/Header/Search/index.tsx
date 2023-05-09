@@ -39,12 +39,14 @@ const Search: React.FC = () => {
     <Box
       sx={{
         height: 44,
+        width: 44,
         position: 'relative',
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {
-            background: 'rgb(255, 255, 255)',
+            background: 'var(--ps-text-4)',
+            color: 'var(--ps-text-5)',
             border: 'none !important',
-            width: 310
+            width: 400
           }
         },
         '.MuiOutlinedInput-root': {
@@ -54,7 +56,7 @@ const Search: React.FC = () => {
           width: 44,
           height: 44,
           overflow: 'hidden',
-          background: '#F5F6F8',
+          background: 'rgba(18, 18, 18, 0.06)',
           padding: '0 !important',
           border: 'none',
           '& input': {

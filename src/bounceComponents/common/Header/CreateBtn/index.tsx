@@ -80,18 +80,12 @@ const CreateBtn: React.FC = () => {
   return (
     <Box>
       <Button
-        variant="outlined"
-        size="small"
+        variant="contained"
         sx={{
           width: 109,
           height: 44,
           borderRadius: 8,
-          border: 'none',
-          background: 'var(--ps-yellow-1)',
-          '&: hover': {
-            backgroundColor: '#000',
-            color: '#fff'
-          }
+          border: 'none'
         }}
         onClick={handleMenuOpen}
         startIcon={<AddSvg />}
