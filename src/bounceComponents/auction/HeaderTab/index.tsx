@@ -25,23 +25,23 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
   const navigate = useNavigate()
   const tabs = [
     'All',
+    'Private Launchpad',
     'Token Auction',
     'NFT Auction',
     'Real World collectibles Auction',
-    'Ads Auction',
-    'Private Launchpad'
+    'Ads Auction'
   ]
   const path =
     location.pathname === '/TokenAuction'
-      ? tabs[1]
-      : location.pathname === '/NFTAuction'
       ? tabs[2]
-      : location.pathname === '/real-auction'
+      : location.pathname === '/NFTAuction'
       ? tabs[3]
-      : location.pathname === '/ads-auction'
+      : location.pathname === '/real-auction'
       ? tabs[4]
-      : location.pathname === '/launch-pad'
+      : location.pathname === '/ads-auction'
       ? tabs[5]
+      : location.pathname === '/launch-pad'
+      ? tabs[1]
       : tabs[0]
   const [currentTab, setCurrentTab] = useState(path)
 

@@ -145,8 +145,8 @@ export const NFTCard = (props: NFTPrams) => {
       >
         <Image
           src={token0?.largeUrl || token0?.smallUrl || token0?.thumbUrl || NFTDefaultIcon}
-          width={323}
-          height={323}
+          width={'100%'}
+          height={'100%'}
           alt="NFT"
           style={{
             position: 'absolute',
@@ -154,7 +154,8 @@ export const NFTCard = (props: NFTPrams) => {
             left: '50%',
             transform: 'translate3D(-50%, -50%, 0)',
             maxWidth: '100%',
-            maxHeight: '100%'
+            maxHeight: '100%',
+            objectFit: 'cover'
           }}
         />
         <Box
@@ -167,7 +168,8 @@ export const NFTCard = (props: NFTPrams) => {
             padding: '12px',
             display: 'flex',
             flexFlow: 'column nowrap',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            boxSizing: 'border-box'
           }}
         >
           <Box
@@ -182,7 +184,6 @@ export const NFTCard = (props: NFTPrams) => {
               e.preventDefault()
               navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
             }}
-            mb={12}
           >
             <Avatar
               src={creatorUserInfo.avatar || DefaultAvatarSVG}
