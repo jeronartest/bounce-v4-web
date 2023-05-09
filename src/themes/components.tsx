@@ -194,7 +194,12 @@ export const ComponentOptions = {
         root: {
           textTransform: 'none',
           fontSize: 14,
-          lineHeight: '20px'
+          lineHeight: '20px',
+          '&:disabled': {
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
+          }
         },
         sizeLarge: {
           height: 72,
@@ -232,10 +237,14 @@ export const ComponentOptions = {
             background: 'var(--ps-gray-900)',
             color: 'var(--ps-white)'
           },
-          '&:disabled': {}
+          '&:disabled': {
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
+          }
         },
         outlinedPrimary: {
-          border: '0px solid var(--ps-yellow-1)',
+          border: '1px solid var(--ps-yellow-1)',
           background: 'var(--ps-primary)',
           color: 'var(--ps-gray-900)',
           '&:hover': {
@@ -248,8 +257,9 @@ export const ComponentOptions = {
             color: 'var(--ps-primary)'
           },
           '&:disabled': {
-            border: '1px solid var(--ps-gray-700)',
-            color: 'var(--ps-gray-700)'
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
           }
         },
         containedSecondary: {
@@ -260,6 +270,18 @@ export const ComponentOptions = {
             boxShadow: 'none',
             background: 'var(--ps-yellow-1)',
             color: 'var(--ps-text-3)'
+          }
+        },
+        outlinedSecondary: {
+          border: '1px solid var(--ps-gray-20)',
+          backgroundColor: 'var(--ps-white)',
+          '&:hover': {
+            border: '1px solid var(--ps-yellow-1)',
+            backgroundColor: 'var(--ps-white)'
+          },
+          '&:active': {
+            border: '1px solid var(--ps-yellow-1)',
+            backgroundColor: 'var(--ps-white)'
           }
         }
       }
