@@ -255,7 +255,7 @@ export const ComponentOptions = {
           }
         },
         outlinedPrimary: {
-          border: '1px solid var(--ps-yellow-1)',
+          border: '1px solid var(--ps-gray-20)',
           background: 'var(--ps-primary)',
           color: 'var(--ps-gray-900)',
           '&:hover': {

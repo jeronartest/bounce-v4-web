@@ -19,7 +19,7 @@ export default function AccountMyCredentials() {
             bgColor="var(--ps-white)"
             prompt="This feature will be available soon. Please stay tuned."
             sx={{
-              padding: '20px 0'
+              padding: '0'
             }}
           />
         </Container>

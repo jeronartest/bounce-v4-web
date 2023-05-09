@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
-import { Box, CircularProgress, Stack, Typography } from '@mui/material'
-import { ReactComponent as AddSVG } from './assets/add.svg'
+import { Box, CircularProgress, Stack, Typography, styled } from '@mui/material'
+import { ReactComponent as AddSVG } from './assets/default_add.svg'
 import styles from './styles'
 import Uploader from 'bounceComponents/common/Uploader'
 import type { IFile } from 'bounceComponents/common/Uploader'
@@ -13,9 +13,28 @@ export type IUploadItemProps = {
   onRemove?: (value: IFile) => void
   sx?: any
   tips?: string
+  inputId?: string
 }
 
-const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onChange, sx, tips }) => {
+export const StyledAvatarInputIdLabel = styled('label')({
+  position: 'absolute',
+  left: 148,
+  top: 75,
+  width: 74,
+  height: 32,
+  cursor: 'pointer',
+  backgroundColor: 'var(--ps-yellow-1)',
+  borderRadius: 8,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  '&:hover': {
+    backgroundColor: 'var(--ps-black)',
+    color: 'var(--ps-white)'
+  }
+})
+
+const UploadItem: React.FC<IUploadItemProps> = ({ inputId, value, accept, limitSize, onChange, sx, tips }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const UploadContent = useMemo(() => {
@@ -39,9 +58,6 @@ const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onCh
     }
     return (
       <Box sx={styles.addItem}>
-        <Typography variant="body1" sx={{ mr: 8 }}>
-          Add
-        </Typography>
         <AddSVG />
       </Box>
     )
@@ -62,6 +78,7 @@ const UploadItem: React.FC<IUploadItemProps> = ({ value, accept, limitSize, onCh
         }}
       >
         <Uploader
+          inputId={inputId}
           sx={styles.uploadBox}
           accept={accept}
           limitSize={limitSize}

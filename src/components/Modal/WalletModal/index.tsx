@@ -79,6 +79,7 @@ export function useGetWalletOptions(
             }}
             id={`connect-${key}`}
             key={key}
+            clickable={!option.disabled}
             active={option.connector && option.connector === connector}
             link={option.href}
             header={option.name}
@@ -92,6 +93,7 @@ export function useGetWalletOptions(
               option.connector !== connector && !option.href && tryActivation(option.connector)
             }}
             id={`connect-${key}`}
+            clickable={!option.disabled}
             key={key}
             active={option.connector && option.connector === connector}
             link={option.href}
@@ -111,6 +113,7 @@ export function useGetWalletOptions(
           return (
             <Option
               id={`connect-${key}`}
+              clickable={!option.disabled}
               key={key}
               header={'Install Metamask'}
               link={'https://metamask.io/'}
@@ -135,6 +138,7 @@ export function useGetWalletOptions(
     return !isMobile && !option.mobileOnly ? (
       <Option
         id={`connect-${key}`}
+        clickable={!option.disabled}
         onClick={() => {
           option.connector === connector
             ? isModal

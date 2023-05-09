@@ -42,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <AccountLayout>
-      <Box>
+      <Box padding="0 20px">
         <Container maxWidth="lg">
           <Box padding="40px 0">
             <Typography variant="h3" fontSize={30}>
