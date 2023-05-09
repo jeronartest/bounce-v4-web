@@ -27,7 +27,7 @@ export const Launchpad: React.FC = () => {
     <Box>
       <HeaderTab />
       <Box mt={16}>
-        <ArrowBanner />
+        <ArrowBanner type={'All'} />
       </Box>
       <PrivatePad />
       <FooterPc />
