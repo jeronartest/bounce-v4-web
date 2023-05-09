@@ -10,7 +10,7 @@ const Market: React.FC = ({}) => {
   return (
     <>
       <HeaderTab onTabChange={tab => console.log(tab)} />
-      <ArrowBanner />
+      <ArrowBanner type={'All'} />
       <AuctionRankCard />
       <TokenAuction />
       <ActiveUser />
