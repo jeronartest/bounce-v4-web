@@ -7,18 +7,33 @@ import { CenterColumn, CenterRow } from '../../components/Layout'
 import AuctionTypeSelect from '../../bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from '../account/MyTokenOrNFT'
 import { useOptionDatas } from '../../state/configOptions/hooks'
-import { TokenCard } from '../../bounceComponents/launchpad/TokenCard'
-import { LaunchPadCard } from '../../bounceComponents/launchpad/LaunchPadCard'
+import {
+  LaunchCardFinish,
+  LaunchCardLive,
+  LaunchCardSocial,
+  LaunchCardUpcoming
+} from '../../bounceComponents/launchpad/LaunchCard'
+import {
+  TokenCard,
+  TokenCardFinish,
+  TokenCardLive,
+  TokenCardUpcoming
+} from '../../bounceComponents/launchpad/TokenCard'
+import { PoolStatus } from '../../api/pool/type'
+import FooterPc from '../../components/Footer/FooterPc'
 
 export const Launchpad: React.FC = () => {
   return (
-    <Container>
-      <HeaderTab />
-      <Box mt={16}>
-        <ArrowBanner />
-      </Box>
+    <>
+      <Container maxWidth="lg">
+        <HeaderTab />
+        <Box mt={16}>
+          <ArrowBanner />
+        </Box>
+      </Container>
       <PrivatePad />
-    </Container>
+      <FooterPc />
+    </>
   )
 }
 
@@ -63,8 +78,14 @@ const PrivatePad: React.FC = () => {
           </Select>
         </CenterRow>
       </CenterRow>
-      <LaunchPadCard />
-      <TokenCard />
+      <LaunchCardFinish />
+      <LaunchCardLive />
+      <LaunchCardUpcoming />
+      <LaunchCardSocial />
+      <TokenCardFinish />
+      <TokenCardLive />
+      <TokenCardUpcoming />
+      <TokenCard state={PoolStatus.Upcoming} />
       <Pagination />
     </PrivatePadBg>
   )
