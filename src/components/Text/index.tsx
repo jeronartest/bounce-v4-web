@@ -69,7 +69,7 @@ export const SmallText = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 140%;
-  color: rgba(27, 27, 27, 0.4);
+  color: var(--ps-text-3);
 `
 export const Body02 = styled(Typography)`
   font-family: 'Inter';

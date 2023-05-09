@@ -115,7 +115,14 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         cursor: 'pointer'
       }}
     >
-      <H7Gray mr={12}>{props.index}</H7Gray>
+      <H7Gray
+        mr={12}
+        sx={{
+          color: 'var(--ps-text-3)'
+        }}
+      >
+        {props.index}
+      </H7Gray>
       <Avatar src={props.token0.largeUrl ? props.token0.largeUrl : EmptyAvatar} />
       <H7>{props.name}</H7>
     </CenterRow>,
