@@ -14,6 +14,7 @@ import {
   Typography
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
+import { PoolStatus } from 'api/pool/type'
 import React, { useEffect, useRef, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
@@ -131,14 +132,14 @@ export const NFTCard = (props: NFTPrams) => {
         background: '#fff',
         // border: `1px solid rgba(0, 0, 0, 0.1)`,
         boxShadow: `0px 5px 20px rgba(0, 0, 0, 0.08)`,
-        borderRadius: '20px'
+        borderRadius: '24px'
       }}
     >
       <Box
         sx={{
           position: 'relative',
           paddingTop: '86%',
-          borderRadius: '20px 20px 0 0',
+          borderRadius: '24px 24px 0 0',
           overflow: 'hidden'
         }}
         mb={16}
@@ -223,7 +224,10 @@ export const NFTCard = (props: NFTPrams) => {
                   color: '#D7D6D9'
                 }}
               >
-                {creatorUserInfo?.publicRole?.length > 0
+                {creatorUserInfo &&
+                creatorUserInfo?.publicRole &&
+                Array.isArray(creatorUserInfo.publicRole) &&
+                creatorUserInfo.publicRole.length > 0
                   ? creatorUserInfo?.publicRole
                       ?.map((item: string | number) => {
                         return getLabelById(item, 'role', optionDatas?.publicRoleOpt)
@@ -256,7 +260,8 @@ export const NFTCard = (props: NFTPrams) => {
                   height: 24,
                   lineHeight: '24px',
                   padding: '0 8px',
-                  background: `rgba(255, 255, 255, 0.6)`,
+                  background: `rgba(255, 255, 255, 0.2)`,
+                  color: '#fff',
                   borderRadius: 20,
                   fontFamily: 'Sharp Grotesk DB Cyr Book 20',
                   fontWeight: 400,
@@ -271,7 +276,8 @@ export const NFTCard = (props: NFTPrams) => {
                   height: 24,
                   lineHeight: '24px',
                   padding: '0 8px',
-                  background: `rgba(255, 255, 255, 0.6)`,
+                  background: `rgba(255, 255, 255, 0.2)`,
+                  color: '#fff',
                   borderRadius: 20,
                   fontFamily: 'Sharp Grotesk DB Cyr Book 20',
                   fontWeight: 400,
@@ -286,7 +292,8 @@ export const NFTCard = (props: NFTPrams) => {
                   height: 24,
                   lineHeight: '24px',
                   padding: '0 8px',
-                  background: `rgba(255, 255, 255, 0.6)`,
+                  background: `rgba(255, 255, 255, 0.2)`,
+                  color: '#fff',
                   borderRadius: 20,
                   fontFamily: 'Sharp Grotesk DB Cyr Book 20',
                   fontWeight: 400,
@@ -330,7 +337,14 @@ export const NFTCard = (props: NFTPrams) => {
               fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
               fontWeight: 500,
               fontSize: 20,
-              color: '#171717',
+              color:
+                status === PoolStatus.Upcoming
+                  ? 'var(--ps-text-2)'
+                  : status === PoolStatus.Live
+                  ? 'var(--ps-green-1)'
+                  : status === PoolStatus.Closed || status === PoolStatus.Cancelled
+                  ? 'var(--ps-text-7)'
+                  : '#171717',
               height: '21px',
               lineHeight: '21px',
               overflow: 'hidden',
@@ -366,13 +380,15 @@ export const NFTCard = (props: NFTPrams) => {
                 marginRight: '4px'
               }}
             >
-              <SizeIcon
+              <picture
                 style={{
-                  verticalAlign: 'middle',
-                  marginRight: 7
+                  marginRight: '4px',
+                  verticalAlign: 'middle'
                 }}
-              />
-              <span>{amountTotal0}</span>
+              >
+                <img src={token1.largeUrl} width={12} height={12} />
+              </picture>
+              {chainConfigInBackend?.ethChainId ? ChainListMap[chainConfigInBackend?.ethChainId as ChainId]?.name : '-'}
             </Box>
             <Box
               sx={{
@@ -388,15 +404,13 @@ export const NFTCard = (props: NFTPrams) => {
                 borderRadius: 20
               }}
             >
-              <picture
+              <SizeIcon
                 style={{
-                  marginRight: '4px',
-                  verticalAlign: 'middle'
+                  verticalAlign: 'middle',
+                  marginRight: 7
                 }}
-              >
-                <img src={token1.largeUrl} width={12} height={12} />
-              </picture>
-              {chainConfigInBackend?.ethChainId ? ChainListMap[chainConfigInBackend?.ethChainId as ChainId]?.name : '-'}
+              />
+              <span>{amountTotal0}</span>
             </Box>
           </Box>
         </Box>

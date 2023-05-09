@@ -228,7 +228,15 @@ const NFTAuctionListDialog = (props: DialogParams) => {
             paddingBottom: 100
           }}
         >
-          <Box mb={160}>
+          <Box
+            mb={160}
+            sx={{
+              width: '100%',
+              maxWidth: 1440,
+              margin: '0 auto',
+              paddingBottom: 100
+            }}
+          >
             {poolsData?.total > 0 ? (
               <Grid container spacing={18}>
                 {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
