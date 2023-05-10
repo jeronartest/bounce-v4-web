@@ -84,7 +84,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
     <Box mx={12} mb={48} p={'40px 30px 48px 36px'}>
       <Box display={'flex'} justifyContent="space-between" alignItems={'center'}>
         <Typography fontFamily={'"Sharp Grotesk DB Cyr Medium 22"'} fontSize={24}>
-          Token & NFT Auction
+          {tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'} Auction
         </Typography>
         <Stack direction={'row'} spacing={15}>
           <Select
