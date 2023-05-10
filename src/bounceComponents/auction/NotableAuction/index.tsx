@@ -22,6 +22,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getRoute } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
+import EmptyData from 'bounceComponents/common/EmptyData'
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
@@ -98,6 +99,10 @@ export const NotableAuction: React.FC = () => {
               </Grid>
             ))}
           </Grid>
+        ) : data?.list?.length === 0 ? (
+          <Box>
+            <EmptyData />
+          </Box>
         ) : (
           <SlideProgress
             grayArrow

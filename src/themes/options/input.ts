@@ -3,7 +3,11 @@ const InputOptions = {
     MuiInputBase: {
       styleOverrides: {
         root: {
-          height: 60,
+          height: 54,
+          border: '1px solid var(--ps-white)',
+          '&:hover': {
+            borderColor: 'var(--ps-yellow-1)'
+          },
           backgroundColor: 'var(--ps-white)',
           'fieldset legend': {
             display: 'none!important'
@@ -19,7 +23,8 @@ const InputOptions = {
             }
           },
           '&.Mui-error': {
-            color: 'var(--ps-error)'
+            color: 'var(--ps-error)',
+            borderColor: 'var(--ps-error)'
           },
           '&.Mui-disabled': {
             '.Mui-disabled': {
@@ -46,7 +51,7 @@ const InputOptions = {
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 20
+          borderRadius: 8
         }
       }
     },
@@ -94,7 +99,7 @@ const InputOptions = {
           paddingBottom: 8
         },
         paper: {
-          borderRadius: 20,
+          borderRadius: 8,
           backgroundColor: 'var(--ps-white)',
           border: '1px solid var(--ps-gray-300)',
           boxShadow: 'none'

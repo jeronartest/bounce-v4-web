@@ -1,4 +1,4 @@
-import { Button, Link, styled } from '@mui/material'
+import { Box, Button, Link, styled } from '@mui/material'
 import PopperCard from 'components/PopperCard'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
@@ -44,13 +44,13 @@ export default function Resources() {
         </Button>
       }
     >
-      <div>
+      <Box width={180}>
         {linkList.map(item => (
           <Link key={item.label} underline="none" href={item.href} target="_blank">
             <StyledButton variant="text">{item.label}</StyledButton>
           </Link>
         ))}
-      </div>
+      </Box>
     </PopperCard>
   )
 }

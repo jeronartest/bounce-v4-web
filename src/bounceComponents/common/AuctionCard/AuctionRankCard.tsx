@@ -246,11 +246,7 @@ export const AuctionRankCard: React.FC = () => {
       {data?.list && data?.list?.length === 0 && (
         <Box
           sx={{
-            padding: '12px',
-            display: 'flex',
-            background: 'white',
-            overflow: 'hidden',
-            borderRadius: '0px 30px 30px 30px'
+            background: 'white'
           }}
         >
           <EmptyData />

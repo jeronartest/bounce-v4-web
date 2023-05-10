@@ -6,7 +6,6 @@ import Slide from '@mui/material/Slide'
 import React, { useEffect, useCallback, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import CloseIcon from 'assets/imgs/common/closeIcon.svg'
-import NoData from 'bounceComponents/common/NoData'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
@@ -27,6 +26,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PoolType } from 'api/pool/type'
 import { formatNumber } from 'utils/number'
 import FixedSelected from 'components/FixedSelected'
+import EmptyData from 'bounceComponents/common/EmptyData'
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
@@ -409,7 +409,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                 ))}
               </Grid>
             ) : (
-              <NoData />
+              <EmptyData />
             )}
 
             {poolsData?.total >= defaultIdeaPageSize && (
