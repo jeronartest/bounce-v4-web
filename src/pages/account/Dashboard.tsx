@@ -87,8 +87,8 @@ export default function Dashboard() {
                     )}
                   </Stack>
 
-                  <Box height={32}>
-                    {userInfo?.location && (
+                  {userInfo?.location && (
+                    <Box height={32}>
                       <Chip
                         sx={{
                           width: 84,
@@ -96,8 +96,8 @@ export default function Dashboard() {
                         }}
                         label={userInfo.location}
                       />
-                    )}
-                  </Box>
+                    </Box>
+                  )}
 
                   <Stack direction={'row'} alignItems="center" justifyContent="space-between" spacing={12}>
                     <SocialMediaButtonGroup
@@ -267,6 +267,7 @@ function FavoritesAuctionsList() {
     </DashboardPoolCard>
   )
 }
+
 function CreateAuctionsList({ title, queryType }: { title: string; queryType: DashboardQueryType }) {
   const { data, loading } = useDashboardUserCreated(queryType)
   return (
