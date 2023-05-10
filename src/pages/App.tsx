@@ -55,6 +55,8 @@ import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 
+import Accelbyte from 'pages/accelbyte/Accelbyte'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -121,6 +123,8 @@ export default function App() {
                     <Route path={routes.account.tokenOrNFT} element={<MyTokenOrNFT />} />
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
+
+                    <Route path={'/accelbyte'} element={<Accelbyte />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
