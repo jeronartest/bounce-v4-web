@@ -1,4 +1,4 @@
-import { Box, SxProps, Theme, Typography } from '@mui/material'
+import { Box, SxProps, Theme } from '@mui/material'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import ComingSoon from 'pages/ComingSoon'
 import FooterPc from 'components/Footer/FooterPc'
@@ -13,16 +13,7 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
         }}
       >
         <HeaderTab />
-        <ComingSoon />
-        <Typography
-          sx={{
-            fontFamily: `'Inter'`,
-            fontSize: 14,
-            textAlign: 'center'
-          }}
-        >
-          The real world collectibles auction will be available soon. Please stay tuned.
-        </Typography>
+        <ComingSoon prompt="The real world collectibles auction will be available soon. Please stay tuned." />
       </Box>
       <FooterPc />
     </>
