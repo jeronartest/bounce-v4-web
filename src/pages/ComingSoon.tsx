@@ -29,9 +29,10 @@ export default function ComingSoon({
           alignItems: 'center'
         }}
       >
-        <Box mt={100}>
+        <Box mt={100} mb={100}>
           <img
             style={{
+              display: 'block',
               width: 453,
               margin: '0 auto'
             }}
