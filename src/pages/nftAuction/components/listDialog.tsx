@@ -15,6 +15,7 @@ import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import FooterPc from 'components/Footer/FooterPc'
 import FixedSelected from 'components/FixedNftSelected'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 
 const Transition = React.forwardRef(function Transition(
@@ -129,6 +130,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
   const {
     pagination: poolsPagination,
     data: poolsData,
+    loading,
     run
   } = usePagination<any, Params>(
     async ({
@@ -204,6 +206,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
   }
   useEffect(() => {
     open && handleSubmit(filterValues)
+    !open && setFilterValues(initialValues)
   }, [handleSubmit, open, filterValues])
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
@@ -237,7 +240,19 @@ const NFTAuctionListDialog = (props: DialogParams) => {
               paddingBottom: 100
             }}
           >
-            {poolsData?.total > 0 ? (
+            {loading ? (
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '70vh',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <BounceAnime />
+              </Box>
+            ) : poolsData?.total > 0 ? (
               <Grid container spacing={18}>
                 {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                   <Grid item xs={3} sm={3} md={3} lg={3} xl={3} key={index}>

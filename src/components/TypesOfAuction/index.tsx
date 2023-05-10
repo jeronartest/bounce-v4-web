@@ -33,6 +33,8 @@ import Icon8 from 'assets/imgs/home/TypeOfAuction/icon8.svg'
 import { getAuctionVolumeCountData } from 'api/market'
 import { useRequest } from 'ahooks'
 import { PoolType } from 'api/pool/type'
+import PoolListDialog from 'pages/tokenAuction/components/listDialog'
+import NftListDialog from 'pages/nftAuction/components/listDialog'
 
 interface AuctionItemParams {
   title: string
@@ -40,9 +42,13 @@ interface AuctionItemParams {
   hoverImg: string
   totalValue: number
   link?: string
+  poolType?: PoolType | string
+  handleOpenTokenAuction?: () => void
+  handleOpenNFTAuction?: () => void
 }
 const AuctionItem = (props: AuctionItemParams) => {
-  const { title, defaultImg, hoverImg, totalValue, link } = props
+  const { title, defaultImg, hoverImg, totalValue, link, handleOpenTokenAuction, handleOpenNFTAuction, poolType } =
+    props
   const [isHover, setIsHover] = useState(false)
   return (
     <Box
@@ -59,7 +65,13 @@ const AuctionItem = (props: AuctionItemParams) => {
         setIsHover(false)
       }}
       onClick={() => {
-        link && window.open(link, '_blank')
+        if (poolType === PoolType.FixedSwap || poolType === PoolType.Lottery) {
+          handleOpenTokenAuction && handleOpenTokenAuction()
+        } else if (poolType === PoolType.fixedSwapNft) {
+          handleOpenNFTAuction && handleOpenNFTAuction()
+        } else {
+          link && window.open(link, '_blank')
+        }
       }}
     >
       {
@@ -123,7 +135,7 @@ const AuctionItem = (props: AuctionItemParams) => {
             sx={{
               fontFamily: `'Inter'`,
               fontWeight: 400,
-              fontSize: 14,
+              fontSize: 13,
               color: 'var(--ps-text-3)',
               lineHeight: '24px',
               marginBottom: 15
@@ -282,6 +294,18 @@ const TypesOfAuction: React.FC = () => {
     })
     return result
   }, [volumnCountData])
+  const [openTokenAuction, setOpenTokenAuction] = useState(false)
+  const [openNFTAuction, setOpenNFTAuction] = useState(false)
+  const handleClose = () => {
+    setOpenTokenAuction(false)
+    setOpenNFTAuction(false)
+  }
+  const handleOpenToken = () => {
+    setOpenTokenAuction(true)
+  }
+  const handleOpenNft = () => {
+    setOpenTokenAuction(true)
+  }
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
@@ -337,6 +361,9 @@ const TypesOfAuction: React.FC = () => {
                 hoverImg={item.hoverImg}
                 totalValue={item.totalValue}
                 link={item.link}
+                poolType={item.poolType}
+                handleOpenTokenAuction={handleOpenToken}
+                handleOpenNFTAuction={handleOpenNft}
               />
             ))}
           </Box>
@@ -407,6 +434,9 @@ const TypesOfAuction: React.FC = () => {
                 hoverImg={item.hoverImg}
                 totalValue={item.totalValue}
                 link={item.link}
+                poolType={item.poolType}
+                handleOpenTokenAuction={handleOpenToken}
+                handleOpenNFTAuction={handleOpenNft}
               />
             ))}
           </Box>
@@ -453,6 +483,8 @@ const TypesOfAuction: React.FC = () => {
           })}
         </Box>
       </SlideBox>
+      <PoolListDialog open={openTokenAuction} handleClose={handleClose} />
+      <NftListDialog open={openNFTAuction} handleClose={handleClose} />
     </>
   )
 }
