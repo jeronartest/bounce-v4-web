@@ -58,7 +58,7 @@ export function DashboardStatCard({ name, value }: { name: string; value: string
   return (
     <StyledStatCard>
       <Typography color={'var(--ps-text-2)'}>{name}</Typography>
-      <Typography fontSize={28} fontWeight={500} color="#2663FF">
+      <Typography variant="h3" textAlign={'center'} fontSize={28} fontWeight={600} color="#2663FF">
         {value}
       </Typography>
     </StyledStatCard>

@@ -69,6 +69,7 @@ export const SmallText = styled(Typography)`
   font-weight: 400;
   font-size: 12px;
   line-height: 140%;
+  letter-spacing: -0.02em;
   color: var(--ps-text-3);
 `
 export const Body02 = styled(Typography)`

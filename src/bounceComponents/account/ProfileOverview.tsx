@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import { LoadingButton } from '@mui/lab'
 import FormItem from 'bounceComponents/common/FormItem'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
-import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import UploadItem, { StyledAvatarInputIdLabel } from 'bounceComponents/common/UploadCard/UploadItem'
 import LocationTimeZone from 'bounceComponents/common/LocationTimeZone'
 // import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { FormType } from 'api/profile/type'
@@ -209,18 +209,24 @@ export default function ProfileOverview() {
                 }
               }}
             >
-              <UploadItem
-                value={{
-                  fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
-                }}
-                onChange={file => {
-                  setFieldValue('avatar', file)
-                }}
-                sx={{ width: 120, height: 120, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
-                accept={['image/jpeg', 'image/png', 'image/webp']}
-                tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
-                limitSize={10}
-              />
+              <Box>
+                <UploadItem
+                  value={{
+                    fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
+                  }}
+                  inputId="avatarInputId"
+                  onChange={file => {
+                    setFieldValue('avatar', file)
+                  }}
+                  sx={{ width: 120, height: 120, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
+                  accept={['image/jpeg', 'image/png', 'image/webp']}
+                  tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
+                  limitSize={10}
+                />
+                <StyledAvatarInputIdLabel style={{ top: 75, left: 148 }} htmlFor="avatarInputId">
+                  Edit
+                </StyledAvatarInputIdLabel>
+              </Box>
             </FormItem>
 
             <Box style={{ margin: '40px 0' }}>

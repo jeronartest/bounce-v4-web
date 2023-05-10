@@ -31,7 +31,7 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
 
   return (
     <AccountLayout>
-      <Box>
+      <Box padding="0 20px">
         <Container maxWidth="lg">
           <Typography padding="40px 20px 0" variant="h3" fontSize={30}>
             {backedTokenType === BackedTokenType.TOKEN ? 'My Token' : 'NFT Auction'}

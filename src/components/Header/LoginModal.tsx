@@ -45,7 +45,7 @@ export default function LoginModal() {
           <Button variant="outlined" onClick={cancel}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={login}>
+          <Button variant="contained" color="secondary" onClick={login}>
             Accept and sign
           </Button>
         </Box>

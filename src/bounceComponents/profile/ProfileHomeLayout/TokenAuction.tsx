@@ -8,7 +8,6 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import { IProfileUserInfo } from 'api/user/type'
 import NoData from 'bounceComponents/common/NoData'
-import FormItem from 'bounceComponents/common/FormItem'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { getPools } from 'api/market'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
@@ -16,13 +15,15 @@ import { NFTCard } from 'pages/market/nftAuctionPool'
 import { getLabelById } from 'utils'
 import { routes } from 'constants/routes'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 
 export type IActivitieProps = {
   userInfo: IProfileUserInfo
+  tokenType: BackedTokenType
 }
-const defaultPageSize = 3
+const defaultPageSize = 9
 
-const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
+const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
@@ -35,7 +36,6 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     async ({ current, pageSize }) => {
       const category = curPoolType
       // tokenType erc20:1 , erc1155:2
-      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
       const resp = await getPools({
         offset: (current - 1) * pageSize,
         limit: pageSize,
@@ -74,7 +74,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     },
     {
       defaultPageSize,
-      refreshDeps: [userInfo.id, curChain, curPoolType]
+      refreshDeps: [userInfo.id, curChain, curPoolType, tokenType]
     }
   )
 
@@ -84,22 +84,27 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo }) => {
     <Box mx={12} mb={48} p={'40px 30px 48px 36px'}>
       <Box display={'flex'} justifyContent="space-between" alignItems={'center'}>
         <Typography fontFamily={'"Sharp Grotesk DB Cyr Medium 22"'} fontSize={24}>
-          Token & NFT Auction
+          {tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'} Auction
         </Typography>
         <Stack direction={'row'} spacing={15}>
-          <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-            <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All Chains
+          <Select
+            value={curChain}
+            onChange={e => setCurChain(Number(e.target?.value) || 0)}
+            sx={{
+              width: '200px',
+              height: '38px'
+            }}
+          >
+            <MenuItem key={0} value={0}>
+              All Chains
+            </MenuItem>
+            {optionDatas?.chainInfoOpt?.map((item, index) => (
+              <MenuItem key={index} value={item.id}>
+                {item.chainName}
               </MenuItem>
-              {optionDatas?.chainInfoOpt?.map((item, index) => (
-                <MenuItem key={index} value={item.id}>
-                  {item.chainName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormItem>
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+            ))}
+          </Select>
+          <AuctionTypeSelect tokenType={tokenType} curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
       </Box>
 
