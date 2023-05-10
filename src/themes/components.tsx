@@ -131,7 +131,10 @@ export const ComponentOptions = {
 
         return {
           html: {
-            ...vars
+            ...vars,
+            '*: hover': {
+              transition: '0.3s'
+            }
           },
           body: {
             fontFamily: `"Sharp Grotesk DB Cyr Book 20"`,
@@ -242,6 +245,7 @@ export const ComponentOptions = {
           '&:hover': {
             boxShadow: 'none',
             background: 'var(--ps-gray-900)',
+            borderColor: 'var(--ps-gray-900)',
             color: 'var(--ps-white)'
           },
           '&:active': {
@@ -349,6 +353,7 @@ export const ComponentOptions = {
         root: {
           borderRadius: 8,
           background: 'var(--ps-white)',
+          border: 'none',
           '&:before': {
             border: 0
           },
@@ -364,7 +369,7 @@ export const ComponentOptions = {
           },
           '&.Mui-focused': {
             background: 'var(--ps-text-8)',
-            border: '1px solide var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)',
             fieldset: { borderColor: 'var(--ps-gray-900)' }
           },
           '&.Mui-disabled': {
