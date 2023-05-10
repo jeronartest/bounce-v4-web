@@ -23,7 +23,8 @@ const usePoolHistory = () => {
         poolId,
         category: PoolType.fixedSwapNft,
         chainId: chainConfigInBackend?.id || 0,
-        address: account || ''
+        address: account || '',
+        tokenType: 2
       })
 
       return response.data

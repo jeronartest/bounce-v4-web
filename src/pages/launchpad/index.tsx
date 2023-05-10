@@ -95,7 +95,7 @@ const PrivatePad: React.FC = () => {
         { title: 'Token Name', content: '$BLADE' },
         { title: 'Token Price', content: 'TBD' },
         { title: 'Token Amount', content: 'TBD' },
-        { title: 'Blockchain', content: 'zkSync ERA' }
+        { title: 'Blockchain', content: 'zkSync Era' }
       ]
     },
     {
@@ -124,7 +124,8 @@ const PrivatePad: React.FC = () => {
       moreData: [
         { title: 'Token Name', content: '$POSE' },
         { title: 'Token Price', content: 'TBD' },
-        { title: 'Token Amount', content: 'TBD' }
+        { title: 'Token Amount', content: 'TBD' },
+        { title: 'Blockchain', content: 'BNB Chain' }
       ]
     }
   ]

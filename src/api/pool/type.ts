@@ -225,6 +225,7 @@ export interface GetPoolHistoryParams {
   category: PoolType
   chainId: number
   poolId: string
+  tokenType: 1 | 2
 }
 
 export interface GetWinnersListParams {

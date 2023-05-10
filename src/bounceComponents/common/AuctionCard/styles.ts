@@ -11,6 +11,8 @@ export default {
       '.MuiCardHeader-content': {
         width: '100%',
         '> span': {
+          fontFamily: `'Public Sans'`,
+          fontWeight: 500,
           fontSize: 16,
           overflow: 'hidden',
           textOverflow: 'ellipsis',
