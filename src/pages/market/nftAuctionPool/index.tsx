@@ -310,7 +310,7 @@ export const NFTCard = (props: NFTPrams) => {
       <Box m={'16px 12px 22px'}>
         <Typography
           sx={{
-            fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+            fontFamily: `'Public Sans'`,
             fontWeight: 500,
             fontSize: 16,
             color: '#000',
@@ -334,7 +334,7 @@ export const NFTCard = (props: NFTPrams) => {
         >
           <Typography
             sx={{
-              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontFamily: `'Public Sans'`,
               fontWeight: 500,
               fontSize: 20,
               color:
