@@ -13,7 +13,7 @@ export default function AdsAuction({ sx }: { sx?: SxProps<Theme> | undefined }) 
         }}
       >
         <HeaderTab />
-        <ComingSoon sx={{ marginTop: '30px' }} prompt={'The Ads Auction will be available soon. Please stay tuned.'} />
+        <ComingSoon prompt={'The Ads Auction will be available soon. Please stay tuned.'} />
       </Box>
       <FooterPc />
     </>

@@ -50,11 +50,13 @@ export const addressRegisterOrLogin = async (params: IAddressRegisterLoginParams
 }
 
 export const getUserInfo = async (params: IUserInfoParams) => {
-  return ApiInstance.post('/personal/profile', { userId: Number(params.userId) })
+  return ApiInstance.post('/personal/profile', {
+    userId: Number(params.userId)
+  })
 }
 
 export const getUserPoolCount = async (address: string) => {
-  return ApiInstance.post('/user/pools/count/stat', { address })
+  return ApiInstance.post<{ createdCount: number; participantCount: number }>('/user/pools/count/stat', { address })
 }
 
 export const logout = async () => {

@@ -140,6 +140,7 @@ export default function Dashboard() {
                     }}
                   />
                   <Button
+                    variant="contained"
                     onClick={() => {
                       navigate(routes.account.myProfile)
                     }}
@@ -147,6 +148,7 @@ export default function Dashboard() {
                     sx={{
                       background: 'none',
                       '&:hover': {
+                        border: 'none',
                         background: 'none',
                         color: 'var(--ps-blue)'
                       }

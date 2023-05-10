@@ -134,6 +134,9 @@ export const ComponentOptions = {
             ...vars,
             '*: hover': {
               transition: '0.3s'
+            },
+            '& .PSans': {
+              fontFamily: 'Public Sans'
             }
           },
           body: {

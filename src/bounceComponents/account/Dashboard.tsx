@@ -57,8 +57,10 @@ export function DashboardPoolCard({ title, children }: { title: string; children
 export function DashboardStatCard({ name, value }: { name: string; value: string | number }) {
   return (
     <StyledStatCard>
-      <Typography color={'var(--ps-text-2)'}>{name}</Typography>
-      <Typography variant="h3" textAlign={'center'} fontSize={28} fontWeight={600} color="#2663FF">
+      <Typography color={'var(--ps-text-2)'} fontWeight={500} className="PSans">
+        {name}
+      </Typography>
+      <Typography variant="h3" className="PSans" textAlign={'center'} fontSize={28} fontWeight={600} color="#2663FF">
         {value}
       </Typography>
     </StyledStatCard>

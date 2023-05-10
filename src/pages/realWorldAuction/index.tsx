@@ -13,10 +13,7 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
         }}
       >
         <HeaderTab />
-        <ComingSoon
-          sx={{ marginTop: '30px' }}
-          prompt={'The Real World Collectibles Auction will be available soon. Please stay tuned.'}
-        />
+        <ComingSoon prompt={'The Real World Collectibles Auction will be available soon. Please stay tuned.'} />
       </Box>
       <FooterPc />
     </>
