@@ -200,6 +200,7 @@ export const useLinkedInOauth = (onChange: (accessToken: string, oauthType: ACCO
 }
 
 interface IUserInfoData {
+  address: string
   id: number
   email: string
   passwordSet: boolean

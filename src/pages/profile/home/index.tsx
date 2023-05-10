@@ -15,14 +15,6 @@ export default function Home() {
     return Number(userId) === Number(id)
   }, [userId, id])
 
-  // useEffect(() => {
-  //   const userPoolCount = async () => {
-  //     const res = await getUserPoolCount('')
-  //     setPersonalInfo(res.data)
-  //   }
-
-  // }, [id, isLoginUser, userId, userInfo])
-
   useEffect(() => {
     const getInfo = async () => {
       const res = await getUserInfo({ userId: Number(id) })

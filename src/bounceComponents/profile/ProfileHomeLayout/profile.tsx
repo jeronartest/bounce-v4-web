@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Avatar, Box, Stack, styled, Typography } from '@mui/material'
 import styles from './styles'
 import { IProfileUserInfo } from 'api/user/type'
@@ -17,13 +17,13 @@ import Twitter from 'assets/socialLinksIcon/twitter-circle.svg'
 import Website from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as VerifyIcon } from 'assets/imgs/user/profile-verify.svg'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
+import { getUserPoolCount } from 'api/user'
 
 const IntroBg = styled(Box)`
   flex-direction: column;
   display: flex;
   align-items: center;
   padding: 40px 24px 64px;
-  gap: 10px;
   width: 264px;
   height: min-content;
   background: #ffffff;
@@ -43,6 +43,7 @@ const ProfileTag = styled(SmallText)`
 `
 
 const AuctionCountBg = styled(Box)`
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,6 +66,21 @@ function AuctionCount({ title, count }: { title: string; count: number }) {
 }
 
 export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserInfo | undefined }) {
+  const [poolCount, setPoolCount] = useState<{
+    createdCount: number
+    participantCount: number
+  }>()
+  useEffect(() => {
+    const userPoolCount = async () => {
+      if (!personalInfo?.address) {
+        return
+      }
+      const res = await getUserPoolCount(personalInfo.address)
+      setPoolCount(res.data)
+    }
+    userPoolCount()
+  }, [personalInfo?.address])
+
   function getSocialList() {
     const list = []
     if (personalInfo?.twitter) {
@@ -116,8 +132,8 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
         ))}
       </Stack>
-      <AuctionCount title={'Auction Participated'} count={10} />
-      <AuctionCount title={'Auction Created'} count={10} />
+      <AuctionCount title={'Auction Participated'} count={poolCount?.participantCount || 0} />
+      <AuctionCount title={'Auction Created'} count={poolCount?.createdCount || 0} />
     </IntroBg>
   )
 }
@@ -154,13 +170,13 @@ const ProfileSummaryLayout: React.FC<{
         labelKey: 'Real World Collectibles Auction',
         label: 'Real World Collectibles Auction',
         href: 'realWorld',
-        components: <ComingSoon sx={{ marginTop: '30px' }} />
+        components: <ComingSoon bgColor="var(--ps-white)" />
       },
       {
         labelKey: 'Ads Auction',
         label: 'Ads Auction',
         href: 'ads',
-        components: <ComingSoon sx={{ marginTop: '30px' }} />
+        components: <ComingSoon bgColor="var(--ps-white)" />
       }
     ],
     [personalInfo]

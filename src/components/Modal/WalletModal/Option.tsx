@@ -44,6 +44,7 @@ export default function Option({
           borderColor: active ? 'var(--ps-yellow-1)' : 'var(--ps-border-1)',
           ':disabled': {
             opacity: 0.5,
+            backgroundColor: 'var(--ps-white)',
             color: 'var(--ps-black)',
             border: '1px solid rgba(18, 18, 18, 0.2)'
           }

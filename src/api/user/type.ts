@@ -87,6 +87,7 @@ export interface IChangeEmailParams {
 }
 
 export interface IProfileUserInfo {
+  address: string
   avatar: IFile
   banner: string
   careJobs: number[]
