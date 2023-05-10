@@ -15,6 +15,14 @@ export default function Home() {
     return Number(userId) === Number(id)
   }, [userId, id])
 
+  // useEffect(() => {
+  //   const userPoolCount = async () => {
+  //     const res = await getUserPoolCount('')
+  //     setPersonalInfo(res.data)
+  //   }
+
+  // }, [id, isLoginUser, userId, userInfo])
+
   useEffect(() => {
     const getInfo = async () => {
       const res = await getUserInfo({ userId: Number(id) })
@@ -29,7 +37,7 @@ export default function Home() {
   }, [id, isLoginUser, userId])
   return (
     <Box display={'flex'} position={'relative'}>
-      <img src={ProfileBg} />
+      <img width={'100%'} style={{ objectFit: 'cover' }} src={personalInfo?.banner || ProfileBg} />
       <Box
         display={'flex'}
         padding={'0 40px'}
