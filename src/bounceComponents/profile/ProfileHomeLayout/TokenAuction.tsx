@@ -9,7 +9,7 @@ import { IProfileUserInfo } from 'api/user/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { getPools } from 'api/market'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
-import { NFTCard } from 'pages/market/nftAuctionPool'
+import { NFTCard } from 'pages/market/nftAuctionPool/index'
 import { getLabelById } from 'utils'
 import { routes } from 'constants/routes'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
@@ -107,7 +107,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
             <Grid container spacing={18}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  {auctionPoolItem.category === PoolType.FixedSwap ? (
+                  {auctionPoolItem.category !== PoolType.fixedSwapNft ? (
                     <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                   ) : (
                     <Box
