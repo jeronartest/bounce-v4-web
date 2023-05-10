@@ -10,6 +10,7 @@ import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
 import EthIcon from 'assets/imgs/auction/eth-icon.svg'
+import { useNavigate } from 'react-router-dom'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -104,6 +105,7 @@ const ArrowBgRight = styled(ArrowBg)`
 `
 
 const BannerH3 = styled(Typography)`
+  font-family: 'Public Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
@@ -165,6 +167,15 @@ const ChainBg = styled(Box)`
 
 function Banner({ banner }: { banner: BannerType }) {
   const countDown = timestampToCountdown(banner.openAt)
+  const navigate = useNavigate()
+  const handleClick = (url: string) => {
+    if (!url) return
+    if (url.indexOf('http://') > -1 || url.indexOf('https://') > -1) {
+      window.open(url, '_blank')
+    } else {
+      navigate(url)
+    }
+  }
   return (
     <Box
       sx={{
@@ -173,6 +184,7 @@ function Banner({ banner }: { banner: BannerType }) {
         width: '100%',
         position: 'relative'
       }}
+      onClick={() => handleClick(banner.url || '')}
     >
       <img
         src={banner.avatar}
@@ -186,36 +198,40 @@ function Banner({ banner }: { banner: BannerType }) {
           borderRadius: '30px'
         }}
       />
-      <Shadow style={{ position: 'absolute', bottom: 0, left: 0 }} />
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '40px'
-        }}
-      >
-        <Box display={'flex'} gap={4}>
-          <ChainBg width={32} height={32}>
-            <img src={EthIcon} />
-          </ChainBg>
-          <ChainBg padding={'0 12px'}>Coming soon</ChainBg>
+      {Number(banner.category) !== 0 && <Shadow style={{ position: 'absolute', bottom: 0, left: 0 }} />}
+      {Number(banner.category) !== 0 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: '40px',
+            left: '40px'
+          }}
+        >
+          <Box display={'flex'} gap={4}>
+            <ChainBg width={32} height={32}>
+              <img src={EthIcon} />
+            </ChainBg>
+            <ChainBg padding={'0 12px'}>Coming soon</ChainBg>
+          </Box>
+          <BannerH3>{banner.name}</BannerH3>
+          <BannerH6>{banner.types}</BannerH6>
         </Box>
-        <BannerH3>{banner.name}</BannerH3>
-        <BannerH6>{banner.types}</BannerH6>
-      </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '40px',
-          display: 'flex',
-          gap: '8px',
-          right: '38px'
-        }}
-      >
-        {countDown.map((time, idx) => (
-          <CountDownBg key={idx}>{time}</CountDownBg>
-        ))}
-      </Box>
+      )}
+      {Number(banner.category) !== 0 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: '40px',
+            display: 'flex',
+            gap: '8px',
+            right: '38px'
+          }}
+        >
+          {countDown.map((time, idx) => (
+            <CountDownBg key={idx}>{time}</CountDownBg>
+          ))}
+        </Box>
+      )}
     </Box>
   )
 }
