@@ -137,7 +137,16 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             : EmptyAvatar
         }
       />
-      <H7>{props.name}</H7>
+      <H7
+        sx={{
+          maxWidth: 160,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
+        }}
+      >
+        {props.name}
+      </H7>
     </CenterRow>,
     <SmallText
       sx={{
