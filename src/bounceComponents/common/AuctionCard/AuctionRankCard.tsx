@@ -139,10 +139,25 @@ export function AuctionRow(props: any): ReactJSXElement[] {
       />
       <H7>{props.name}</H7>
     </CenterRow>,
-    <SmallText maxWidth={164} key={1}>
+    <SmallText
+      sx={{
+        cursor: 'pointer'
+      }}
+      maxWidth={164}
+      onClick={() => props.navigate(url)}
+      key={1}
+    >
       {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
     </SmallText>,
-    <SmallText key={2}>{getTextFromPoolType(props.category)}</SmallText>,
+    <SmallText
+      sx={{
+        cursor: 'pointer'
+      }}
+      onClick={() => props.navigate(url)}
+      key={2}
+    >
+      {getTextFromPoolType(props.category)}
+    </SmallText>,
     <Status key={3} status={status} />
   ]
 }
