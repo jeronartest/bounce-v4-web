@@ -166,6 +166,9 @@ export default function Header() {
           {!token && (
             <Button
               onClick={() => {
+                if (location.pathname === routes.login) {
+                  return
+                }
                 const _redirect = location.pathname + location.search
                 navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
               }}

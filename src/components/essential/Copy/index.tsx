@@ -22,7 +22,7 @@ export default function Copy(props: Props) {
         cursor: 'pointer',
         width: width || 20,
         '& svg': {
-          ':hover': {
+          ':hover path': {
             fill: 'var(--ps-text-7)'
           },
           width: width || 20
@@ -42,7 +42,7 @@ export default function Copy(props: Props) {
           </Typography>
         }
       >
-        {isCopied ? <CheckIcon sx={{ color: 'var(--ps-text-7)', fontSize: 20 }} /> : <CopySvg />}
+        {isCopied ? <CheckIcon sx={{ color: 'var(--ps-text-7)', fontSize: 18 }} /> : <CopySvg />}
       </Tooltip>
       {children}
     </Box>
