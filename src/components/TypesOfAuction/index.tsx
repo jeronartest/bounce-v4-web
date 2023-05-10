@@ -123,7 +123,7 @@ const AuctionItem = (props: AuctionItemParams) => {
             sx={{
               fontFamily: `'Inter'`,
               fontWeight: 400,
-              fontSize: 14,
+              fontSize: 13,
               color: 'var(--ps-text-3)',
               lineHeight: '24px',
               marginBottom: 15

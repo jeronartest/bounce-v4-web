@@ -72,11 +72,19 @@ export const UpcomingAuction = (props: Notable1155Props) => {
         <CenterRow justifyContent={'space-between'}>
           <H4 mb={33}>Upcoming Auctions</H4>
           <Row gap={8}>
-            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
+            <AuctionTypeSelect
+              noBorder={true}
+              curPoolType={auction}
+              setCurPoolType={setAuction}
+              tokenType={BackedTokenType.TOKEN}
+            />
             <Select
               sx={{
                 width: '200px',
-                height: '38px'
+                height: '38px',
+                fieldset: {
+                  border: 0
+                }
               }}
               value={chainFilter}
               onChange={e => setChainFilter(Number(e.target.value))}

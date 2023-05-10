@@ -1,6 +1,6 @@
 import inputOptions from './options/input'
 import { ReactComponent as ArrowSVG } from 'assets/imgs/components/arrow.svg'
-import CheckedSVG from 'assets/imgs/components/checked.svg'
+// import CheckedSVG from 'assets/imgs/components/checked.svg'
 import { CommonColors } from '@mui/material/styles/createPalette'
 import React, { HTMLProps, useCallback } from 'react'
 import MuiCloseIcon from '@mui/icons-material/Close'
@@ -325,14 +325,14 @@ export const ComponentOptions = {
               padding: '6px !important',
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
-                background: 'var(--ps-yellow-1)',
+                color: 'var(--ps-text-7)',
                 borderRadius: '8px',
-                '&::after': {
-                  content: `' '`,
-                  width: 20,
-                  height: 20,
-                  background: `url(${CheckedSVG}) no-repeat center`
-                },
+                // '&::after': {
+                //   content: `' '`,
+                //   width: 20,
+                //   height: 20,
+                //   background: `url(${CheckedSVG}) no-repeat center`
+                // },
                 '&:hover': {
                   background: 'var(--ps-yellow-1)'
                 }
@@ -349,6 +349,8 @@ export const ComponentOptions = {
         root: {
           borderRadius: 8,
           background: 'var(--ps-white)',
+          border: 0,
+          fieldset: { borderColor: 'var(--ps-text-8)' },
           '&:before': {
             border: 0
           },
@@ -358,6 +360,7 @@ export const ComponentOptions = {
           '&:hover': {
             background: 'var(--ps-white)',
             border: '1px solid var(--ps-yellow-1)',
+            fieldset: { borderColor: 'unset !important', borderWidth: 0, border: 0 },
             '&:not(.Mui-disabled):before': {
               border: 'none'
             }
@@ -365,7 +368,7 @@ export const ComponentOptions = {
           '&.Mui-focused': {
             background: 'var(--ps-white)',
             border: '1px solide var(--ps-yellow-1)',
-            fieldset: { borderColor: 'var(--ps-gray-900)' }
+            fieldset: { borderColor: 'var(--ps-yellow-1) !important', borderWidth: 'unset !impoartant' }
           },
           '&.Mui-disabled': {
             background: 'var(--ps-white)'

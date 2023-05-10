@@ -66,9 +66,12 @@ const Tab = styled(Box)`
     background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
-
   &:hover {
     background: var(--ps-yellow-1);
+    border-radius: 20px 20px 0 0;
+  }
+  &.active:hover {
+    background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
 `
@@ -188,7 +191,10 @@ export const AuctionRankCard: React.FC = () => {
         <Select
           sx={{
             width: '200px',
-            height: '38px'
+            height: '38px',
+            fieldset: {
+              border: 0
+            }
           }}
           value={chainFilter}
           onChange={e => setChainFilter(Number(e.target.value))}

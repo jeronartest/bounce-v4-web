@@ -6,11 +6,13 @@ import { useMemo } from 'react'
 export default function AuctionTypeSelect({
   curPoolType,
   setCurPoolType,
-  tokenType
+  tokenType,
+  noBorder
 }: {
   curPoolType: PoolType | 0
   setCurPoolType: (type: PoolType) => void
   tokenType?: BackedTokenType
+  noBorder?: boolean
 }) {
   const list = useMemo(() => {
     if (tokenType === BackedTokenType.TOKEN) {
@@ -30,7 +32,13 @@ export default function AuctionTypeSelect({
 
   return (
     <Select
-      sx={{ width: 200, height: 38 }}
+      sx={{
+        width: 200,
+        height: 38,
+        fieldset: {
+          border: noBorder ? 0 : '1px solid var(--ps-text-8)'
+        }
+      }}
       defaultValue={PoolType.FixedSwap}
       value={curPoolType}
       onChange={e => setCurPoolType(e.target.value as PoolType)}
