@@ -4,10 +4,8 @@ import { Avatar, Box, Grid, Stack, styled, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { Body02, Body03, H5, H6 } from '../../components/Text'
-import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
-import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { PoolStatus } from '../../api/pool/type'
+import { IPrivatePadProp } from 'pages/launchpad'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
   return (
@@ -122,28 +120,10 @@ export function Progress() {
   )
 }
 
-export function LaunchPadDesc() {
-  const descList = [
-    {
-      title: 'Token offered',
-      content: '420,000,000.0000 GMT'
-    },
-    {
-      title: 'Participants',
-      content: '130,672'
-    },
-    {
-      title: 'Sale price',
-      content: '1 GMT = 0.00002514 BNB'
-    },
-    {
-      title: 'Sale price',
-      content: '8,742,450.4131 BNB'
-    }
-  ]
+export function LaunchPadDesc({ data }: { data: IPrivatePadProp }) {
   return (
     <Grid mt={24} container spacing={16}>
-      {descList.map((d, i) => (
+      {data.moreData.map((d, i) => (
         <Grid key={i} item md={6}>
           <CardDesc title={d.title} content={d.content} />
         </Grid>
@@ -152,40 +132,36 @@ export function LaunchPadDesc() {
   )
 }
 
-export function SocialMedia() {
+export function SocialMedia({ data }: { data: IPrivatePadProp }) {
   return (
     <AlignBottomBG>
-      <Body03>
-        Equilibria Finance is designed exclusively for PENDLE holders and liquidity providers, offering an easy-to-use
-        platform to maximize your profits. It leverages the veToken boosted yield model ...
-      </Body03>
+      <Body03>{data.desc}</Body03>
       <Row mt={24} gap={10}>
-        <Web />
-        <Twitter />
+        {data.social.map(item => item)}
       </Row>
     </AlignBottomBG>
   )
 }
 
-export const LaunchCard: React.FC<{ child: ReactJSXElement; state: PoolStatus }> = props => {
+export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadProp }> = props => {
   return (
     <Common
-      img={''}
+      img={props.data.img}
       child={
         <Box padding={'24px 40px'} display={'flex'} flexDirection={'column'} height={'100%'}>
           <CenterRow justifyContent={'space-between'}>
             <Row gap={16}>
-              <Avatar sx={{ width: 60, height: 60 }} />
-              <Box sx={{ color: 'white' }}>
+              <Avatar sx={{ width: 60, height: 60 }} src={props.data.avatar} />
+              <Box sx={{ color: 'white', display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={28} lineHeight={'36px'}>
-                  Hiley Golbel Coin
+                  {props.data.title}
                 </Typography>
-                <Typography fontSize={14} lineHeight={'21px'}>
-                  Hiley Golbel Coin and text and the coin
-                </Typography>
+                {/* <Typography fontSize={14} lineHeight={'21px'}>
+                  {props.data.shortTitle}
+                </Typography> */}
               </Box>
             </Row>
-            <PoolStatusBox status={props.state} claimAt={0} closeTime={1685376000} openTime={1685376000} />
+            <PoolStatusBox status={props.data.status} claimAt={0} closeTime={1685376000} openTime={1685376000} />
           </CenterRow>
           {props.child}
         </Box>
@@ -193,10 +169,10 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; state: PoolStatus }>
     />
   )
 }
-export const LaunchCardFinish: React.FC = () => {
+export const LaunchCardFinish: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
   return (
     <LaunchCard
-      state={PoolStatus.Finish}
+      data={data}
       child={
         <CardContainer>
           <LaunchPadDesc />
@@ -207,10 +183,10 @@ export const LaunchCardFinish: React.FC = () => {
   )
 }
 
-export const LaunchCardLive: React.FC = () => {
+export const LaunchCardLive: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
   return (
     <LaunchCard
-      state={PoolStatus.Live}
+      data={data}
       child={
         <CardContainer>
           <LaunchPadDesc />
@@ -220,10 +196,10 @@ export const LaunchCardLive: React.FC = () => {
     />
   )
 }
-export const LaunchCardUpcoming: React.FC = () => {
+export const LaunchCardUpcoming: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
   return (
     <LaunchCard
-      state={PoolStatus.Upcoming}
+      data={data}
       child={
         <CardContainer>
           <LaunchPadDesc />
@@ -233,15 +209,15 @@ export const LaunchCardUpcoming: React.FC = () => {
     />
   )
 }
-export const LaunchCardSocial: React.FC = () => {
+export const LaunchCardSocial: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
   return (
     <LaunchCard
-      state={PoolStatus.Upcoming}
+      data={data}
       child={
         <CardContainer>
-          <SocialMedia />
+          <SocialMedia data={data} />
           <AlignBottomBG>
-            <LaunchPadDesc />
+            <LaunchPadDesc data={data} />
           </AlignBottomBG>
         </CardContainer>
       }
