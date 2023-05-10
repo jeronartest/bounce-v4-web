@@ -25,7 +25,7 @@ const defaultPageSize = 9
 const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
-  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
 
   const {
     pagination,
@@ -44,31 +44,16 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
         orderBy: '',
         tokenType
       })
-      if (category === PoolType.FixedSwap) {
+      if (tokenType === BackedTokenType.TOKEN) {
         return {
           list: resp.data.fixedSwapList.list,
           total: resp.data.fixedSwapList.total
         }
-      } else if (category === 2) {
-        return {
-          list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total
-        }
-      } else if (category === PoolType.fixedSwapNft) {
-        return {
-          list: resp.data.fixedSwapNftList.list,
-          total: resp.data.fixedSwapNftList.total
-        }
-      } else if (category === 3) {
-        return {
-          list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total
-        }
-      } else {
-        return {
-          list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total
-        }
+      }
+
+      return {
+        list: resp.data.fixedSwapNftList.list,
+        total: resp.data.fixedSwapNftList.total
       }
     },
     {

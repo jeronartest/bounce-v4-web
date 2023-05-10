@@ -53,6 +53,10 @@ export const getUserInfo = async (params: IUserInfoParams) => {
   return ApiInstance.post('/personal/profile', { userId: Number(params.userId) })
 }
 
+export const getUserPoolCount = async (address: string) => {
+  return ApiInstance.post('/user/pools/count/stat', { address })
+}
+
 export const logout = async () => {
   return ApiInstance.get('/login/logout', {})
 }

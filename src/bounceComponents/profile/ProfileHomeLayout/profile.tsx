@@ -93,19 +93,21 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
       />
       <H4 mt={24}>{personalInfo?.fullName}</H4>
       <H6 mt={4} sx={{ color: '#2B51DA' }}>
-        {`#${personalInfo?.fullNameId}`}
+        {`#${personalInfo?.fullNameId}`}1
       </H6>
       <Row mt={24} gap={4}>
         <ProfileTag>{personalInfo?.location}</ProfileTag>
         {personalInfo?.isVerify && (
-          <ProfileTag>
+          <ProfileTag display={'none !important'}>
             KYC Verified
             <VerifyIcon />
           </ProfileTag>
         )}
       </Row>
-      <Box mt={32} sx={{ border: '1px solid #E8E9E4' }} />
-      <H6 mt={24}>About</H6>
+      <Box mt={32} sx={{ width: '100%', borderBottom: '1px solid #E8E9E4' }} />
+      <H6 mt={24} width={'100%'}>
+        About
+      </H6>
       <Typography mt={16} variant={'body2'}>
         {personalInfo?.description || 'There is nothing for the time being'}
       </Typography>
