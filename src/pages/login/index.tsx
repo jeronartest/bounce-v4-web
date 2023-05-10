@@ -12,6 +12,7 @@ import { useGetWalletOptions } from 'components/Modal/WalletModal'
 import { useActiveWeb3React } from 'hooks'
 import { useOpenModal } from 'state/application/hooks'
 import { ApplicationModal } from 'state/application/actions'
+import { useWeb3React } from '@web3-react/core'
 
 const illustrationWidth = 500
 
@@ -50,10 +51,19 @@ export function LoginLayout({ image, children }: { image: string; children: JSX.
 const Login: React.FC = () => {
   // const {redirect} = useQueryParams()
   const { token } = useUserInfo()
+  const { error } = useWeb3React()
+
   // const navigate = useNavigate()
   const getWalletOptions = useGetWalletOptions()
   const { account } = useActiveWeb3React()
   const openSignLoginModal = useOpenModal(ApplicationModal.SIGN_LOGIN)
+  const openWalletModal = useOpenModal(ApplicationModal.WALLET)
+
+  useEffect(() => {
+    if (error) {
+      openWalletModal()
+    }
+  }, [error, openWalletModal])
 
   useEffect(() => {
     if (account && !token) {
