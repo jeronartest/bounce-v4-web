@@ -139,9 +139,6 @@ export const useWeb3Login = (path?: string) => {
         if (path) {
           return navigate(path)
         }
-        if (path === '') {
-          return
-        }
         if (redirect) {
           return navigate(redirect)
         }
