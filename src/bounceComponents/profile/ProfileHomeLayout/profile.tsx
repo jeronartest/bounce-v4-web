@@ -170,13 +170,25 @@ const ProfileSummaryLayout: React.FC<{
         labelKey: 'Real World Collectibles Auction',
         label: 'Real World Collectibles Auction',
         href: 'realWorld',
-        components: <ComingSoon bgColor="var(--ps-white)" />
+        components: (
+          <ComingSoon
+            bgColor="var(--ps-white)"
+            sx={{ marginTop: '30px' }}
+            prompt={'The Real World Collectibles Auction will be available soon. Please stay tuned.'}
+          />
+        )
       },
       {
         labelKey: 'Ads Auction',
         label: 'Ads Auction',
         href: 'ads',
-        components: <ComingSoon bgColor="var(--ps-white)" />
+        components: (
+          <ComingSoon
+            bgColor="var(--ps-white)"
+            sx={{ marginTop: '30px' }}
+            prompt={'The Ads Auction will be available soon. Please stay tuned.'}
+          />
+        )
       }
     ],
     [personalInfo]

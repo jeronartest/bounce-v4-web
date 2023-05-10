@@ -68,7 +68,14 @@ export function SlideProgress(props: ISlideProgress) {
       >
         {children}
       </Swiper>
-      <Box display={'flex'} alignItems={'center'} mt={34}>
+      <Box
+        display={'flex'}
+        alignItems={'center'}
+        sx={{
+          maxWidth: 1440,
+          margin: '34px auto 0'
+        }}
+      >
         <ArrowBg className={props.grayArrow ? 'gray' : ''} onClick={() => swiper?.slidePrev()}>
           <ArrowBackIcon />
         </ArrowBg>
