@@ -109,6 +109,7 @@
     ]
   },
   "dependencies": {
+    "@accelbyte/sdk": "^2.0.0",
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
