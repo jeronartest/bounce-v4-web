@@ -29,7 +29,7 @@ export default function ComingSoon({
           alignItems: 'center'
         }}
       >
-        <Box mt={100}>
+        <Box mt={100} display="grid" justifyItems={'center'}>
           <img
             style={{
               width: 453,
