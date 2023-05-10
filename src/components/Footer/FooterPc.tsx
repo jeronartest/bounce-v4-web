@@ -47,8 +47,7 @@ export const FooterSocialLink: React.FC = () => {
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        paddingBottom: 32
+        alignItems: 'flex-start'
       }}
     >
       <ExternalLink href={routes.market.index} role="link" rel="noopener noreferrer" aria-disabled={true}>
@@ -59,7 +58,7 @@ export const FooterSocialLink: React.FC = () => {
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
-          marginBottom: 60
+          marginBottom: 20
         }}
       >
         {Links.map((item, index) => {
@@ -71,6 +70,7 @@ export const FooterSocialLink: React.FC = () => {
         })}
       </Box>
       <Box
+        id={'123'}
         sx={{
           position: 'relative',
           width: '100%'
@@ -79,12 +79,14 @@ export const FooterSocialLink: React.FC = () => {
         <iframe
           src="/crypotoWidget.html"
           width="100%"
+          height="230px"
           style={{
             border: '0 none',
-            position: 'absolute',
+            position: 'relative',
             top: 0,
             left: -42,
-            width: 280
+            width: 280,
+            overflow: 'hidden'
           }}
         ></iframe>
       </Box>
