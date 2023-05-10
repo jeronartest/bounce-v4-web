@@ -54,7 +54,7 @@ export default function MyProfile() {
         <Box
           padding="0 20px 30px 20px"
           sx={{
-            backgroundColor: '#E5E5E5'
+            backgroundColor: '#F6F6F3'
           }}
         >
           <Container

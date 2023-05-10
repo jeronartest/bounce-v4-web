@@ -106,9 +106,10 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
       <Box
         mt={16}
         sx={{
-          background: '#F5F5F5',
+          background: '#F6F6F3',
           padding: 40,
-          mt: -30,
+          position: 'relative',
+          mt: -24,
           borderRadius: '20px'
         }}
       >

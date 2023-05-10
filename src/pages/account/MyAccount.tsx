@@ -21,7 +21,7 @@ export default function MyAccount() {
           <Box
             sx={{
               mt: 40,
-              border: '1px solid #D7D6D9',
+              border: '1px solid var(--ps-text-5)',
               padding: '80px 30px',
               background: '#FFFFFF',
               borderRadius: '16px'
