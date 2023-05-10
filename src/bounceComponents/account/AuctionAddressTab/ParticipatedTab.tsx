@@ -1,8 +1,7 @@
-import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
+import { Box, Button, Grid, MenuItem, Pagination, Select, Stack } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { usePagination } from 'ahooks'
-import NoData from 'bounceComponents/common/NoData'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { Params } from 'ahooks/lib/usePagination/types'
@@ -19,6 +18,7 @@ import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const defaultPageSize = 6
 
@@ -134,15 +134,12 @@ export default function ParticipatedTab({
           <BounceAnime />
         </Box>
       ) : !auctionPoolData?.total || auctionPoolData?.total === 0 ? (
-        <NoData sx={{ padding: 40 }}>
-          <Box display={'grid'} justifyItems="center">
-            <Typography fontWeight={500} fontSize={20} mt={10}>
-              {`Hasn’t ${
-                type === 'created' ? 'created' : type === 'participated' ? 'participated' : 'collect'
-              } Auction`}{' '}
-            </Typography>
-          </Box>
-        </NoData>
+        <EmptyData
+          title={`Hasn’t ${
+            type === 'created' ? 'created' : type === 'participated' ? 'participated' : 'collect'
+          } Auction`}
+          prompt="Go and explore auctions."
+        />
       ) : (
         <Box mt={40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (

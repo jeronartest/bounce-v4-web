@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 interface Notable721Props {
   handleViewAll?: () => void
@@ -88,6 +89,10 @@ export const Notable721 = (props: Notable721Props) => {
               </Grid>
             ))}
           </Grid>
+        ) : data?.list?.length === 0 ? (
+          <Box>
+            <EmptyData />
+          </Box>
         ) : (
           <SlideProgress
             swiperStyle={{

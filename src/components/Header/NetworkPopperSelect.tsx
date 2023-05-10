@@ -83,7 +83,8 @@ export default function NetworkPopperSelect() {
               <Button
                 sx={{
                   height: 48,
-                  justifyContent: 'start'
+                  justifyContent: 'start',
+                  borderColor: 'var(--ps-yellow-1)'
                 }}
                 variant="outlined"
                 key={option.id}

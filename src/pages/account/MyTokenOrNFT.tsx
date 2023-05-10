@@ -60,9 +60,10 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
               <Box
                 padding="40px"
                 sx={{
-                  background: '#F5F5F5',
+                  background: '#F6F6F3',
                   borderRadius: '20px',
-                  mt: -24
+                  mt: -24,
+                  position: 'relative'
                 }}
               >
                 <>

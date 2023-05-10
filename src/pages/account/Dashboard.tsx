@@ -62,7 +62,7 @@ export default function Dashboard() {
                       width={42}
                       height={42}
                       showVerify
-                      sx={{ position: 'absolute', right: 0, bottom: 20 }}
+                      sx={{ position: 'absolute', right: 0, bottom: 0 }}
                     />
                   )}
                 </Box>

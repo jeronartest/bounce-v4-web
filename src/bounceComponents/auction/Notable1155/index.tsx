@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 export const Notable1155: React.FC = () => {
   const optionDatas = useOptionDatas()
@@ -84,6 +85,10 @@ export const Notable1155: React.FC = () => {
               </Grid>
             ))}
           </Grid>
+        ) : data?.list?.length === 0 ? (
+          <Box>
+            <EmptyData />
+          </Box>
         ) : (
           <SlideProgress
             grayArrow

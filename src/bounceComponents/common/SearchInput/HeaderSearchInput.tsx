@@ -90,7 +90,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
               '& fieldset': {
                 border: 'none'
               },
-              ...(focus ? { fontSize: 13, borderRadius: 8 } : noFocusStyle)
+              ...(focus ? { fontSize: 13, borderRadius: 8, height: 44 } : noFocusStyle)
             }}
             onChange={ev => {
               onChange?.(ev, ev.target.value)

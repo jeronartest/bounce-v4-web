@@ -13,8 +13,6 @@ import {
   Typography
 } from '@mui/material'
 import moment from 'moment'
-
-import NoData from 'bounceComponents/common/NoData'
 import { PoolEvent, PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getLabelById, shortenAddress } from 'utils'
@@ -34,6 +32,7 @@ import { ZERO_ADDRESS } from '../../../constants'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -198,9 +197,7 @@ const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }
           </Box>
         </TableContainer>
       ) : (
-        <Box sx={{ width: '100%' }}>
-          <NoData />
-        </Box>
+        <EmptyData />
       )}
     </Box>
   )

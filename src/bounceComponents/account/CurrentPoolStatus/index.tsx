@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUserPoolsTokenCreated, useUserPoolsTokenParticipant } from 'bounceHooks/account/useAddressStatus'
 import { useActiveWeb3React } from 'hooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import NoData from 'bounceComponents/common/NoData'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
@@ -16,6 +15,7 @@ import { NFTCard } from 'pages/market/nftAuctionPool'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import styles from 'pages/account/tabStyles'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const StatusText = {
   [DashboardQueryType.ongoing]: 'Ongoing Auctions',
@@ -106,9 +106,10 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
       <Box
         mt={16}
         sx={{
-          background: '#F5F5F5',
+          background: '#F6F6F3',
           padding: 40,
-          mt: -30,
+          position: 'relative',
+          mt: -24,
           borderRadius: '20px'
         }}
       >
@@ -117,13 +118,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
             <BounceAnime />
           </Box>
         ) : curList.length === 0 ? (
-          <NoData sx={{ padding: '0px 20px' }} widthSvg>
-            <Box display={'grid'} justifyItems="center">
-              <Typography fontWeight={500} fontSize={20} mt={10}>
-                Empty...
-              </Typography>
-            </Box>
-          </NoData>
+          <EmptyData title="You haven’t create or participate in any auction yet" prompt="Go and explore auctions." />
         ) : (
           <Box mt={20}>
             <Grid container spacing={{ xs: 10, xl: 18 }}>

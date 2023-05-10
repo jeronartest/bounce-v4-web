@@ -6,7 +6,6 @@ import Slide from '@mui/material/Slide'
 import React, { useEffect, useCallback, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import CloseIcon from 'assets/imgs/common/closeIcon.svg'
-import NoData from 'bounceComponents/common/NoData'
 import { NFTCard } from 'pages/market/nftAuctionPool/index'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
@@ -17,6 +16,7 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import FooterPc from 'components/Footer/FooterPc'
 import FixedSelected from 'components/FixedNftSelected'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -272,7 +272,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                 ))}
               </Grid>
             ) : (
-              <NoData />
+              <EmptyData />
             )}
             {poolsData?.total >= defaultIdeaPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>

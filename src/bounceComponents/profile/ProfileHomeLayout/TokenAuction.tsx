@@ -5,9 +5,7 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { FixedSwapPool, PoolType } from 'api/pool/type'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import { IProfileUserInfo } from 'api/user/type'
-import NoData from 'bounceComponents/common/NoData'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { getPools } from 'api/market'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
@@ -16,6 +14,7 @@ import { getLabelById } from 'utils'
 import { routes } from 'constants/routes'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 export type IActivitieProps = {
   userInfo: IProfileUserInfo
@@ -113,15 +112,10 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
           <BounceAnime />
         </Box>
       ) : !auctionPoolData?.total || auctionPoolData?.total === 0 ? (
-        <NoData sx={{ padding: 40 }}>
-          <Box display={'grid'} justifyItems="center">
-            <NoPoolFoundSVG />
-            <Typography fontWeight={500} fontSize={20} mt={10}>
-              {userInfo.fullName} {'hasn’t created Auction'}{' '}
-            </Typography>
-            <Typography>Once they do, those Auctions will show up here.</Typography>
-          </Box>
-        </NoData>
+        <EmptyData
+          title={`${userInfo.fullName} hasn’t created Auction`}
+          prompt="Once they do, those Auctions will show up here."
+        />
       ) : (
         <Box mt={20}>
           {auctionPoolData && auctionPoolData?.total > 0 && (

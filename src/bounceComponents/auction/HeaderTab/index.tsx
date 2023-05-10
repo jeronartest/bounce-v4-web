@@ -13,6 +13,7 @@ const StyledTab = styled(Button)(({}) => ({
   height: '40px',
   background: 'transparent',
   '&:hover': {
+    border: 'none',
     background: '#FFFFFF33'
   },
   '&.selected': {
@@ -86,6 +87,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
     >
       {tabs.map((tab: string) => (
         <StyledTab
+          variant="contained"
           key={tab}
           className={tab === currentTab ? 'selected' : ''}
           onClick={() => {

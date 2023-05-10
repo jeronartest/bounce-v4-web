@@ -41,10 +41,15 @@ export default function Option({
         key={id}
         fullWidth
         sx={{
-          borderColor: 'var(--ps-border-1)'
+          borderColor: active ? 'var(--ps-yellow-1)' : 'var(--ps-border-1)',
+          ':disabled': {
+            opacity: 0.5,
+            color: 'var(--ps-black)',
+            border: '1px solid rgba(18, 18, 18, 0.2)'
+          }
         }}
-        onClick={onClick ?? undefined}
-        disabled={!clickable || active}
+        onClick={!active ? onClick || undefined : undefined}
+        disabled={!clickable}
       >
         <Box width={140}>
           <LogoText fontSize={14} logo={icon} text={header} />

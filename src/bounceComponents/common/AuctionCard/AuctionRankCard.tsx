@@ -14,6 +14,7 @@ import EmptyData from '../EmptyData'
 import { getTextFromPoolType, PoolType } from '../../../api/pool/type'
 import { routes } from '../../../constants/routes'
 import { getLabelById } from '../../../utils'
+import { useNavigate } from 'react-router-dom'
 
 enum StatusE {
   'live',
@@ -114,9 +115,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
   return [
     <CenterRow
       key={0}
-      onClick={() => {
-        window.open(url)
-      }}
+      onClick={() => props.navigate(url)}
       sx={{
         cursor: 'pointer'
       }}
@@ -154,6 +153,7 @@ export const AuctionRankCard: React.FC = () => {
   const optionDatas = useOptionDatas()
   const action = Tabs.indexOf(currentTab) + 1
   const [chainFilter, setChainFilter] = useState<number>(0)
+  const navigate = useNavigate()
   const { data } = useRequest(
     async () => {
       const resp = await getPoolsFilter({
@@ -227,7 +227,8 @@ export const AuctionRankCard: React.FC = () => {
                     AuctionRow({
                       ...d,
                       index: idx + 1,
-                      opt: optionDatas
+                      opt: optionDatas,
+                      navigate
                     })
                   )
                 : []
@@ -241,7 +242,8 @@ export const AuctionRankCard: React.FC = () => {
                     AuctionRow({
                       ...d,
                       index: idx + 6,
-                      opt: optionDatas
+                      opt: optionDatas,
+                      navigate
                     })
                   )
                 : []
@@ -252,11 +254,7 @@ export const AuctionRankCard: React.FC = () => {
       {data?.list && data?.list?.length === 0 && (
         <Box
           sx={{
-            padding: '12px',
-            display: 'flex',
-            background: 'white',
-            overflow: 'hidden',
-            borderRadius: '0px 30px 30px 30px'
+            background: 'white'
           }}
         >
           <EmptyData />

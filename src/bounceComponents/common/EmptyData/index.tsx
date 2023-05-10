@@ -1,26 +1,56 @@
-import { Box } from '@mui/material'
-import EmptyDataIcon from 'assets/imgs/common/NoData.png'
-const EmptyData = () => {
+import { Box, Container, SxProps, Theme, Typography } from '@mui/material'
+import DefaultIcon from 'assets/imgs/common/ComingSoon.png'
+
+export default function EmptyData({
+  sx,
+  title,
+  height,
+  prompt,
+  bgColor
+}: {
+  sx?: SxProps<Theme> | undefined
+  title?: string
+  prompt?: string
+  bgColor?: string
+  height?: number | string
+}) {
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '40px 0'
-      }}
-    >
-      <img
-        style={{
-          width: 118
+    <Box sx={{ padding: 40, ...sx }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          width: '100%',
+          backgroundColor: bgColor || 'transparent',
+          display: 'grid',
+          justifyItems: 'center',
+          alignItems: 'center'
         }}
-        src={EmptyDataIcon}
-        alt=""
-        srcSet=""
-      />
+      >
+        <img
+          style={{
+            width: height || 300,
+            margin: '0 auto'
+          }}
+          src={DefaultIcon}
+          alt=""
+          srcSet=""
+        />
+        <Typography
+          variant="h4"
+          sx={{
+            fontSize: 20,
+            textAlign: 'center',
+            mt: 40
+          }}
+        >
+          {title || 'No Data'}
+        </Typography>
+        {prompt && (
+          <Typography mt={5} textAlign={'center'}>
+            {prompt}
+          </Typography>
+        )}
+      </Container>
     </Box>
   )
 }
-export default EmptyData

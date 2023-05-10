@@ -44,7 +44,7 @@ export default function Resources() {
           </StyledTextLink>
         }
       >
-        <Box width={230}>
+        <Box width={240}>
           {homeList.map((item, key) => (
             <StyledButton key={key} onClick={() => navigate(item.href)}>
               {item.label}
