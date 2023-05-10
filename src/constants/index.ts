@@ -25,6 +25,7 @@ export interface WalletInfo {
   primary?: true
   mobile?: true
   mobileOnly?: true
+  disabled?: true
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -56,10 +57,37 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   WALLET_LINK: {
     connector: walletlink,
-    name: 'Coinbase Wallet',
+    name: 'Coinbase',
     iconName: 'coinbaseWalletIcon.svg',
     description: 'Use Coinbase Wallet app on mobile device',
     href: null,
+    color: '#315CF5'
+  },
+  BINANCE: {
+    connector: undefined,
+    name: 'Binance Wallet',
+    iconName: 'BinanceWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
+    color: '#315CF5'
+  },
+  TRUST_WALLET: {
+    connector: undefined,
+    name: 'Trust wallet',
+    iconName: 'trustWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
+    color: '#315CF5'
+  },
+  MATH_WALLET: {
+    connector: undefined,
+    name: 'Math wallet',
+    iconName: 'mathWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
     color: '#315CF5'
   }
   // COINBASE_LINK: {
@@ -196,6 +224,36 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '0x92f742a243904818e9167725eC3B7b992f8eeB2E',
   [ChainId.SEPOLIA]: process.env.REACT_APP_RANDOM_SELECTION_ADDRESS || '',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.PALM]: ''
+}
+
+export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.PALM]: ''

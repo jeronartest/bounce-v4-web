@@ -14,7 +14,7 @@ export type IFile = {
   fileUrl: string
   fileThumbnailUrl?: string
   fileName: string
-  fileSize: string
+  fileSize: number
   fileType: string
   originFileObj?: File
 }
@@ -52,12 +52,14 @@ export type IUploaderProps = {
   onError?: (error: IUploaderError[], file?: IFile) => void
   validator?: Record<Partial<ValidatorName>, Validator>
   children?: React.ReactNode
+  inputId?: string
 }
 
 const Uploader: React.FC<IUploaderProps> = ({
   sx,
   icon,
   disabled,
+  inputId,
   children,
   onChange,
   onBefore,
@@ -171,6 +173,7 @@ const Uploader: React.FC<IUploaderProps> = ({
         {icon && <Image src={icon} alt="Uploader" />}
         <input
           ref={refFile}
+          id={inputId}
           accept={formatAccept.join(',')}
           type="file"
           multiple={maxCount > 1}

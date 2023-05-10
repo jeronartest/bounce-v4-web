@@ -5,7 +5,15 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { Moment } from 'moment'
 import { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react'
 import { isAddress } from 'utils'
-import { AllocationStatus, AuctionPool, CompletedSteps, ParticipantStatus, TokenType, AuctionType } from '../types'
+import {
+  AllocationStatus,
+  AuctionPool,
+  CompletedSteps,
+  NFTToken,
+  ParticipantStatus,
+  TokenType,
+  AuctionType
+} from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -65,6 +73,8 @@ export const useValuesDispatch = () => {
 
 const initialValues: AuctionPool = {
   tokenType: TokenType.ERC20,
+  priceFloor: '',
+  amountMinIncr1: '',
   tokenFrom: {
     chainId: NETWORK_CHAIN_ID,
     address: '',
@@ -73,6 +83,7 @@ const initialValues: AuctionPool = {
     decimals: 18
   },
   auctionChainId: '',
+  nft721TokenFrom: [],
   nftTokenFrom: {
     contractAddr: '',
     contractName: '',
@@ -104,7 +115,7 @@ const initialValues: AuctionPool = {
   participantStatus: ParticipantStatus.Public,
   auctionType: AuctionType.FIXED_PRICE,
   winnerNumber: 0,
-  ticketPrice: 0,
+  ticketPrice: '',
   maxParticipantAllowed: 0
 }
 
@@ -115,6 +126,7 @@ export enum ActionType {
   SetAuctionType = 'SET_AUCTION_TYPE',
   CommitTokenImformation = 'COMMIT_TOKEN_IMFORMATION',
   CommitToken1155Information = 'COMMIT_TOKEN_1155_INFORMATION',
+  CommitToken721Information = 'COMMIT_TOKEN_721_INFORMATION',
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
   CommitRandomSelectionAuctionParameters = 'COMMIT_RANDOM_SELECTION_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
@@ -123,24 +135,26 @@ export enum ActionType {
 }
 
 type Payload = {
-  [ActionType.SetActiveStep]: {
-    activeStep: number
-    completed: CompletedSteps
-  }
+  // [ActionType.SetActiveStep]: {
+  //   activeStep: number
+  //   completed: CompletedSteps
+  // }
   [ActionType.SetAuctionType]: {
     auctionType: AuctionType
   }
   [ActionType.SetTokenType]: {
     tokenType: TokenType
   }
-  [ActionType.SetAuctionType]: {
-    auctionType: AuctionType
-  }
   [ActionType.SetTokenFrom]: {
     tokenFrom: Token
   }
   [ActionType.CommitTokenImformation]: {
     tokenFrom: Token
+    activeStep: number
+    completed: CompletedSteps
+  }
+  [ActionType.CommitToken721Information]: {
+    nft721TokenFrom: NFTToken[]
     activeStep: number
     completed: CompletedSteps
   }
@@ -163,6 +177,8 @@ type Payload = {
     poolSize: string
     allocationStatus: AllocationStatus
     allocationPerWallet: string
+    priceFloor?: string
+    amountMinIncr1?: string
     activeStep: number
     completed: CompletedSteps
   }
@@ -172,8 +188,8 @@ type Payload = {
     activeStep: number
     completed: CompletedSteps
     ticketPrice: string
-    winnerNumber: string
-    maxParticipantAllowed: string
+    winnerNumber: number
+    maxParticipantAllowed: number
   }
   [ActionType.CommitAdvancedSettings]: {
     poolName: string
@@ -232,6 +248,13 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
+    case ActionType.CommitToken721Information:
+      return {
+        ...state,
+        nft721TokenFrom: action.payload.nft721TokenFrom,
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true }
+      }
     case ActionType.CommitToken1155Information:
       return {
         ...state,
@@ -252,6 +275,8 @@ const reducer = (state: AuctionPool, action: Actions) => {
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
         allocationStatus: action.payload.allocationStatus,
+        priceFloor: action.payload.priceFloor,
+        amountMinIncr1: action.payload.amountMinIncr1,
         allocationPerWallet: action.payload.allocationPerWallet,
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }

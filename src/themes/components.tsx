@@ -1,6 +1,6 @@
 import inputOptions from './options/input'
 import { ReactComponent as ArrowSVG } from 'assets/imgs/components/arrow.svg'
-import CheckedSVG from 'assets/imgs/components/checked.svg'
+// import CheckedSVG from 'assets/imgs/components/checked.svg'
 import { CommonColors } from '@mui/material/styles/createPalette'
 import React, { HTMLProps, useCallback } from 'react'
 import MuiCloseIcon from '@mui/icons-material/Close'
@@ -131,13 +131,19 @@ export const ComponentOptions = {
 
         return {
           html: {
-            ...vars
+            ...vars,
+            '*: hover': {
+              transition: '0.3s'
+            },
+            '& .PSans': {
+              fontFamily: 'Public Sans'
+            }
           },
           body: {
             fontFamily: `"Sharp Grotesk DB Cyr Book 20"`,
             fontSize: 14,
             color: common.text,
-            background: '#F5F5F5'
+            background: '#F6F7F3'
           },
           a: {
             textDecoration: 'none',
@@ -194,64 +200,108 @@ export const ComponentOptions = {
         root: {
           textTransform: 'none',
           fontSize: 14,
-          lineHeight: '20px'
+          lineHeight: '20px',
+          transition:
+            'background-color 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          '&:disabled': {
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
+          },
+          '&:hover': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)'
+          },
+          '&:active': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)',
+            color: 'var(--ps-primary)'
+          }
         },
         sizeLarge: {
           height: 72,
-          borderRadius: 36
+          borderRadius: 8
         },
         sizeMedium: {
           height: 60,
-          borderRadius: 30
+          borderRadius: 8
         },
         sizeSmall: {
           height: 36,
-          borderRadius: 18
+          borderRadius: 8
         },
         textPrimary: {
           background: 'var(--ps-gray-50)',
           color: '#000000',
           '&:hover': {
-            background: 'var(--ps-gray-50)'
+            background: 'var(--ps-yellow-1)'
           },
           '&:active': {
-            background: '#DFDFDF',
+            background: 'var(--ps-yellow-1)',
             color: '#000000'
           }
         },
         containedPrimary: {
-          background: 'var(--ps-gray-900)',
-          color: 'var(--ps-white)',
+          background: 'var(--ps-yellow-1)',
+          color: 'var(--ps-text-3)',
+          boxShadow: 'none',
           '&:hover': {
-            background: 'var(--ps-gray-800)'
-          },
-          '&:active': {
-            background: 'var(--ps-gray-200)',
-            color: 'var(--ps-gray-900)'
-          },
-          '&:disabled': {
-            background: 'var(--ps-gray-400)',
-            color: 'var(--ps-primary)'
-          }
-        },
-        outlinedPrimary: {
-          border: '1px solid var(--ps-gray-900)',
-          background: 'var(--ps-primary)',
-          color: 'var(--ps-gray-900)',
-          '&:hover': {
-            background: 'var(--ps-gray-200)',
-            border: '1px solid var(--ps-gray-800)'
+            boxShadow: 'none',
+            background: 'var(--ps-gray-900)',
+            borderColor: 'var(--ps-gray-900)',
+            color: 'var(--ps-white)'
           },
           '&:active': {
             background: 'var(--ps-gray-900)',
+            color: 'var(--ps-white)'
+          },
+          '&:disabled': {
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
+          }
+        },
+        outlinedPrimary: {
+          border: '1px solid var(--ps-gray-20)',
+          background: 'var(--ps-primary)',
+          color: 'var(--ps-gray-900)',
+          '&:hover': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)'
+          },
+          '&:active': {
+            background: 'var(--ps-yellow-1)',
+            border: '1px solid var(--ps-yellow-1)',
             color: 'var(--ps-primary)'
           },
           '&:disabled': {
-            border: '1px solid var(--ps-gray-700)',
-            color: 'var(--ps-gray-700)'
+            border: '1px solid var(--ps-text-5)',
+            background: 'var(--ps-text-5)',
+            color: 'var(--ps-white)'
           }
         },
-        containedSecondary: {}
+        containedSecondary: {
+          background: 'var(--ps-gray-900)',
+          color: 'var(--ps-white)',
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: 'none',
+            background: 'var(--ps-yellow-1)',
+            color: 'var(--ps-text-3)'
+          }
+        },
+        outlinedSecondary: {
+          border: '1px solid var(--ps-gray-20)',
+          backgroundColor: 'var(--ps-white)',
+          '&:hover': {
+            border: '1px solid var(--ps-yellow-1)',
+            backgroundColor: 'var(--ps-white)'
+          },
+          '&:active': {
+            border: '1px solid var(--ps-yellow-1)',
+            backgroundColor: 'var(--ps-white)'
+          }
+        }
       }
     },
     MuiSelect: {
@@ -261,10 +311,13 @@ export const ComponentOptions = {
           PaperProps: {
             sx: {
               marginTop: 16,
-              border: '1px solid #D7D6D9',
-              borderRadius: 20,
+              border: '1px solid rgba(18, 18, 18, 0.06)',
+              borderRadius: 8,
               maxHeight: 350,
               boxShadow: 'none',
+              '&:focus': {
+                border: '1px solid var(--ps-yellow-1)'
+              },
               '& .MuiMenu-list .MuiListSubheader-sticky': {
                 color: '#878A8E',
                 fontSize: 12,
@@ -276,14 +329,24 @@ export const ComponentOptions = {
           },
           MenuListProps: {
             sx: {
+              padding: '6px !important',
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
-                '&::after': {
-                  content: `' '`,
-                  width: 20,
-                  height: 20,
-                  background: `url(${CheckedSVG}) no-repeat center`
+                color: 'var(--ps-text-7)',
+                borderRadius: '8px',
+                // '&::after': {
+                //   content: `' '`,
+                //   width: 20,
+                //   height: 20,
+                //   background: `url(${CheckedSVG}) no-repeat center`
+                // },
+                '&:hover': {
+                  background: 'var(--ps-yellow-1)'
                 }
+              },
+              '& .MuiMenuItem-root:hover': {
+                background: 'var(--ps-yellow-1)',
+                borderRadius: '8px'
               }
             }
           }
@@ -291,37 +354,38 @@ export const ComponentOptions = {
       },
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: 8,
           background: 'var(--ps-white)',
+          border: 0,
+          fieldset: { borderColor: 'var(--ps-text-8)' },
           '&:before': {
             border: 0
           },
           '&:after': {
             border: 0
           },
-          '&:hover': {
-            background: 'var(--ps-white)',
+          '&:hover, &:active, &:focus': {
+            background: 'var(--ps-text-8)',
+            border: '1px solid var(--ps-yellow-1)',
+            fieldset: { borderColor: 'unset !important', borderWidth: 0, border: 0 },
             '&:not(.Mui-disabled):before': {
-              border: 0
+              border: 'none'
             }
           },
-
           '&.Mui-focused': {
             background: 'var(--ps-white)',
-
-            fieldset: { borderColor: 'var(--ps-gray-900)' }
+            border: '1px solide var(--ps-yellow-1)',
+            fieldset: { borderColor: 'var(--ps-yellow-1) !important', borderWidth: 'unset !impoartant' }
           },
           '&.Mui-disabled': {
             background: 'var(--ps-white)'
           }
         },
-
         select: {
           '&:focus': {
             background: 'none'
           }
         },
-
         icon: {
           right: 14
         }
@@ -347,23 +411,24 @@ export const ComponentOptions = {
           },
           ' .MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
             border: 0,
-            color: '#908E96',
-            fontFamily: `"Sharp Grotesk DB Cyr Medium 22"`,
-            fontSize: 14,
+            color: 'var(--ps-text-3)',
+            fontFamily: `'Inter'`,
+            fontWight: 400,
+            fontSize: 16,
             '&.Mui-selected': {
-              color: '#171717',
-              background: 'none'
+              color: 'var(--ps-text-3)',
+              background: 'var(--ps-yellow-1)'
             },
             '&:hover': {
-              backgroundColor: 'white',
-              color: '#171717'
+              backgroundColor: 'var(--ps-text-1)',
+              color: '#fff'
             }
           },
 
           '& .MuiPaginationItem-root': {
-            height: 48,
-            borderRadius: 100,
-            width: 48,
+            height: 32,
+            borderRadius: 6,
+            width: 32,
             margin: '0 12px'
           }
         }

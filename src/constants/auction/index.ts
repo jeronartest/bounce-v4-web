@@ -1,7 +1,8 @@
+import { AuctionType } from 'bounceComponents/create-auction-pool/types'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 
-export const AUCTION_TYPES = ['fixed-price', 'random-selection']
+export const AUCTION_TYPES: string[] = Object.values(AuctionType)
 
 export const isSupportedAuctionType = (auctionType: string | undefined | null): boolean => {
   return !!auctionType && AUCTION_TYPES.includes(auctionType)
@@ -58,6 +59,7 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
   [ChainId.ZKSYNC_ERA]: null,
+  [ChainId.ZKSYNC_ERA_TESTNET]: null,
   [ChainId.POLYGON_ZK_EVM]: null,
   [ChainId.POLYGON_ZK_EVM_TESTNET]: null,
   [ChainId.MOONBEAM]: null,

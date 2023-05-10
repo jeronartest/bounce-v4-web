@@ -131,9 +131,9 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   },
   '&:hover': {
     '& + tr .MuiCollapse-root': {
-      backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#E2E7F0'
+      backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
     },
-    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#E2E7F0'
+    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
   }
 }))
 

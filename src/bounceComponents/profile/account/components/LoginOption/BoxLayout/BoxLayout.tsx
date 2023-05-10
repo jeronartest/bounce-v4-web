@@ -1,35 +1,37 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 
 export type IBoxLayoutProps = {
-  email: string
+  link: string
   title: string
-  emailSvg: React.ReactNode
+  image: React.ReactNode
   onBind: () => void
 }
 
-const BoxLayout: React.FC<IBoxLayoutProps> = ({ email, title, emailSvg, onBind }) => {
+const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) => {
   return (
     <Box
       display={'flex'}
-      px={20}
       alignItems="center"
-      height={60}
-      sx={{ border: '1px solid #D7D6D9', backgroundColor: '#fff', borderRadius: 20 }}
+      justifyContent={'space-between'}
+      height={80}
+      sx={{ borderBottom: '1px solid #D7D6D9' }}
     >
-      {emailSvg}
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-        <Typography variant="body2" color={'var(--ps-gray-700)'} ml={10}>
+      <Box display={'flex'} alignItems="center">
+        {image}
+        <Typography variant="body1" color={'var(--ps-text-3)'} ml={10}>
           {title}
         </Typography>
-        <Typography variant="body1" color={'var(--ps-gray-900)'} ml={10}>
-          {email}
+      </Box>
+      <Box display={'flex'} alignItems="center">
+        <Typography variant="body1" fontWeight={600} color={'var(--ps-text-3)'} ml={10}>
+          {link}
         </Typography>
       </Box>
-      {!email && (
-        <Typography sx={{ ml: 'auto', cursor: 'pointer' }} variant="body1" color={'blue'} onClick={onBind}>
+      {!link && (
+        <Button sx={{ width: 102, height: 32, backgroundColor: 'var(--ps-yellow-1)' }} onClick={onBind}>
           Connect
-        </Typography>
+        </Button>
       )}
     </Box>
   )

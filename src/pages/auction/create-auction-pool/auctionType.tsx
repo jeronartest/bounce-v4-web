@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import Erc20Pool from './Erc20Pool'
 import Erc1155Pool from './Erc1155Pool'
+import Erc721Pool from './Erc721Pool'
+
 import RandomSelection from './RandomSelection'
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -54,6 +56,7 @@ const CreateAuctionPool = () => {
         {valuesState.auctionType === AuctionType.RANDOM_SELECTION && valuesState.tokenType === TokenType.ERC20 ? (
           <RandomSelection />
         ) : null}
+        {valuesState.tokenType === TokenType.ERC721 ? <Erc721Pool /> : null}
       </RoundedContainer>
     </>
   )

@@ -1,21 +1,21 @@
 import React from 'react'
-import { styled, Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { ExternalLink } from 'themes/components'
 import LogoText from 'components/LogoText'
 
-const GreenCircle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '& div ': {
-    height: 8,
-    width: 8,
-    marginRight: 8,
-    backgroundColor: theme.palette.success.main,
-    borderRadius: '50%'
-  }
-}))
+// const GreenCircle = styled('div')(({ theme }) => ({
+//   display: 'flex',
+//   flexFlow: 'row nowrap',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   '& div ': {
+//     height: 8,
+//     width: 8,
+//     marginRight: 8,
+//     backgroundColor: theme.palette.success.main,
+//     borderRadius: '50%'
+//   }
+// }))
 
 export default function Option({
   link = null,
@@ -41,18 +41,20 @@ export default function Option({
         key={id}
         fullWidth
         sx={{
-          color: active ? 'transparent' : undefined,
-          fontWeight: 500
+          borderColor: active ? 'var(--ps-yellow-1)' : 'var(--ps-border-1)',
+          ':disabled': {
+            opacity: 0.5,
+            backgroundColor: 'var(--ps-white)',
+            color: 'var(--ps-black)',
+            border: '1px solid rgba(18, 18, 18, 0.2)'
+          }
         }}
-        onClick={onClick ?? undefined}
-        disabled={!clickable || active}
+        onClick={!active ? onClick || undefined : undefined}
+        disabled={!clickable}
       >
-        {active ? (
-          <GreenCircle>
-            <div />
-          </GreenCircle>
-        ) : null}
-        <LogoText logo={icon} text={header} />
+        <Box width={140}>
+          <LogoText fontSize={14} logo={icon} text={header} />
+        </Box>
       </Button>
     </>
   )

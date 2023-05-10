@@ -1,25 +1,54 @@
 import { MenuItem, Select } from '@mui/material'
-import FormItem from '../FormItem'
 import { PoolType } from 'api/pool/type'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import { useMemo } from 'react'
 
 export default function AuctionTypeSelect({
   curPoolType,
-  setCurPoolType
+  setCurPoolType,
+  tokenType,
+  noBorder
 }: {
-  curPoolType: PoolType
+  curPoolType: PoolType | 0
   setCurPoolType: (type: PoolType) => void
+  tokenType?: BackedTokenType
+  noBorder?: boolean
 }) {
+  const list = useMemo(() => {
+    if (tokenType === BackedTokenType.TOKEN) {
+      return [
+        { label: 'Fixed Price', value: PoolType.FixedSwap },
+        { label: 'Random Selection', value: PoolType.Lottery }
+      ]
+    } else if (tokenType === BackedTokenType.NFT) {
+      return [{ label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }]
+    }
+    return [
+      { label: 'Fixed Price', value: PoolType.FixedSwap },
+      { label: 'Random Selection', value: PoolType.Lottery },
+      { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
+    ]
+  }, [tokenType])
+
   return (
-    <FormItem name="auctionType" label="Auction type" sx={{ width: 190 }}>
-      <Select
-        defaultValue={PoolType.FixedSwap}
-        value={curPoolType}
-        onChange={e => setCurPoolType(e.target.value as PoolType)}
-      >
-        <MenuItem value={PoolType.FixedSwap}>Fixed Price</MenuItem>
-        <MenuItem value={PoolType.fixedSwapNft}>Fixed Swap NFT</MenuItem>
-        <MenuItem value={PoolType.Lottery}>Random Selection</MenuItem>
-      </Select>
-    </FormItem>
+    <Select
+      sx={{
+        width: 200,
+        height: 38,
+        fieldset: {
+          border: noBorder ? 0 : '1px solid var(--ps-text-8)'
+        }
+      }}
+      defaultValue={PoolType.FixedSwap}
+      value={curPoolType}
+      onChange={e => setCurPoolType(e.target.value as PoolType)}
+    >
+      <MenuItem value={0}>Auction Type</MenuItem>
+      {list.map(({ label, value }) => (
+        <MenuItem key={value} value={value}>
+          {label}
+        </MenuItem>
+      ))}
+    </Select>
   )
 }

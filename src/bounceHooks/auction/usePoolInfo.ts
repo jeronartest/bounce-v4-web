@@ -108,21 +108,6 @@ const usePoolInfo = () => {
     poolInfo?.ethChainId
   ).result
 
-  // console.log('amountSwap0PRes?.[0].toString()---', amountSwap0PRes?.[0].toString(), poolInfo?.swappedAmount0)
-  // console.log('amountSwap1PRes?.[0].toString()---', amountSwap1PRes?.[0].toString(), poolInfo?.currentTotal1)
-  // console.log(
-  //   'creatorClaimedPRes?.[0] || poolInfo.creatorClaimed---',
-  //   creatorClaimedPRes?.[0],
-  //   poolInfo?.creatorClaimed
-  // )
-  // console.log(
-  //   'myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0---',
-  //   myAmountSwapped0Res?.[0].toString(),
-  //   poolInfo?.participant.swappedAmount0
-  // )
-  // console.log('myAmountSwapped1Res?.[0].toString()---', myAmountSwapped1Res?.[0].toString())
-  // console.log('myClaimedRes---', myClaimedRes?.[0], poolInfo?.participant.claimed)
-
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t0 = poolInfo.token0

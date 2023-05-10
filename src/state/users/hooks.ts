@@ -6,7 +6,7 @@ import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { addressRegisterOrLogin, login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
 import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo } from 'state/users/reducer'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
+import { useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -71,6 +73,9 @@ export const useLogin = (path?: string) => {
 export const useWeb3Login = (path?: string) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { redirect } = useQueryParams()
+  const location = useLocation()
+
   const { account } = useActiveWeb3React()
   const signMessage = useSignMessage()
   return useRequest(
@@ -121,8 +126,24 @@ export const useWeb3Login = (path?: string) => {
             userId: data?.userId
           })
         )
+
+        if (data?.ifLogin === false) {
+          const _redirect = redirect
+            ? redirect
+            : location.pathname === routes.login
+            ? routes.market.index
+            : location.pathname + location.search
+          navigate(routes.loginBase + `?redirect=${_redirect}`)
+          return
+        }
         if (path) {
           return navigate(path)
+        }
+        if (redirect) {
+          return navigate(redirect)
+        }
+        if (location.pathname === routes.login) {
+          return navigate(routes.market.index)
         }
       }
     }
@@ -178,8 +199,61 @@ export const useLinkedInOauth = (onChange: (accessToken: string, oauthType: ACCO
   return { linkedInLogin }
 }
 
+interface IUserInfoData {
+  address: string
+  id: number
+  email: string
+  passwordSet: boolean
+  fullName: string
+  fullNameId: number
+  avatar: {
+    id: number
+    type: number
+    userId: number
+    fileName: string
+    fileType: string
+    fileSize: number
+    fileUrl: string
+    fileThumbnailUrl: string
+  }
+  banner: string
+  location: string
+  timezone: string
+  publicRole: number[]
+  companyRole: number
+  company: { name: string; avatar: string; link: string }
+  companyId: number
+  thirdpartId: number
+  university: { name: string; avatar: string; link: string }
+  description: string
+  contactEmail: string
+  website: string
+  github: string
+  discord: string
+  instagram: string
+  googleEmail: string
+  twitter: string
+  twitterName: string
+  linkedin: string
+  linkedinName: string
+  userType: number
+  isMember: number
+  primaryRole: number
+  years: number
+  skills: string
+  currentState: string
+  jobTypes: any[]
+  ifRemotely: 0
+  desiredSalary: string
+  desiredCompanySize: number
+  desiredMarket: any[]
+  careJobs: any[]
+  resumes: any[]
+  isVerify: number
+}
+
 export function useUserInfo(): ICacheLoginInfo & {
-  userInfo: any
+  userInfo?: IUserInfoData
   companyInfo: any
 } {
   const { account } = useActiveWeb3React()
@@ -248,4 +322,12 @@ export function useRefreshUserInfoByFirstLoad() {
       })
     )
   }, [dispatch, first, token, userId])
+}
+
+export function useShowLoginModal() {
+  const walletModalToggle = useWalletModalToggle()
+  const signLoginModalToggle = useSignLoginModalToggle()
+  const { account } = useActiveWeb3React()
+
+  return !account ? walletModalToggle : signLoginModalToggle
 }

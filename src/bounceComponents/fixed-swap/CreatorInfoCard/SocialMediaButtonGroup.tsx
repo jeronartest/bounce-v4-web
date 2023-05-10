@@ -17,6 +17,7 @@ export interface SocialMediaButtonGroupProps {
   website?: string
   linkedin?: string
   github?: string
+  style?: React.CSSProperties
 }
 
 const SocialMediaButtonGroup = ({
@@ -26,10 +27,11 @@ const SocialMediaButtonGroup = ({
   instagram,
   website,
   linkedin,
+  style,
   github
 }: SocialMediaButtonGroupProps) => {
   return (
-    <Stack spacing={8} direction="row" sx={{ mt: 20 }}>
+    <Stack spacing={8} direction="row" sx={{ mt: 20, ...style }}>
       {email && shouldShowEmailButton ? (
         <SocialMediaButton href={`mailto:${email}`}>
           <EmailSVG />

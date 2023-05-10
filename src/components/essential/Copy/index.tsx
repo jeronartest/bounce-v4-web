@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import useCopyClipboard from 'hooks/useCopyClipboard'
-import { ContentCopy } from '@mui/icons-material'
+import { ReactComponent as CopySvg } from 'assets/svg/account/copy-icon.svg'
+import Tooltip from 'bounceComponents/common/Tooltip'
 
 interface Props {
   toCopy: string
@@ -19,15 +20,30 @@ export default function Copy(props: Props) {
       sx={{
         display: 'flex',
         cursor: 'pointer',
-        width: width || 16,
+        width: width || 20,
         '& svg': {
-          width: width || 16,
-          mr: '10px'
+          ':hover path': {
+            fill: 'var(--ps-text-7)'
+          },
+          width: width || 20
         }
       }}
       onClick={() => setCopied(toCopy)}
     >
-      {isCopied ? <CheckIcon sx={{ opacity: 0.6, fontSize: 16 }} /> : <ContentCopy />}
+      <Tooltip
+        title={
+          <Typography
+            sx={{
+              fontSize: 12,
+              textDecoration: 'underline'
+            }}
+          >
+            {isCopied ? 'Copied' : 'Click to copy'}
+          </Typography>
+        }
+      >
+        {isCopied ? <CheckIcon sx={{ color: 'var(--ps-text-7)', fontSize: 18 }} /> : <CopySvg />}
+      </Tooltip>
       {children}
     </Box>
   )

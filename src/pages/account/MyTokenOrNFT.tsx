@@ -1,82 +1,86 @@
-import { Box, Button, Container, Stack, Typography } from '@mui/material'
+import { Box, Container, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
-import AuctionCreatedTab from 'bounceComponents/account/AuctionAddressTab/CreatedTab'
 import AuctionParticipatedTab from 'bounceComponents/account/AuctionAddressTab/ParticipatedTab'
 import ActivitiesTab from 'bounceComponents/account/AuctionAddressTab/ActivitiesTab'
-import NoData from 'bounceComponents/common/NoData'
-import { useActiveWeb3React } from 'hooks'
 import { useState } from 'react'
-import { useWalletModalToggle } from 'state/application/hooks'
-import styles from './styles'
+import styles from './tabStyles'
 import CurrentPoolStatus from 'bounceComponents/account/CurrentPoolStatus'
 
 enum TabListProp {
   'Auction_Created' = 'Auction Created',
   'Auction_Participated' = 'Auction Participated',
+  'Auction_Collect' = 'Favorites Auctions',
   'Activities' = 'Activities'
 }
 
-const tabsList = [TabListProp.Auction_Created, TabListProp.Auction_Participated, TabListProp.Activities]
-export default function MyProfile() {
+const tabsList = [
+  TabListProp.Auction_Created,
+  TabListProp.Auction_Participated,
+  TabListProp.Auction_Collect,
+  TabListProp.Activities
+]
+
+// tokenType erc20:1 , erc1155:2
+export enum BackedTokenType {
+  TOKEN = 1,
+  NFT = 2
+}
+
+export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: BackedTokenType }) {
   const [curTab, setCurTab] = useState(TabListProp.Auction_Created)
-  const { account } = useActiveWeb3React()
-  const toggleWalletModal = useWalletModalToggle()
 
   return (
     <AccountLayout>
-      <Box>
+      <Box padding="0 20px">
         <Container maxWidth="lg">
           <Typography padding="40px 20px 0" variant="h3" fontSize={30}>
-            My Token & NFT Auction
+            {backedTokenType === BackedTokenType.TOKEN ? 'My Token' : 'NFT Auction'}
           </Typography>
 
-          {!account ? (
-            <NoData>
-              <Box display={'grid'} gap="10px" justifyItems="center">
-                <Button variant="contained" onClick={toggleWalletModal}>
-                  Connect Wallet
-                </Button>
-                <Typography color={'var(--ps-gray-600)'}>
-                  Connect wallet to view information for this address
-                </Typography>
-              </Box>
-            </NoData>
-          ) : (
-            <>
-              <CurrentPoolStatus />
+          <>
+            <CurrentPoolStatus backedTokenType={backedTokenType} />
+            <Box mt={40} mb={30}>
+              <Stack direction={'row'} sx={styles.tabsBox}>
+                <Stack direction="row" alignItems="center">
+                  {tabsList?.map(item => {
+                    return (
+                      <Typography
+                        variant="h4"
+                        onClick={() => setCurTab(item)}
+                        key={item}
+                        sx={{ ...styles.menu, ...(curTab === item ? styles.menuActive : ({} as any)) }}
+                      >
+                        {item}
+                      </Typography>
+                    )
+                  })}
+                </Stack>
+              </Stack>
+
               <Box
+                padding="40px"
                 sx={{
-                  mt: 40,
-                  borderRadius: '20px'
+                  background: '#F6F6F3',
+                  borderRadius: '20px',
+                  mt: -24,
+                  position: 'relative'
                 }}
               >
-                <Stack direction={'row'} justifyContent="space-between" sx={styles.tabsBox}>
-                  <Stack direction="row" spacing={36} alignItems="center">
-                    {tabsList?.map(item => {
-                      return (
-                        <Typography
-                          variant="h4"
-                          onClick={() => setCurTab(item)}
-                          key={item}
-                          sx={{ ...styles.menu, ...(curTab === item ? styles.menuActive : ({} as any)) }}
-                        >
-                          {item}
-                        </Typography>
-                      )
-                    })}
-                  </Stack>
-                </Stack>
-
-                <Box padding="40px 20px">
-                  <>
-                    {curTab === TabListProp.Auction_Created && <AuctionCreatedTab />}
-                    {curTab === TabListProp.Auction_Participated && <AuctionParticipatedTab />}
-                    {curTab === TabListProp.Activities && <ActivitiesTab />}
-                  </>
-                </Box>
+                <>
+                  {curTab === TabListProp.Auction_Created && (
+                    <AuctionParticipatedTab type="created" backedTokenType={backedTokenType} />
+                  )}
+                  {curTab === TabListProp.Auction_Participated && (
+                    <AuctionParticipatedTab type="participated" backedTokenType={backedTokenType} />
+                  )}
+                  {curTab === TabListProp.Auction_Collect && (
+                    <AuctionParticipatedTab type="collect" backedTokenType={backedTokenType} />
+                  )}
+                  {curTab === TabListProp.Activities && <ActivitiesTab backedTokenType={backedTokenType} />}
+                </>
               </Box>
-            </>
-          )}
+            </Box>
+          </>
         </Container>
       </Box>
     </AccountLayout>

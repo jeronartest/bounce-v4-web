@@ -15,10 +15,20 @@ const NoData: React.FC<INoDataProps> = ({ svgColor, color, children, sx, widthSv
   return (
     <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: 20, ...sx }}>
       {widthSvg ? (
-        <NoDataSVG1 />
+        <NoDataSVG1
+          style={{
+            maxWidth: '100%',
+            margin: 'auto'
+          }}
+        />
       ) : (
         <NoDataSVG
-          style={{ maxWidth: '100%', margin: 'auto', color: svgColor ? svgColor : 'var(--ps-gray-50)', minHeight: 308 }}
+          style={{
+            maxWidth: '100%',
+            margin: 'auto',
+            color: svgColor ? svgColor : 'var(--ps-gray-50)',
+            minHeight: 308
+          }}
         />
       )}
 

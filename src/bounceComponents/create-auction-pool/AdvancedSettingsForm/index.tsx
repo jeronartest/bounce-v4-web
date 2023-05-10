@@ -36,7 +36,13 @@ interface MyFormValues {
   participantStatus: ParticipantStatus
 }
 
-export const DateRangePickerDemo = () => {
+export const DateRangePickerDemo = ({
+  hideDelayUnlocking,
+  hideRefundable
+}: {
+  hideDelayUnlocking?: boolean
+  hideRefundable?: boolean
+}) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
 
@@ -176,53 +182,58 @@ export const DateRangePickerDemo = () => {
                   />
                 </Stack>
 
-                <Box sx={{ mt: 38 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 20 }}>
-                    <Stack direction="row" alignItems="center" spacing={8}>
+                {!hideDelayUnlocking && (
+                  <Box sx={{ mt: 38 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 20 }}>
+                      <Stack direction="row" alignItems="center" spacing={8}>
+                        <Typography variant="h3" sx={{ fontSize: 16 }}>
+                          Delay Unlocking Token
+                        </Typography>
+
+                        <Tooltip title="Set a date so traders can only claim tokens by that time.">
+                          <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                        </Tooltip>
+                      </Stack>
+
+                      <Field component={SwitchFormItem} type="checkbox" name="shouldDelayUnlocking" />
+                    </Box>
+
+                    {/* TODO: disable when switch is off */}
+                    <Field
+                      readOnly={!values.shouldDelayUnlocking}
+                      component={DateTimePickerFormItem}
+                      disablePast
+                      name="delayUnlockingTime"
+                      minDateTime={values.endTime}
+                      textField={{ sx: { width: '100%' } }}
+                    />
+                  </Box>
+                )}
+
+                {!hideRefundable && (
+                  <Box sx={{ mt: 38, mb: 34 }}>
+                    <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
                       <Typography variant="h3" sx={{ fontSize: 16 }}>
-                        Delay Unlocking Token
+                        Refundable
                       </Typography>
 
-                      <Tooltip title="Set a date so traders can only claim tokens by that time.">
+                      <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
                         <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                       </Tooltip>
                     </Stack>
 
-                    <Field component={SwitchFormItem} type="checkbox" name="shouldDelayUnlocking" />
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1">Auction will be refundable before the end time</Typography>
+
+                      {values?.endTime ? (
+                        <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
+                          Before {values.endTime.format('MMM D, YYYY hh:mm A')}
+                        </Box>
+                      ) : null}
+                    </Box>
                   </Box>
+                )}
 
-                  {/* TODO: disable when switch is off */}
-                  <Field
-                    readOnly={!values.shouldDelayUnlocking}
-                    component={DateTimePickerFormItem}
-                    disablePast
-                    name="delayUnlockingTime"
-                    minDateTime={values.endTime}
-                    textField={{ sx: { width: '100%' } }}
-                  />
-                </Box>
-
-                <Box sx={{ mt: 38, mb: 34 }}>
-                  <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
-                    <Typography variant="h3" sx={{ fontSize: 16 }}>
-                      Refundable
-                    </Typography>
-
-                    <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
-                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                    </Tooltip>
-                  </Stack>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body1">Auction will be refundable before the end time</Typography>
-
-                    {values?.endTime ? (
-                      <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
-                        Before {values.endTime.format('MMM D, YYYY hh:mm A')}
-                      </Box>
-                    ) : null}
-                  </Box>
-                </Box>
                 <Box sx={{ mt: 38, mb: 34 }}>
                   <Stack direction="row" alignItems="center" spacing={8}>
                     <Typography variant="h3" sx={{ fontSize: 16 }}>

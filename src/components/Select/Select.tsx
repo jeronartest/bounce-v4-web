@@ -73,7 +73,7 @@ export default function Select(props: Props) {
             width: '100%',
             maxWidth: 'calc(100vw - 70px)',
             height: '100%',
-            padding: '0 50px 0 20px !important',
+            padding: '0 10px 0 10px',
             display: 'flex',
             alignItems: 'center'
           },
@@ -113,6 +113,7 @@ export default function Select(props: Props) {
             '& .MuiPaper-root': {
               width: width ?? 'unset',
               borderRadius: '10px',
+              maxHeight: 400,
               mt: '10px',
               boxShadow: theme => theme.shadows[4],
               transform: width ? 'translateX(-12px)!important' : 'none',

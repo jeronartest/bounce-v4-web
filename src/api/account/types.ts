@@ -4,12 +4,12 @@ import { CurrencyAmount } from 'constants/token'
 
 export interface GetUserPoolsDashboardParams {
   address: string
-  category?: PoolType // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
+  category: PoolType | 0 // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
   chainId: number
   limit?: number
   offset?: number
-  tokenType?: 1 | 2
-  queryType?: DashboardQueryType | 0
+  tokenType: 1 | 2
+  queryType: DashboardQueryType | 0
 }
 
 export enum DashboardQueryType {
@@ -36,10 +36,11 @@ export interface GetUserPoolsDashboardStatRes {
 
 export interface GetAddressActivitiesParams {
   address: string
-  category: PoolType // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
+  category: PoolType | 0 // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
   chainId: number
   limit?: number
   offset?: number
+  tokenType: 1 | 2
 }
 
 export interface GetAddressActivitiesRes {

@@ -1,10 +1,10 @@
-import { Box, OutlinedInput, Stack, Typography } from '@mui/material'
+import { Box, Button, IconButton, OutlinedInput, Stack, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import * as yup from 'yup'
 import { LoadingButton } from '@mui/lab'
 import FormItem from 'bounceComponents/common/FormItem'
 import { useUpdateBasic } from 'bounceHooks/profile/useUpdateBasic'
-import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import UploadItem, { StyledAvatarInputIdLabel } from 'bounceComponents/common/UploadCard/UploadItem'
 import LocationTimeZone from 'bounceComponents/common/LocationTimeZone'
 // import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { FormType } from 'api/profile/type'
@@ -13,10 +13,11 @@ import { useUserInfo } from 'state/users/hooks'
 
 import { ReactComponent as WebsiteSVG } from 'assets/imgs/profile/links/website.svg'
 import { ReactComponent as GithubSVG } from 'assets/imgs/profile/links/github.svg'
-import { ReactComponent as TwitterSVG } from 'assets/imgs/profile/links/twitter.svg'
+import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instagram.svg'
-import { ReactNode } from 'react'
-import { SocialLinks } from 'bounceComponents/profile/SocialList'
+import { ReactNode, useState } from 'react'
+import Divider from 'components/Divider'
+import { Cancel } from '@mui/icons-material'
 
 export interface ILinksItem {
   name: string
@@ -26,7 +27,7 @@ export interface ILinksItem {
   autoComplete: string
 }
 
-const links: ILinksItem[] = [
+export const ProfileSocialLinks: ILinksItem[] = [
   {
     name: 'website',
     label: 'Website',
@@ -42,10 +43,10 @@ const links: ILinksItem[] = [
     autoComplete: 'off'
   },
   {
-    name: 'twitter',
-    label: 'Twitter',
+    name: 'discord',
+    label: 'Discord',
     required: false,
-    icon: <TwitterSVG />,
+    icon: <DiscordSVG />,
     autoComplete: 'off'
   },
   {
@@ -60,14 +61,14 @@ const links: ILinksItem[] = [
 const DESCRIPTION_LENGTH = 350
 
 const validationSchema = yup.object({
-  avatar: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
+  // avatar: yup.object({
+  //   fileName: yup.string(),
+  //   fileSize: yup.number(),
+  //   fileThumbnailUrl: yup.string(),
+  //   fileType: yup.string(),
+  //   fileUrl: yup.string().required('Please upload your Profile Picture'),
+  //   id: yup.number()
+  // }),
   fullName: yup
     .string()
     .trim()
@@ -78,16 +79,57 @@ const validationSchema = yup.object({
   location: yup.string().required(formCheckValid('location（time zone）', FormType.Select)),
   website: yup.string().trim().url('Please enter a valid URL'),
   github: yup.string().trim().url('Please enter a valid URL'),
-  twitter: yup.string().trim().url('Please enter a valid URL'),
+  discord: yup.string().trim().url('Please enter a valid URL'),
   instagram: yup.string().trim().url('Please enter a valid URL')
 })
 
-const ProfileOverview = () => {
+export interface ISocialEditInputProp {
+  website: string
+  github: string
+  discord: string
+  instagram: string
+}
+
+export const sxInputStyle = {
+  '& .MuiInputBase-root': {
+    backgroundColor: '#F6F6F3',
+    '& fieldset': {
+      border: 'none'
+    }
+  }
+}
+
+export interface IProfileOverviewValue extends ISocialEditInputProp {
+  avatar:
+    | {
+        id: number
+        type: number
+        userId: number
+        fileName: string
+        fileType: string
+        fileSize: number
+        fileUrl: string
+        fileThumbnailUrl: string
+      }
+    | {
+        fileName: string
+        fileSize: number
+        fileThumbnailUrl: string
+        fileType: string
+        fileUrl: string
+        id: number
+      }
+  fullName: string
+  description: string
+  location: string
+}
+
+export default function ProfileOverview() {
   const { userInfo } = useUserInfo()
 
   const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
 
-  const initialValues = {
+  const initialValues: IProfileOverviewValue = {
     avatar: userInfo?.avatar || {
       fileName: '',
       fileSize: 0,
@@ -102,7 +144,7 @@ const ProfileOverview = () => {
     location: userInfo?.location || '',
     website: userInfo?.website || '',
     github: userInfo?.github || '',
-    twitter: userInfo?.twitter || '',
+    discord: userInfo?.discord || '',
     instagram: userInfo?.instagram || ''
   }
 
@@ -122,17 +164,22 @@ const ProfileOverview = () => {
           <Stack component={Form} spacing={20} noValidate>
             <Box
               sx={{
-                position: 'absolute',
-                right: 0,
-                top: -10
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
+              <Typography variant="h3" fontSize={36}>
+                My Profile
+              </Typography>
+
               <LoadingButton
                 loading={loading}
                 loadingPosition="start"
                 startIcon={<></>}
                 variant="contained"
-                sx={{ width: 140, textAlign: 'right' }}
+                color="secondary"
+                sx={{ width: 116, height: 52, textAlign: 'right' }}
                 type="submit"
               >
                 Save
@@ -145,60 +192,83 @@ const ProfileOverview = () => {
               tips="(JPEG, PNG, WEBP Files, Size<10M)"
               fieldType="custom"
               sx={{
+                display: 'flex',
                 '& label': {
                   position: 'absolute',
-                  left: 184,
-                  top: 46,
+                  left: 134,
+                  top: 0,
                   fontSize: 14,
                   color: 'var(--ps-gray-900)'
                 },
                 '&>p': {
                   position: 'absolute',
-                  left: 184,
-                  top: 78,
+                  left: 134,
+                  top: 38,
                   fontSize: 12,
                   color: 'var(--ps-gray-600)'
                 }
               }}
             >
-              <UploadItem
-                value={{
-                  fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
-                }}
-                onChange={file => {
-                  setFieldValue('avatar', file)
-                }}
-                sx={{ width: 160, height: 160, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
-                accept={['image/jpeg', 'image/png', 'image/webp']}
-                tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
-                limitSize={10}
-              />
+              <Box>
+                <UploadItem
+                  value={{
+                    fileUrl: values.avatar.fileThumbnailUrl || values.avatar.fileUrl
+                  }}
+                  inputId="avatarInputId"
+                  onChange={file => {
+                    setFieldValue('avatar', file)
+                  }}
+                  sx={{ width: 120, height: 120, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
+                  accept={['image/jpeg', 'image/png', 'image/webp']}
+                  tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
+                  limitSize={10}
+                />
+                <StyledAvatarInputIdLabel style={{ top: 75, left: 148 }} htmlFor="avatarInputId">
+                  Edit
+                </StyledAvatarInputIdLabel>
+              </Box>
             </FormItem>
 
-            <FormItem name="fullName" label="Full name" required style={{ marginTop: 40 }}>
-              <OutlinedInput />
-            </FormItem>
-            <FormItem name="location" label="Location (Time Zone)" required fieldType="custom">
-              <LocationTimeZone value={values.location} onChange={val => setFieldValue('location', val)} />
-            </FormItem>
-            <FormItem name="description" label=" ">
-              <OutlinedInput
-                placeholder="Introduce yourself..."
-                multiline
-                endAdornment={
-                  <Typography
-                    variant="body2"
-                    className="endAdorn"
-                  >{`${values.description?.length} / ${DESCRIPTION_LENGTH}`}</Typography>
-                }
-                inputProps={{ sx: { minHeight: 144 } }}
-              />
-            </FormItem>
+            <Box style={{ margin: '40px 0' }}>
+              <Divider />
+            </Box>
 
-            <Typography variant="h3" pt={20} fontSize={16}>
-              Social links
-            </Typography>
-            <SocialLinks links={links} />
+            <Box display={'grid'} gridTemplateColumns={{ sm: '1fr', md: '1fr 1fr' }} gap={55}>
+              <Stack spacing={16}>
+                <Typography variant="h5" fontSize={20} pb={15}>
+                  Profile
+                </Typography>
+
+                <FormItem sx={sxInputStyle} name="fullName" label="Username" required>
+                  <OutlinedInput />
+                </FormItem>
+                <FormItem sx={sxInputStyle} name="location" label="Location (Time Zone)" required fieldType="custom">
+                  <LocationTimeZone value={values.location} onChange={val => setFieldValue('location', val)} />
+                </FormItem>
+                <FormItem sx={sxInputStyle} name="description" label=" ">
+                  <OutlinedInput
+                    placeholder="Introduce yourself..."
+                    multiline
+                    endAdornment={
+                      <Typography
+                        variant="body2"
+                        className="endAdorn"
+                      >{`${values.description?.length} / ${DESCRIPTION_LENGTH}`}</Typography>
+                    }
+                    inputProps={{ sx: { minHeight: 144 } }}
+                  />
+                </FormItem>
+              </Stack>
+
+              <Box>
+                <Typography variant="h5" fontSize={20} mb={30}>
+                  Social links
+                </Typography>
+                <Stack spacing={20}>
+                  <SocialEditLinks values={values} setFieldValue={setFieldValue} />
+                </Stack>
+              </Box>
+            </Box>
           </Stack>
         )
       }}
@@ -206,4 +276,88 @@ const ProfileOverview = () => {
   )
 }
 
-export default ProfileOverview
+function SocialEditInput({ value, setValue }: { value: string; setValue: (val: string) => void }) {
+  const [mode, setMode] = useState<'unset' | 'set' | 'input'>(!!value ? 'set' : 'unset')
+
+  return (
+    <>
+      <Box display={mode !== 'unset' ? 'flex' : 'none'} alignItems={'center'}>
+        {mode === 'input' && (
+          <>
+            <OutlinedInput
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              sx={{
+                width: 160,
+                height: 34,
+                background: '#F6F7F3',
+                borderRadius: '100px'
+              }}
+            />
+            <Typography
+              onClick={() => {
+                if (value) {
+                  setMode('set')
+                }
+              }}
+              mx={20}
+              sx={{ cursor: 'pointer' }}
+            >
+              Send
+            </Typography>
+          </>
+        )}
+        {mode === 'set' && (
+          <Typography maxWidth={200} noWrap>
+            {value}
+          </Typography>
+        )}
+        <IconButton
+          onClick={() => {
+            setValue('')
+            setMode('unset')
+          }}
+        >
+          <Cancel sx={{ color: '#000' }} />
+        </IconButton>
+      </Box>
+      {mode === 'unset' && (
+        <Button sx={{ width: 102, height: 32 }} variant="contained" onClick={() => setMode('input')}>
+          Connect
+        </Button>
+      )}
+    </>
+  )
+}
+
+export function SocialEditLinks({
+  values,
+  setFieldValue
+}: {
+  values: ISocialEditInputProp
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+}) {
+  return (
+    <>
+      {ProfileSocialLinks.map((item, index) => (
+        <>
+          <FormItem key={item.name} name={item.name}>
+            <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+              <Box display={'flex'} alignItems={'center'}>
+                <IconButton>{item.icon}</IconButton>
+                <Typography>{item.label}</Typography>
+              </Box>
+              <Box display={'flex'} alignItems={'center'}>
+                <SocialEditInput
+                  value={values?.[item.name as keyof ISocialEditInputProp] || ''}
+                  setValue={(val: string) => setFieldValue(item.name, val || '')}
+                />
+              </Box>
+            </Box>
+          </FormItem>
+          <Divider key={index} />
+        </>
+      ))}
+    </>
+  )
+}

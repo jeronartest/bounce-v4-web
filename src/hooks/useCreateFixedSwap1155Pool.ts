@@ -133,10 +133,6 @@ export function useCreateFixedSwap1155Pool() {
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
-    console.log(
-      '🚀 ~ file: useCreateFixedSwap1155Pool.ts:136 ~ returnuseCallback ~ contractCallParams:',
-      contractCallParams
-    )
 
     const args = [contractCallParams, expiredTime, signature]
 

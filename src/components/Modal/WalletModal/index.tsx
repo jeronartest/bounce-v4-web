@@ -10,7 +10,7 @@ import { /*fortmatic,*/ injected, portis } from 'connectors'
 import { SUPPORTED_WALLETS } from 'constants/index'
 import usePrevious from 'hooks/usePrevious'
 import { ApplicationModal } from 'state/application/actions'
-import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
+import { useModalOpen, useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
 import AccountDetails from 'components/Modal/WalletModal/AccountDetails'
 
 import Modal from '../index'
@@ -24,6 +24,136 @@ const WALLET_VIEWS = {
   OPTIONS: 'options',
   ACCOUNT: 'account',
   PENDING: 'pending'
+}
+
+// get wallets user can switch too, depending on device/browser
+export function useGetWalletOptions(
+  isModal?: boolean,
+  activation?: (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => Promise<void>
+) {
+  const { activate, connector } = useWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
+  const signLoginModalToggle = useSignLoginModalToggle()
+
+  const defaultActivation = useCallback(
+    async (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => {
+      const conn = typeof connector === 'function' ? await connector() : connector
+
+      // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
+      if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.connector?.connected) {
+        conn.walletConnectProvider = undefined
+      }
+
+      conn &&
+        activate(conn, undefined, true)
+          .then(() => {
+            setInjectedConnected(conn)
+            signLoginModalToggle()
+          })
+          .catch(error => {
+            if (error instanceof UnsupportedChainIdError) {
+              activate(conn) // a little janky...can't use setError because the connector isn't set
+            }
+            setInjectedConnected()
+          })
+    },
+    [activate, signLoginModalToggle]
+  )
+  const tryActivation = activation || defaultActivation
+
+  const isMetamask = window.ethereum && window.ethereum.isMetaMask
+  return Object.keys(SUPPORTED_WALLETS).map(key => {
+    const option = SUPPORTED_WALLETS[key]
+    // check for mobile options
+    if (isMobile) {
+      //disable portis on mobile for now
+      if (option.connector === portis) {
+        return null
+      }
+
+      if (!window.web3 && !window.ethereum && option.mobile) {
+        return (
+          <Option
+            onClick={() => {
+              option.connector !== connector && !option.href && tryActivation(option.connector)
+            }}
+            id={`connect-${key}`}
+            key={key}
+            clickable={!option.disabled}
+            active={option.connector && option.connector === connector}
+            link={option.href}
+            header={option.name}
+            icon={require('../../../assets/walletIcon/' + option.iconName)}
+          />
+        )
+      } else if (isMetamask && option.name === 'MetaMask') {
+        return (
+          <Option
+            onClick={() => {
+              option.connector !== connector && !option.href && tryActivation(option.connector)
+            }}
+            id={`connect-${key}`}
+            clickable={!option.disabled}
+            key={key}
+            active={option.connector && option.connector === connector}
+            link={option.href}
+            header={option.name}
+            icon={require('../../../assets/walletIcon/' + option.iconName)?.default}
+          />
+        )
+      }
+      return null
+    }
+
+    // overwrite injected when needed
+    if (option.connector === injected) {
+      // don't show injected if there's no injected provider
+      if (!(window.web3 || window.ethereum)) {
+        if (option.name === 'MetaMask') {
+          return (
+            <Option
+              id={`connect-${key}`}
+              clickable={!option.disabled}
+              key={key}
+              header={'Install Metamask'}
+              link={'https://metamask.io/'}
+              icon={MetamaskIcon}
+            />
+          )
+        } else {
+          return null //dont want to return install twice
+        }
+      }
+      // don't return metamask if injected provider isn't metamask
+      else if (option.name === 'MetaMask' && !isMetamask) {
+        return null
+      }
+      // likewise for generic
+      else if (option.name === 'Injected' && isMetamask) {
+        return null
+      }
+    }
+
+    // return rest of options
+    return !isMobile && !option.mobileOnly ? (
+      <Option
+        id={`connect-${key}`}
+        clickable={!option.disabled}
+        onClick={() => {
+          option.connector === connector
+            ? isModal
+              ? toggleWalletModal()
+              : null
+            : !option.href && tryActivation(option.connector)
+        }}
+        key={key}
+        active={option.connector === connector}
+        link={option.href}
+        header={option.name}
+        icon={require('../../../assets/walletIcon/' + option.iconName)}
+      />
+    ) : null
+  })
 }
 
 export default function WalletModal({
@@ -68,6 +198,7 @@ export default function WalletModal({
   // close modal when a connection is successful
   const activePrevious = usePrevious(active)
   const connectorPrevious = usePrevious(connector)
+  const signLoginModalToggle = useSignLoginModalToggle()
   useEffect(() => {
     if (walletModalOpen && ((active && !activePrevious) || (connector && connector !== connectorPrevious && !error))) {
       setWalletView(WALLET_VIEWS.OPTIONS)
@@ -90,6 +221,7 @@ export default function WalletModal({
         activate(conn, undefined, true)
           .then(() => {
             setInjectedConnected(conn)
+            signLoginModalToggle()
           })
           .catch(error => {
             if (error instanceof UnsupportedChainIdError) {
@@ -100,8 +232,9 @@ export default function WalletModal({
             setInjectedConnected()
           })
     },
-    [activate]
+    [activate, signLoginModalToggle]
   )
+  const getWalletOptions = useGetWalletOptions(true, tryActivation)
 
   // close wallet modal if fortmatic modal is active
   // useEffect(() => {
@@ -111,96 +244,96 @@ export default function WalletModal({
   // }, [toggleWalletModal])
 
   // get wallets user can switch too, depending on device/browser
-  function getOptions() {
-    const isMetamask = window.ethereum && window.ethereum.isMetaMask
-    return Object.keys(SUPPORTED_WALLETS).map(key => {
-      const option = SUPPORTED_WALLETS[key]
-      // check for mobile options
-      if (isMobile) {
-        //disable portis on mobile for now
-        if (option.connector === portis) {
-          return null
-        }
+  // function getOptions() {
+  //   const isMetamask = window.ethereum && window.ethereum.isMetaMask
+  //   return Object.keys(SUPPORTED_WALLETS).map(key => {
+  //     const option = SUPPORTED_WALLETS[key]
+  //     // check for mobile options
+  //     if (isMobile) {
+  //       //disable portis on mobile for now
+  //       if (option.connector === portis) {
+  //         return null
+  //       }
 
-        if (!window.web3 && !window.ethereum && option.mobile) {
-          return (
-            <Option
-              onClick={() => {
-                option.connector !== connector && !option.href && tryActivation(option.connector)
-              }}
-              id={`connect-${key}`}
-              key={key}
-              active={option.connector && option.connector === connector}
-              link={option.href}
-              header={option.name}
-              icon={require('../../../assets/walletIcon/' + option.iconName)}
-            />
-          )
-        } else if (isMetamask && option.name === 'MetaMask') {
-          return (
-            <Option
-              onClick={() => {
-                option.connector !== connector && !option.href && tryActivation(option.connector)
-              }}
-              id={`connect-${key}`}
-              key={key}
-              active={option.connector && option.connector === connector}
-              link={option.href}
-              header={option.name}
-              icon={require('../../../assets/walletIcon/' + option.iconName)?.default}
-            />
-          )
-        }
-        return null
-      }
+  //       if (!window.web3 && !window.ethereum && option.mobile) {
+  //         return (
+  //           <Option
+  //             onClick={() => {
+  //               option.connector !== connector && !option.href && tryActivation(option.connector)
+  //             }}
+  //             id={`connect-${key}`}
+  //             key={key}
+  //             active={option.connector && option.connector === connector}
+  //             link={option.href}
+  //             header={option.name}
+  //             icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //           />
+  //         )
+  //       } else if (isMetamask && option.name === 'MetaMask') {
+  //         return (
+  //           <Option
+  //             onClick={() => {
+  //               option.connector !== connector && !option.href && tryActivation(option.connector)
+  //             }}
+  //             id={`connect-${key}`}
+  //             key={key}
+  //             active={option.connector && option.connector === connector}
+  //             link={option.href}
+  //             header={option.name}
+  //             icon={require('../../../assets/walletIcon/' + option.iconName)?.default}
+  //           />
+  //         )
+  //       }
+  //       return null
+  //     }
 
-      // overwrite injected when needed
-      if (option.connector === injected) {
-        // don't show injected if there's no injected provider
-        if (!(window.web3 || window.ethereum)) {
-          if (option.name === 'MetaMask') {
-            return (
-              <Option
-                id={`connect-${key}`}
-                key={key}
-                header={'Install Metamask'}
-                link={'https://metamask.io/'}
-                icon={MetamaskIcon}
-              />
-            )
-          } else {
-            return null //dont want to return install twice
-          }
-        }
-        // don't return metamask if injected provider isn't metamask
-        else if (option.name === 'MetaMask' && !isMetamask) {
-          return null
-        }
-        // likewise for generic
-        else if (option.name === 'Injected' && isMetamask) {
-          return null
-        }
-      }
+  //     // overwrite injected when needed
+  //     if (option.connector === injected) {
+  //       // don't show injected if there's no injected provider
+  //       if (!(window.web3 || window.ethereum)) {
+  //         if (option.name === 'MetaMask') {
+  //           return (
+  //             <Option
+  //               id={`connect-${key}`}
+  //               key={key}
+  //               header={'Install Metamask'}
+  //               link={'https://metamask.io/'}
+  //               icon={MetamaskIcon}
+  //             />
+  //           )
+  //         } else {
+  //           return null //dont want to return install twice
+  //         }
+  //       }
+  //       // don't return metamask if injected provider isn't metamask
+  //       else if (option.name === 'MetaMask' && !isMetamask) {
+  //         return null
+  //       }
+  //       // likewise for generic
+  //       else if (option.name === 'Injected' && isMetamask) {
+  //         return null
+  //       }
+  //     }
 
-      // return rest of options
-      return (
-        !isMobile &&
-        !option.mobileOnly && (
-          <Option
-            id={`connect-${key}`}
-            onClick={() => {
-              option.connector === connector ? toggleWalletModal() : !option.href && tryActivation(option.connector)
-            }}
-            key={key}
-            active={option.connector === connector}
-            link={option.href}
-            header={option.name}
-            icon={require('../../../assets/walletIcon/' + option.iconName)}
-          />
-        )
-      )
-    })
-  }
+  //     // return rest of options
+  //     return (
+  //       !isMobile &&
+  //       !option.mobileOnly && (
+  //         <Option
+  //           id={`connect-${key}`}
+  //           onClick={() => {
+  //             option.connector === connector ? toggleWalletModal() : !option.href && tryActivation(option.connector)
+  //           }}
+  //           key={key}
+  //           active={option.connector === connector}
+  //           link={option.href}
+  //           header={option.name}
+  //           icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //         />
+  //       )
+  //     )
+  //   })
+  // }
 
   function getModalContent() {
     if (error) {
@@ -284,8 +417,8 @@ export default function WalletModal({
             </Button>
           </PendingView>
         ) : (
-          <Box display="grid" gap="10px" width="100%">
-            {getOptions()}
+          <Box display="grid" gap="16px" width="100%" gridTemplateColumns={'1fr 1fr'}>
+            {getWalletOptions}
           </Box>
         )}
       </>
@@ -293,8 +426,8 @@ export default function WalletModal({
   }
 
   return (
-    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="480px" closeIcon={true}>
-      <Box width={'100%'} padding="32px" display="flex" flexDirection="column" alignItems="center" gap={20}>
+    <Modal customIsOpen={walletModalOpen} customOnDismiss={toggleWalletModal} maxWidth="772px" closeIcon={true}>
+      <Box width={'100%'} padding="48px" display="flex" flexDirection="column" alignItems="center" gap={20}>
         {getModalContent()}
       </Box>
     </Modal>

@@ -1,19 +1,27 @@
 import { Dots } from 'themes/components'
 import { Box, Container, SxProps, Theme, Typography } from '@mui/material'
-import { ReactComponent as DefaultIcon } from 'assets/svg/default.svg'
+import DefaultIcon from 'assets/imgs/common/ComingSoon.png'
 
-export default function ComingSoon({ sx }: { sx?: SxProps<Theme> | undefined }) {
+export default function ComingSoon({
+  sx,
+  prompt,
+  bgColor
+}: {
+  sx?: SxProps<Theme> | undefined
+  prompt?: string
+  bgColor?: string
+}) {
   return (
     <Box
       sx={{
-        padding: '40px 60px',
+        padding: '0 60px 40px',
         ...sx
       }}
     >
       <Container
         maxWidth="lg"
         sx={{
-          backgroundColor: '#F5F5F5',
+          backgroundColor: bgColor || '#F5F5F5',
           borderRadius: '20px',
           minHeight: 436,
           display: 'grid',
@@ -21,18 +29,27 @@ export default function ComingSoon({ sx }: { sx?: SxProps<Theme> | undefined }) 
           alignItems: 'center'
         }}
       >
-        <Box>
-          <DefaultIcon />
+        <Box mt={100} display="grid" justifyItems={'center'}>
+          <img
+            style={{
+              width: 453,
+              margin: '0 auto'
+            }}
+            src={DefaultIcon}
+            alt=""
+            srcSet=""
+          />
           <Typography
-            fontWeight={500}
+            variant="h4"
             sx={{
-              color: '#908E96',
-              fontSize: 28,
+              fontSize: 20,
+              textAlign: 'center',
               mt: 40
             }}
           >
             Coming soon <Dots />
           </Typography>
+          {prompt && <Typography textAlign={'center'}>{prompt}</Typography>}
         </Box>
       </Container>
     </Box>

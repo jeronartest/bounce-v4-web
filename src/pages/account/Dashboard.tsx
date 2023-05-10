@@ -1,10 +1,9 @@
-import { Box, Button, Container, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Container, Skeleton, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import AccountAvatar from 'bounceComponents/account/AccountAvatar'
 import { useUserInfo } from 'state/users/hooks'
-import { getCurrentTimeStamp, getLabelById } from 'utils'
-import { useOptionDatas } from 'state/configOptions/hooks'
+import { getCurrentTimeStamp, shortenAddress } from 'utils'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as EditSVG } from 'assets/imgs/companies/edit.svg'
 import { routes } from 'constants/routes'
@@ -21,6 +20,10 @@ import {
 } from 'bounceComponents/account/Dashboard'
 import { DashboardQueryType } from 'api/account/types'
 import { useMemo } from 'react'
+import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/SocialMediaButtonGroup'
+import { useActiveWeb3React } from 'hooks'
+import Copy from 'components/essential/Copy'
+import Divider from 'components/Divider'
 
 const btnStyle = {
   height: 26,
@@ -33,63 +36,111 @@ const btnStyle = {
 
 export default function Dashboard() {
   const { userInfo } = useUserInfo()
-  const optionDatas = useOptionDatas()
+  const { account } = useActiveWeb3React()
   const navigate = useNavigate()
   const { data: dashboardStat } = useDashboardStat()
 
   return (
     <AccountLayout>
-      <Box>
+      <Box padding="0 20px">
         <Container maxWidth="lg">
-          <Box padding="40px 20px">
+          <Box padding="40px 0">
             <Typography variant="h3" fontSize={30}>
               Dashboard
             </Typography>
-            <Box pt={48} display="flex">
-              <Box sx={{ position: 'relative', width: '120px' }}>
-                {!userInfo?.avatar ? (
-                  <Skeleton variant="circular" width={120} height={120} sx={{ background: 'var(--ps-gray-50)' }} />
-                ) : (
-                  <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
-                )}
-                {userInfo?.isVerify && (
-                  <VerifiedIcon
-                    isVerify={userInfo.isVerify}
-                    width={42}
-                    height={42}
-                    showVerify
-                    sx={{ position: 'absolute', right: -5, bottom: 10 }}
-                  />
-                )}
-              </Box>
-              <Box sx={{ width: '100%', ml: 24, mt: 30 }}>
-                <Stack direction={'row'} justifyContent="space-between" alignItems={'center'}>
-                  {!userInfo?.fullName && !userInfo?.fullNameId ? (
-                    <Skeleton variant="rectangular" width={280} height={46} sx={{ background: 'var(--ps-gray-50)' }} />
+            <Box pt={40}>
+              <Box display="flex" alignItems={'center'}>
+                <Box sx={{ position: 'relative', width: '120px' }}>
+                  {!userInfo?.avatar ? (
+                    <Skeleton variant="circular" width={120} height={120} sx={{ background: 'var(--ps-gray-50)' }} />
                   ) : (
-                    <Stack direction={'row'} alignItems="center">
-                      <Typography variant="h1" fontWeight={500}>
-                        {userInfo?.fullName}
-                      </Typography>
-                      <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
-                        {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
-                      </Typography>
-                    </Stack>
+                    <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
                   )}
-                </Stack>
+                  {userInfo?.isVerify && (
+                    <VerifiedIcon
+                      isVerify={userInfo.isVerify}
+                      width={42}
+                      height={42}
+                      showVerify
+                      sx={{ position: 'absolute', right: 0, bottom: 0 }}
+                    />
+                  )}
+                </Box>
+                <Stack sx={{ width: '100%', ml: 16 }} spacing={5}>
+                  <Stack direction={'row'} alignItems={'center'}>
+                    {!userInfo?.fullName && !userInfo?.fullNameId ? (
+                      <Skeleton
+                        variant="rectangular"
+                        width={280}
+                        height={46}
+                        sx={{ background: 'var(--ps-gray-50)' }}
+                      />
+                    ) : (
+                      <Stack direction={'row'} alignItems="center">
+                        <Typography variant="h1" fontWeight={500}>
+                          {userInfo?.fullName}
+                        </Typography>
+                        <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
+                          {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Stack>
 
-                <Stack direction={'row'} alignItems="center" justifyContent="space-between" spacing={12} mt={6}>
-                  <Box>
-                    {userInfo?.publicRole?.map((item: any) => {
-                      const label = getLabelById(item, 'role', optionDatas?.publicRoleOpt)
-                      return (
-                        <Box key={item} sx={{ padding: '7px 12px', background: 'var(--ps-gray-50)', borderRadius: 16 }}>
-                          {label}
-                        </Box>
-                      )
-                    })}
+                  <Box height={32}>
+                    {userInfo?.location && (
+                      <Chip
+                        sx={{
+                          width: 84,
+                          height: '100%'
+                        }}
+                        label={userInfo.location}
+                      />
+                    )}
                   </Box>
+
+                  <Stack direction={'row'} alignItems="center" justifyContent="space-between" spacing={12}>
+                    <SocialMediaButtonGroup
+                      style={{ margin: 0 }}
+                      email={userInfo?.contactEmail}
+                      shouldShowEmailButton={true}
+                      twitter={userInfo?.twitter}
+                      instagram={userInfo?.instagram}
+                      website={userInfo?.website}
+                      linkedin={userInfo?.linkedin}
+                      github={userInfo?.github}
+                    />
+                  </Stack>
+                </Stack>
+              </Box>
+
+              <Box display={'flex'} justifyContent={'flex-end'}>
+                <Box
+                  sx={{
+                    mt: -50,
+                    backgroundColor: '#F6F7F3',
+                    borderRadius: '8px',
+                    height: 45,
+                    width: 320,
+                    padding: '12px',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1px 1fr',
+                    alignContent: 'center',
+                    justifyItems: 'center'
+                  }}
+                >
+                  <Box display={'flex'} alignItems={'center'}>
+                    <Typography mr={5}>{account ? shortenAddress(account) : '-'}</Typography>
+                    <Copy toCopy={account || ''} />
+                  </Box>
+                  <Box
+                    sx={{
+                      borderRight: '1px solid var(--ps-border-1)',
+                      height: '100%'
+                    }}
+                  />
                   <Button
+                    variant="contained"
                     onClick={() => {
                       navigate(routes.account.myProfile)
                     }}
@@ -97,6 +148,7 @@ export default function Dashboard() {
                     sx={{
                       background: 'none',
                       '&:hover': {
+                        border: 'none',
                         background: 'none',
                         color: 'var(--ps-blue)'
                       }
@@ -105,11 +157,15 @@ export default function Dashboard() {
                     <EditSVG style={{ marginRight: 10 }} />
                     Edit portfolio
                   </Button>
-                </Stack>
+                </Box>
               </Box>
             </Box>
+
+            <Box py={50}>
+              <Divider />
+            </Box>
+
             <Box
-              mt={50}
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { lg: '346fr 346fr 346fr', md: '346fr 346fr', xs: '1fr' },
@@ -122,13 +178,14 @@ export default function Dashboard() {
             </Box>
           </Box>
         </Container>
-        <Box
-          sx={{
-            background: '#F5F5F5',
-            borderRadius: '20px 20px 0 0'
-          }}
-        >
-          <Container maxWidth="lg">
+        <Box>
+          <Container
+            maxWidth="lg"
+            sx={{
+              background: '#F6F6F3',
+              borderRadius: '20px 20px 0 0'
+            }}
+          >
             <Box padding="50px 60px">
               <Typography variant="h3" fontSize={24}>
                 Auction Statistics
@@ -184,7 +241,7 @@ function FavoritesAuctionsList() {
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>
@@ -230,7 +287,7 @@ function CreateAuctionsList({ title, queryType }: { title: string; queryType: Da
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>
@@ -277,7 +334,7 @@ function PendingClaimAuctionsList() {
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
                 background: '#F5F5F5',
-                borderRadius: 100
+                borderRadius: 8
               }}
             >
               <Typography fontSize={12}>#{item.poolId}</Typography>

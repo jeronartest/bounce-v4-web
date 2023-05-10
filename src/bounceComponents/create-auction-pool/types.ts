@@ -45,6 +45,7 @@ export enum TokenType {
 }
 
 export enum AuctionType {
+  ENGLISH_AUCTION = 'English Auction',
   FIXED_PRICE = 'fixed-price',
   RANDOM_SELECTION = 'random-selection'
 }
@@ -52,6 +53,7 @@ export enum AuctionType {
 export interface AuctionPool {
   tokenType: TokenType
   nftTokenFrom: NFTToken
+  nft721TokenFrom: NFTToken[]
   auctionChainId?: string
   tokenFrom: Token
   tokenTo: Token
@@ -68,8 +70,10 @@ export interface AuctionPool {
   activeStep: CreationStep
   completed: CompletedSteps
   participantStatus: ParticipantStatus
+  priceFloor?: string
+  amountMinIncr1?: string
   auctionType?: AuctionType
   winnerNumber?: number
-  ticketPrice?: number
+  ticketPrice?: string
   maxParticipantAllowed?: number
 }

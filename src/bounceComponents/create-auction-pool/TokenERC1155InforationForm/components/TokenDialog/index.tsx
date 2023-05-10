@@ -1,34 +1,18 @@
 import { useState } from 'react'
 import { useModal, create, muiDialogV5 } from '@ebay/nice-modal-react'
-import { Box, Stack, Typography, Grid, Button } from '@mui/material'
+import { Box, Stack, Grid, Button } from '@mui/material'
 import CollectionSelect from '../CollectionSelect'
 import NFTCard from '../NFTCard'
 import { UserNFTCollection } from 'api/user/type'
 import Dialog from 'bounceComponents/common/DialogBase'
 import { use1155TokenList } from 'bounceHooks/auction/use1155TokenList'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
-export interface BasicToken {
-  address: string
-  symbol: string
-  name: string
-  decimals: number
-}
-
-export interface TokenDialogProps {
+interface TokenDialogProps {
   enableEth?: boolean
   onClose?: () => void
   chainId: number
-}
-
-const Loading = () => {
-  return (
-    <Stack direction="row" alignItems="center" justifyContent="center">
-      <Typography variant="h4" sx={{ color: '#878A8E' }}>
-        Loading
-      </Typography>
-    </Stack>
-  )
 }
 
 const TokenDialog = create(({ chainId }: TokenDialogProps) => {
@@ -64,8 +48,8 @@ const TokenDialog = create(({ chainId }: TokenDialogProps) => {
       }}
     >
       {loading && (
-        <Box sx={{ height: 300 }}>
-          <Loading />
+        <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
+          <BounceAnime />
         </Box>
       )}
       {!loading && (

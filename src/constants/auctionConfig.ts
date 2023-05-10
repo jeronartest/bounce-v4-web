@@ -77,6 +77,9 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.SEPOLIA]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC721]: [],
+    // [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.AUROEA]: {

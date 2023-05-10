@@ -87,6 +87,7 @@ export interface IChangeEmailParams {
 }
 
 export interface IProfileUserInfo {
+  address: string
   avatar: IFile
   banner: string
   careJobs: number[]
@@ -102,6 +103,7 @@ export interface IProfileUserInfo {
   fullName: string
   fullNameId: number
   github: string
+  discord: string
   googleEmail: string
   id: number
   ifRemotely: number
@@ -110,10 +112,10 @@ export interface IProfileUserInfo {
   jobTypes: number[]
   linkedin: string
   location: string
-  passwordSet: true
+  passwordSet: boolean
   primaryRole: number
   publicRole: number[]
-  resumes: []
+  resumes: any[]
   skills: string
   timezone: string
   twitter: string
@@ -280,7 +282,7 @@ export interface UserNFTCollection {
   description?: string
   image?: string
   name?: string
-  tokenId?: string
+  tokenId: string
 }
 export interface GetUserNFTsResponse {
   list: UserNFTCollection[]

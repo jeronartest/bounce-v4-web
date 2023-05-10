@@ -4,13 +4,24 @@ export const routes = {
     createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName/:tokenType',
     fixedSwapNft: '/auction/fixed-swap-1155/:chainShortName/:poolId',
     fixedPrice: '/auction/fixed-price/:chainShortName/:poolId',
+    englishAuction: '/auction/english-auction/:chainShortName/:poolId',
     randomSelection: '/auction/random-selection/:chainShortName/:poolId'
   },
   login: '/login',
+  loginBase: '/login_base',
   market: {
     index: '/market',
     pools: '/market/pools',
     nftPools: '/market/nft-pools'
+  },
+  nftAuction: {
+    index: '/NFTAuction'
+  },
+  tokenAuction: {
+    index: '/TokenAuction'
+  },
+  launchpad: {
+    index: '/launch-pad'
   },
   realAuction: {
     index: '/real-auction'
@@ -42,8 +53,11 @@ export const routes = {
     dashboard: '/account/dashboard',
     myProfile: '/account/my_profile',
     myAccount: '/account/my_account',
-    tokenOrNFT: '/account/token_nft',
+    myCredentials: '/account/my_credentials',
+    tokenAuction: '/account/token_auction',
+    nftAuction: '/account/nft_auction',
     realAuction: '/account/real_auction',
-    adsAuction: '/account/ads_auction'
+    adsAuction: '/account/ads_auction',
+    myPrivateLaunchpad: '/account/private_launchpad'
   }
 }

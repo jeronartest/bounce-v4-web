@@ -1,30 +1,42 @@
-import { Box, Grid, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material'
-import FormItem from 'bounceComponents/common/FormItem'
+import { Box, Button, Grid, MenuItem, Pagination, Select, Stack } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { usePagination } from 'ahooks'
-import NoData from 'bounceComponents/common/NoData'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { FixedSwapPool, PoolType } from 'api/pool/type'
-import { getUserPoolsTokenParticipant } from 'api/account'
+import { getUserPoolsTokenCollect, getUserPoolsTokenCreated, getUserPoolsTokenParticipant } from 'api/account'
 import { DashboardQueryType } from 'api/account/types'
 import { useActiveWeb3React } from 'hooks'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { routes } from 'constants/routes'
 import { getLabelById } from 'utils'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import { Add } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import ChainSelect from 'bounceComponents/common/ChainSelect'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const defaultPageSize = 6
 
-export default function ParticipatedTab() {
+type IType = 'created' | 'collect' | 'participated'
+
+export default function ParticipatedTab({
+  backedTokenType,
+  type = 'created'
+}: {
+  backedTokenType: BackedTokenType
+  type?: IType
+}) {
   const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
   const [queryType, setQueryType] = useState<DashboardQueryType | 0>(0)
   const { account } = useActiveWeb3React()
-  const [curPoolType, setCurPoolType] = useState(PoolType.FixedSwap)
+  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
+  const navigate = useNavigate()
 
   const {
     pagination,
@@ -38,48 +50,37 @@ export default function ParticipatedTab() {
           list: []
         }
       const category = curPoolType
-      // tokenType erc20:1 , erc1155:2
-      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
-      const resp: any = await getUserPoolsTokenParticipant({
+      const func =
+        type === 'created'
+          ? getUserPoolsTokenCreated
+          : type === 'participated'
+          ? getUserPoolsTokenParticipant
+          : getUserPoolsTokenCollect
+      const resp: any = await func({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         category,
         address: account,
         chainId: curChain,
         queryType,
-        tokenType
+        tokenType: backedTokenType
       })
-      if (category === 1) {
+      if (backedTokenType === BackedTokenType.TOKEN) {
         return {
           list: resp.data.fixedSwapList.list,
           total: resp.data.fixedSwapList.total
         }
-      } else if (category === 2) {
-        return {
-          list: resp.data.dutchPoolList.list,
-          total: resp.data.dutchPoolList.total
-        }
-      } else if (category === PoolType.fixedSwapNft) {
-        return {
-          list: resp.data.fixedSwapNftList.list,
-          total: resp.data.fixedSwapNftList.total
-        }
-      } else if (category === 3) {
-        return {
-          list: resp.data.lotteryPoolList.list,
-          total: resp.data.lotteryPoolList.total
-        }
-      } else {
-        return {
-          list: resp.data.sealedBidPoolList.list,
-          total: resp.data.sealedBidPoolList.total
-        }
+      }
+
+      return {
+        list: resp.data.fixedSwapNftList.list,
+        total: resp.data.fixedSwapNftList.total
       }
     },
     {
       defaultPageSize,
       ready: !!account,
-      refreshDeps: [account, curChain, curPoolType, queryType],
+      refreshDeps: [account, curChain, curPoolType, queryType, backedTokenType],
       debounceWait: 100
     }
   )
@@ -87,7 +88,7 @@ export default function ParticipatedTab() {
   useEffect(() => {
     pagination.changeCurrent(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, queryType])
+  }, [account, curPoolType, queryType, backedTokenType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -97,29 +98,35 @@ export default function ParticipatedTab() {
     <Box>
       <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
         <Stack spacing={10} direction="row">
-          <FormItem name="chain" label="Chain" sx={{ width: 190 }}>
-            <Select value={curChain} onChange={e => setCurChain(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All Chains
-              </MenuItem>
-              {optionDatas?.chainInfoOpt?.map((item, index) => (
-                <MenuItem key={index} value={item.id}>
-                  {item.chainName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem name="status" label="Status" sx={{ width: 190 }}>
-            <Select value={queryType} onChange={e => setQueryType(Number(e.target?.value) || 0)}>
-              <MenuItem key={0} value={0}>
-                All
-              </MenuItem>
-              <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
-              <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
-            </Select>
-          </FormItem>
-          <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
+          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
+          <Select
+            value={queryType}
+            sx={{ width: 200, height: 38 }}
+            onChange={e => setQueryType(Number(e.target?.value) || 0)}
+          >
+            <MenuItem key={0} value={0}>
+              All
+            </MenuItem>
+            <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
+            <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
+          </Select>
+          <AuctionTypeSelect
+            tokenType={backedTokenType}
+            curPoolType={curPoolType}
+            setCurPoolType={t => setCurPoolType(t)}
+          />
         </Stack>
+
+        {type === 'created' && (
+          <Button
+            sx={{ height: 44 }}
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate(routes.auction.createAuctionPool)}
+          >
+            <Add /> Create a pool
+          </Button>
+        )}
       </Box>
 
       {loading ? (
@@ -127,15 +134,14 @@ export default function ParticipatedTab() {
           <BounceAnime />
         </Box>
       ) : !auctionPoolData?.total || auctionPoolData?.total === 0 ? (
-        <NoData sx={{ padding: 40 }}>
-          <Box display={'grid'} justifyItems="center">
-            <Typography fontWeight={500} fontSize={20} mt={10}>
-              {'Hasn’t participated Auction'}{' '}
-            </Typography>
-          </Box>
-        </NoData>
+        <EmptyData
+          title={`Hasn’t ${
+            type === 'created' ? 'created' : type === 'participated' ? 'participated' : 'collect'
+          } Auction`}
+          prompt="Go and explore auctions."
+        />
       ) : (
-        <Box mt={20}>
+        <Box mt={40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (

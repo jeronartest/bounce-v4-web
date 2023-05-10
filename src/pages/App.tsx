@@ -24,13 +24,19 @@ import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType
 import AuctionFixedPricePoolId from 'pages/auction/fixed-price/poolId'
 import RandomSelectionPricePoolId from 'pages/auction/randomSelection/poolId'
 import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
+import EnglishAuctionNFTPoolId from 'pages/auction/englishAuctionNFT/poolId'
 
 import Login from 'pages/login'
+import FirstLoginInfo from 'pages/login/FirstLoginInfo'
 
 import Market from 'pages/market'
 import MarketPools from 'pages/market/pools'
 import MarketNFTPools from 'pages/market/nftAuctionPool'
+import NFTAuction from 'pages/nftAuction'
+import RealWorldAuction from 'pages/realWorldAuction'
+import AdsAuction from 'pages/adsAuction'
 
+import TokenAuctionPage from 'pages/tokenAuction'
 // import AccountSettings from 'pages/profile/account/settings'
 // import ProfileActivities from 'pages/profile/activities'
 // import ProfileBasic from 'pages/profile/basic'
@@ -40,20 +46,21 @@ import MarketNFTPools from 'pages/market/nftAuctionPool'
 import ProfileHome from 'pages/profile/home'
 
 // import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
-
-import SignupAccount from 'pages/signup/account'
-import ComingSoon from './ComingSoon'
+// import SignupAccount from 'pages/signup/account'
 
 import AccountDashboard from 'pages/account/Dashboard'
 import AccountMyProfile from 'pages/account/MyProfile'
 import AccountMyAccount from 'pages/account/MyAccount'
+import AccountMyCredentials from 'pages/account/AccountMyCredentials'
 import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
+import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
+import { Launchpad } from './launchpad'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -90,18 +97,24 @@ export default function App() {
                   <Routes>
                     <Route path={routes.auction.createAuctionPool} element={<CreateAuctionPool />} />
                     <Route path={routes.auction.createAuctionPoolType} element={<CreateAuctionPoolType />} />
+
                     <Route path={routes.auction.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
+                    <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
+                    <Route path={routes.loginBase} element={<FirstLoginInfo />} />
 
                     <Route path={routes.market.index} element={<Market />} />
                     <Route path={routes.market.pools} element={<MarketPools />} />
                     <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
+                    <Route path={routes.nftAuction.index} element={<NFTAuction />} />
+                    <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
+                    <Route path={routes.launchpad.index} element={<Launchpad />} />
 
-                    <Route path={routes.realAuction.index} element={<ComingSoon />} />
-                    <Route path={routes.adsAuction.index} element={<ComingSoon />} />
+                    <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
+                    <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                     {/* <Route path={routes.profile.account.settings} element={<AccountSettings />} />
                     <Route path={routes.profile.activities} element={<ProfileActivities />} />
@@ -112,15 +125,18 @@ export default function App() {
 
                     <Route path={routes.profile.summary} element={<ProfileHome />} />
 
-                    <Route path={routes.signup.account} element={<SignupAccount />} />
+                    {/* <Route path={routes.signup.account} element={<SignupAccount />} /> */}
                     {/* <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} /> */}
 
                     <Route path={routes.account.dashboard} element={<AccountDashboard />} />
                     <Route path={routes.account.myProfile} element={<AccountMyProfile />} />
                     <Route path={routes.account.myAccount} element={<AccountMyAccount />} />
-                    <Route path={routes.account.tokenOrNFT} element={<MyTokenOrNFT />} />
+                    <Route path={routes.account.myCredentials} element={<AccountMyCredentials />} />
+                    <Route path={routes.account.tokenAuction} element={<MyTokenOrNFT backedTokenType={1} />} />
+                    <Route path={routes.account.nftAuction} element={<MyTokenOrNFT backedTokenType={2} />} />
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
+                    <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />

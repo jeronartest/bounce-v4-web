@@ -65,7 +65,7 @@ const ProfileHomeLayout: React.FC = () => {
         labelKey: 'Token & NFT Auction',
         label: 'Token & NFT Auction',
         href: '',
-        components: personalInfo ? <TokenAuction userInfo={personalInfo} /> : <></>
+        components: personalInfo ? <TokenAuction userInfo={personalInfo} tokenType={0} /> : <></>
       },
       {
         labelKey: 'Real World Collectibles Auction',

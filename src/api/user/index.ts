@@ -50,7 +50,13 @@ export const addressRegisterOrLogin = async (params: IAddressRegisterLoginParams
 }
 
 export const getUserInfo = async (params: IUserInfoParams) => {
-  return ApiInstance.post('/personal/profile', { userId: Number(params.userId) })
+  return ApiInstance.post('/personal/profile', {
+    userId: Number(params.userId)
+  })
+}
+
+export const getUserPoolCount = async (address: string) => {
+  return ApiInstance.post<{ createdCount: number; participantCount: number }>('/user/pools/count/stat', { address })
 }
 
 export const logout = async () => {
@@ -145,5 +151,5 @@ export const updateUserBanner = async (params: IUserUpdateBannerParams) => {
  * Get nfts of login user
  */
 export const getUserNFTsInfo = (params: GetUserNFTsParams) => {
-  return ApiInstance.post('/user/nfts ', params)
+  return ApiInstance.post('/user/nfts', params)
 }

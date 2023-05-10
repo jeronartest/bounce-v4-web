@@ -3,6 +3,7 @@ import React from 'react'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
+
 export interface PoolStatusBoxProps {
   status: PoolStatus
   openTime: number
@@ -12,12 +13,19 @@ export interface PoolStatusBoxProps {
   style?: React.CSSProperties
 }
 
-const PoolStatusBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: PoolStatusBoxProps): JSX.Element => {
+export const PoolStatusBox = ({
+  status,
+  openTime,
+  closeTime,
+  claimAt,
+  onEnd,
+  style
+}: PoolStatusBoxProps): JSX.Element => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming
         ? openTime * 1000
-        : status === PoolStatus.Live
+        : status === PoolStatus.Live || status == PoolStatus.Finish
         ? closeTime * 1000
         : status === PoolStatus.Closed
         ? claimAt * 1000
@@ -41,7 +49,23 @@ const PoolStatusBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: P
           <Typography variant="body1">Upcoming</Typography>
         </Box>
       )
-
+    case PoolStatus.Finish:
+      return (
+        <Box
+          sx={{
+            display: 'inline-block',
+            px: 12,
+            py: 4,
+            bgcolor: '#D6DFF6',
+            borderRadius: 20,
+            ...style
+          }}
+        >
+          <Typography variant="body1" sx={{ color: '#2B51DA' }}>
+            Finished
+          </Typography>
+        </Box>
+      )
     case PoolStatus.Live:
       return (
         <Box style={{ display: 'inline-block', padding: '4px 8px', background: '#D4F5DE', borderRadius: 20, ...style }}>
@@ -78,7 +102,16 @@ const PoolStatusBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: P
             </Typography>
           </Box>
           <span
-            style={{ display: 'inline-block', padding: '4px 8px', background: '#000000', borderRadius: 20, ...style }}
+            style={{
+              display: 'inline-block',
+              padding: '4px 8px',
+              background: '#000000',
+              borderRadius: 20,
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              ...style
+            }}
           >
             {countdown > 0 && (
               <>

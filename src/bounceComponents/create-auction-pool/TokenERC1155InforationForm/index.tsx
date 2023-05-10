@@ -4,16 +4,15 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { show } from '@ebay/nice-modal-react'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import ShowNFTCard from './components/NFTCard/showCard'
+import ShowNFTCard from './components/NFTCard/ShowNFTCard'
 import TokenDialog from './components/TokenDialog/index'
 import { UserNFTCollection } from 'api/user/type'
-import FormItem from 'bounceComponents/common/FormItem'
 // import { ReactComponent as ChainIcon } from 'assets/imgs/auction/chain.svg'
-import { ReactComponent as AddIcon } from 'assets/imgs/auction/add-icon.svg'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId } from 'constants/chain'
 import { getEtherscanLink } from 'utils'
 // import { ReactComponent as ChainLightIcon } from 'assets/imgs/auction/chain-light.svg'
+import EmptyCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/EmptyCard'
 
 interface FormValues {
   contractAddr: string
@@ -101,7 +100,10 @@ const TokenInformationForm = (): JSX.Element => {
               <Stack component={Form} spacing={20} noValidate>
                 {resultNft ? (
                   <ShowNFTCard
-                    nft={resultNft}
+                    balance={resultNft.balance}
+                    name={resultNft.name || resultNft.contractName || ''}
+                    tokenId={resultNft.tokenId || ''}
+                    image={resultNft.image}
                     handleClear={() => {
                       setResultNft(null)
                     }}
@@ -110,28 +112,15 @@ const TokenInformationForm = (): JSX.Element => {
                     }}
                   />
                 ) : (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      width: '220px',
-                      height: '286px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      background: `#F4F5F8`,
-                      borderRadius: '10px',
-                      cursor: 'pointer',
-                      margin: '0 auto 51px'
-                    }}
+                  <EmptyCard
+                    width={220}
+                    height={286}
                     onClick={() => {
                       if (account && auctionInChainId) {
                         showTokenDialog(auctionInChainId, setValues)
                       }
                     }}
-                  >
-                    <FormItem name="tokenId" required>
-                      <AddIcon />
-                    </FormItem>
-                  </Box>
+                  ></EmptyCard>
                 )}
                 <Stack direction="row" spacing={10} justifyContent="space-between">
                   <ButtonBase sx={{ width: 'fit-content', textDecorationLine: 'underline' }} disabled={!values.tokenId}>

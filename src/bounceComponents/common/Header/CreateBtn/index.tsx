@@ -1,7 +1,8 @@
 import { Box, Button, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
-import { ReactComponent as ArrowDownSVG } from 'assets/imgs/user/arrow_down.svg'
-import { ReactComponent as ArrowUpSVG } from 'assets/imgs/user/arrow_up.svg'
+// import { ReactComponent as ArrowDownSVG } from 'assets/imgs/user/arrow_down.svg'
+// import { ReactComponent as ArrowUpSVG } from 'assets/imgs/user/arrow_up.svg'
+import { ReactComponent as AddSvg } from 'assets/imgs/user/add.svg'
 import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
@@ -35,8 +36,8 @@ const CreateBtn: React.FC = () => {
       sx={{
         mt: 4,
         '& .MuiPopover-paper': {
-          borderRadius: 20,
-          padding: '10px 0px'
+          borderRadius: 8,
+          padding: '6px'
         },
         '& .MuiList-padding': {
           padding: '0px 0px 0px 0px',
@@ -45,7 +46,11 @@ const CreateBtn: React.FC = () => {
           borderRadius: 20
         },
         '& .MuiMenuItem-gutters': {
-          padding: '10px 20px'
+          padding: '10px 20px',
+          borderRadius: 8
+        },
+        '& .MuiMenuItem-gutters:hover': {
+          background: '#E1F25C'
         }
       }}
     >
@@ -75,11 +80,15 @@ const CreateBtn: React.FC = () => {
   return (
     <Box>
       <Button
-        variant="outlined"
-        size="small"
-        sx={{ width: 100, height: 40, borderRadius: 20 }}
+        variant="contained"
+        sx={{
+          width: 109,
+          height: 44,
+          borderRadius: 8,
+          border: 'none'
+        }}
         onClick={handleMenuOpen}
-        endIcon={anchorEl ? <ArrowUpSVG /> : <ArrowDownSVG />}
+        startIcon={<AddSvg />}
       >
         Create
       </Button>

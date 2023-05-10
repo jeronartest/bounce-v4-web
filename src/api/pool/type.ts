@@ -8,10 +8,28 @@ export enum PoolType {
   'Duch' = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
-  'fixedSwapNft' = 5
+  'fixedSwapNft' = 5,
+  ENGLISH_AUCTION_NFT = 6
 }
+
+export function getTextFromPoolType(type: PoolType) {
+  switch (type) {
+    case PoolType.Duch:
+      return 'Dutch Auction'
+    case PoolType.ENGLISH_AUCTION_NFT:
+      return 'English Auction'
+    case PoolType.FixedSwap:
+      return 'Fix-Swap Auction'
+    case PoolType.fixedSwapNft:
+      return 'Fix-Swap NFT'
+    case PoolType.Lottery:
+      return 'Lottery'
+    case PoolType.SealedBid:
+      return 'Sealed Bid'
+  }
+}
+
 export interface GetPoolCreationSignatureParams {
-  amountMin1?: string
   amountTotal0: string
   amountTotal1?: string
   category: PoolType
@@ -26,11 +44,15 @@ export interface GetPoolCreationSignatureParams {
   token0: string
   token1: string
   tokenId?: string
+  tokenIds?: string[]
+  amountMinIncr1?: string
+  amountMin1?: string
   is721?: boolean
   maxPlayer?: number
   totalShare?: string | number
   nShare?: string | number
 }
+
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string
@@ -49,6 +71,7 @@ export interface GetWhitelistMerkleTreeRootResponse {
 export enum PoolStatus {
   'Upcoming' = 1,
   'Live' = 2,
+  'Finish' = 3,
   'Closed' = 4,
   'Cancelled' = 5
 }
@@ -91,6 +114,7 @@ export interface LikeInfo {
   myDislike: number
   myLike: number
 }
+
 export interface FixedSwapPool {
   amountTotal0: string
   amountTotal1: string
@@ -169,6 +193,25 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
   }
 }
 
+export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
+  currencyAmountMin1: CurrencyAmount | undefined
+  currencyAmountMinIncr1: CurrencyAmount | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    is721?: 0 | 1
+    tokenId?: string
+  }
+  creatorClaimed: boolean
+  currentBidder: string | undefined
+  currentBidderAmount1: CurrencyAmount | undefined
+  currentBidderMinAmount: CurrencyAmount | undefined
+  gasFee: CurrencyAmount | undefined
+  isWinner: boolean
+  isUserJoinedPool: boolean
+}
+
 export interface GetPoolInfoResponse {
   dutchPool: any
   fixedSwapPool: FixedSwapPool
@@ -183,12 +226,14 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
 }
+
 export interface GetWinnersListParams {
   limit: number
   offset: number
   chainId: number
   poolId: string
 }
+
 export type PoolEvent = 'Swapped' | 'Reversed'
 
 export interface PoolHistory {
@@ -241,6 +286,7 @@ export interface GetWinnersListResponse {
   list: string[]
   total: number
 }
+
 export interface UpdateAuctionBackgroundParams {
   id: number
   description?: string

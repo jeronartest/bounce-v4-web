@@ -21,10 +21,9 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { ChainId, ChainList, ChainListMap } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-import { useWalletModalToggle } from 'state/application/hooks'
 import { AuctionType, TokenType } from 'bounceComponents/create-auction-pool/types'
 import { useAuctionConfigList } from 'hooks/useAuctionConfig'
-import { useWeb3Login, useUserInfo } from 'state/users/hooks'
+import { useUserInfo, useShowLoginModal } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 
@@ -41,9 +40,8 @@ const CreateAuctionPoolIntroPage = () => {
   const { redirect } = useQueryParams()
   const { account, active, chainId } = useActiveWeb3React()
 
-  const walletModalToggle = useWalletModalToggle()
   const { userId, userInfo } = useUserInfo()
-  const { run: runWeb3Login } = useWeb3Login()
+  const showLoginModal = useShowLoginModal()
   const { chainInfoOpt } = useOptionDatas()
   const switchNetwork = useSwitchNetwork()
   const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
@@ -121,7 +119,7 @@ const CreateAuctionPoolIntroPage = () => {
                       if (account) {
                         switchNetwork(Number(event.target.value))
                       } else {
-                        walletModalToggle()
+                        showLoginModal()
                       }
                     }}
                     renderValue={value => {
@@ -181,7 +179,7 @@ const CreateAuctionPoolIntroPage = () => {
                 <TextField
                   label="Wallet for creation"
                   variant="outlined"
-                  onClick={() => !account && walletModalToggle()}
+                  onClick={() => !account && showLoginModal()}
                   value={addressFieldValue}
                   inputProps={{ readOnly: true }}
                   InputProps={{
@@ -240,7 +238,7 @@ const CreateAuctionPoolIntroPage = () => {
                       </Button>
                     </>
                   ) : !userId ? (
-                    <Button variant="contained" sx={{ width: 140 }} onClick={runWeb3Login}>
+                    <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
                       Login
                     </Button>
                   ) : !userInfo?.email || !userInfo?.twitterName ? (
@@ -258,7 +256,7 @@ const CreateAuctionPoolIntroPage = () => {
                       variant="contained"
                       sx={{ width: 140 }}
                       onClick={() => {
-                        walletModalToggle()
+                        showLoginModal()
                       }}
                     >
                       Connect

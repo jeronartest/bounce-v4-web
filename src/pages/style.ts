@@ -24,7 +24,7 @@ const BodyWrapper = styled(Box)(({ theme }) => ({
   // minHeight: `calc(100vh - ${theme.height.header})`,
   minHeight: '100vh',
   padding: `${theme.height.header} 0 0`,
-  backgroundColor: '#fff',
+  // backgroundColor: '#fff',
   // justifyContent: 'center',
   // alignItems: 'center',
   // flex: 1,
