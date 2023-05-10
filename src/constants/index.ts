@@ -25,6 +25,7 @@ export interface WalletInfo {
   primary?: true
   mobile?: true
   mobileOnly?: true
+  disabled?: true
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -56,10 +57,37 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   WALLET_LINK: {
     connector: walletlink,
-    name: 'Coinbase Wallet',
+    name: 'Coinbase',
     iconName: 'coinbaseWalletIcon.svg',
     description: 'Use Coinbase Wallet app on mobile device',
     href: null,
+    color: '#315CF5'
+  },
+  BINANCE: {
+    connector: undefined,
+    name: 'Binance Wallet',
+    iconName: 'BinanceWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
+    color: '#315CF5'
+  },
+  TRUST_WALLET: {
+    connector: undefined,
+    name: 'Trust wallet',
+    iconName: 'trustWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
+    color: '#315CF5'
+  },
+  MATH_WALLET: {
+    connector: undefined,
+    name: 'Math wallet',
+    iconName: 'mathWalletIcon.svg',
+    description: '',
+    href: null,
+    disabled: true,
     color: '#315CF5'
   }
   // COINBASE_LINK: {

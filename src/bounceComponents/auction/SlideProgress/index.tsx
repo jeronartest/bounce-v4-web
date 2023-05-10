@@ -32,7 +32,7 @@ const ArrowBg = styled(Box)`
   border-radius: 8px;
 
   &:hover {
-    background: #626262;
+    background: var(--ps-yellow-1);
     color: white;
     cursor: pointer;
   }

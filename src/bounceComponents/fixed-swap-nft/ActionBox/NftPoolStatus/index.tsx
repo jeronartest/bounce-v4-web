@@ -102,7 +102,16 @@ export const PoolStatusBox = ({
             </Typography>
           </Box>
           <span
-            style={{ display: 'inline-block', padding: '4px 8px', background: '#000000', borderRadius: 20, ...style }}
+            style={{
+              display: 'inline-block',
+              padding: '4px 8px',
+              background: '#000000',
+              borderRadius: 20,
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              ...style
+            }}
           >
             {countdown > 0 && (
               <>

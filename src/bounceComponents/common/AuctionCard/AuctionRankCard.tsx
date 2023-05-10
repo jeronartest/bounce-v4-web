@@ -84,7 +84,7 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
       return <></>
   }
 }
-const getRoute = (category: PoolType) => {
+export const getRoute = (category: PoolType) => {
   let route = routes.auction.fixedPrice
   switch (category) {
     case PoolType.Lottery:
@@ -118,7 +118,14 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         cursor: 'pointer'
       }}
     >
-      <H7Gray mr={12}>{props.index}</H7Gray>
+      <H7Gray
+        mr={14}
+        sx={{
+          width: 16
+        }}
+      >
+        {props.index}
+      </H7Gray>
       <Avatar
         src={
           props.token0.largeUrl

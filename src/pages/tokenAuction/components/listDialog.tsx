@@ -265,7 +265,15 @@ const NFTAuctionListDialog = (props: DialogParams) => {
             paddingBottom: 100
           }}
         >
-          <Box mb={160}>
+          <Box
+            mb={160}
+            sx={{
+              width: '100%',
+              maxWidth: 1440,
+              margin: '0 auto',
+              paddingBottom: 100
+            }}
+          >
             {loading ? (
               <Box
                 sx={{

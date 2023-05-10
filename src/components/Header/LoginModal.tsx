@@ -13,7 +13,7 @@ export default function LoginModal() {
   const { connector, deactivate } = useWeb3React()
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
   const toggleSignLoginModal = useSignLoginModalToggle()
-  const { run: login } = useWeb3Login()
+  const { run: login } = useWeb3Login('')
 
   const { token } = useUserInfo()
 
@@ -45,7 +45,7 @@ export default function LoginModal() {
           <Button variant="outlined" onClick={cancel}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={login}>
+          <Button variant="contained" color="secondary" onClick={login}>
             Accept and sign
           </Button>
         </Box>

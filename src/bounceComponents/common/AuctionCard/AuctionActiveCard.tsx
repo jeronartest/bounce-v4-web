@@ -104,7 +104,7 @@ export const ActiveUser: React.FC = () => {
     >
       <Container
         sx={{
-          maxWidth: '1296px !important'
+          maxWidth: '1440px !important'
         }}
       >
         <H2 mb={80}>
