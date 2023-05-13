@@ -30,7 +30,7 @@
   ],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "prettier/prettier":[ "error", {},
+    "prettier/prettier":[ "error", { "endOfLine": "auto" },
       {
         "usePrettierrc": true
       }],

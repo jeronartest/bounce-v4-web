@@ -109,8 +109,6 @@
     ]
   },
   "dependencies": {
-    "@accelbyte/sdk": "^2.0.0",
-    "@accelbyte/widgets": "^0.2.1",
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
@@ -136,6 +134,7 @@
     "react-linkedin-login-oauth2": "2.0.1",
     "react-lottie": "^1.2.3",
     "react-toastify": "9.1.1",
+    "react-unity-webgl": "^9.4.0",
     "swiper": "^9.1.0",
     "toformat": "^2.0.0",
     "web3": "^1.7.4",

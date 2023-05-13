@@ -1,21 +1,26 @@
-const SdkWidget = require('@accelbyte/widgets')
-import '@accelbyte/widgets/dist/style.css'
-
-const SDK_CONFIG = {
-  baseURL: process.env.REACT_APP_ACCELBYTE_BASE_URL || '',
-  clientId: process.env.REACT_APP_ACCELBYTE_CLIENT_ID || '',
-  namespace: process.env.REACT_APP_ACCELBYTE_NAMESPACE || '',
-  redirectURI: process.env.REACT_APP_ACCELBTE_REDIRECT_URI || ''
-}
-
-function AccelbyteProvider({ children }: { children: any }) {
-  return <SdkWidget.SdkWidget sdkOptions={SDK_CONFIG}>{children}</SdkWidget.SdkWidget>
-}
+import React, { useState, useEffect, useCallback } from 'react'
+import { Unity, useUnityContext } from 'react-unity-webgl'
 
 export default function Accelbyte() {
+  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
+    loaderUrl: 'build/GhostieRunnerWebGL_0.2.0.loader.js',
+    dataUrl: 'build/GhostieRunnerWebGL_0.2.0.data',
+    frameworkUrl: 'build/GhostieRunnerWebGL_0.2.0.framework.js',
+    codeUrl: 'build/GhostieRunnerWebGL_0.2.0.wasm'
+  })
+
+  const loadingPercentage = Math.round(loadingProgression * 100)
+
   return (
-    <AccelbyteProvider>
-      <SdkWidget.LoginWidget onLogout={() => alert('111')} />
-    </AccelbyteProvider>
+    <div className="container">
+      {isLoaded === false && (
+        // We'll conditionally render the loading overlay if the Unity
+        // Application is not loaded.
+        <div className="loading-overlay">
+          <p>Loading... ({loadingPercentage}%)</p>
+        </div>
+      )}
+      <Unity className="unity" unityProvider={unityProvider} />
+    </div>
   )
 }
